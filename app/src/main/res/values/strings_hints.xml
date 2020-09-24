@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- All hints for text views-->
+
+    <string name="hint_user_birthplace" translatable="false">Batcham</string>
+    <string name="hint_user_email" translatable="false">abc@example.com</string>
+    <string name="hint_user_contact" translatable="false">+237 6 55 14 23 26</string>
+    <string name="hint_user_birthday" translatable="false">22/06/2000</string>
+    <string name="hint_user_occupation">Student</string>
+    <string name="hint_user_name" translatable="false">John Paul</string>
+
+    <string name="qr_alert_NB">NB: The above QR code should be scanned at the agency!</string>
+    <string name="hint_destination">Where are you going to?</string>
+    <string name="hint_travel_time">What time?</string>
+    <string name="hint_travel_date">Which day?</string>
+    <!--Descriptions-->
+    <string name="desc_user_image">Tap to change photo.</string>
+    <string name="desc_agency_logo">Transport agency\'s logo</string>
+    <string name="desc_qr_code">Your journey QR code</string>
+    <string name="desc_transpido_logo">The Transpido logo</string>
+</resources>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "819741617511",
+    "firebase_url": "https://transpeed01.firebaseio.com",
+    "project_id": "transpeed01",
+    "storage_bucket": "transpeed01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819741617511:android:8b3c1326b37212b90913c2",
+        "android_client_info": {
+          "package_name": "com.lado.travago.transpido"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "819741617511-gat86n3c1kp5n1ooqnjegbt2e6u2gt64.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lado.travago.transpido",
+            "certificate_hash": "e911de866c938ea79c4f86b1f27e88a26011ef9b"
+          }
+        },
+        {
+          "client_id": "819741617511-nneplji6g2c3ltm3ndqltus02omdlm79.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnEzM8E4P7_536hJGMZjdCCW6N1ElZ3N4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "819741617511-nneplji6g2c3ltm3ndqltus02omdlm79.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

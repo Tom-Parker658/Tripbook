@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    All button switch text-->
+    <string name="btn_search_journey">Search Journey</string>
+    <string name="switch_vip_jouney">VIP Journey</string>
+    <string name="btn_save_profile">Save Profile</string>
+    <string name="btn_delete_profile">Delete Profile</string>
+</resources>

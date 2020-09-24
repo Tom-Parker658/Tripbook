@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Transpido</string>
+    <string name="hint_user_occupation">Elève</string>
+    <string name="text_label_birthplace">Né à:</string>
+    <string name="text_label_birthday">Né le:</string>
+    <string name="text_label_name">Nom:</string>
+    <string name="btn_save_profile">Enregistrer</string>
+    <string name="desc_user_image">Clique pour changer ta photo.</string>
+    <string name="btn_delete_profile">Supprimer mon profile</string>
+    <string name="hint_destination">Ou allez vous?</string>
+    <string name="hint_travel_time">A quelle heure?</string>
+    <string name="hint_travel_date">Quelle jour?</string>
+    <string name="hint_location">Ou étes-vous?</string>
+    <string name="btn_search_journey">Rechercher un voyage</string>
+    <string name="switch_vip_jouney">Voyage VIP</string>
+    <string name="text_label_contact">Téléphone:</string>
+    <string name="text_label_price">Prix:</string>
+    <string name="text_label_journey">Voyage:</string>
+    <string name="desc_agency_logo">Logo de l\'agence de transport</string>
+    <string name="text_label_reputation">Réputation:</string>
+    <string name="transpido_ticket_name">Ticket de Voyage Transpido</string>
+    <string name="text_label_valid">Validité:</string>
+    <string name="text_label_scanned">Scanner?:</string>
+    <string name="qr_alert_NB">NB: Ce code QR doit ètre scanner a l\' agence!</string>
+    <string name="desc_qr_code">Le code QR de votre voyage</string>
+    <string name="desc_transpido_logo">Le logo Transpido</string>
+    <string name="text_label_destination">Ma Déstination:</string>
+    <string name="text_label_travel_date">Date du Voyage:</string>
+    <string name="text_label_travel_time">Temp du Voyage:</string>
+    <string name="text_label_location" translatable="false">Ma Location:</string>
+</resources>

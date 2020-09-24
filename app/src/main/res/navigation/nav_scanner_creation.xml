@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_scanner_creation"
+    app:startDestination="@id/scannerRegistrationFragment2">
+    <fragment
+        android:id="@+id/scannerRegistrationFragment2"
+        android:name="com.lado.travago.transpido.ui.scanner.ScannerRegistrationFragment"
+        android:label="Scanner Creation">
+        <action
+            android:id="@+id/action_scannerRegistrationFragment2_to_phoneValidationFragment"
+            app:destination="@id/phoneValidationFragment" />
+        <argument
+            android:name="scannerID"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/phoneValidationFragment"
+        android:name="com.lado.travago.transpido.ui.scanner.PhoneValidationFragment"
+        android:label="Validate SMS">
+        <action
+            android:id="@+id/action_phoneValidationFragment_to_scannerRegistrationFragment2"
+            app:destination="@id/scannerRegistrationFragment2" />
+        <argument
+            android:name="phoneNumber"
+            app:argType="string" />
+    </fragment>
+</navigation>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            tools:context=".ui.agency.AgencyRegistration2Fragment">
+
+            <!-- TODO: Update blank fragment layout -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/num_parks"
+                style="@style/editTextStyle"
+                android:hint="Number of stations:"
+                app:helperText="The total number of your agencies park stations any where"
+                app:hintTextAppearance="@style/editTextStyle"
+                app:layout_constraintBottom_toTopOf="@+id/textView11"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/num_vehicles">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/num_vehicles"
+                style="@style/editTextStyle"
+                android:hint="Number of vehicles:"
+                app:helperText="The total number of vehicles owned by your agency"
+                app:hintTextAppearance="@style/editTextStyle"
+                app:layout_constraintBottom_toTopOf="@+id/num_parks"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbars="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/btn_create"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView11">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:divider="?attr/dividerHorizontal"
+                    android:orientation="vertical"
+                    android:showDividers="middle|beginning|end|none">
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/radio_north"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:focusable="true"
+                        android:text="North Region" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/radio_south"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="South Region" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/radio_west"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="West Region" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/radio_east"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="East Region" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/radio_far_north"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="FarNorth Region" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/radio_north_west"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NorthWest Region" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/radio_south_west"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="SouthWest Region" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/radio_adamawa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Adamawa Region" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/radio_centre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Centre Region" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/radio_littoral"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Littoral Region" />
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+            <TextView
+                android:id="@+id/textView11"
+                style="@style/infoTextStyle"
+                android:text="Check all the regions in which your agency are situated:"
+                app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/num_parks" />
+
+            <Button
+                android:id="@+id/btn_create"
+                style="@style/navButtonStyles"
+                android:text="Create"
+                app:icon="@drawable/baseline_arrow_forward_24"
+                app:iconGravity="end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

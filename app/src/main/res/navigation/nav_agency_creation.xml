@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/myAgencyNavHostFragment"
+    app:startDestination="@id/agencyRegistration1Fragment">
+
+    <fragment
+        android:id="@+id/agencyRegistration1Fragment"
+        android:name="com.lado.travago.transpido.ui.agency.AgencyRegistration1Fragment"
+        android:label="Agency Creation(1/3)"
+        tools:layout="@layout/fragment_agency_registration1">
+        <action
+            android:id="@+id/action_agencyRegistration1Fragment_to_agencyRegistration2Fragment"
+            app:destination="@id/agencyRegistration2Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/agencyRegistration2Fragment"
+        android:name="com.lado.travago.transpido.ui.agency.AgencyRegistration2Fragment"
+        android:label="Agency Creation(2/3)"
+        tools:layout="@layout/fragment_agency_registration2">
+        <action
+            android:id="@+id/action_agencyRegistration2Fragment_to_agencyRegistration3Fragment"
+            app:destination="@id/agencyRegistration3Fragment"
+            app:popUpTo="@id/agencyRegistration1Fragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/agencyRegistration3Fragment"
+        android:name="com.lado.travago.transpido.ui.agency.AgencyRegistration3Fragment"
+        android:label="Agency Creation(3/3)"
+        tools:layout="@layout/fragment_agency_registration3"/>
+</navigation>

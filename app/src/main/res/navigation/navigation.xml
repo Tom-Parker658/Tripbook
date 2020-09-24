@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my"
+    app:startDestination="@id/scannerRegistrationFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.lado.travago.transpido.ui.traveller.JourneySearchFragment"
+        android:label="HomeFragment">
+        <action
+            android:id="@+id/action_homeFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.lado.travago.transpido.ui.traveller.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result">
+        <action
+            android:id="@+id/action_resultFragment_to_customisationFragment2"
+            app:destination="@id/customisationFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/paymentActivity"
+        android:name="com.lado.travago.transpido.ui.PaymentActivity"
+        android:label="activity_payment"
+        tools:layout="@layout/activity_payment" />
+    <fragment
+        android:id="@+id/aboutFragment2"
+        android:name="com.lado.travago.transpido.ui.traveller.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/customisationFragment"
+        android:name="com.lado.travago.transpido.ui.traveller.CustomisationFragment"
+        android:label="fragment_customisation"
+        tools:layout="@layout/fragment_customisation">
+        <action
+            android:id="@+id/action_customisationFragment_to_paymentActivity"
+            app:destination="@id/paymentActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.lado.travago.transpido.ui.traveller.HelpFragment"
+        android:label="fragment_help"
+        tools:layout="@layout/fragment_help" />
+    <fragment
+        android:id="@+id/ticketsFragment"
+        android:name="com.lado.travago.transpido.ui.traveller.TicketsFragment"
+        android:label="fragment_tickets"
+        tools:layout="@layout/fragment_tickets" />
+    <fragment
+        android:id="@+id/registrationFragment3"
+        android:name="com.lado.travago.transpido.ui.traveller.RegistrationFragment"
+        android:label="fragment_registration"
+        tools:layout="@layout/fragment_registration" />
+    <fragment
+        android:id="@+id/scannerRegistrationFragment"
+        android:name="com.lado.travago.transpido.ui.scanner.ScannerRegistrationFragment"
+        android:label="ScannerRegistrationFragment" />
+</navigation>
