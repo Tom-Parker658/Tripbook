@@ -11,19 +11,13 @@
         <action
             android:id="@+id/action_scannerRegistrationFragment2_to_phoneValidationFragment"
             app:destination="@id/phoneValidationFragment" />
-        <argument
-            android:name="scannerID"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/phoneValidationFragment"
-        android:name="com.lado.travago.transpido.ui.scanner.PhoneValidationFragment"
+        android:name="com.lado.travago.transpido.ui.scanner.ScannerPhoneValidationFragment"
         android:label="Validate SMS">
         <action
             android:id="@+id/action_phoneValidationFragment_to_scannerRegistrationFragment2"
             app:destination="@id/scannerRegistrationFragment2" />
-        <argument
-            android:name="phoneNumber"
-            app:argType="string" />
     </fragment>
 </navigation>

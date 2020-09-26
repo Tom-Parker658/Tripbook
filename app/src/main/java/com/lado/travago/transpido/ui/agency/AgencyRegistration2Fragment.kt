@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,7 +21,7 @@ import kotlinx.coroutines.*
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class AgencyRegistration2Fragment() : Fragment() {
-    private lateinit var binding: com.lado.travago.transpido.databinding.FragmentAgencyRegistration2Binding
+    private lateinit var binding: FragmentAgencyRegistration2Binding
     private lateinit var viewModel: AgencyRegistrationViewModel
     private val uiScope = CoroutineScope(Dispatchers.Main)
 
@@ -123,7 +122,7 @@ class AgencyRegistration2Fragment() : Fragment() {
 
     }
 
-    private suspend fun onBtnCreateClicked() = binding.btnCreate.setOnClickListener { btn ->
+    private suspend fun onBtnCreateClicked() = binding.btnCreate.setOnClickListener {
         onSaveRadioValues()
         val anyError = when {
             binding.numParks.editText!!.text.isBlank() -> {
@@ -150,8 +149,9 @@ class AgencyRegistration2Fragment() : Fragment() {
 
     private fun navigateToNextScreen(){
         viewModel.onOtaCreated.observe(viewLifecycleOwner){
-            if(it)
-            requireView().findNavController().navigate(AgencyRegistration2FragmentDirections.actionAgencyRegistration2FragmentToAgencyRegistration3Fragment())
+            if(it) requireView().findNavController().navigate(
+                AgencyRegistration2FragmentDirections.actionAgencyRegistration2FragmentToAgencyRegistration3Fragment()
+            )
         }
     }
 

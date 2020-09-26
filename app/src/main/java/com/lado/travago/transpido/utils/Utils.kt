@@ -123,6 +123,7 @@ object Utils {
         startDate: Long,
         endDate: Long,
         titleText: String,
+        setValue: (millis: Long)-> Unit
     ): MaterialDatePicker<Long> {
         //We create constraint so that the user can only select dates between a particular interval
         val bounds = CalendarConstraints.Builder()
@@ -132,11 +133,13 @@ object Utils {
 
         //We create our date picker which the user will use to enter his travel day
         //Showing the created date picker onScreen
-        return MaterialDatePicker.Builder.datePicker()
+        val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(bounds)//Constrain the possible dates
             .setTitleText(titleText)//Set the Title of the Picker
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
+        datePicker.addOnPositiveButtonClickListener { setValue(it) }
+        return datePicker
     }
 
     /**

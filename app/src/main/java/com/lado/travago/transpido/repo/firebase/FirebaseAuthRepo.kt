@@ -6,6 +6,7 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.lado.travago.transpido.repo.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -26,7 +27,7 @@ class FirebaseAuthRepo {
      * @param credential are the generated from phoneNumber see [PhoneAuthCredential]
      * @return FirebaseUser which the signIn scanner(traveller, scanner etc) see [FirebaseUser]
      */
-    fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) = flow {
+    fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential)= flow {
         firebaseAuth.useAppLanguage()
         emit(State.loading())
 

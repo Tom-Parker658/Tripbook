@@ -150,7 +150,8 @@ class AgencyRegistrationViewModel(): ViewModel() {
                                     mtnMoMoAccount = momoField,
                                     orangeMoneyAccount = orangeMoneyField,
                                     supportEmail = supportEmailField,
-                                    supportContact = supportPhoneField).otaMap
+                                    supportContact = supportPhoneField
+                                ).otaMap
 
                                 /**
                                  * Adds the agency document to the OnlineTravelAgency collection and returns the
@@ -229,10 +230,10 @@ class AgencyRegistrationViewModel(): ViewModel() {
     private fun startLoading() {
         _onLoading.value = true
     }
-
     private fun stopLoading() {
         _onLoading.value = false
     }
+
 
 
 

@@ -11,15 +11,13 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lado.travago.transpido.R
 import com.lado.travago.transpido.databinding.FragmentScannerRegistrationBinding
 import com.lado.travago.transpido.model.enums.SEX
-import com.lado.travago.transpido.ui.agency.AgencyRegistrationActivity
 import com.lado.travago.transpido.utils.Utils
-import com.lado.travago.transpido.viewmodel.ScannerCreationViewModelFactory
 import com.lado.travago.transpido.viewmodel.admin.ScannerCreationViewModel
 import com.lado.travago.transpido.viewmodel.admin.ScannerCreationViewModel.FieldTags
 import kotlinx.coroutines.*
@@ -29,7 +27,8 @@ import java.util.*
 @InternalCoroutinesApi
 class ScannerRegistrationFragment : Fragment() {
     private lateinit var binding: FragmentScannerRegistrationBinding
-    private lateinit var viewModel: ScannerCreationViewModel
+    //activityViewModels() gets the view-model from the parent activity
+    private val viewModel: ScannerCreationViewModel by activityViewModels()
     private val uiScope = CoroutineScope(Dispatchers.Main)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,12 +41,11 @@ class ScannerRegistrationFragment : Fragment() {
             container,
             false
         )
-        initViewModel()
         onFieldChange()
         onBtnCreateClicked()
         //Restore all fields after configuration changes
         restoreFields()
-        uiScope.launch { createScanner() }
+//        uiScope.launch { createScanner() }
 
         return binding.root
     }
@@ -59,6 +57,7 @@ class ScannerRegistrationFragment : Fragment() {
         if(viewModel.photoField != null)
             binding.profilePhoto.setImageBitmap(viewModel.photoField)
         binding.name.editText!!.setText(viewModel.nameField)
+        binding.phone.editText!!.setText(viewModel.phoneField)
         binding.birthday.editText!!.setText(
             Utils.formatDate(
                 viewModel.birthdayField,
@@ -71,62 +70,14 @@ class ScannerRegistrationFragment : Fragment() {
     }
 
     /**
-     * Initialises [viewModel] using the agencyName and the path gotten from the agency launched-bundle
-     */
-    private fun initViewModel() {
-        //Data gotten from the agency
-        val intentData = getIntentData()
-        val viewModelFactory = ScannerCreationViewModelFactory(
-            agencyName = intentData.first,
-            agencyFirestorePath = intentData.second
-        )
-        viewModel = ViewModelProvider(this, viewModelFactory)[ScannerCreationViewModel::class.java]
-    }
-
-    /**
-     * We observe the live data [PhoneValidationFragment.done] to know when the phone verification is finished.
-     * Then we obtain the generated id from the the arguments.
-     */
-    private suspend fun createScanner() {
-        PhoneValidationFragment.done.observe(viewLifecycleOwner) {
-            if (it) {
-                uiScope.launch {
-                    viewModel.setFields(
-                        FieldTags.ID,
-                        ScannerRegistrationFragmentArgs.fromBundle(requireArguments()).scannerID
-                    )
-                    viewModel.createScanner()
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Gets the intent data which is passed from the Agency to launch the Scanner creation.
-     * The intent contains the agency name and the database path to teh agency's document. Tis data wil
-     * be used for the creation of the scanner.
-     * We assume their values can not be null
-     * @return A pair where first = agencyName and second = path
-     */
-    private fun getIntentData(): Pair<String, String> {
-        val agencyFirestorePath =
-            requireActivity().intent.getStringExtra(AgencyRegistrationActivity.KEY_OTA_PATH)!!
-        val agencyName =
-            requireActivity().intent.getStringExtra(AgencyRegistrationActivity.KEY_AGENCY_NAME)!!
-        showToast("$agencyName, $agencyFirestorePath")
-        return agencyName to agencyFirestorePath
-    }
-
-    /**
-     * Navigates to the phoneVerification fragment with the [phoneField]
+     * Starts the code verification by calling [ScannerCreationViewModel.startPhoneVerification].
+     * Then navigates to the [ScannerPhoneValidationFragment]
      */
     private fun onBtnCreateClicked() =
         binding.btnCreateScanner.setOnClickListener {
+            viewModel.startPhoneVerification(requireActivity())
             it.findNavController().navigate(
-                ScannerRegistrationFragmentDirections.actionScannerRegistrationFragment2ToPhoneValidationFragment(
-                    viewModel.phoneField
-                )
+                ScannerRegistrationFragmentDirections.actionScannerRegistrationFragment2ToPhoneValidationFragment()
             )
         }
 
@@ -136,13 +87,13 @@ class ScannerRegistrationFragment : Fragment() {
      */
     private fun onFieldChange() {
         binding.name.editText!!.addTextChangedListener {
-            viewModel.setFields(FieldTags.NAME, binding.name.editText.toString())
+            viewModel.setFields(FieldTags.NAME, binding.name.editText!!.text.toString())
         }
         binding.phone.editText!!.addTextChangedListener {
-            viewModel.setFields(FieldTags.PHONE, binding.phone.editText.toString())
+            viewModel.setFields(FieldTags.PHONE, binding.phone.editText!!.text.toString())
         }
         binding.birthplace.editText!!.addTextChangedListener {
-            viewModel.setFields(FieldTags.BIRTH_PLACE, binding.birthplace.editText.toString())
+            viewModel.setFields(FieldTags.BIRTH_PLACE, binding.birthplace.editText!!.text.toString())
         }
         binding.checkBoxAdmin.setOnCheckedChangeListener { _, isAdmin ->
             viewModel.setFields(FieldTags.IS_ADMIN, isAdmin)
@@ -152,9 +103,7 @@ class ScannerRegistrationFragment : Fragment() {
             initPictureSelection()
         }
         // Add an onClick listener to the birthday endIcon to select the birthday
-        binding.birthday.setOnClickListener { selectBirthDay() }
-        binding.birthday.setEndIconOnClickListener { selectBirthDay() }
-        binding.birthday.editText!!.setOnClickListener { selectBirthDay() }
+        binding.fabPickDate.setOnClickListener { selectBirthDay() }
 
         binding.radioGroupSex.setOnCheckedChangeListener { _, id ->
             viewModel.setFields(FieldTags.SEX_ID, id)
@@ -175,26 +124,25 @@ class ScannerRegistrationFragment : Fragment() {
         val today = calendar.timeInMillis// The current date in millis
         calendar.set(1900, 1, 1)//Date in 1900s
         val date1900s = calendar.timeInMillis
+
         Utils.getDatePicker(
             date1900s,
             today,
-            "Select your birthday"
-        ).run {
-            showNow(fragmentManager!!, "")
-            addOnPositiveButtonClickListener {
-                viewModel.setFields(FieldTags.BIRTHDAY, it)
-            }
-        }
+            "Select your birthday",
+        ){
+            viewModel.setFields(FieldTags.BIRTHDAY, it)
+        }.showNow(parentFragmentManager, "")
+
     }
 
     /**
      * Intent to select profile photo from gallery. Request code = [RC_LOAD_PHOTO]
      */
     private fun initPictureSelection() =
-        startActivityForResult(
-            Intent(Intent.ACTION_PICK).setType("image/*"),
-            RC_LOAD_PHOTO
-        )
+        requireActivity().startActivityForResult(
+                Intent(Intent.ACTION_PICK).setType("image/*"),
+                RC_LOAD_PHOTO
+            )
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

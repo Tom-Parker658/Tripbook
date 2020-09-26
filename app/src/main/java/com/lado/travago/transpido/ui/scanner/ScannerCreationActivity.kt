@@ -19,7 +19,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class ScannerCreationActivity : AppCompatActivity() {
+class ScannerCreationActivity() : AppCompatActivity() {
     private lateinit var viewModel: ScannerCreationViewModel
     private lateinit var binding: ActivityScannerCreationBinding
 
