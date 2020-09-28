@@ -35,7 +35,6 @@ class AgencyRegistrationActivity : AppCompatActivity() {
     }
 
 
-
     private fun onLoading() {
         viewModel.onLoading.observe(this) {
             if (it == true) binding.progressBar.visibility = View.VISIBLE
@@ -44,7 +43,7 @@ class AgencyRegistrationActivity : AppCompatActivity() {
     }
 
     /**
-     * Navigate up in the stack whenn the back button is clicked
+     * Navigate up in the stack when the back button is clicked
      */
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.myAgencyNavHostFragment)
@@ -59,8 +58,7 @@ class AgencyRegistrationActivity : AppCompatActivity() {
         const val KEY_SCANNER_BIRTHDAY = "scannerBirthday"
         const val KEY_SCANNER_IS_ADMIN = "scannerIsAdmin"
         const val KEY_SCANNER_URL = "scannerPhotoUrl"
-        const val RC_LOAD_LOGO = 1
-        const val RC_SCANNER_CREATION = 2
+        const val RC_SCANNER_CREATION = 1
     }
 
 }

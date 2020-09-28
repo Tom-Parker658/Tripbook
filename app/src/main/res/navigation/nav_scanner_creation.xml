@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_scanner_creation"
     app:startDestination="@id/scannerRegistrationFragment2">
     <fragment
@@ -15,9 +14,5 @@
     <fragment
         android:id="@+id/phoneValidationFragment"
         android:name="com.lado.travago.transpido.ui.scanner.ScannerPhoneValidationFragment"
-        android:label="Validate SMS">
-        <action
-            android:id="@+id/action_phoneValidationFragment_to_scannerRegistrationFragment2"
-            app:destination="@id/scannerRegistrationFragment2" />
-    </fragment>
+        android:label="Validate SMS"/>
 </navigation>

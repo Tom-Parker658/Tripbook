@@ -1,6 +1,7 @@
 package com.lado.travago.transpido.viewmodel.admin
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -17,7 +18,9 @@ import com.lado.travago.transpido.repo.StorageTags
 import com.lado.travago.transpido.repo.firebase.FirebaseAuthRepo
 import com.lado.travago.transpido.repo.firebase.FirestoreRepo
 import com.lado.travago.transpido.repo.firebase.StorageRepo
+import com.lado.travago.transpido.ui.agency.AgencyRegistrationActivity
 import com.lado.travago.transpido.utils.Utils
+import com.lado.travago.transpido.viewmodel.admin.ScannerCreationViewModel.FieldTags.SMS_CODE
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -25,7 +28,7 @@ import java.util.concurrent.TimeUnit
 
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
-class ScannerCreationViewModel(private val agencyFirestorePath: String, private val agencyName: String) : ViewModel() {
+class ScannerCreationViewModel(private val agencyFirestorePath: String, val agencyName: String) : ViewModel() {
 
     //FirebaseRepo utilities for db, signIn and cloud storage
     private val firestoreRepo = FirestoreRepo()
@@ -87,10 +90,10 @@ class ScannerCreationViewModel(private val agencyFirestorePath: String, private 
     fun setFields(fieldTag: FieldTags, value: Any) = when(fieldTag){
         FieldTags.NAME -> this.nameField = value.toString()
         FieldTags.BIRTHDAY -> birthdayField = value as Long
-        FieldTags.PHONE -> phoneField = value.toString()
+        FieldTags.PHONE -> phoneField = "+237$value"
         FieldTags.SEX_ID -> sexFieldId = value as Int
         FieldTags.IS_ADMIN -> isAdminField = value as Boolean
-        FieldTags.PROFILE_PHOTO -> photoField = value as Bitmap
+        FieldTags.PROFILE_PHOTO -> photoField = value as Bitmap?
         FieldTags.BIRTH_PLACE -> birthplaceField = value.toString()
         FieldTags.SEX -> sex = value as SEX
         FieldTags.ID -> generatedID = value as String
@@ -132,7 +135,6 @@ class ScannerCreationViewModel(private val agencyFirestorePath: String, private 
         }
 
         override fun onVerificationFailed(exception: FirebaseException) {
-            _onCodeVerified.value = false
             Log.e("AUTH", exception.message!!)
         }
 
@@ -140,7 +142,6 @@ class ScannerCreationViewModel(private val agencyFirestorePath: String, private 
             resendToken = forceResendToken
             verificationId = id
             _onCodeSent.value = true
-//            super.onCodeSent(id, forceResendToken)
         }
     }
 
@@ -161,14 +162,26 @@ class ScannerCreationViewModel(private val agencyFirestorePath: String, private 
         NAME, SEX_ID, SEX, IS_ADMIN, PHONE, BIRTHDAY, BIRTH_PLACE, PROFILE_PHOTO, ID, SMS_CODE
     }
 
+    /**
+     * This is an intent which contains all data which will be needed about the scanners.
+     */
+    val scannerDataIntent by lazy {
+        Intent()
+            .putExtra(AgencyRegistrationActivity.KEY_SCANNER_NAME, nameField)
+            .putExtra(AgencyRegistrationActivity.KEY_SCANNER_BIRTHDAY, birthdayField)
+            .putExtra(AgencyRegistrationActivity.KEY_SCANNER_IS_ADMIN, isAdminField)
+            .putExtra(AgencyRegistrationActivity.KEY_SCANNER_PHONE, phoneField)
+            .putExtra(AgencyRegistrationActivity.KEY_SCANNER_URL, url)
+    }
 
     /**
      * Adds the scanner to the db, upload the photo
      */
     suspend fun createScanner(){
         /**
-         * Uses [FirebaseAuth] to sign in scanner to firestore and generate an id
+         * Uses [FirebaseAuthRepo.signInWithPhoneAuthCredential] to sign in scanner to firestore and generate an id
          */
+        _loading.value = true
         authRepo.signInWithPhoneAuthCredential(phoneCredential).collect{authState ->
             when(authState){
                 is State.Success -> {
@@ -176,15 +189,16 @@ class ScannerCreationViewModel(private val agencyFirestorePath: String, private 
                     //Get id from created user
                     generatedID = authState.data.uid
 
-                    val photoStream = Utils.convertBitmapToStream(photoField!!, Bitmap.CompressFormat.PNG, 0)
+                    val photoStream =
+                        Utils.convertBitmapToStream(photoField!!, Bitmap.CompressFormat.PNG, 0)
                     //Upload the profile photo to the cloud storage and retrieve url
                     storageRepo.uploadPhoto(
                         photoStream,
                         generatedID,
                         FirestoreTags.Scanner,
                         StorageTags.PROFILE
-                    ).collect{storageState ->
-                        when(storageState){
+                    ).collect { storageState ->
+                        when (storageState) {
                             is State.Loading -> _loading.value = true
                             is State.Failed -> {
                                 loading.value = false
@@ -210,8 +224,8 @@ class ScannerCreationViewModel(private val agencyFirestorePath: String, private 
                                 firestoreRepo.setDocument(
                                     scanner.scannerMap,
                                     "${FirestoreTags.Scanner}/${scanner.scannerMap["uid"]}"
-                                ).collect {dbState ->
-                                    when(dbState){
+                                ).collect { dbState ->
+                                    when (dbState) {
                                         is State.Loading -> _loading.value = true
                                         is State.Failed -> {
                                             _loading.value = false
@@ -219,18 +233,20 @@ class ScannerCreationViewModel(private val agencyFirestorePath: String, private 
                                         }
                                         is State.Success -> {
                                             _loading.value = false
-                                            val otaScannerMap = OnlineTravelAgency.otaScannerMap(scanner)
+                                            val otaScannerMap =
+                                                OnlineTravelAgency.otaScannerMap(scanner)
                                             //e.g OTA/General/Scanners/Administrator/scanner/Tom Joe
                                             val otaScannerPath =
-                                                "$agencyFirestorePath/Scanners${
-                                                    if(scanner.isAdmin) "Administrators" else "Standard"} ${scanner.name}"
+                                                "$agencyFirestorePath/Scanners/${
+                                                    if(scanner.isAdmin) "Administrators" else "Standard"
+                                                }/My Scanners/${scanner.name}"
 
                                             //Add some data about the scanner to the document of the agency
                                             firestoreRepo.setDocument(
                                                 otaScannerMap,
                                                 otaScannerPath
-                                            ).collect {dbState1 ->
-                                                when(dbState1){
+                                            ).collect { dbState1 ->
+                                                when (dbState1) {
                                                     is State.Loading -> _loading.value = true
                                                     is State.Failed -> {
                                                         _loading.value = false
@@ -238,7 +254,8 @@ class ScannerCreationViewModel(private val agencyFirestorePath: String, private 
                                                     }
                                                     is State.Success -> {
                                                         _loading.value = false
-                                                        //Complete the creation process
+                                                        //Complete the creation process and logout
+                                                        authRepo.signOutUser()
                                                         _scannerCreated.value = true
                                                     }
                                                 }
@@ -259,6 +276,9 @@ class ScannerCreationViewModel(private val agencyFirestorePath: String, private 
 
 
     }
+
+    fun startLoading(){_loading.value = true}
+    fun stopLoading(){_loading.value = false}
 
     fun formatDate(timeInMillis: Long) =
         Utils.formatDate(timeInMillis, "MMMM, dd YYYY")

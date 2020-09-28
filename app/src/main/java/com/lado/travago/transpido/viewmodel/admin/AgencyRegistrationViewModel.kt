@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lado.travago.transpido.model.admin.OnlineTravelAgency
+import com.lado.travago.transpido.model.admin.Scanner
 import com.lado.travago.transpido.model.enums.Region
 import com.lado.travago.transpido.repo.FirestoreTags
 import com.lado.travago.transpido.repo.State
@@ -17,7 +18,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import java.util.*
-import kotlin.collections.HashMap
 
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
@@ -25,6 +25,9 @@ class AgencyRegistrationViewModel(): ViewModel() {
     private val authRepo = FirebaseAuthRepo()
     private val firestoreRepo = FirestoreRepo()
     private val storageRepo = StorageRepo()
+    //Contains a list of created scanners
+    private val _listOfScanners = mutableListOf<Scanner.ScannerBasicInfo>()
+    val listOfScanners get() = _listOfScanners.toList()
 
     var logoFilename = ""
         private set
@@ -63,11 +66,18 @@ class AgencyRegistrationViewModel(): ViewModel() {
     private val _onOtaCreated = MutableLiveData(false)
     val onOtaCreated get() = _onOtaCreated
     //A live data about the number of scanners created already
-    private val _numberOfScanners = MutableLiveData(0)
+    private val _numberOfScanners = MutableLiveData(_listOfScanners.size)
     val numberOfScanners get() = _numberOfScanners
 
+    /**
+     * Adds a new scanner([Scanner.ScannerBasicInfo] object) to the [_listOfScanners]
+     */
+    fun addCreatedScannerToList(scannerInfo: Scanner.ScannerBasicInfo) = _listOfScanners.add(scannerInfo)
 
 
+    /**
+     * Saves the agency fields to a viewModel variables
+     */
     fun saveField(key: FieldTags, value: Any){
         when(key){
             FieldTags.NAME -> nameField = value.toString()
@@ -202,6 +212,7 @@ class AgencyRegistrationViewModel(): ViewModel() {
                                                                 is State.Success -> {
                                                                     stopLoading()
                                                                     _onOtaCreated.value = true
+                                                                    authRepo.signOutUser()
                                                                 }
                                                             }
 

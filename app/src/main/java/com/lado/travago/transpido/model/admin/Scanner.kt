@@ -4,7 +4,6 @@ import com.google.firebase.Timestamp
 import com.lado.travago.transpido.model.enums.SEX
 import com.lado.travago.transpido.utils.Utils
 import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * @author Tom Parkert
@@ -55,12 +54,25 @@ data class Scanner(
         "birthplace" to birthPlace,
         "Online Travel Agency" to otaName,
         "nationality" to "Cameroon",
-        "park" to park!!,
+        "park" to park,
         "isAdmin" to isAdmin,
         "isActive" to isActive,
         "numberOfScans" to numberOfScans,
         "photoUrl" to profilePhoto,
         "addedOn" to Timestamp(Date())
     )
+
+    /**
+     * An inner class which contains some basic information about the scanner.
+     */
+   data class ScannerBasicInfo(
+        val name: String,
+        val birthdayInMillis: Long,
+        val isAdmin: Boolean,
+        val phoneNumber: String,
+        val photoUrl: String
+    )
+
+
 
 }

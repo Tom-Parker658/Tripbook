@@ -1,35 +1,39 @@
 package com.lado.travago.transpido.ui.scanner
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.lado.travago.transpido.R
 import com.lado.travago.transpido.databinding.FragmentScannerRegistrationBinding
 import com.lado.travago.transpido.model.enums.SEX
+import com.lado.travago.transpido.ui.agency.AgencyRegistrationActivity
 import com.lado.travago.transpido.utils.Utils
+import com.lado.travago.transpido.viewmodel.ScannerCreationViewModelFactory
 import com.lado.travago.transpido.viewmodel.admin.ScannerCreationViewModel
 import com.lado.travago.transpido.viewmodel.admin.ScannerCreationViewModel.FieldTags
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.*
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class ScannerRegistrationFragment : Fragment() {
+class ScannerRegistrationFragment() : Fragment() {
     private lateinit var binding: FragmentScannerRegistrationBinding
     //activityViewModels() gets the view-model from the parent activity
-    private val viewModel: ScannerCreationViewModel by activityViewModels()
-    private val uiScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var viewModel: ScannerCreationViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,21 +45,51 @@ class ScannerRegistrationFragment : Fragment() {
             container,
             false
         )
+        initViewModel()
         onFieldChange()
         onBtnCreateClicked()
         //Restore all fields after configuration changes
         restoreFields()
-//        uiScope.launch { createScanner() }
 
         return binding.root
     }
 
     /**
+     * Initialises [viewModel] using the agencyName and the path gotten from the agency launched-bundle
+     */
+    private fun initViewModel(){
+        //Data gotten from the agency
+        val intentData = getIntentData()
+        val viewModelFactory = ScannerCreationViewModelFactory(
+            agencyName = intentData.first,
+            agencyFirestorePath = intentData.second
+        )
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[ScannerCreationViewModel::class.java]
+    }
+
+    /**
+     * Gets the intent data which is passed from the Agency to launch the Scanner creation.
+     * The intent contains the agency name and the database path to teh agency's document. Tis data wil
+     * be used for the creation of the scanner.
+     * We assume their values can not be null
+     * @return A pair where first = agencyName and second = path
+     */
+    private fun getIntentData(): Pair<String, String>{
+        val agencyFirestorePath = requireActivity().intent.getStringExtra(AgencyRegistrationActivity.KEY_OTA_PATH) !!
+        val agencyName = requireActivity().intent.getStringExtra(AgencyRegistrationActivity.KEY_AGENCY_NAME) !!
+
+        Log.i("ScannerCreationActivity", "agencyName=$agencyName, path=$agencyFirestorePath")
+        return agencyName to agencyFirestorePath
+    }
+
+
+
+    /**
      * Loads all values of the fields from the viewModel in case of config change
      */
     private fun restoreFields() {
-        if(viewModel.photoField != null)
-            binding.profilePhoto.setImageBitmap(viewModel.photoField)
+        binding.park.editText!!.setText(viewModel.agencyName)
+        viewModel.photoField?.let{ binding.profilePhoto.setImageBitmap(it)}
         binding.name.editText!!.setText(viewModel.nameField)
         binding.phone.editText!!.setText(viewModel.phoneField)
         binding.birthday.editText!!.setText(
@@ -73,13 +107,13 @@ class ScannerRegistrationFragment : Fragment() {
      * Starts the code verification by calling [ScannerCreationViewModel.startPhoneVerification].
      * Then navigates to the [ScannerPhoneValidationFragment]
      */
-    private fun onBtnCreateClicked() =
-        binding.btnCreateScanner.setOnClickListener {
-            viewModel.startPhoneVerification(requireActivity())
-            it.findNavController().navigate(
-                ScannerRegistrationFragmentDirections.actionScannerRegistrationFragment2ToPhoneValidationFragment()
-            )
-        }
+    private fun onBtnCreateClicked() = binding.btnCreateScanner.setOnClickListener {
+        it.findNavController().navigate(
+            ScannerRegistrationFragmentDirections.actionScannerRegistrationFragment2ToPhoneValidationFragment()
+        )
+        viewModel.startPhoneVerification(requireActivity())
+        viewModel.startLoading()
+    }
 
 
     /**
@@ -115,62 +149,63 @@ class ScannerRegistrationFragment : Fragment() {
             viewModel.setFields(FieldTags.SEX, sex)
         }
     }
+    private fun initPictureSelection() =
+        pickScannerPhoto.launch("image/*")
+
 
     /**
      * initiate the date picker to select the birthday
      */
     private fun selectBirthDay() {
+        val titleText = "Select your birthday"
         val calendar = Calendar.getInstance()//An instance of the current Calendar
         val today = calendar.timeInMillis// The current date in millis
         calendar.set(1900, 1, 1)//Date in 1900s
         val date1900s = calendar.timeInMillis
 
-        Utils.getDatePicker(
-            date1900s,
-            today,
-            "Select your birthday",
-        ){
+        //We create constraint so that the user can only select dates between a particular interval
+        val bounds = CalendarConstraints.Builder()
+            .setStart(date1900s)//Smallest date which can be selected
+            .setEnd(today)//Furthest day which can be selected
+            .build()
+
+        //We create our date picker which the user will use to enter his travel day
+        //Showing the created date picker onScreen
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setCalendarConstraints(bounds)//Constrain the possible dates
+            .setTitleText(titleText)//Set the Title of the Picker
+            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+            .build()
+        //Sets the value of the edit text to the formatted value of the selection
+        datePicker.addOnPositiveButtonClickListener {
             viewModel.setFields(FieldTags.BIRTHDAY, it)
-        }.showNow(parentFragmentManager, "")
+            binding.birthday.editText!!.setText(viewModel.formatDate(viewModel.birthdayField))
+        }
+        datePicker.showNow(parentFragmentManager, "")
 
     }
+
 
     /**
-     * Intent to select profile photo from gallery. Request code = [RC_LOAD_PHOTO]
+     * A pre-built contract to pick an image from the gallery!
+     * If the received photoUri is not null, we convert the uri to a bitmap and set its value to that of [ScannerCreationViewModel.photoField]
+     * Then we set the [FragmentScannerRegistrationBinding.profilePhoto] bitmap to the selected image if the image is less than 4000*4000
+     * else we re-launch the selection
      */
-    private fun initPictureSelection() =
-        requireActivity().startActivityForResult(
-                Intent(Intent.ACTION_PICK).setType("image/*"),
-                RC_LOAD_PHOTO
-            )
+    private val pickScannerPhoto: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.GetContent()) { photoUri ->
+        photoUri?.let {uri ->
+            val photoStream = requireActivity().contentResolver.openInputStream(uri)!!
+            viewModel.setFields(FieldTags.PROFILE_PHOTO, BitmapFactory.decodeStream(photoStream))
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK)
-            when (requestCode) {
-                //Profile photo selection intent result
-                RC_LOAD_PHOTO -> {
-                    try {
-                        val logoUri = data?.data!!
-                        //convert image into stream
-                        val photoStream =
-                            requireActivity().contentResolver.openInputStream(logoUri)!!
-                        val selectedPhoto = BitmapFactory.decodeStream(photoStream)
-                        viewModel.setFields(FieldTags.PROFILE_PHOTO, selectedPhoto)
-
-                        if (selectedPhoto.width >= 4000 && selectedPhoto.height >= 4000) {//In case image too large
-                            showToast("The image is too large!")
-                            initPictureSelection()
-                        } else // Sets the profile to the selected image
-                            binding.profilePhoto.setImageBitmap(viewModel.photoField!!)
-                    } catch (e: Exception) {
-                        showToast("Something went wrong when loading image. Try again")
-                    }
-                }
+            if (viewModel.photoField!!.width >= 4000 && viewModel.photoField!!.height >= 4000) {//In case image too large
+                showToast("The image is too large!")
+                initPictureSelection()
             }
-        else
-            showToast("You haven't picked any picture")
+            else // Sets the profile to the selected image
+                binding.profilePhoto.setImageBitmap(viewModel.photoField!!)
+        }
     }
+
 
     /**
      * Helper method to display toasts
@@ -178,15 +213,15 @@ class ScannerRegistrationFragment : Fragment() {
     private fun showToast(message: String) =
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
-    /**
-     * Helper method to display snackbars
-     */
-    private fun showSnackbar(message: String) =
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
+//    /**
+//     * Helper method to display snackbars
+//     */
+//    private fun showSnackbar(message: String) =
+//        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
 
     companion object {
-        const val RC_LOAD_PHOTO = 1
-        const val TAG = "ScannerRegistFragment"
+//        const val TAG = "ScannerRegistFragment"
     }
+    //TODO Armel disturbed me!! I need to debug the error from layout fidelity
 
 }

@@ -1,19 +1,19 @@
 package com.lado.travago.transpido.ui.scanner
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.PhoneAuthCredential
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.transpido.R
 import com.lado.travago.transpido.databinding.FragmentScannerPhoneValidationBinding
+import com.lado.travago.transpido.ui.agency.AgencyRegistrationActivity
+import com.lado.travago.transpido.viewmodel.ScannerCreationViewModelFactory
 import com.lado.travago.transpido.viewmodel.admin.ScannerCreationViewModel
 import com.lado.travago.transpido.viewmodel.admin.ScannerCreationViewModel.FieldTags
 import kotlinx.coroutines.*
@@ -25,9 +25,8 @@ import kotlinx.coroutines.*
 @InternalCoroutinesApi
 class ScannerPhoneValidationFragment : Fragment() {
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private lateinit var phoneAuthCredential: PhoneAuthCredential
     private lateinit var binding: FragmentScannerPhoneValidationBinding
-    private val viewModel: ScannerCreationViewModel by activityViewModels()
+    private lateinit var viewModel: ScannerCreationViewModel
 
 
     override fun onCreateView(
@@ -36,18 +35,59 @@ class ScannerPhoneValidationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding =  DataBindingUtil.inflate(layoutInflater, R.layout.fragment_scanner_phone_validation, container, false)
+
+        initViewModel()
         restoreFields()
         onFieldChange()
         onClickBtnVerify()
         onClickBtnResend()
+        createScanner()
+        enableLayout()
+
 
         return binding.root
     }
 
     /**
+     * Initialises [viewModel] using the agencyName and the path gotten from the agency launched-bundle
+     */
+    private fun initViewModel(){
+        //Data gotten from the agency
+        val intentData = getIntentData()
+        val viewModelFactory = ScannerCreationViewModelFactory(
+            agencyName = intentData.first,
+            agencyFirestorePath = intentData.second
+        )
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[ScannerCreationViewModel::class.java]
+    }
+
+    /**
+     * Gets the intent data which is passed from the Agency to launch the Scanner creation.
+     * The intent contains the agency name and the database path to teh agency's document. Tis data wil
+     * be used for the creation of the scanner.
+     * We assume their values can not be null
+     * @return A pair where first = agencyName and second = path
+     */
+    private fun getIntentData(): Pair<String, String>{
+        val agencyFirestorePath = requireActivity().intent.getStringExtra(AgencyRegistrationActivity.KEY_OTA_PATH) !!
+        val agencyName = requireActivity().intent.getStringExtra(AgencyRegistrationActivity.KEY_AGENCY_NAME) !!
+
+        Log.i("ScannerCreationActivity", "agencyName=$agencyName, path=$agencyFirestorePath")
+        return agencyName to agencyFirestorePath
+    }
+
+
+    /**
+     * A function which checks if the code has been sent. If then, we activate the layout to let the user input his
+     * verification code. Observes [ScannerCreationViewModel.onCodeSent] and if true, we remove the loading spin
+     */
+    private fun enableLayout() = viewModel.onCodeSent.observe(viewLifecycleOwner){
+        if(it) viewModel.stopLoading()
+    }
+    /**
      * Creates the scanner when the [ScannerCreationViewModel.onCodeVerified] is made true.
      */
-    fun createScanner(){
+    private fun createScanner(){
         viewModel.onCodeVerified.observe(viewLifecycleOwner){
             uiScope.launch {
                 if (it) viewModel.createScanner()
@@ -89,10 +129,10 @@ class ScannerPhoneValidationFragment : Fragment() {
      */
     private fun showToast(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
-    /**
-     * Helper method to display snackbars
-     */
-    private fun showSnackbar(message: String) = Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
+//    /**
+//     * Helper method to display snackbars
+//     */
+//    private fun showSnackbar(message: String) = Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
 
     companion object{
         const val TAG = "PhoneValidationFrag"

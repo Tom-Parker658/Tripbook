@@ -1,12 +1,10 @@
 package com.lado.travago.transpido.ui.scanner
 
 import android.app.Activity
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.transpido.R
@@ -62,20 +60,17 @@ class ScannerCreationActivity() : AppCompatActivity() {
     /**
      * Send an intent containing the data about the the scanner once the scanner has been created.
      * This intent shall be gotten from [onActivityResult] with request code [AgencyRegistrationActivity.RC_SCANNER_CREATION]
+     * Finally, we end the activity with [finish]
      */
-    private fun navigateToAgencyFragment(){
+    private fun navigateToAgencyFragment()=
         viewModel.scannerCreated.observe(this) {
             if(it){
-                val scannerDataIntent  = Intent()
-                    .putExtra(AgencyRegistrationActivity.KEY_SCANNER_NAME, viewModel.nameField)
-                    .putExtra(AgencyRegistrationActivity.KEY_SCANNER_BIRTHDAY, viewModel.birthdayField)
-                    .putExtra(AgencyRegistrationActivity.KEY_SCANNER_IS_ADMIN, viewModel.isAdminField)
-                    .putExtra(AgencyRegistrationActivity.KEY_SCANNER_PHONE, viewModel.phoneField)
-                    .putExtra(AgencyRegistrationActivity.KEY_SCANNER_URL, viewModel.url)
-                setResult(Activity.RESULT_OK, scannerDataIntent)
+                setResult(Activity.RESULT_OK, viewModel.scannerDataIntent)
+                finish()
+                viewModel.stopLoading()
             }
         }
-    }
+
 
     /**
      * Observe the [ScannerCreationViewModel.loading] live data to know when a process is actually in the loading state
