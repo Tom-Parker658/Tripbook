@@ -25,9 +25,10 @@ class AgencyRegistrationViewModel(): ViewModel() {
     private val authRepo = FirebaseAuthRepo()
     private val firestoreRepo = FirestoreRepo()
     private val storageRepo = StorageRepo()
+
     //Contains a list of created scanners
-    private val _listOfScanners = mutableListOf<Scanner.ScannerBasicInfo>()
-    val listOfScanners get() = _listOfScanners.toList()
+    private val _listOfScanners = MutableLiveData<MutableList<Scanner.ScannerBasicInfo>>()
+    val listOfScanners get() = _listOfScanners
 
     var logoFilename = ""
         private set
@@ -65,14 +66,17 @@ class AgencyRegistrationViewModel(): ViewModel() {
     //Completion state
     private val _onOtaCreated = MutableLiveData(false)
     val onOtaCreated get() = _onOtaCreated
-    //A live data about the number of scanners created already
-    private val _numberOfScanners = MutableLiveData(_listOfScanners.size)
-    val numberOfScanners get() = _numberOfScanners
+
 
     /**
      * Adds a new scanner([Scanner.ScannerBasicInfo] object) to the [_listOfScanners]
      */
-    fun addCreatedScannerToList(scannerInfo: Scanner.ScannerBasicInfo) = _listOfScanners.add(scannerInfo)
+    fun addCreatedScannerToList(scannerInfo: Scanner.ScannerBasicInfo) {
+        if(_listOfScanners.value == null)
+            _listOfScanners.value = mutableListOf(scannerInfo)
+        else
+            _listOfScanners.value!! += scannerInfo
+    }
 
 
     /**
@@ -97,7 +101,8 @@ class AgencyRegistrationViewModel(): ViewModel() {
 
 
     /**
-     * Creates the Agency and adds it to the db. When succesfull, it makes sure we navigate to the fragment to add scanners
+     * Creates the Agency and adds it to the db. When successful, it makes sure we navigate to the fragment to add scanners
+     * Then finally, it deletes the temporary current account created for the process sake
      */
     suspend fun createOTA(){
         val logoStream = Utils.convertBitmapToStream(
@@ -117,13 +122,11 @@ class AgencyRegistrationViewModel(): ViewModel() {
             Region.LITTORAL.name to regions.contains(Region.LITTORAL),
             Region.SOUTH_WEST.name to regions.contains(Region.SOUTH_WEST),
         )
-
         /**
          * Generate an anonymous account which can be use by the Scanner to create the Agency and returns
          * the state of the operation. We then continue if the state is success
          */
         authRepo.signInAnonymously().collect { authState ->
-
             when (authState) {
                 is State.Loading -> startLoading()
                 is State.Failed -> {
@@ -132,7 +135,6 @@ class AgencyRegistrationViewModel(): ViewModel() {
                 }
                 is State.Success -> {
                     stopLoading()
-
                     /**
                      * Upload the logo to the storage
                      */
@@ -212,7 +214,20 @@ class AgencyRegistrationViewModel(): ViewModel() {
                                                                 is State.Success -> {
                                                                     stopLoading()
                                                                     _onOtaCreated.value = true
-                                                                    authRepo.signOutUser()
+                                                                    //Delete the created anonymous user from the database
+                                                                    authRepo.deleteCurrentUser().collect{ deleteState ->
+                                                                        when(deleteState){
+                                                                            is State.Loading -> startLoading()
+                                                                            is State.Failed -> {
+                                                                                Log.e(TAG, "FireStore OTA: ${deleteState.message}")
+                                                                            }
+                                                                            is State.Success -> {
+                                                                                Log.i(TAG, "Anonymous deleted")
+                                                                                stopLoading()
+                                                                            }
+
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
 
@@ -231,7 +246,6 @@ class AgencyRegistrationViewModel(): ViewModel() {
                             }
                         }
                     }
-
                 }
             }
         }
@@ -244,9 +258,6 @@ class AgencyRegistrationViewModel(): ViewModel() {
     private fun stopLoading() {
         _onLoading.value = false
     }
-
-
-
 
     /**
      * Cancels the state of [_onOtaCreated] after the navigation has been done

@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,18 +17,14 @@
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:contentDescription="@string/desc_user_image"
             app:srcCompat="@drawable/baseline_add_photo_alternate_24"
             tools:srcCompat="@tools:sample/avatars" />
 
-
-     <androidx.core.widget.NestedScrollView
+         <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -42,7 +37,6 @@
                 app:icon="@drawable/baseline_save_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/radioGroup_sex" />
 
@@ -58,14 +52,12 @@
 
             <ImageView
                 android:id="@+id/text_label_user_contact"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="16dp"
                 android:contentDescription="@string/desc_user_image"
                 app:layout_constraintBottom_toBottomOf="@+id/phone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/phone"
-                app:srcCompat="@drawable/baseline_phone_24" />
+                app:srcCompat="@drawable/baseline_phone_24"
+                style="@style/style_image_label" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/birthplace"
@@ -104,7 +96,7 @@
                 android:hint="@string/text_label_birthday"
                 app:helperText="Tap and enter your birth day!"
                 app:layout_constraintBottom_toTopOf="@+id/birthplace"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/fab_pick_date"
                 app:layout_constraintStart_toEndOf="@+id/text_label_user_birthday"
                 app:layout_constraintTop_toBottomOf="@+id/name">
 
@@ -134,9 +126,6 @@
                 style="@style/editTextStyle"
                 android:hint="@string/text_label_name"
                 app:helperText="Enter all your names"
-                app:helperTextEnabled="true"
-                app:hintAnimationEnabled="true"
-                app:hintEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/birthday"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/text_label_user_name"
@@ -149,45 +138,37 @@
 
             <ImageView
                 android:id="@+id/text_label_user_occupation"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/park"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/park"
-                app:srcCompat="@drawable/baseline_directions_bus_24" />
+                app:srcCompat="@drawable/baseline_directions_bus_24"
+                style="@style/style_image_label" />
 
             <ImageView
                 android:id="@+id/text_label_user_birthplace"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/birthplace"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/birthplace"
-                app:srcCompat="@drawable/baseline_place_24" />
+                app:srcCompat="@drawable/baseline_place_24"
+                style="@style/style_image_label" />
 
             <ImageView
                 android:id="@+id/text_label_user_birthday"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="16dp"
 
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/birthday"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/birthday"
-                app:srcCompat="@drawable/baseline_cake_24" />
+                app:srcCompat="@drawable/baseline_cake_24"
+                style="@style/style_image_label" />
 
             <ImageView
                 android:id="@+id/text_label_user_name"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/name"
-                app:srcCompat="@drawable/baseline_person_24" />
+                app:srcCompat="@drawable/baseline_person_24"
+                style="@style/style_image_label" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/checkBox_admin"

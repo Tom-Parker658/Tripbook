@@ -1,13 +1,13 @@
 package com.lado.travago.transpido.ui.agency
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,11 +16,11 @@ import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lado.travago.transpido.R
 import com.lado.travago.transpido.databinding.FragmentAgencyRegistration1Binding
+import com.lado.travago.transpido.databinding.FragmentScannerRegistrationBinding
 import com.lado.travago.transpido.viewmodel.admin.AgencyRegistrationViewModel
-import com.lado.travago.transpido.viewmodel.admin.AgencyRegistrationViewModel.*
+import com.lado.travago.transpido.viewmodel.admin.AgencyRegistrationViewModel.FieldTags
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import java.io.FileNotFoundException
 
 
 @ExperimentalCoroutinesApi
@@ -112,14 +112,9 @@ class AgencyRegistration1Fragment(): Fragment() {
     }
 
     /**
-     * Launches the intent to select the log from the gallery
+     * Launches the [pickAgencyLogo] event with the parameter image/
      */
-    private fun initLogoSelection(){
-        val photoIntentPicker = Intent(Intent.ACTION_PICK)
-            .setType("image/*")
-
-        startActivityForResult(photoIntentPicker, AgencyRegistrationActivity.RC_LOAD_LOGO)
-    }
+    private fun initLogoSelection() = pickAgencyLogo.launch("image/*")
 
 
     /**
@@ -174,32 +169,25 @@ class AgencyRegistration1Fragment(): Fragment() {
     }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK)
-        // Gets the selected logo picture
-            if (requestCode == AgencyRegistrationActivity.RC_LOAD_LOGO) {
-                try {
-                    val logoUri = data?.data!!
-                    //Adds the filename of the bitmap
-                    logoFileName = logoUri.lastPathSegment!!
-                    val logoStream = requireActivity().contentResolver.openInputStream(logoUri)!!
-                    //convert image into stream
-                    viewModel.saveField(FieldTags.LOGO_BITMAP, BitmapFactory.decodeStream(logoStream))
+    /**
+     * A pre-built contract to pick an image from the gallery!
+     * If the received photoUri is not null, we convert the uri to a bitmap and set its value to that of [AgencyRegistrationViewModel.logoBitmap]
+     * Then we set the [FragmentScannerRegistrationBinding.profilePhoto] value to the name of selected image if the image is less than 4000*4000
+     * else we re-launch the event
+     */
+    private val pickAgencyLogo: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.GetContent()) { logoUri ->
+        logoUri?.let {uri ->
+            val logoStream = requireActivity().contentResolver.openInputStream(uri)!!
+            viewModel.saveField(FieldTags.LOGO_BITMAP, BitmapFactory.decodeStream(logoStream))
 
-                    if (viewModel.logoBitmap!!.width >= 4000 && viewModel.logoBitmap!!.height >= 4000) {
-                        showToast("Choose a smaller logo")
-                        initLogoSelection()
-                    } else {
-                        binding.logo.editText!!.setText(logoFileName)// Set the logo field to the filename of the logo
-                    }
-                } catch (e: FileNotFoundException) {
-                    e.printStackTrace()
-                    showToast("Something went wrong when loading image. Try again",)
-                }
-            } else {
-                showToast("You haven't picked any logo")
+            if (viewModel.logoBitmap!!.width >= 4000 && viewModel.logoBitmap!!.height >= 4000) { //In case image too large
+                showToast("The image is too large!")
+                initLogoSelection()
             }
+
+            else // Sets the logo field to the name of the selected photo
+                binding.logo.editText!!.setText(uri.lastPathSegment)
+        }
     }
 
     /**

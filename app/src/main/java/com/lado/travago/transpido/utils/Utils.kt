@@ -1,8 +1,6 @@
 package com.lado.travago.transpido.utils
 
 import android.graphics.Bitmap
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
@@ -19,21 +17,17 @@ import java.util.*
 object Utils {
 
     /**
-     * Used to calculate the age of a Traveller [Traveller]
-     * @param birthday it must in the format dd/mm/yy
-     * It extract the year from the [birthday] and subtracts it from the current year to get the age
+     * @author Tom Parkert
+     * Subtracts the birthday in millis from the current date in millis, then convert the
+     * answer from milliseconds to years
+     * @param birthdayInMillis is the birthday in milliseconds
+     * @return the age in Whole number
+     *
      */
-    fun getAge(birthday: String): Int {
-        val birthDate = Calendar.getInstance()
-        birthDate.set(
-            birthday.subSequence(0, 1).toString().toInt(),
-            birthday.subSequence(3, 4).toString().toInt(),
-            birthday.subSequence(6, 9).toString().toInt()
-        )
+    fun getAge(birthdayInMillis: Long): Int{
         val now = Calendar.getInstance().timeInMillis
-        val age = Calendar.getInstance()
-        age.timeInMillis = now - birthDate.timeInMillis
-        return age[Calendar.DAY_OF_YEAR] % 365
+        val ageInMillis = now - birthdayInMillis
+        return (ageInMillis/(1000*3600*24*365.25)).toInt()
     }
 
     /**
@@ -66,7 +60,6 @@ object Utils {
             }?.split(":")?.last()
         }
     }
-
 
     /**
      * Generate a QR based on the ticket
@@ -116,31 +109,6 @@ object Utils {
         return Calendar.getInstance().before(Date(travelDay))
     }
 
-    /**
-     * PickDate Utility
-     */
-    fun getDatePicker(
-        startDate: Long,
-        endDate: Long,
-        titleText: String,
-        setValue: (millis: Long)-> Unit
-    ): MaterialDatePicker<Long> {
-        //We create constraint so that the user can only select dates between a particular interval
-        val bounds = CalendarConstraints.Builder()
-            .setStart(startDate)//Smallest date which can be selected
-            .setEnd(endDate)//Furthest day which can be selected
-            .build()
-
-        //We create our date picker which the user will use to enter his travel day
-        //Showing the created date picker onScreen
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setCalendarConstraints(bounds)//Constrain the possible dates
-            .setTitleText(titleText)//Set the Title of the Picker
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-            .build()
-        datePicker.addOnPositiveButtonClickListener { setValue(it) }
-        return datePicker
-    }
 
     /**
      * Formats the date from a milliseconds Long to a nice looking date
@@ -149,6 +117,7 @@ object Utils {
      * @return the formatted date [String]
      */
     fun formatDate(dateInMillis: Long, pattern: String): String = SimpleDateFormat(pattern, Locale.getDefault()).format(Date(dateInMillis))
+
     /**
      * Helper method to create a stream from bitmap
      * @param bitmap is the image we which to use for the conversion

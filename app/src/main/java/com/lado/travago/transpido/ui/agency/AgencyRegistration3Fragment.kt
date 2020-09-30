@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.transpido.R
 import com.lado.travago.transpido.databinding.FragmentAgencyRegistration3Binding
 import com.lado.travago.transpido.model.admin.Scanner
+import com.lado.travago.transpido.ui.recyclerview.adapters.AgencyScannersAdapter
 import com.lado.travago.transpido.utils.contracts.ScannerCreationContract
 import com.lado.travago.transpido.viewmodel.admin.AgencyRegistrationViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,42 +19,53 @@ import kotlinx.coroutines.InternalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class AgencyRegistration3Fragment() : Fragment() {
+class AgencyRegistration3Fragment : Fragment() {
     private lateinit var binding: FragmentAgencyRegistration3Binding
     private lateinit var viewModel: AgencyRegistrationViewModel
+    private val adapter = AgencyScannersAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
-        viewModel = ViewModelProvider(this)[AgencyRegistrationViewModel::class.java]
         binding = DataBindingUtil.inflate(
             layoutInflater,
             R.layout.fragment_agency_registration3,
             container,
             false
         )
+        // Inflate the layout for this fragment
         viewModel = ViewModelProvider(requireActivity())[AgencyRegistrationViewModel::class.java]
 
-        //Init Binding
-        binding.viewModel = viewModel
-
-        binding.lifecycleOwner = this
-
+        //Observes the list of scanners and updates the number of them
+        updateNumberOfScanners()
         onFabAddScannerClicked()
+        setAdapter()
+        updateRecyclerView()
+//        testRecyclerView()
         return binding.root
     }
 
-    private fun onFabAddScannerClicked(){
-        //Starts the scanner creation activity using the agency name and the agency firestore path
-        binding.fabAddScanner.setOnClickListener {
-            val agencyNameToPathPair = viewModel.nameField to viewModel.otaPath
-            Log.i("ScannerCreationActivity",
-                "${viewModel.nameField}, ${viewModel.otaPath}"
-            )
-            scannerBasicInfo.launch(agencyNameToPathPair)
-        }
+    //Updates the number of scanners
+    private fun updateNumberOfScanners() = viewModel.listOfScanners.observe(viewLifecycleOwner) {
+        binding.numberOfScanners.text = it.size.toString()
+    }
+
+    /**
+     * Initialises and sets the recycler view adapter to the defined adapter of [AgencyScannersAdapter]
+     */
+    private fun setAdapter() {
+        binding.recyclerView.adapter = adapter
+    }
+
+    //Starts the scanner creation activity using the agency name and the agency firestore path
+    private fun onFabAddScannerClicked() = binding.fabAddScanner.setOnClickListener {
+        val agencyNameToPathPair = viewModel.nameField to viewModel.otaPath
+        Log.i(
+            "ScannerCreationActivity",
+            "${viewModel.nameField}, ${viewModel.otaPath}"
+        )
+        scannerBasicInfo.launch(agencyNameToPathPair)
     }
 
     /**
@@ -62,9 +74,43 @@ class AgencyRegistration3Fragment() : Fragment() {
      * @see Scanner.ScannerBasicInfo
      * @see ScannerCreationContract
      */
-    private val scannerBasicInfo = registerForActivityResult(ScannerCreationContract()){info ->
+    private val scannerBasicInfo = registerForActivityResult(ScannerCreationContract()) { info ->
         viewModel.addCreatedScannerToList(info)
         Log.i("Scanner Info", info.toString())
     }
+
+    //Adds the newly created scannerInfo to the adapter list to add it ot the recyclerView
+    private fun updateRecyclerView() = viewModel.listOfScanners.observe(viewLifecycleOwner) {
+        it?.let { scannerBasicInfo ->
+            adapter.submitList(scannerBasicInfo)
+        }
+    }
+
+//    private fun testRecyclerView(){
+//        val scanner1 = Scanner.ScannerBasicInfo(
+//            "Joe Thompson",
+//            Date(2003, 4,25,).time,
+//            true,
+//            "+237 677 66 98 48",
+//            ""
+//
+//        )
+//        val scanner2 = Scanner.ScannerBasicInfo(
+//            "Karlos Pin",
+//            Date(1993, 1,25,).time,
+//            false,
+//            "+237 699 55 22 33",
+//            ""
+//        )
+//        val scanner3 = Scanner.ScannerBasicInfo(
+//            "Kenne Saha",
+//            Date(2009, 9,19,).time,
+//            true,
+//            "+237 602 55 22 33",
+//            ""
+//        )
+//        val list = listOf(scanner1, scanner2, scanner3)
+//        adapter.submitList(list)
+//    }
 
 }

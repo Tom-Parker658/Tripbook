@@ -32,7 +32,8 @@ data class Traveller(
     var email: String? = null,
 ) {
     val age: Int by lazy {
-        Utils.getAge(birthday)
+        Utils.getAge(
+           0L)
     }
 //    val travellerDescription
 //        get() = "{travellerName:${name}," +

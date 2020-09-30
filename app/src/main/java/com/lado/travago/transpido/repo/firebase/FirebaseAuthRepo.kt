@@ -6,7 +6,6 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.lado.travago.transpido.repo.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -27,7 +26,7 @@ class FirebaseAuthRepo {
      * @param credential are the generated from phoneNumber see [PhoneAuthCredential]
      * @return FirebaseUser which the signIn scanner(traveller, scanner etc) see [FirebaseUser]
      */
-    fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential)= flow {
+    fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) = flow {
         firebaseAuth.useAppLanguage()
         emit(State.loading())
 
@@ -45,7 +44,7 @@ class FirebaseAuthRepo {
      * files to storage without actually signIn.
      *
      */
-    fun signInAnonymously() = flow{
+    fun signInAnonymously() = flow {
         emit(State.loading())
         val anonymousUser = firebaseAuth.signInAnonymously().await()
         //Returns the user object
@@ -57,6 +56,20 @@ class FirebaseAuthRepo {
     /**
      * Sign out the current user
      */
-    fun signOutUser()= firebaseAuth.signOut()
+    fun signOutUser() = firebaseAuth.signOut()
 
+
+    /**
+     * Delete the current anonymous user from firestore
+     */
+    fun deleteCurrentUser() = flow {
+        emit(State.loading())
+        val deleteTask = firebaseAuth.currentUser!!.delete().await()
+        emit(State.success(deleteTask))
+    }.catch {
+        emit(State.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
 }
+
+
+

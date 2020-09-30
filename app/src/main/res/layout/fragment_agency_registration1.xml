@@ -27,7 +27,6 @@
                 app:helperText="This number will be contacted for help or complains"
                 app:layout_constraintBottom_toTopOf="@+id/bank"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/logo">
 
@@ -43,7 +42,6 @@
                 app:helperText="Payment will be channelled to this account"
                 app:layout_constraintBottom_toTopOf="@+id/momo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/phone">
 
@@ -74,7 +72,6 @@
                 app:helperText="Leave it empty to use the default logo"
                 app:layout_constraintBottom_toTopOf="@+id/phone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/email">
 
@@ -90,7 +87,6 @@
                 app:helperText="This email will be used to channel help or complains"
                 app:layout_constraintBottom_toTopOf="@+id/logo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/motto">
 
@@ -106,7 +102,6 @@
                 app:helperText="Enter the motto for your agency"
                 app:layout_constraintBottom_toTopOf="@+id/email"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/name">
 
@@ -122,7 +117,6 @@
                 app:helperText="MTN Mobile Money number:"
                 app:layout_constraintBottom_toTopOf="@+id/orange_money"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bank">
 
@@ -136,9 +130,8 @@
                 style="@style/editTextStyle"
                 android:hint="Orange Money account number:"
                 app:helperText="Orange Money number"
-                app:layout_constraintBottom_toTopOf="@+id/btn_create"
+                app:layout_constraintBottom_toTopOf="@+id/btn_next"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/momo">
 
@@ -151,12 +144,10 @@
                 android:id="@+id/btn_next"
                 style="@style/navButtonStyles"
                 android:text="Next"
-                app:helperText="A"
                 app:icon="@drawable/baseline_arrow_forward_24"
                 app:iconGravity="end"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/orange_money" />
 
