@@ -7,9 +7,6 @@
 
         <import type="android.text.InputType" />
 
-        <variable
-            name="homeViewModel"
-            type="com.lado.travago.transpido.viewmodel.traveller.SearchJourneyViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView

@@ -22,19 +22,16 @@ import com.lado.travago.transpido.utils.Utils
  */
 
 data class Traveller(
-    var name: String = "",
+    var name: String,
     var sex: SEX = SEX.UNKNOWN,
-    var birthday: String = "20/15/2015",
-    var picture: String = "",
+    var birthdayInMillis: Long,
+    var pictureUrl: String,
     var occupation: OCCUPATION = OCCUPATION.UNKNOWN,
-    var birthplace: String = "",
-    var phoneNumber: String = "",
+    var birthplace: String,
+    var phoneNumber: String,
     var email: String? = null,
 ) {
-    val age: Int by lazy {
-        Utils.getAge(
-           0L)
-    }
+    val age by lazy { Utils.getAge(birthdayInMillis) }
 //    val travellerDescription
 //        get() = "{travellerName:${name}," +
 //                "travellerSex:${name}," +

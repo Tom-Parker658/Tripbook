@@ -21,8 +21,8 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import com.lado.travago.transpido.R
 import com.lado.travago.transpido.databinding.FragmentSearchJourneyBinding
-import com.lado.travago.transpido.viewmodel.traveller.SearchJourneyViewModel
 import com.lado.travago.transpido.viewmodel.SearchJourneyViewModelFactory
+import com.lado.travago.transpido.viewmodel.traveller.SearchJourneyViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -72,7 +72,7 @@ class JourneySearchFragment : Fragment() {
             }
         }
 
-        //As the user enter text in Destination field
+        //As the user enter text in Place field
         (binding.inputDestination.editText as MaterialAutoCompleteTextView).run {
             addTextChangedListener {
                 //Adapt the adapter to the destination field
