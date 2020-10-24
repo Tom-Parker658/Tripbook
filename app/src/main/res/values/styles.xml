@@ -8,6 +8,16 @@
         <item name="fontFamily">@font/aclonica</item>
         <item name="font">@font/aclonica</item>
     </style>
+    <!-- Base application theme. -->
+    <style name="AppTheme.Light" parent="Theme.MaterialComponents.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="font">@font/aclonica</item>
+    </style>
+
     <!--Style for TextLayoutInput-->
     <style name="editTextStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="android:layout_width">0dp</item>

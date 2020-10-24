@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_admin_panel"
+    app:startDestination="@id/fragmentTicketScanPanel">
+
+    <fragment
+        android:id="@+id/agencyJourneyFragment"
+        android:name="com.lado.travago.transpido.ui.scanner.panel.AgencyJourneyFragment"
+        android:label="fragment_agency_journey"
+        tools:layout="@layout/fragment_agency_journey" />
+    <fragment
+        android:id="@+id/myScannerFragment"
+        android:name="com.lado.travago.transpido.ui.scanner.panel.MyScannerFragment"
+        android:label="fragment_my_scanner"
+        tools:layout="@layout/fragment_my_scanner" />
+    <fragment
+        android:id="@+id/agencyStatsFragment"
+        android:name="com.lado.travago.transpido.ui.scanner.panel.AgencyStatsFragment"
+        android:label="fragment_agency_stats"
+        tools:layout="@layout/fragment_agency_stats" />
+    <fragment
+        android:id="@+id/infoScreenFragment"
+        android:name="com.lado.travago.transpido.ui.scanner.panel.InfoScreenFragment"
+        android:label="fragment_info_screen"
+        tools:layout="@layout/fragment_info_screen" />
+    <fragment
+        android:id="@+id/scannerStatsFragment"
+        android:name="com.lado.travago.transpido.ui.scanner.panel.ScannerStatsFragment"
+        android:label="fragment_scanner_stats"
+        tools:layout="@layout/fragment_scanner_stats" />
+    <fragment
+        android:id="@+id/todayJourneyFragment"
+        android:name="com.lado.travago.transpido.ui.scanner.panel.TodayJourneyFragment"
+        android:label="fragment_today_journey"
+        tools:layout="@layout/fragment_today_journey" />
+    <fragment
+        android:id="@+id/fragmentTicketScanPanel"
+        android:name="com.lado.travago.transpido.ui.scanner.panel.FragmentTicketScanPanel"
+        android:label="fragment_ticket_scan_panel"
+        tools:layout="@layout/fragment_ticket_scan_panel" />
+</navigation>

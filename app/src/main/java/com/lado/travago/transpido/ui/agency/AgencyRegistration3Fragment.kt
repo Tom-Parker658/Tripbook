@@ -86,31 +86,4 @@ class AgencyRegistration3Fragment : Fragment() {
         }
     }
 
-//    private fun testRecyclerView(){
-//        val scanner1 = Scanner.ScannerBasicInfo(
-//            "Joe Thompson",
-//            Date(2003, 4,25,).time,
-//            true,
-//            "+237 677 66 98 48",
-//            ""
-//
-//        )
-//        val scanner2 = Scanner.ScannerBasicInfo(
-//            "Karlos Pin",
-//            Date(1993, 1,25,).time,
-//            false,
-//            "+237 699 55 22 33",
-//            ""
-//        )
-//        val scanner3 = Scanner.ScannerBasicInfo(
-//            "Kenne Saha",
-//            Date(2009, 9,19,).time,
-//            true,
-//            "+237 602 55 22 33",
-//            ""
-//        )
-//        val list = listOf(scanner1, scanner2, scanner3)
-//        adapter.submitList(list)
-//    }
-
 }

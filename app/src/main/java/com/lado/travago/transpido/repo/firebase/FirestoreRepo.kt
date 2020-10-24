@@ -1,7 +1,6 @@
 package com.lado.travago.transpido.repo.firebase
 
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import com.lado.travago.transpido.repo.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -80,4 +79,53 @@ class FirestoreRepo {
         emit(State.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
+    /**
+     * This function is used to get a specific document using its path
+     * @param docPath is the firestore document path
+     * @param from is the [Source] from which we want to get the data e.g from server [Source.SERVER],
+     * from cache [Source.CACHE] or start from cache and if not found, look from server [Source.DEFAULT]
+     * @return the document snapshot which contains all info about the document
+     */
+    fun getDocument(docPath: String, from: Source = Source.DEFAULT) = flow {
+        emit(State.loading())
+        val doc = db.document(docPath)
+        val documentSnapshot = doc.get(from).await()
+        emit(State.success(documentSnapshot))
+    }.catch {
+        emit(State.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+    /**
+     * Query a collection and returns documents which meets the provided requirement
+     * @param collectionPath is the firestore path of the collection you which to query
+     * @param from is the [Source] from which we want to get the data
+     * @param query is a lambda containing the required specifications(Conditions) which we use as the [Query].
+     *  This does the query on the required collection reference returned from the [collectionPath]
+     * @return a [QuerySnapshot] which contains all documents which matched the query
+     */
+    fun queryCollection(
+        collectionPath: String,
+        from: Source = Source.DEFAULT,
+        query: (collection: CollectionReference) -> Query
+    ) =
+        flow {
+            emit(State.loading())
+            val collectionRef = db.collection(collectionPath)
+            val documents = query(collectionRef)
+                .get(from)
+                .await()
+            emit(State.success(documents))
+        }
+
+    /**
+     * Gets all the documents from a collection
+     */
+    fun getAllDocuments(collectionPath: String, from: Source = Source.DEFAULT) = flow {
+        emit(State.loading())
+        val collectionRef = db.collection(collectionPath)
+        val allDocuments = collectionRef.get(from).await()
+        emit(State.success(allDocuments))
+    }.catch {
+        emit(State.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
 }

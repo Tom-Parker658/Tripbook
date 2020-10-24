@@ -1,19 +1,23 @@
 package com.lado.travago.transpido.model.admin
 
-import com.google.android.libraries.places.api.model.Place
-import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
 import com.lado.travago.transpido.model.enums.Region
 import java.util.*
 
-data class Destination(val place: Place, val region: Region) {
+data class Destination(
+    val region: Region,
+    val id: String,
+    val name: String,
+    val country: String,
+    val latLng: GeoPoint,
+) {
     val placeMap: HashMap<String, Any?> = hashMapOf(
-        "id" to place.id,
-        "name" to place.name,
-        "address" to place.address,
+        "id" to id,
+        "name" to name,
+        "address" to "$country, $region $name",
         "country" to "Cameroon",
-        "latitude" to place.latLng?.latitude,
-        "longitude" to place.latLng?.longitude,
-        "region" to region,
-        "addedOn" to Timestamp(Date())
+        "latitude" to latLng.latitude,
+        "longitude" to latLng.longitude,
+        "region" to region
     )
 }

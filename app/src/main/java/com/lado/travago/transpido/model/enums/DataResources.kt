@@ -67,6 +67,7 @@ object DataResources {
         Yaounde+Centre
         Yokadouma+East
     """
+
     const val journeyDistanceList = """
     Abong-Mbang	Akonolinga	131	
     Abong-Mbang	Ambam	433	

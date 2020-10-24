@@ -1,5 +1,6 @@
 package com.lado.travago.transpido.model.traveller
 
+import com.lado.travago.transpido.model.admin.Journey
 import com.lado.travago.transpido.utils.Utils
 
 /**

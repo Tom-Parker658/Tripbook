@@ -1,8 +1,6 @@
 package com.lado.travago.transpido.utils
 
 
-import androidx.fragment.app.Fragment
-import com.google.zxing.integration.android.IntentIntegrator
 import com.lado.travago.transpido.model.admin.Destination
 import com.lado.travago.transpido.model.admin.Journey
 import com.lado.travago.transpido.model.enums.DataResources
@@ -15,27 +13,6 @@ import java.util.*
  */
 object AdminUtils {
 
-    /**
-     * Initiates the scanning process for the QR code. It call the camera to do the scan then stores the
-     * content as part of an intent which can gotten by any Activity or Fragment using the [onActivityResult]
-     * callback method.
-     * @param fragment is the fragment which will call this utility in other to actually scan the QR code.
-     */
-    fun qRCodeScannerInitiator(fragment: Fragment) {
-        //A scannerIntentIntegrator to scan the qr
-        IntentIntegrator.forSupportFragment(fragment)
-            //Specifies only QR CODES and not bar codes should be scanned
-            .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
-            //Specifies the activity to capture the intent
-            .setCaptureActivity(fragment.activity?.javaClass)
-            .setBeepEnabled(true)//Enables the beep sound during scanning
-            .setOrientationLocked(false)//Unlocks phone orientation during scanning
-            .setPrompt("Scan QR Ticket!")// Text to be displayed to tell the admin to scan
-            .setRequestCode(5)//Set the scan intent request code which will be used to extract this intent when called by [OnActivityResult]
-            .setTorchEnabled(true)//Enables the torch on the camera to make it more visible
-            .initiateScan()//Initiates the scan process
-
-    }
 
     /**
      * Returns a list of places and their respective regions. the format of the list is as follows.

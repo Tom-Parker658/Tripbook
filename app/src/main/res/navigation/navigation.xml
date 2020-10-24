@@ -57,6 +57,6 @@
         tools:layout="@layout/fragment_registration" />
     <fragment
         android:id="@+id/scannerRegistrationFragment"
-        android:name="com.lado.travago.transpido.ui.scanner.ScannerRegistrationFragment"
+        android:name="com.lado.travago.transpido.ui.scanner.creation.ScannerRegistrationFragment"
         android:label="ScannerRegistrationFragment" />
 </navigation>
