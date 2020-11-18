@@ -138,6 +138,7 @@
             <Button
                 android:id="@+id/btn_search_journey"
                 style="@style/navButtonStyles"
+                android:layout_marginTop="16dp"
                 android:text="Search Journey"
                 app:icon="@drawable/baseline_directions_bus_24"
                 app:iconGravity="start"

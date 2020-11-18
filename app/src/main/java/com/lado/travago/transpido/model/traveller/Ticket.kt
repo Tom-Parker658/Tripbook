@@ -1,7 +1,9 @@
 package com.lado.travago.transpido.model.traveller
 
+import com.google.firebase.Timestamp
 import com.lado.travago.transpido.model.admin.Journey
 import com.lado.travago.transpido.utils.Utils
+import java.util.*
 
 /**
  * @author Tom Parkert
@@ -24,9 +26,12 @@ data class Ticket(
 ) {
     var isExpired = Utils.isTicketExpired(this)
     var isScanned = false
+    var qrSeed = "" +
+            "${journey.location.id}+${journey.destination.id}+$travellerUid+${Timestamp(Date())}"
 
     private val qrCode by lazy {
         Utils.ticketQRCodeGenerator(this)
     }
-
 }
+
+//TODO Info screen

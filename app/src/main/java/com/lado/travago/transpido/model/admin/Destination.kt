@@ -8,7 +8,7 @@ data class Destination(
     val region: Region,
     val id: String,
     val name: String,
-    val country: String,
+    val country: String = "Cameroon",
     val latLng: GeoPoint,
 ) {
     val placeMap: HashMap<String, Any?> = hashMapOf(

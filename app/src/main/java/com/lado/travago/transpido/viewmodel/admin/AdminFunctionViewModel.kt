@@ -1,21 +1,28 @@
 package com.lado.travago.transpido.viewmodel.admin
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.lado.travago.transpido.model.enums.DataResources
-import com.lado.travago.transpido.repo.firebase.FirestoreRepo
+import com.lado.travago.transpido.repo.State
+import com.lado.travago.transpido.repo.places.PlacesRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 
+@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 class AdminFunctionViewModel: ViewModel() {
-    private val dbRepo = FirestoreRepo()
+    private val placeRepo = PlacesRepo(null)
 
-    fun upload(){
-        val journeyList = DataResources.journeyDistanceList.trimIndent().reader().buffered().readLines()
-        for(journey in journeyList){
-            val destinationToJourney = journey.split(" ").toMutableList()
-            destinationToJourney.removeAt(2)
-            val locationName = destinationToJourney[0]
-            val destinationName = destinationToJourney[1]
+    suspend fun upload(){
+        placeRepo.addJourneys().collect {
+            when(it){
+                is State.Failed -> {
+                    Log.e("AdminJourneys", it.message)
+                }
+                is State.Success -> {
+                    Log.i("AdminJourneys", it.toString())
+                }
+            }
         }
     }
 

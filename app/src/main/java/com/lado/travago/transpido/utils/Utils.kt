@@ -64,6 +64,7 @@ object Utils {
     /**
      * Generate a QR based on the ticket
      * @param ticket is a ticket instance which provides a description string for the journey
+     * Uses [Utils.qrCodeEncryptor] to encrypt the code
      * @return the qrCode generated is returned as a bitmap image.
      *
      */
@@ -71,9 +72,10 @@ object Utils {
         val result: BitMatrix
         val requiredHeight = 300
         val requiredWidth = 300
-        //Try to encode the QR code or generate an error
+        val encryptedSeed = Utils.qrCodeEncryptor(ticket.qrSeed)
+        //Try to encode the qrSeed to QR code or generate an error
         try {
-            result = MultiFormatWriter().encode("ticket",
+            result = MultiFormatWriter().encode(encryptedSeed,
                 BarcodeFormat.QR_CODE, requiredHeight, requiredWidth, null)
         } catch (iae: IllegalArgumentException) {
             return null
@@ -93,6 +95,22 @@ object Utils {
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
         // createImageFile(bitmap)
         return bitmap
+    }
+
+    /**
+     * CERA
+     */
+    fun qrCodeEncryptor(qrSeed: String): String{
+        val reversedQRSeed = qrSeed.reversed()
+        return reversedQRSeed.replace("e", "~",ignoreCase = false)
+    }
+
+    /**
+     * DERA
+     */
+    fun qrCodeDecryptor(reversedQrSeed: String): String{
+        val qrSeedWithoutE = reversedQrSeed.reversed()
+        return qrSeedWithoutE.replace("~", "e",ignoreCase = false)
     }
 
     /**

@@ -7,11 +7,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.transpido.R
 import com.lado.travago.transpido.databinding.ActivityAdminFunctionBinding
 import com.lado.travago.transpido.viewmodel.admin.AdminFunctionViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 
 /**
  * Used by me to do specific task to the database
  */
+@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 class AdminFunctionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminFunctionBinding
@@ -21,7 +22,15 @@ class AdminFunctionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_admin_function)
         viewModel = ViewModelProvider(this)[AdminFunctionViewModel::class.java]
+        //Uploads the journeys to the database
+        binding.button.setOnClickListener {
+            doTheUpload()
+        }
         binding.root
+    }
+
+    private fun doTheUpload() = CoroutineScope(Dispatchers.IO).launch {
+        viewModel.upload()
     }
 
 
