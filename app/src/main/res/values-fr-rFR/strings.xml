@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Transpido</string>
     <string name="hint_user_occupation">Elève</string>
     <string name="text_label_birthplace">Né à:</string>
     <string name="text_label_birthday">Né le:</string>

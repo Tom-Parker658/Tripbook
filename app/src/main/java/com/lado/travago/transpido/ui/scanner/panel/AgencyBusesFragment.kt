@@ -7,19 +7,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.lado.travago.transpido.R
 
+
 /**
  * A simple [Fragment] subclass.
- * Use the [TodayJourneyFragment.newInstance] factory method to
+ * Use the [AgencyBusesFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TodayJourneyFragment : Fragment() {
+class AgencyBusesFragment : Fragment() {
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_today_journey, container, false)
+        return inflater.inflate(R.layout.fragment_agency_journey, container, false)
     }
 
 }

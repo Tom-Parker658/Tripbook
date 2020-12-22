@@ -18,24 +18,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <RadioGroup
                 android:id="@+id/input_travel_time"
-                style="@style/editTextStyle"
-                android:hint="@string/text_label_travel_time"
-                app:endIconMode="dropdown_menu"
-                app:helperText="@string/hint_travel_time"
-                app:helperTextEnabled="true"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:divider="@android:drawable/divider_horizontal_bright"
+                android:gravity="clip_horizontal|start"
                 app:layout_constraintBottom_toTopOf="@+id/checkbox_vip"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/imageView7"
                 app:layout_constraintTop_toBottomOf="@+id/input_travel_date">
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    style="@style/textInputStyle.autoComplete"
-                    android:inputType="@{InputType.TYPE_NULL}" />
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Morning" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Noon / Afternoon" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Evening-Night" />
+
+
+            </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_location"
@@ -46,7 +60,7 @@
                 app:helperText="@string/hint_location"
                 app:helperTextEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/input_destination"
-                app:layout_constraintEnd_toStartOf="@+id/fab_locate_me"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView3"
                 app:layout_constraintTop_toBottomOf="@+id/textView33">
 
@@ -77,19 +91,19 @@
 
             <ImageView
                 android:id="@+id/imageView6"
+                style="@style/style_image_label"
                 app:layout_constraintBottom_toBottomOf="@+id/input_travel_date"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/input_travel_date"
-                app:srcCompat="@drawable/baseline_calendar_today_24"
-                style="@style/style_image_label" />
+                app:srcCompat="@drawable/baseline_calendar_today_24" />
 
             <ImageView
                 android:id="@+id/imageView7"
+                style="@style/style_image_label"
                 app:layout_constraintBottom_toBottomOf="@+id/input_travel_time"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/input_travel_time"
-                app:srcCompat="@drawable/baseline_departure_board_24"
-                style="@style/style_image_label" />
+                app:srcCompat="@drawable/baseline_departure_board_24" />
 
             <TextView
                 android:id="@+id/textView33"
@@ -102,19 +116,19 @@
 
             <ImageView
                 android:id="@+id/imageView3"
+                style="@style/style_image_label"
                 app:layout_constraintBottom_toBottomOf="@+id/input_location"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/input_location"
-                app:srcCompat="@drawable/baseline_place_24"
-                style="@style/style_image_label" />
+                app:srcCompat="@drawable/baseline_place_24" />
 
             <ImageView
                 android:id="@+id/imageView4"
+                style="@style/style_image_label"
                 app:layout_constraintBottom_toBottomOf="@+id/input_destination"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/input_destination"
-                app:srcCompat="@drawable/baseline_directions_bus_24"
-                style="@style/style_image_label" />
+                app:srcCompat="@drawable/baseline_directions_bus_24" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_travel_date"
@@ -125,8 +139,7 @@
                 app:helperText="@string/hint_travel_date"
                 app:helperTextEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/input_travel_time"
-                app:layout_constraintEnd_toStartOf="@+id/fab_select_date"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
                 app:layout_constraintTop_toBottomOf="@+id/input_destination">
 
@@ -150,9 +163,9 @@
             <CheckBox
                 android:id="@+id/checkbox_vip"
                 style="@style/navButtonStyles"
+                android:checked="true"
                 android:drawableEnd="@drawable/baseline_vip_24"
                 android:text="VIP Journey"
-                android:checked="true"
                 app:layout_constraintBottom_toTopOf="@+id/btn_search_journey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -161,11 +174,13 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_locate_me"
+                style="@style/navButtonStyles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:clickable="true"
+                android:clickable="false"
                 android:hapticFeedbackEnabled="true"
+                android:visibility="gone"
                 app:backgroundTintMode="src_in"
                 app:fabSize="mini"
                 app:layout_constraintBottom_toBottomOf="@+id/input_location"
@@ -175,6 +190,7 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_select_date"
+                style="@style/navButtonStyles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"

@@ -1,6 +1,7 @@
 package com.lado.travago.transpido.repo.firebase
 
 import com.google.firebase.firestore.*
+import com.lado.travago.transpido.repo.FirestoreTags
 import com.lado.travago.transpido.repo.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -127,5 +128,18 @@ class FirestoreRepo {
         emit(State.success(allDocuments))
     }.catch {
         emit(State.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+    /**
+     * Identifies the current user. If it is a "Traveller" or "Scanner"
+     * @param uid uses the uid to query the document and then checks the origin of the uid either from
+     * Scanner collection of Traveller Booker collection
+     */
+    fun identifyUser(uid: String) = flow {
+        emit(State.loading())
+        val doc = db.document("${FirestoreTags.Scanner}/$uid").get().await()
+        emit(State.success(doc))
+    }.catch {
+        emit(State.failed(FirestoreTags.Bookers.toString()))
     }.flowOn(Dispatchers.IO)
 }

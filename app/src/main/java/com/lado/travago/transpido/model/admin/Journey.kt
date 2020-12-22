@@ -18,7 +18,7 @@ data class Journey(
     val journeyMap = hashMapOf(
         "fromID" to location.placeMap["id"],
         "toID" to destination.placeMap["id"],
-        "name" to "${location.name} ${destination.name}",
+        "name" to "${location.name}-${destination.name}",
         "distance" to distance,
         "timeTaken" to estimatedTimeTaken,
         "addedOn" to Timestamp(Date())

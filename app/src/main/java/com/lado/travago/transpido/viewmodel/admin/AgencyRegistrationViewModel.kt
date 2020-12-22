@@ -57,6 +57,8 @@ class AgencyRegistrationViewModel(): ViewModel() {
         private set
     var numberOfParks = ""
         private set
+    var pricePerKm = 10.0
+        private set
 
     val regions: MutableList<Region> = mutableListOf()
 
@@ -93,6 +95,7 @@ class AgencyRegistrationViewModel(): ViewModel() {
             FieldTags.ORANGE -> orangeMoneyField = value.toString()
             FieldTags.NUM_VEHICLES -> vehicleNumberField = value.toString()
             FieldTags.NUM_PARKS -> numberOfParks = value.toString()
+            FieldTags.PRICE_PER_KM -> pricePerKm = value.toString().toDouble()
             FieldTags.REGIONS -> regions.add(value as Region)
             FieldTags.LOGO_NAME -> logoFilename = value.toString()
             FieldTags.LOGO_BITMAP -> logoBitmap = value as Bitmap
@@ -110,17 +113,18 @@ class AgencyRegistrationViewModel(): ViewModel() {
             Bitmap.CompressFormat.PNG,
             0
         )
+
         val regionsMap: HashMap<String, Any?> = hashMapOf(
             Region.NORTH.name to regions.contains(Region.NORTH),
             Region.SOUTH.name to regions.contains(Region.SOUTH),
             Region.WEST.name to regions.contains(Region.WEST),
             Region.EAST.name to regions.contains(Region.EAST),
             Region.NORTH_WEST.name to regions.contains(Region.NORTH_WEST),
-            Region.ADAMAWA.name to regions.contains(Region.ADAMAWA),
-            Region.CENTER.name to regions.contains(Region.CENTER),
-            Region.EXTREME_NORTH.name to regions.contains(Region.EXTREME_NORTH),
-            Region.LITTORAL.name to regions.contains(Region.LITTORAL),
             Region.SOUTH_WEST.name to regions.contains(Region.SOUTH_WEST),
+            Region.LITTORAL.name to regions.contains(Region.LITTORAL),
+            Region.CENTER.name to regions.contains(Region.CENTER),
+            Region.ADAMAWA.name to regions.contains(Region.ADAMAWA),
+            Region.EXTREME_NORTH.name to regions.contains(Region.EXTREME_NORTH),
         )
         /**
          * Generate an anonymous account which can be use by the Scanner to create the Agency and returns
@@ -157,6 +161,7 @@ class AgencyRegistrationViewModel(): ViewModel() {
                                     agencyName = nameField,
                                     agencyLogo = storageState.data,
                                     motto = mottoField,
+                                    pricePerKm = pricePerKm,
                                     numberOfBuses = vehicleNumberField.toInt(),
                                     bankAccountNumber = bankField,
                                     mtnMoMoAccount = momoField,
@@ -184,11 +189,11 @@ class AgencyRegistrationViewModel(): ViewModel() {
                                             otaPath = dbState.data
                                             stopLoading()
                                             /**
-                                             * Adds the regions subCollection to the Online Travel Agency document
+                                             * Adds the Countries subcollection to the Agency before adding the regions into it
                                              */
                                             firestoreRepo.setDocument(
                                                 regionsMap,
-                                                "${dbState.data}/Region/status"
+                                                "${otaPath}/Cameroon/Regions"
                                             ).collect { regionState ->
                                                 when(regionState){
                                                     is State.Loading -> startLoading()
@@ -267,7 +272,7 @@ class AgencyRegistrationViewModel(): ViewModel() {
     }
 
     enum class FieldTags{
-        NAME, MOTTO, EMAIL, LOGO_NAME, PHONE, BANK, MOMO, ORANGE, NUM_VEHICLES, NUM_PARKS, REGIONS, LOGO_BITMAP
+        NAME, MOTTO, EMAIL, LOGO_NAME, PHONE, BANK, MOMO, ORANGE, NUM_VEHICLES, NUM_PARKS, REGIONS, LOGO_BITMAP, PRICE_PER_KM
     }
 
 

@@ -1,5 +1,6 @@
 package com.lado.travago.transpido.repo.places
 
+import android.util.Log
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
@@ -7,10 +8,8 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.GeoPoint
 import com.lado.travago.transpido.model.admin.Destination
 import com.lado.travago.transpido.model.admin.Journey
-import com.lado.travago.transpido.model.enums.DataResources
 import com.lado.travago.transpido.repo.State
 import com.lado.travago.transpido.repo.firebase.FirestoreRepo
 import com.lado.travago.transpido.utils.AdminUtils
@@ -58,6 +57,7 @@ class PlacesRepo(private val placesClient: PlacesClient?) {
         emit(State.failed(it.message.toString()))
     }.flowOn(Dispatchers.Main)
 
+
     fun fetchPlace(placeId: String, fields: List<Place.Field>) = flow {
         emit(State.loading())
         val request = FetchPlaceRequest.builder(placeId, fields).build()
@@ -67,88 +67,92 @@ class PlacesRepo(private val placesClient: PlacesClient?) {
         emit(State.failed(it.message.toString()))
     }.flowOn(Dispatchers.Main)
 
+
     /**
-     * Administrator utility
-     * Introduces journeys to the TranSpeed database
-     * It run through all combination of journeys found in [DataResources.journeyDistanceList] and uploads each to the database
+     * Upload a journey
      */
-    fun addJourneys() = flow {
-        emit(State.loading())
-        val allPlaces = mutableListOf<DocumentSnapshot>()
-        //Gets all the destinations places found the database
-        allPlaces.run {
-            db.getAllDocuments("Destination").collect { queryState ->
-                when (queryState) {
-                    is State.Success -> {
-                        this += queryState.data.documents
-                    }
-                    is State.Failed -> {
-                        this += listOf()
-                    }
+    suspend fun journeyUploader(
+        location: DocumentSnapshot,
+        destination: DocumentSnapshot,
+    ) {
+        val locationPlace = Destination(
+            AdminUtils.parseRegionFromString(location["region"].toString()),
+            location.id,
+            location["name"].toString(),
+            latLng = null
+        )
+        val destinationPlace = Destination(
+            AdminUtils.parseRegionFromString(destination["region"].toString()),
+            destination.id,
+            destination["name"].toString(),
+            latLng = null
+        )
+
+        //The journey to be uploaded
+        val journey = Journey(
+            locationPlace,
+            destinationPlace
+        )
+
+        //Adds the journey to firestore database under the path Journey/locationRegion-finalRegion/locationIDdestinationID
+        val firestoreRepo = FirestoreRepo()
+        val journeyPath = "Journeys/Cameroon/${locationPlace.region}-${destinationPlace.region}/${locationPlace.id}${destinationPlace.id}"
+
+        firestoreRepo.setDocument(
+            journey.journeyMap,
+            journeyPath
+        ).collect{
+            when(it){
+                is State.Loading -> Log.i("TransferResponse1", "Transferring ${journey.journeyMap["name"]}")
+                is State.Failed -> Log.e("TransferResponse1", it.message)
+                is State.Success -> {
+                    Log.i("TransferResponse1", "Done")
                 }
             }
         }
-        /**
-         * Go through all the possible journey combination list and for each combination, uploads it to the database
-         * based on their corresponding regions! e,g Dschang-Yaounde will be stored under West-Centre collection
-         */
-        for (journeyName in DataResources.journeyDistanceList.split("\n")) {
-            val (location1, destination1) = journeyName.split(" ")
-            val location = allPlaces.find { doc ->
-                doc["name"] == location1
-            }!!
-            val destination = allPlaces.find { doc ->
-                doc["name"] == destination1
-            }!!
+    }
 
-            val locationPlace = Destination(
-                AdminUtils.parseRegionFromString(location["region"].toString()),
-                location.id,
-                location["name"].toString(),
-                latLng = GeoPoint(
-                    location["latitude"].toString().toDouble(),
-                    location["longitude"].toString().toDouble(),
-                )
-            )
-            val destinationPlace = Destination(
-                AdminUtils.parseRegionFromString(destination["region"].toString()),
-                destination.id,
-                destination["name"].toString(),
-                latLng = GeoPoint(
-                    destination["latitude"].toString().toDouble(),
-                    destination["longitude"].toString().toDouble(),
-                )
-            )
-            //The journey to be uploaded
-            val journey = Journey(
-                locationPlace,
-                destinationPlace
-            )
+    /**
+     * Searches journeys from the database
+     * @locationName is the name of the location of the user
+     * @destinationName is the name of the destination to where the user is going to
+     */
+    fun searchJourney(locationName: String, destinationName: String) = flow{
+        emit(State.loading())
 
-            //Adds the journey to firestore database under the path Journey/locationRegion-finalRegion/locationIDdestinationID
-            val firestoreRepo = FirestoreRepo()
-            val journeyPath = "Journey/Cameroon/${locationPlace.region}-${destinationPlace.region}/${locationPlace.id}${destinationPlace.id}"
-            firestoreRepo.setDocument(
-                journey.journeyMap,
-                journeyPath
-            )
-            /*//A  pair which contains the location region and destination region
-            val regionToRegion = locationPlace.region to destinationPlace.region
+        db.queryCollection("Destinations"){
+            it.whereEqualTo("name", locationName)
+        }.collect{locationState ->
+            when(locationState){
+                is State.Loading -> Log.i("JourneySearch", "Getting the journey")
 
-            //Checks for the pair of regions to which the journey belongs to
-            for (pairOfRegions in DataResources.regionPairs) {
-                val requiredRegions =
-                    AdminUtils.parseRegionFromString(pairOfRegions.first) to AdminUtils.parseRegionFromString(
-                        pairOfRegions.second
-                    )
-                if (requiredRegions == regionToRegion) {
+                is State.Success -> {
+                   val location = locationState.data.documents.first()
+                    //Searches for destination id
+                    db.queryCollection("Destinations"){
+                        it.whereEqualTo("name", destinationName)
+                    }.collect{destinationState ->
+                        when(destinationState){
+                            is State.Success ->{
+                                val destination = destinationState.data.documents.first()
 
+                                //Returns the correct journey
+                                val journeyId = "${location.id}${destination.id}"
+                                val regionToRegion = "${location["region"].toString().toUpperCase()}-${destination["region"].toString().toUpperCase()}"
+                                db.getDocument("Journey/Cameroon/$regionToRegion/$journeyId").collect{
+                                    when(it){
+                                        is State.Success ->{
+                                            emit(State.success(it))
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-            }*/
+            }
+
+        }
         }
 
-        emit(State.success("Done"))
-    }.catch {
-        emit(State.failed(it.message.toString()))
-    }.flowOn(Dispatchers.IO)
 }

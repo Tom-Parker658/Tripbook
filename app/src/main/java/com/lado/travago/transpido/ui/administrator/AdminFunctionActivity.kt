@@ -1,6 +1,7 @@
 package com.lado.travago.transpido.ui.administrator
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -25,13 +26,13 @@ class AdminFunctionActivity : AppCompatActivity() {
         //Uploads the journeys to the database
         binding.button.setOnClickListener {
             doTheUpload()
+            Toast.makeText(this, "Do it!", Toast.LENGTH_LONG).show()
         }
         binding.root
     }
 
     private fun doTheUpload() = CoroutineScope(Dispatchers.IO).launch {
-        viewModel.upload()
+        viewModel.uploadJourney()
     }
-
 
 }

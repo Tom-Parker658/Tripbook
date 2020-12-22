@@ -5,6 +5,8 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.lado.travago.transpido.R
+import java.text.SimpleDateFormat
+import java.util.*
 
 ///**
 // * Formats the date in a nice format from milliseconds and sets as teh text of the view
@@ -40,4 +42,12 @@ fun TextView.setStatusText(isAdmin: Boolean){
 @BindingAdapter("ageFromMillis")
 fun TextView.setAgeFromMillis(birthdayInMillis: Long){
     text = Utils.getAge(birthdayInMillis).toString()
+}
+
+/**
+ * Display dates in a nice form
+ */
+@BindingAdapter("formatDateFromMillis")
+fun TextView.formatDate(dateInMillis: Long){
+    text = SimpleDateFormat("dd/MM/YYYY", Locale.getDefault()).toString()
 }

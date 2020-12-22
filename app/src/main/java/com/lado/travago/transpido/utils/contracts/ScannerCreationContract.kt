@@ -6,7 +6,7 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import com.lado.travago.transpido.model.admin.Scanner
 import com.lado.travago.transpido.ui.agency.AgencyRegistrationActivity
-import com.lado.travago.transpido.ui.scanner.ScannerCreationActivity
+import com.lado.travago.transpido.ui.scanner.creation.ScannerCreationActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.*

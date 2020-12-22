@@ -73,5 +73,4 @@ data class Scanner(
     )
 
 
-
 }

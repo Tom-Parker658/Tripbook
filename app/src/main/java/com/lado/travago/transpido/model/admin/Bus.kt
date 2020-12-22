@@ -11,4 +11,31 @@ import com.lado.travago.transpido.model.traveller.Traveller
 data class Bus(
     var size: Int = 70,
     var passengers: List<Traveller> = listOf(),
-)
+
+){
+    /**
+     * An inner class for listing all buses in the recycler view of [AgencyJourneyFragment]
+     */
+    data class BusListInfo(
+        val dateInMillis: Long,
+        val totalBusNumber: Int
+    )
+
+    /**
+     * An inner class for listing buses of a day per journey
+     */
+    data class JourneyBusList(
+        val location: String,
+        val destination: String,
+        val percentageFull: Double
+    )
+
+    /**
+     * An inner class to contain the info for each passenger of a particular bus
+     */
+    data class PassengerInfo(
+        val travellerName: String,
+        val seatNumber: Int,
+        val photoUrl: String
+    )
+}

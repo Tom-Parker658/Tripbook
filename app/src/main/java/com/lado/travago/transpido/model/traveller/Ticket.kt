@@ -9,7 +9,7 @@ import java.util.*
  * @author Tom Parkert
  * A ticket is created by a [Traveller] and is mainly made up of a booked journey and the Traveller
  * This state is determined my the travelTime and travelDay encoded in the journeyID. If it ticked-QR is not
- * scanned by transpido admin before the takeoff time, it becomes expired and can't be used anymore
+ * scanned by tranSpeed admin before the takeoff time, it becomes expired and can't be used anymore
  * @property journeyID This is the id gotten from booking a ticket which has the traveller's id and travel time
  * encoded in it.
  * @property isExpired as seen below manages the validity of the ticket

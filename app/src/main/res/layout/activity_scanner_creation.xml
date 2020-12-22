@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.scanner.ScannerCreationActivity">
+        tools:context=".ui.scanner.creation.ScannerCreationActivity">
 
         <fragment
             android:id="@+id/fragment"
@@ -18,8 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultNavHost="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/nav_scanner_creation"
-            tools:layout="@layout/fragment_scanner_registration"/>
+            tools:layout="@layout/fragment_scanner_registration" />
 
         <LinearLayout
             android:id="@+id/progressBar"
@@ -36,5 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

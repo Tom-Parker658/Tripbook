@@ -1,4 +1,4 @@
-package com.lado.travago.transpido.ui.scanner
+package com.lado.travago.transpido.ui.scanner.creation
 
 import android.app.Activity
 import android.os.Bundle

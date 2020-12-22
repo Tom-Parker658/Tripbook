@@ -10,11 +10,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.transpido.R
 import com.lado.travago.transpido.databinding.FragmentAgencyRegistration2Binding
 import com.lado.travago.transpido.model.enums.Region
 import com.lado.travago.transpido.viewmodel.admin.AgencyRegistrationViewModel
-import com.lado.travago.transpido.viewmodel.admin.AgencyRegistrationViewModel.*
+import com.lado.travago.transpido.viewmodel.admin.AgencyRegistrationViewModel.FieldTags
 import kotlinx.coroutines.*
 
 
@@ -138,12 +139,24 @@ class AgencyRegistration2Fragment() : Fragment() {
             }
             else -> null
         }
-        uiScope.launch {
-            if (anyError == null) {
-                viewModel.createOTA()
+
+        if (anyError == null) {
+            //A popup to tell the agency if he wants to continue, if yes upload the agency as required
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Continue?")
+                .setMessage("Have you chosen ${viewModel.regions.size}/10 regions!")
+                .setNegativeButton("Cancel!"){dialog,_ ->
+                   dialog.cancel()
+                }
+                .setPositiveButton("Continue!"){dialog, _ ->
+                    dialog.dismiss()
+                    uiScope.launch {
+                        viewModel.createOTA()
+                    }
+                }
+                .show()
             } else//Show snackbar message
                 Toast.makeText(requireActivity(), anyError, Toast.LENGTH_LONG).show()
-        }
 
     }
 

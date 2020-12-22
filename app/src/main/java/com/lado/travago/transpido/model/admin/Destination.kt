@@ -9,15 +9,15 @@ data class Destination(
     val id: String,
     val name: String,
     val country: String = "Cameroon",
-    val latLng: GeoPoint,
+    val latLng: GeoPoint?,
 ) {
     val placeMap: HashMap<String, Any?> = hashMapOf(
         "id" to id,
         "name" to name,
         "address" to "$country, $region $name",
         "country" to "Cameroon",
-        "latitude" to latLng.latitude,
-        "longitude" to latLng.longitude,
+        "latitude" to latLng?.latitude,
+        "longitude" to latLng?.longitude,
         "region" to region
     )
 }

@@ -5,7 +5,7 @@ package com.lado.travago.transpido.repo
  * user types
  */
 enum class FirestoreTags {
-    Scanner, Traveller, Record, Ticket, Journey, OnlineTransportAgency
+    Scanner, Bookers, Record, Ticket, Journey, OnlineTransportAgency, Destinations
 }
 
 /**

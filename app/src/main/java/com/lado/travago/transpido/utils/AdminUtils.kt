@@ -23,6 +23,20 @@ object AdminUtils {
         DataResources.regionList.trimIndent().reader().buffered().readLines()
 
     /**
+     * Removes a particular predicate from all the list
+     */
+    fun Collection<String>.removePredicate(vararg predicate: String): Collection<String>{
+        var newList = emptyList<String>() as Collection<String>
+        this.forEach {
+            if (it !in predicate) newList+=it
+        }
+        return newList
+    }
+
+    /**
+     * Removes a predicate
+     */
+    /**
      * Takes in a string and returns the corresponding [Region]
      */
     fun parseRegionFromString(regionInString: String) =
@@ -66,9 +80,9 @@ object AdminUtils {
         //Average speed a bus can move
         val averageCarSpeed = 60.0
         //We query to find the parameter locations from the list if not, return "0"
-        val journeysDistanceList = DataResources.journeyDistanceList.trimIndent().reader().buffered().readLines()
+        val journeysDistanceList = DataResources.journeyDistanceListOriginal.trimIndent().reader().buffered().readLines()
         val journeyString = journeysDistanceList.find {
-            it.contains(from.placeMap["name"].toString(), true) && it.contains(to.placeMap["name"].toString(), true)
+            it.contains(from.placeMap["name"].toString().replace(" ", "-"), true) && it.contains(to.placeMap["name"].toString().replace(" ", "-"), true)
         }
         //Finally we get the distance in km part of the journey and convert it to an integer and return that
         var distanceString = ""

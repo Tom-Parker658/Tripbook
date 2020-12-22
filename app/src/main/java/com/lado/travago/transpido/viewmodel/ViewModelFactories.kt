@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.lado.travago.transpido.viewmodel.admin.ScannerCreationViewModel
-import com.lado.travago.transpido.viewmodel.traveller.SearchJourneyViewModel
+import com.lado.travago.transpido.viewmodel.traveller.JourneySearchViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -16,9 +16,11 @@ import kotlinx.coroutines.InternalCoroutinesApi
  */
 
 /**
-     * This is a factory class which will be used to build our custom [SearchJourneyViewModel] with arguments
-     * @property placesClient Needed by [SearchJourneyViewModel] to compute Place related operations.
+     * This is a factory class which will be used to build our custom [JourneySearchViewModel] with arguments
+     * @property placesClient Needed by [JourneySearchViewModel] to compute Place related operations.
      */
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
 class SearchJourneyViewModelFactory(
     private val application: Application,
     private val placesClient: PlacesClient,
@@ -30,8 +32,8 @@ class SearchJourneyViewModelFactory(
      * @return a newly created ViewModel
     </T> */
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SearchJourneyViewModel::class.java)) {
-            return SearchJourneyViewModel(application = application, placesClient = placesClient) as T
+        if (modelClass.isAssignableFrom(JourneySearchViewModel::class.java)) {
+            return JourneySearchViewModel(application = application, placesClient = placesClient) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
