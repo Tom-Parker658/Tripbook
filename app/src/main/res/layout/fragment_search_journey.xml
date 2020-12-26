@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <import type="android.text.InputType" />
 
     </data>
@@ -19,13 +18,13 @@
             android:layout_height="match_parent">
 
             <RadioGroup
-                android:id="@+id/input_travel_time"
+                android:id="@+id/option_travel_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:divider="@android:drawable/divider_horizontal_bright"
+                android:divider="@android:drawable/divider_horizontal_textfield"
                 android:gravity="clip_horizontal|start"
                 app:layout_constraintBottom_toTopOf="@+id/checkbox_vip"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -34,16 +33,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/input_travel_date">
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/option_morning"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Morning" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/option_noon"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Noon / Afternoon" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/option_night"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Evening-Night" />
@@ -56,6 +58,7 @@
                 style="@style/editTextStyle"
                 android:layout_width="0dp"
                 android:hint="@string/text_label_location"
+                app:boxBackgroundMode="outline"
                 app:endIconMode="dropdown_menu"
                 app:helperText="@string/hint_location"
                 app:helperTextEnabled="true"
@@ -100,9 +103,9 @@
             <ImageView
                 android:id="@+id/imageView7"
                 style="@style/style_image_label"
-                app:layout_constraintBottom_toBottomOf="@+id/input_travel_time"
+                app:layout_constraintBottom_toBottomOf="@+id/option_travel_time"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/input_travel_time"
+                app:layout_constraintTop_toTopOf="@+id/option_travel_time"
                 app:srcCompat="@drawable/baseline_departure_board_24" />
 
             <TextView
@@ -138,7 +141,7 @@
                 android:hint="@string/text_label_travel_date"
                 app:helperText="@string/hint_travel_date"
                 app:helperTextEnabled="true"
-                app:layout_constraintBottom_toTopOf="@+id/input_travel_time"
+                app:layout_constraintBottom_toTopOf="@+id/option_travel_time"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
                 app:layout_constraintTop_toBottomOf="@+id/input_destination">
@@ -170,7 +173,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_travel_time" />
+                app:layout_constraintTop_toBottomOf="@+id/option_travel_time" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_locate_me"

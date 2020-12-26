@@ -7,7 +7,7 @@
     <data>
         <variable
             name="scannerInfo"
-            type="com.lado.travago.transpido.model.admin.Scanner.ScannerBasicInfo" />
+            type="com.lado.travago.tripbook.model.admin.Scanner.ScannerBasicInfo" />
 
     </data>
 

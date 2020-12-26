@@ -5,7 +5,7 @@
     app:startDestination="@id/phoneValidationFragment">
     <fragment
         android:id="@+id/scannerRegistrationFragment2"
-        android:name="com.lado.travago.transpido.ui.scanner.creation.ScannerRegistrationFragment"
+        android:name="com.lado.travago.tripbook.ui.scanner.creation.ScannerRegistrationFragment"
         android:label="Scanner Creation">
         <action
             android:id="@+id/action_scannerRegistrationFragment2_to_phoneValidationFragment"
@@ -13,6 +13,6 @@
     </fragment>
     <fragment
         android:id="@+id/phoneValidationFragment"
-        android:name="com.lado.travago.transpido.ui.scanner.creation.ScannerPhoneValidationFragment"
+        android:name="com.lado.travago.tripbook.ui.scanner.creation.ScannerPhoneValidationFragment"
         android:label="Validate SMS"/>
 </navigation>

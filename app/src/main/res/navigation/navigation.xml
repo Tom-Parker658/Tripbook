@@ -3,60 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my"
-    app:startDestination="@id/homeFragment">
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.lado.travago.transpido.ui.traveller.JourneySearchFragment"
-        android:label="HomeFragment">
-        <action
-            android:id="@+id/action_homeFragment_to_resultFragment"
-            app:destination="@id/resultFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/resultFragment"
-        android:name="com.lado.travago.transpido.ui.traveller.JourneySearchResultFragment"
-        android:label="fragment_result"
-        tools:layout="@layout/fragment_journey_search_result">
-        <action
-            android:id="@+id/action_resultFragment_to_customisationFragment2"
-            app:destination="@id/customisationFragment" />
-    </fragment>
+    app:startDestination="@id/journeySearchFragment">
     <activity
         android:id="@+id/paymentActivity"
-        android:name="com.lado.travago.transpido.ui.PaymentActivity"
+        android:name="com.lado.travago.tripbook.ui.PaymentActivity"
         android:label="activity_payment"
         tools:layout="@layout/activity_payment" />
     <fragment
         android:id="@+id/aboutFragment2"
-        android:name="com.lado.travago.transpido.ui.traveller.AboutFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.AboutFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/customisationFragment"
-        android:name="com.lado.travago.transpido.ui.traveller.CustomisationFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.CustomisationFragment"
         android:label="fragment_customisation"
-        tools:layout="@layout/fragment_customisation">
-        <action
-            android:id="@+id/action_customisationFragment_to_paymentActivity"
-            app:destination="@id/paymentActivity" />
-    </fragment>
+        tools:layout="@layout/fragment_customisation"/>
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.lado.travago.transpido.ui.traveller.HelpFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.HelpFragment"
         android:label="fragment_help"
         tools:layout="@layout/fragment_help" />
     <fragment
         android:id="@+id/ticketsFragment"
-        android:name="com.lado.travago.transpido.ui.traveller.TicketsFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.TicketsFragment"
         android:label="fragment_tickets"
         tools:layout="@layout/fragment_tickets" />
     <fragment
         android:id="@+id/registrationFragment3"
-        android:name="com.lado.travago.transpido.ui.traveller.RegistrationFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.RegistrationFragment"
         android:label="fragment_registration"
         tools:layout="@layout/fragment_registration" />
     <fragment
         android:id="@+id/scannerRegistrationFragment"
-        android:name="com.lado.travago.transpido.ui.scanner.creation.ScannerRegistrationFragment"
+        android:name="com.lado.travago.tripbook.ui.scanner.creation.ScannerRegistrationFragment"
         android:label="ScannerRegistrationFragment" />
+    <fragment
+        android:id="@+id/journeySearchFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.JourneySearchFragment"
+        android:label="JourneySearchFragment" >
+        <action
+            android:id="@+id/action_journeySearchFragment_to_journeySearchResultFragment"
+            app:destination="@id/journeySearchResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/journeySearchResultFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.JourneySearchResultFragment"
+        android:label="fragment_journey_search_result"
+        tools:layout="@layout/fragment_journey_search_result" />
 </navigation>

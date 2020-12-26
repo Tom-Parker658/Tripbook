@@ -21,9 +21,9 @@
             <!-- TODO: Update blank fragment layout -->
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/num_parks"
+                android:id="@+id/cost_per_km"
                 style="@style/editTextStyle"
-                android:hint="Number of stations:"
+                android:hint="Cost per Km:"
                 app:helperText="The total number of your agencies park stations any where"
                 app:hintTextAppearance="@style/editTextStyle"
                 app:layout_constraintBottom_toTopOf="@+id/textView11"
@@ -34,7 +34,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/textInputStyle"
-                    android:inputType="number" />
+                    android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -43,7 +43,7 @@
                 android:hint="Number of vehicles:"
                 app:helperText="The total number of vehicles owned by your agency"
                 app:hintTextAppearance="@style/editTextStyle"
-                app:layout_constraintBottom_toTopOf="@+id/num_parks"
+                app:layout_constraintBottom_toTopOf="@+id/cost_per_km"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -147,7 +147,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/num_parks" />
+                app:layout_constraintTop_toBottomOf="@+id/cost_per_km" />
 
             <Button
                 android:id="@+id/btn_create"

@@ -1,128 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:divider="?attr/dividerHorizontal"
-    android:orientation="vertical"
-    android:showDividers="beginning|end|none">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/result_journey_tap"
+    <data>
+        <variable
+            name="resultInfo"
+            type="com.lado.travago.tripbook.model.admin.Journey.JourneySearchResultInfo" />
+
+    </data>
+
+    <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical">
+        android:divider="?attr/dividerHorizontal"
+        android:orientation="vertical"
+        android:showDividers="beginning|end|none">
 
-        <androidx.appcompat.widget.AppCompatRatingBar
-            android:id="@+id/item_text_agency_reputation"
-            style="@style/Widget.AppCompat.RatingBar.Small"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/result_journey_tap"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:numStars="10"
-            app:layout_constraintBottom_toTopOf="@+id/item_text_journey_vip"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/item_text_journey_name"
-            app:layout_constraintTop_toBottomOf="@+id/item_text_journey_name"
-            tools:rating="7.5" />
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/item_text_journey_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/aclonica"
-            android:textAlignment="center"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/item_text_agency_reputation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
-            app:layout_constraintTop_toBottomOf="@+id/item_text_agency_price"
-            tools:text="Dschang - Yaounde" />
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/item_text_agency_reputation"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:numStars="@{resultInfo.agencyReputation}"
+                app:layout_constraintBottom_toTopOf="@+id/item_text_journey_vip"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/item_text_journey_name"
+                app:layout_constraintTop_toBottomOf="@+id/item_text_journey_name"
+                tools:rating="7.5" />
 
-        <TextView
-            android:id="@+id/item_text_agency_price"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/aclonica"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/item_text_journey_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
-            app:layout_constraintTop_toBottomOf="@+id/item_text_agency_name"
-            tools:text="5,000 Franc CFA" />
+            <TextView
+                android:id="@+id/item_text_journey_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/aclonica"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:text="@{resultInfo.journeyName}"
+                app:layout_constraintBottom_toTopOf="@+id/item_text_agency_reputation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
+                app:layout_constraintTop_toBottomOf="@+id/item_text_agency_price"
+                tools:text="Dschang - Yaounde" />
 
-        <TextView
-            android:id="@+id/item_text_journey_vip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="16dp"
-            android:drawableEnd="@drawable/baseline_vip_24"
-            android:text="@string/switch_vip_jouney"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/item_text_journey_day"
-            app:layout_constraintTop_toBottomOf="@+id/item_text_agency_reputation" />
+            <TextView
+                android:id="@+id/item_text_agency_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/aclonica"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@{resultInfo.journeyCostFormatted}"
+                app:layout_constraintBottom_toTopOf="@+id/item_text_journey_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
+                app:layout_constraintTop_toBottomOf="@+id/item_text_agency_name"
+                tools:text="5,000 FCFA" />
 
-        <ImageView
-            android:id="@+id/item_image_agency_logo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="16dp"
-            android:contentDescription="@string/desc_agency_logo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            <TextView
+                android:id="@+id/item_text_journey_vip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:drawableEnd="@drawable/baseline_vip_24"
+                android:text="@string/switch_vip_jouney"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/distance"
+                app:layout_constraintStart_toEndOf="@+id/item_text_journey_day"
+                app:layout_constraintTop_toBottomOf="@+id/item_text_agency_reputation" />
 
-        <TextView
-            android:id="@+id/item_text_agency_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="2dp"
-            android:fontFamily="@font/aclonica"
-            android:textAlignment="center"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/item_text_agency_price"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="General Voyage" />
+            <ImageView
+                android:id="@+id/item_image_agency_logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="16dp"
+                app:imageFromUrl="@{resultInfo.agencyLogoUrl}"
+                android:contentDescription="@string/desc_agency_logo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/item_text_journey_day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/aclonica"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/item_text_journey_vip"
-            app:layout_constraintEnd_toStartOf="@+id/item_text_journey_vip"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
-            app:layout_constraintTop_toTopOf="@+id/item_text_journey_vip"
-            tools:text="12 / 11 / 2019" />
+            <TextView
+                android:id="@+id/item_text_agency_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="2dp"
+                android:fontFamily="@font/aclonica"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@{resultInfo.agencyName}"
+                app:layout_constraintBottom_toTopOf="@+id/item_text_agency_price"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="General Voyage" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/item_text_journey_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/aclonica"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                formatDateFromMillis="@{resultInfo.travelDateInMillis}"
+                app:layout_constraintBottom_toBottomOf="@+id/item_text_journey_vip"
+                app:layout_constraintEnd_toStartOf="@+id/item_text_journey_vip"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
+                app:layout_constraintTop_toTopOf="@+id/item_text_journey_vip"
+                tools:text="12/11/2019" />
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@{String.valueOf(resultInfo.journeyDistance)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_text_agency_reputation"
+                tools:text="589Km" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

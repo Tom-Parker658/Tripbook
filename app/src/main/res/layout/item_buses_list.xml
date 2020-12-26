@@ -6,7 +6,7 @@
     <data>
         <variable
             name="busListInfo"
-            type="com.lado.travago.transpido.model.admin.Bus.BusListInfo" />
+            type="com.lado.travago.tripbook.model.admin.Bus.BusListInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
