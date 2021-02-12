@@ -14,7 +14,7 @@ import java.util.*
 @ExperimentalCoroutinesApi
 class AdminFunctionViewModel : ViewModel() {
     private val db = FirestoreRepo()
-    private val placeRepo = PlacesRepo(null)
+    private val placeRepo = PlacesRepo()
 
     /**
      * Administrator utility

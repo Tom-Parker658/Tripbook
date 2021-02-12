@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:819741617511:android:8b3c1326b37212b90913c2",
+        "mobilesdk_app_id": "1:819741617511:android:d44dae3d9a545ad20913c2",
         "android_client_info": {
-          "package_name": "com.lado.travago.transpido"
+          "package_name": "com.lado.travago.tripbook"
         }
       },
       "oauth_client": [
         {
-          "client_id": "819741617511-gat86n3c1kp5n1ooqnjegbt2e6u2gt64.apps.googleusercontent.com",
+          "client_id": "819741617511-atpabgu45baglq90ak14v6tvlnfg5sg0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.lado.travago.transpido",
-            "certificate_hash": "e911de866c938ea79c4f86b1f27e88a26011ef9b"
+            "package_name": "com.lado.travago.tripbook",
+            "certificate_hash": "1f7407abdcdeb51bcb7df825fa1b5210fa9c32c2"
           }
         },
         {

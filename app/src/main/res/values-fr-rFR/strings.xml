@@ -28,4 +28,6 @@
     <string name="text_label_travel_date">Date du Voyage:</string>
     <string name="text_label_travel_time">Temp du Voyage:</string>
     <string name="text_label_location" translatable="false">Ma Location:</string>
+    <string name="text_label_password">Mot de passe:</string>
+    <string name="text_label_email" translatable="false">Email ou tel:</string>
 </resources>

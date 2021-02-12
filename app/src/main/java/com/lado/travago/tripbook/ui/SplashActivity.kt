@@ -2,6 +2,7 @@ package com.lado.travago.tripbook.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.lado.travago.tripbook.R
@@ -45,9 +46,11 @@ class SplashActivity : AppCompatActivity() {
                     db.identifyUser(auth.currentUser!!.uid).collect {
                         when(it){
                             is State.Failed ->{
+                                Toast.makeText(applicationContext, "Its a Booker!", Toast.LENGTH_LONG).show()
                                 //Is a Booker, we redirect later to the ticket screen
                             }
                             is State.Success ->{
+                                Toast.makeText(applicationContext, "Its a Booker!", Toast.LENGTH_LONG).show()
                                 //Is a Scanner, Redirect to the Scanner panel
                             }
                         }

@@ -31,10 +31,13 @@ fun ImageView.loadImageFromUrl(imageUrl: String){
         .into(this)
 }
 
-@BindingAdapter("statusText")
-fun TextView.setStatusText(isAdmin: Boolean){
-    text = if (isAdmin) "Administrator" else "Standard"
-}
+//@BindingAdapter("statusText")
+//fun TextView.setStatusTextIfScanner(userBasicInfo: User.UserBasicInfo){
+//    text = if(userBasicInfo is Scanner.ScannerBasicInfo)
+//        if (userBasicInfo.isAdmin) "Admin scanner" else "scanner"
+//    else
+//        "Booker"
+//}
 
 /**
  * Uses [Utils.getAge] to get the age of the user from their birthday in millisecond

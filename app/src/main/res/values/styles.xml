@@ -30,7 +30,21 @@
         <item name="hintEnabled">true</item>
         <item name="helperTextEnabled">true</item>
         <item name="hintAnimationEnabled">true</item>
+    </style>
 
+    <style name="passwordTextStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="endIconMode">password_toggle</item>
+        <item name="hintEnabled">true</item>
+        <item name="helperTextEnabled">true</item>
+        <item name="hintAnimationEnabled">true</item>
+        <item name="android:password">true</item>
+        <item name="passwordToggleEnabled">true</item>
     </style>
     <!--Style for TextInputEditText-->
     <style name="textInputStyle">

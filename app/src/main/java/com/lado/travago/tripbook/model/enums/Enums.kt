@@ -23,7 +23,6 @@ enum class SEX {
 /**
  * Contains options for occupations of travellers
  *
- *
  * @property PUPIL any person from nursery to class 6
  * @property STUDENT any person from secondary school & university
  * @property EMPLOYEE any person who has a job
@@ -32,6 +31,13 @@ enum class SEX {
  * @property UNKNOWN for initialising occupation variables
  */
 enum class OCCUPATION {
-    PUPIL, STUDENT, EMPLOYEE, WORKER, OTHER, UNKNOWN
+    PUPIL, STUDENT, EMPLOYEE, WORKER, SCANNER, OTHER, UNKNOWN
+}
+
+/**
+ * Contains all operations firestore can carry out
+ */
+enum class DbOperations{
+    SET, DELETE, UPDATE, GET
 }
 

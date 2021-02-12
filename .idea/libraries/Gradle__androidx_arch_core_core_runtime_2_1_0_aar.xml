@@ -1,9 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.arch.core:core-runtime:2.1.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/3f73d3bf54337d381a45775e68a697e9/core-runtime-2.1.0/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/caches/transforms-2/files-2.1/3f73d3bf54337d381a45775e68a697e9/core-runtime-2.1.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/3f73d3bf54337d381a45775e68a697e9/core-runtime-2.1.0/res" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/139d80ad894f8c1df28fd1eefd4289b7/core-runtime-2.1.0/res" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/3d82d7d58d42dccafc3ffa59979742f2/core-runtime-2.1.0/res" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/ec867cffd12fb019f3ffc0b028f518ea/core-runtime-2.1.0/res" />
+      <root url="jar://$USER_HOME$/caches/transforms-2/files-2.1/eb3eb4016cf09f718c60d55e17d5ac0d/core-runtime-2.1.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/eb3eb4016cf09f718c60d55e17d5ac0d/core-runtime-2.1.0/res" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/eb3eb4016cf09f718c60d55e17d5ac0d/core-runtime-2.1.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -54,6 +54,7 @@ class AgencyRegistrationActivity : AppCompatActivity() {
         const val KEY_OTA_PATH = "path"
         const val KEY_AGENCY_NAME = "agencyName"
         const val KEY_SCANNER_NAME = "scannerName"
+        const val KEY_AGENCY_ID = "agencyId"
         const val KEY_SCANNER_PHONE = "scannerPhone"
         const val KEY_SCANNER_BIRTHDAY = "scannerBirthday"
         const val KEY_SCANNER_IS_ADMIN = "scannerIsAdmin"

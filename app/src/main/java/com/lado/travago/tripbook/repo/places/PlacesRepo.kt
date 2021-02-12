@@ -1,16 +1,9 @@
 package com.lado.travago.tripbook.repo.places
 
 import android.util.Log
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.TypeFilter
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.getField
 import com.lado.travago.tripbook.model.admin.Destination
 import com.lado.travago.tripbook.model.admin.Journey
@@ -18,29 +11,24 @@ import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import com.lado.travago.tripbook.utils.AdminUtils
-import com.lado.travago.tripbook.utils.Utils
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.tasks.await
-import java.util.*
 
 /**
  * Performs all queries like places autocomplete and Locate-Me functions.
  */
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
-class PlacesRepo(private val placesClient: PlacesClient?) {
+class PlacesRepo {
     private val db = FirestoreRepo()
 
-    /**
+   /**
      * Used to find a [Place] from its name
      * @return a list of places
      */
+   /**
     fun findPlace(placeName: String) = flow {
         emit(State.loading())
         //A session token for each autocomplete session. Helps in billing and is required
@@ -73,7 +61,7 @@ class PlacesRepo(private val placesClient: PlacesClient?) {
     }.catch {
         emit(State.failed(it.message.toString()))
     }.flowOn(Dispatchers.Main)
-
+*/
 
     /**
      * Upload a journey
@@ -130,7 +118,6 @@ class PlacesRepo(private val placesClient: PlacesClient?) {
      */
     fun searchJourney(locationName: String, destinationName: String) = flow {
         emit(State.loading())
-        var journeyDoc: DocumentSnapshot? = null
 
         db.queryCollection("Destinations") {
             it.whereEqualTo("name", locationName)
@@ -171,19 +158,28 @@ class PlacesRepo(private val placesClient: PlacesClient?) {
                                                            val listOfAgencies = mutableListOf<DocumentSnapshot>()
                                                            val fieldPath = FieldPath.of("Cameroon", "Regions", "list")
                                                            for(agency in it.data.documents){
-                                                               val regions =
                                                                if(agency.getField<List<String>>(fieldPath)?.containsAll(listOf(destination["region"].toString().toUpperCase(), location["region"].toString().toUpperCase()))!!
-                                                               ) listOfAgencies.add(agency)
+                                                               ) {
+                                                                   listOfAgencies += agency
+                                                               }
+
                                                            }
                                                            //Then we emit the result as a pair of the journey snapshot and a list of all agencies snapshots
-                                                           emit(
-                                                               State.success( Pair(journeyState.data, listOfAgencies.toList()))
-                                                           )
+
+                                                               emit(
+                                                                   State.success(
+                                                                       Pair(
+                                                                           journeyState.data,
+                                                                           listOfAgencies.toList()
+                                                                       )
+                                                                   )
+                                                               )
                                                        }
                                                        is State.Failed -> {
                                                             Log.e("Journey Search", "Couldn't find the agenciees")
                                                        }
 
+                                                       else -> {}
                                                    }
                                                }
                                            }
@@ -191,12 +187,15 @@ class PlacesRepo(private val placesClient: PlacesClient?) {
                                         }
                                     }
                             }
+                            is State.Loading -> TODO()
+                            is State.Failed -> TODO()
                         }
                     }
                 }
+                is State.Failed -> Log.i("JourneySearch", "Failed gettting journey")
             }
-
         }
+
     }
 
 }

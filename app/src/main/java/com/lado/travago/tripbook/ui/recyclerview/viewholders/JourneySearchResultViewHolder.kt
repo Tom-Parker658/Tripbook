@@ -4,9 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lado.travago.tripbook.databinding.ItemJourneySearchResultBinding
-import com.lado.travago.tripbook.databinding.ItemScannerInfoBinding
 import com.lado.travago.tripbook.model.admin.Journey
-import com.lado.travago.tripbook.model.admin.Scanner
+import com.lado.travago.tripbook.model.users.Scanner
 
 
 class JourneySearchResultViewHolder private constructor(val binding: ItemJourneySearchResultBinding) :

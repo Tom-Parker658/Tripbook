@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.android.gms:play-services-basement:17.2.1@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/ce41456f927bc20439fca18f556891ff/jetified-play-services-basement-17.2.1/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/caches/transforms-2/files-2.1/ce41456f927bc20439fca18f556891ff/jetified-play-services-basement-17.2.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/ce41456f927bc20439fca18f556891ff/jetified-play-services-basement-17.2.1/res" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/8c7a713f8c3cb65598e8b45e43e338f0/jetified-play-services-basement-17.2.1/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/caches/transforms-2/files-2.1/8c7a713f8c3cb65598e8b45e43e338f0/jetified-play-services-basement-17.2.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/8c7a713f8c3cb65598e8b45e43e338f0/jetified-play-services-basement-17.2.1/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/com.google.android.gms/play-services-basement/17.2.1/f55b6b203ba306fe2c164c981aa42f1cf1d6aa2d/play-services-basement-17.2.1-javadoc.jar!/" />

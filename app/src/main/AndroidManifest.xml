@@ -16,24 +16,44 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name="com.lado.travago.tripbook.ui.SplashActivity"
-            android:theme="@style/SplashTheme">
+        <activity android:name=".ui.users.UserLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.lado.travago.tripbook.ui.scanner.AdminPanelActivity" />
-        <activity android:name="com.lado.travago.tripbook.ui.administrator.AdminFunctionActivity" />
-        <activity android:name="com.lado.travago.tripbook.ui.scanner.creation.ScannerCreationActivity" />
-        <activity android:name="com.lado.travago.tripbook.ui.agency.AgencyRegistrationActivity"/>
-        <activity android:name="com.lado.travago.tripbook.ui.PaymentActivity" /> <!-- Helps for screen orientation during barcode scanning -->
+        <activity
+            android:name=".ui.SplashActivity"
+            android:theme="@style/SplashTheme" />
+        <activity android:name=".ui.scanner.AdminPanelActivity"></activity>
+        <activity android:name=".ui.administrator.AdminFunctionActivity" />
+        <activity android:name=".ui.users.UserCreationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="tripbook.auth.com"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.agency.AgencyRegistrationActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name=".ui.PaymentActivity" /> <!-- Helps for screen orientation during barcode scanning -->
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
-        <activity android:name="com.lado.travago.tripbook.ui.MainActivity" />
+        <activity android:name=".ui.MainActivity" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

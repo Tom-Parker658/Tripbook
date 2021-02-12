@@ -1,6 +1,7 @@
 package com.lado.travago.tripbook.repo.firebase
 
 import com.google.firebase.firestore.*
+import com.lado.travago.tripbook.model.enums.DbOperations
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,15 @@ import kotlinx.coroutines.tasks.await
 class FirestoreRepo {
     //Instance of our firestore db
     private val db = FirebaseFirestore.getInstance()
+
+    /**
+     * A little prototype class to organise data to enter a batched operation
+     */
+    data class BatchedWritesInfo(
+        val documentPath: String,
+        val data: HashMap<String, Any?>,
+        val dbOperation: DbOperations
+    )
 
     /**
      * Uses the .add() to add a document to a collection from the path. A random id is given to the
@@ -50,12 +60,41 @@ class FirestoreRepo {
         emit(State.loading())
 
         val document = db.document(documentPath)
-        document.set(data)
+        document.set(data).await()
         emit(State.success(null))
 
     }.catch {
         emit(State.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)
+
+    fun batchedWriteDocuments(
+        batchedWritesInfoList: List<BatchedWritesInfo>
+    ) = flow{
+        emit(State.loading())
+        db.runBatch {batchWriter ->
+            for (info in batchedWritesInfoList){
+                when(info.dbOperation){
+                    DbOperations.SET -> {
+                        batchWriter.set(
+                            db.document(info.documentPath),
+                            info.data
+                        )
+                    }
+                    DbOperations.DELETE -> {
+                       // TODO("What to do when we instead need to delete a field using batched write")
+                    }
+                    DbOperations.UPDATE -> {
+                        //TODO("What to do when we instead need to update a field sing batched write")
+                    }
+
+                }
+            }
+        }.await()
+        emit(State.success(null))
+    }.catch {
+        emit(State.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
 
     /**
      * Increments a number in the database and returns the new value of the field
@@ -137,7 +176,7 @@ class FirestoreRepo {
      */
     fun identifyUser(uid: String) = flow {
         emit(State.loading())
-        val doc = db.document("${FirestoreTags.Scanner}/$uid").get().await()
+        val doc = db.document("${FirestoreTags.Scanners}/$uid").get().await()
         emit(State.success(doc))
     }.catch {
         emit(State.failed(FirestoreTags.Bookers.toString()))

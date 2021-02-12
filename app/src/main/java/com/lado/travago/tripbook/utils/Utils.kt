@@ -4,8 +4,8 @@ import android.graphics.Bitmap
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
-import com.lado.travago.tripbook.model.booker.Booker
-import com.lado.travago.tripbook.model.booker.Ticket
+import com.lado.travago.tripbook.model.booking.Ticket
+import com.lado.travago.tripbook.model.users.Booker
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
@@ -72,7 +72,7 @@ object Utils {
         val result: BitMatrix
         val requiredHeight = 300
         val requiredWidth = 300
-        val encryptedSeed = Utils.qrCodeEncryptor(ticket.qrSeed)
+        val encryptedSeed = qrCodeEncryptor(ticket.qrSeed)
         //Try to encode the qrSeed to QR code or generate an error
         try {
             result = MultiFormatWriter().encode(encryptedSeed,

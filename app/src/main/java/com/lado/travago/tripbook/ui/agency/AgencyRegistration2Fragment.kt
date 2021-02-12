@@ -1,5 +1,6 @@
 package com.lado.travago.tripbook.ui.agency
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyRegistration2Binding
 import com.lado.travago.tripbook.model.enums.Region
+import com.lado.travago.tripbook.ui.users.UserCreationActivity
 import com.lado.travago.tripbook.viewmodel.admin.AgencyRegistrationViewModel
 import com.lado.travago.tripbook.viewmodel.admin.AgencyRegistrationViewModel.FieldTags
 import kotlinx.coroutines.*
@@ -29,7 +30,7 @@ class AgencyRegistration2Fragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_agency_registration2, container, false)
@@ -42,7 +43,7 @@ class AgencyRegistration2Fragment : Fragment() {
          uiScope.launch {
              onBtnCreateClicked()
          }
-        navigateToNextScreen()
+        navigateToUserCreation()
 
         return binding.root
     }
@@ -65,7 +66,7 @@ class AgencyRegistration2Fragment : Fragment() {
      * Restore all saved data to their respective views
      */
     private fun restoreSavedData() {
-        binding.costPerKm.editText!!.setText(viewModel.costPerKm.toString())
+        binding.costPerKm.editText!!.setText(viewModel.costPerKm)
         binding.numVehicles.editText!!.setText(viewModel.vehicleNumberField)
         binding.radioNorth.isChecked = viewModel.regions.contains(Region.NORTH)
         binding.radioEast.isChecked = viewModel.regions.contains(Region.EAST)
@@ -89,38 +90,29 @@ class AgencyRegistration2Fragment : Fragment() {
         if (binding.radioNorth.isChecked) viewModel.regions.add(Region.NORTH)
         else viewModel.regions.remove(Region.NORTH)
 
-
         if (binding.radioEast.isChecked) viewModel.regions.add(Region.EAST)
         else viewModel.regions.remove(Region.EAST)
-
 
         if ( binding.radioWest.isChecked) viewModel.regions.add(Region.WEST)
         else viewModel.regions.remove(Region.WEST)
 
-
         if (binding.radioSouth.isChecked) viewModel.regions.add(Region.SOUTH)
         else viewModel.regions.remove(Region.SOUTH)
-
 
         if (binding.radioNorthWest.isChecked) viewModel.regions.add(Region.NORTH_WEST)
         else viewModel.regions.remove(Region.NORTH_WEST)
 
-
         if (binding.radioSouthWest.isChecked) viewModel.regions.add(Region.SOUTH_WEST)
         else viewModel.regions.remove(Region.SOUTH_WEST)
-
 
         if (binding.radioAdamawa.isChecked) viewModel.regions.add(Region.ADAMAWA)
         else viewModel.regions.remove(Region.ADAMAWA)
 
-
         if (binding.radioLittoral.isChecked) viewModel.regions.add(Region.LITTORAL)
         else viewModel.regions.remove(Region.LITTORAL)
 
-
         if (binding.radioFarNorth.isChecked) viewModel.regions.add(Region.EXTREME_NORTH)
         else viewModel.regions.remove(Region.EXTREME_NORTH)
-
     }
 
     private suspend fun onBtnCreateClicked() = binding.btnCreate.setOnClickListener {
@@ -160,11 +152,16 @@ class AgencyRegistration2Fragment : Fragment() {
 
     }
 
-    private fun navigateToNextScreen(){
+    private fun navigateToUserCreation(){
         viewModel.onOtaCreated.observe(viewLifecycleOwner){
-            if(it) requireView().findNavController().navigate(
-                AgencyRegistration2FragmentDirections.actionAgencyRegistration2FragmentToAgencyRegistration3Fragment()
-            )
+            if(it) {
+                startActivity(
+                    //Starts the scanner creation activity using the agency name and the agency firestore path
+                    Intent(context, UserCreationActivity::class.java)
+                        .putExtra(AgencyRegistrationActivity.KEY_AGENCY_NAME, viewModel.nameField)
+                        .putExtra(AgencyRegistrationActivity.KEY_OTA_PATH, viewModel.otaPath)
+                )
+            }
         }
     }
 

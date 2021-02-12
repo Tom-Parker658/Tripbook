@@ -45,6 +45,7 @@ data class OnlineTravelAgency(
     val orangeMoneyAccount: String,
     val supportEmail: String = "",
     val supportContact: String = "",
+    val isSuspended: Boolean = false
 ) {
 //    @DocumentId
 //    var uid: String =""
@@ -70,17 +71,9 @@ data class OnlineTravelAgency(
             "likes" to likes,
             "dislikes" to dislikes,
             "reputation" to reputation,
-            "addedOn" to Timestamp(Date())
+            "addedOn" to Timestamp(Date()),
+            "isSuspended" to isSuspended
         )
-    }
-
-    companion object{
-        fun otaScannerMap(scanner: Scanner): HashMap<String, Any?> =
-            hashMapOf(
-                "birthdayInMillis" to scanner.birthdayInMillis,
-                "sex" to scanner.sex.name,
-                "photoUrl" to scanner.profilePhoto
-            )
     }
 
 }

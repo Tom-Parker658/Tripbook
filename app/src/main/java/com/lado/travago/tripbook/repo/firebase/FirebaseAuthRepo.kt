@@ -40,6 +40,55 @@ class FirebaseAuthRepo {
     }.flowOn(Dispatchers.IO)
 
     /**
+     * A sign-in method which uses either a phone number or an credential to SignIn the user
+     */
+    fun logInUserWithEmail(email: String, password: String) = flow{
+        firebaseAuth.useAppLanguage()
+
+        emit(State.loading())
+
+        val user = firebaseAuth.signInWithEmailAndPassword(email, password).await().user
+        emit(State.success(user!!))
+    }.catch{
+        emit(State.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+    /**
+     * A -in method which uses either a phone number or an credential to SignIn the user
+     */
+    fun createUserWithEmail(email: String, password: String) = flow{
+        firebaseAuth.useAppLanguage()
+
+        emit(State.loading())
+
+        val user = firebaseAuth.createUserWithEmailAndPassword(email, password).await().user
+        emit(State.success(user!!))
+    }.catch{
+        emit(State.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+    /**
+     * A method to send the emailLink to the user credential address
+     *
+    fun sendSignInLinkToUserEmail(credential: String, packageName: String) =  flow{
+        emit(State.loading())
+
+        val actionCodeSettings = actionCodeSettings {
+            url = "https://tripbook.auth.com/finishSignup/"
+            handleCodeInApp = true
+            setAndroidPackageName(
+                packageName,
+                true,
+                null
+            )
+        }
+        val x = firebaseAuth.sendSignInLinkToEmail(credential, actionCodeSettings).await()
+        emit(State.success(x))
+    }.catch {
+        emit(State.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+*/
+    /**
      * SignIn the user anonymously. This gives permission to a user to write to db and upload
      * files to storage without actually signIn.
      *

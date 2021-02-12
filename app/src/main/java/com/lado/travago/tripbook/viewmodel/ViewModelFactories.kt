@@ -4,7 +4,9 @@ package com.lado.travago.tripbook.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.lado.travago.tripbook.viewmodel.admin.ScannerCreationViewModel
+import com.lado.travago.tripbook.model.users.Booker
+import com.lado.travago.tripbook.model.users.Scanner
+import com.lado.travago.tripbook.viewmodel.admin.UserCreationViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -37,17 +39,22 @@ import kotlinx.coroutines.InternalCoroutinesApi
 //}
 
 /**
- * This is a factory class which will be used to build our custom [ScannerCreationViewModel] with arguments
- * @property agencyName is teh name of the agency which will be filled to the agencyName field of the
- * creation form
+ * This is a factory class which will be used to build our custom [UserCreationViewModel] with arguments
+ * For this creation to be
+ * -[Scanner] Creation: All the properties must not be null
+ * @property agencyName is the name of the Agemcy which employed  this scanner
  * @property agencyFirestorePath is the path of the agency Document stored in firestore. This will be used
  * during the scanner creation
+ * @property agencyId is the id of the agency
+
+ * -[Booker] Creation: All the properties must be null
+
  */
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class ScannerCreationViewModelFactory(
-    private val agencyName: String,
-    private val agencyFirestorePath: String,
+class UserCreationViewModelFactory(
+    private val agencyName: String?,
+    private val agencyId: String?
 ) : ViewModelProvider.Factory {
     /**
      * Creates a new instance of the given `Class`.
@@ -57,8 +64,8 @@ class ScannerCreationViewModelFactory(
     </T> */
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ScannerCreationViewModel::class.java))
-            return  ScannerCreationViewModel(agencyFirestorePath, agencyName) as T
+        if (modelClass.isAssignableFrom(UserCreationViewModel::class.java))
+            return  UserCreationViewModel( agencyName, agencyId) as T
 
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Transpido.iml" filepath="$PROJECT_DIR$/.idea/modules/Transpido.iml" group="Transpido" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="Transpido/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Transpido.iml" filepath="$PROJECT_DIR$/.idea/modules/Transpido.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Transpido.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Transpido.app.iml" />
     </modules>
   </component>
 </project>

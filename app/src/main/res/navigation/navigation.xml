@@ -30,15 +30,6 @@
         android:label="fragment_tickets"
         tools:layout="@layout/fragment_tickets" />
     <fragment
-        android:id="@+id/registrationFragment3"
-        android:name="com.lado.travago.tripbook.ui.booker.RegistrationFragment"
-        android:label="fragment_registration"
-        tools:layout="@layout/fragment_registration" />
-    <fragment
-        android:id="@+id/scannerRegistrationFragment"
-        android:name="com.lado.travago.tripbook.ui.scanner.creation.ScannerRegistrationFragment"
-        android:label="ScannerRegistrationFragment" />
-    <fragment
         android:id="@+id/journeySearchFragment"
         android:name="com.lado.travago.tripbook.ui.booker.JourneySearchFragment"
         android:label="JourneySearchFragment" >

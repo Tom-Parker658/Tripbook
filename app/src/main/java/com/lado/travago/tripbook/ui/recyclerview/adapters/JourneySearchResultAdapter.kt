@@ -5,12 +5,12 @@ import androidx.recyclerview.widget.ListAdapter
 import com.lado.travago.tripbook.model.admin.Journey
 import com.lado.travago.tripbook.ui.recyclerview.diffutils.JourneySearchResultDiffCallback
 import com.lado.travago.tripbook.ui.recyclerview.viewholders.JourneySearchResultViewHolder
-import com.lado.travago.tripbook.ui.recyclerview.viewholders.ScannerInfoViewHolder
+import com.lado.travago.tripbook.ui.recyclerview.viewholders.UserInfoViewHolder
 
 class JourneySearchResultAdapter: ListAdapter<Journey.JourneySearchResultInfo, JourneySearchResultViewHolder>(
     JourneySearchResultDiffCallback()
 ) {
-    /** Creates, inflates and returns [ScannerInfoViewHolder] ViewHolder */
+    /** Creates, inflates and returns [UserInfoViewHolder] ViewHolder */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JourneySearchResultViewHolder =
         JourneySearchResultViewHolder.from(parent)
 

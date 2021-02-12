@@ -62,7 +62,7 @@ class JourneySearchViewModel : ViewModel() {
      * Searches Journey and all the agencies which can offer the journey
      */
     suspend fun searchMyJourney(){
-        val placeRepo = PlacesRepo(null)
+        val placeRepo = PlacesRepo()
 
         placeRepo.searchJourney(location, destination).collect{ pairState ->
 
@@ -74,8 +74,8 @@ class JourneySearchViewModel : ViewModel() {
                 is State.Success -> {
                     journey = pairState.data.first
                     Log.i("Journey Search", "Got It: $journey")
-                    Log.i("Journey Search", "Got It 2:  ${pairState?.data.second?.size ?: 0}")
-                    pairState.data.second?.forEach {
+                    Log.i("Journey Search", "Got It 2:  ${pairState.data.second.size}")
+                    pairState.data.second.forEach {
                         _resultsReady.value?.add(
                             Journey.JourneySearchResultInfo(
                                 journey["name"].toString(),
@@ -87,7 +87,7 @@ class JourneySearchViewModel : ViewModel() {
                                 journey["distance"].toString().toInt()
                             )
                         )?:Log.i("Journey Search", "Got It: Livedata null")
-                    } ?: Log.i("Journey Search", "Got It 2:  No data")
+                    }
                     _loading.value = false
                 }
                 is State.Failed -> {

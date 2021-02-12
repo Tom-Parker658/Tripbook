@@ -5,7 +5,7 @@
     <string name="text_label_total_reputation" translatable="false">/ 10</string>
     <string name="text_label_reputation">Reputation:</string>
     <string name="text_label_contact">Phone:</string>
-    <string name="text_label_email" translatable="false">E-mail:</string>
+    <string name="text_label_email">E-mail or Phone:</string>
     <string name="text_label_occupation" translatable="false">Occupation:</string>
     <string name="text_label_birthplace">Birthplace:</string>
     <string name="text_label_birthday">Birthday:</string>

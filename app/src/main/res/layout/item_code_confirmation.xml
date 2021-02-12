@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/text_label_user_contact"
+            style="@style/style_image_label"
+            android:contentDescription="@string/desc_user_image"
+            app:layout_constraintBottom_toBottomOf="@+id/code"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/code"
+            app:srcCompat="@drawable/baseline_password_24" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/code"
+            style="@style/editTextStyle"
+            android:hint="Code:"
+            app:counterMaxLength="6"
+            app:helperText="enter 6 digit confirmation code"
+            app:helperTextEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/text_label_user_contact"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/textInputStyle"
+                android:inputType="numberSigned"
+                android:maxLength="6" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -18,16 +18,5 @@
         android:id="@+id/agencyRegistration2Fragment"
         android:name="com.lado.travago.tripbook.ui.agency.AgencyRegistration2Fragment"
         android:label="Agency Creation(2/3)"
-        tools:layout="@layout/fragment_agency_registration2">
-        <action
-            android:id="@+id/action_agencyRegistration2Fragment_to_agencyRegistration3Fragment"
-            app:destination="@id/agencyRegistration3Fragment"
-            app:popUpTo="@id/agencyRegistration1Fragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/agencyRegistration3Fragment"
-        android:name="com.lado.travago.tripbook.ui.agency.AgencyRegistration3Fragment"
-        android:label="Agency Creation(3/3)"
-        tools:layout="@layout/fragment_agency_registration3"/>
+        tools:layout="@layout/fragment_agency_registration2"/>
 </navigation>

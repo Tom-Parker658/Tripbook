@@ -1,9 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.legacy:legacy-support-core-utils:1.0.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/54750aa99d6adc489f3cca87264df46a/legacy-support-core-utils-1.0.0/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/caches/transforms-2/files-2.1/54750aa99d6adc489f3cca87264df46a/legacy-support-core-utils-1.0.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/54750aa99d6adc489f3cca87264df46a/legacy-support-core-utils-1.0.0/res" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/1c32170f119d31a45c96013fc4ab8e40/legacy-support-core-utils-1.0.0/res" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/11421765e13c7befd7130303bcf45329/legacy-support-core-utils-1.0.0/res" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/0d5f066630f9c15a24c35fb7965e2ca0/legacy-support-core-utils-1.0.0/res" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/1a83bc1c4ba64640e7c96a55b3a23755/legacy-support-core-utils-1.0.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/caches/transforms-2/files-2.1/1a83bc1c4ba64640e7c96a55b3a23755/legacy-support-core-utils-1.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/1a83bc1c4ba64640e7c96a55b3a23755/legacy-support-core-utils-1.0.0/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

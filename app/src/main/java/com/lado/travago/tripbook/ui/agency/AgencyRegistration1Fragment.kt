@@ -16,7 +16,6 @@ import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyRegistration1Binding
-import com.lado.travago.tripbook.databinding.FragmentScannerRegistrationBinding
 import com.lado.travago.tripbook.viewmodel.admin.AgencyRegistrationViewModel
 import com.lado.travago.tripbook.viewmodel.admin.AgencyRegistrationViewModel.FieldTags
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,7 +32,7 @@ class AgencyRegistration1Fragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             layoutInflater,

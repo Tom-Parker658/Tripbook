@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lado.travago.tripbook.model.admin.OnlineTravelAgency
-import com.lado.travago.tripbook.model.admin.Scanner
 import com.lado.travago.tripbook.model.enums.Region
+import com.lado.travago.tripbook.model.users.User
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.StorageTags
@@ -27,7 +27,7 @@ class AgencyRegistrationViewModel : ViewModel() {
     private val storageRepo = StorageRepo()
 
     //Contains a list of created scanners
-    private val _listOfScanners = MutableLiveData<MutableList<Scanner.ScannerBasicInfo>>()
+    private val _listOfScanners = MutableLiveData<MutableList<User.UserBasicInfo>>()
     val listOfScanners get() = _listOfScanners
 
     var logoFilename = ""
@@ -70,13 +70,13 @@ class AgencyRegistrationViewModel : ViewModel() {
 
 
     /**
-     * Adds a new scanner([Scanner.ScannerBasicInfo] object) to the [_listOfScanners]
+     * Adds a new scanner object) to the [_listOfScanners]
      */
-    fun addCreatedScannerToList(scannerInfo: Scanner.ScannerBasicInfo) {
+    fun addCreatedScannerToList(userInfo: User.UserBasicInfo) {
         if (_listOfScanners.value == null)
-            _listOfScanners.value = mutableListOf(scannerInfo)
+            _listOfScanners.value = mutableListOf(userInfo)
         else
-            _listOfScanners.value!! += scannerInfo
+            _listOfScanners.value!! += userInfo
     }
 
 
@@ -197,7 +197,7 @@ class AgencyRegistrationViewModel : ViewModel() {
                                                          */
                                                         firestoreRepo.setDocument(
                                                             hashMapOf(),
-                                                            "${FirestoreTags.Record}/${agencyMapData["agencyName"]}/stats/${Date()}",
+                                                            "${FirestoreTags.Records}/${agencyMapData["agencyName"]}/stats/${Date()}",
                                                         ).collect {
                                                             when (it) {
                                                                 is State.Loading -> startLoading()

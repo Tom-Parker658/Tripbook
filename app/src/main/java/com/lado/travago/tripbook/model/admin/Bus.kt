@@ -1,6 +1,6 @@
 package com.lado.travago.tripbook.model.admin
 
-import com.lado.travago.tripbook.model.booker.Booker
+import com.lado.travago.tripbook.model.users.Booker
 
 /**
  * A bus is a passenger container. A bus contains a list of [Booker].
