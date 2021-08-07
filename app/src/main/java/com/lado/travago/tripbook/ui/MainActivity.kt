@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityMainBinding
-import com.lado.travago.tripbook.viewmodel.booker.JourneySearchViewModel
+import com.lado.travago.tripbook.ui.booker.panel.viewmodel.JourneySearchViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 

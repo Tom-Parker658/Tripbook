@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:verticalScrollbarPosition="defaultPosition"
-        tools:context=".ui.agency.AgencyRegistration3Fragment">
+        tools:context=".ui.agency.creation.AgencyRegistration3Fragment">
 
         <Button
             android:id="@+id/button2"

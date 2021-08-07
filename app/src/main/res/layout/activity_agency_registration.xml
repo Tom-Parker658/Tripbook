@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.agency.AgencyRegistrationActivity">
+        tools:context=".ui.agency.creation.AgencyCreationActivity">
 
 
         <!--  A navigation host fragment to hold our fragments  -->

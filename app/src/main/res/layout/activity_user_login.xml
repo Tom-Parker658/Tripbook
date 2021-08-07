@@ -15,7 +15,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.users.UserLoginActivity">
+            tools:context=".ui.booker.UserLoginActivity">
 
             <ImageView
                 android:id="@+id/text_label_user_email"

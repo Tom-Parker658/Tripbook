@@ -6,8 +6,8 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import com.lado.travago.tripbook.model.enums.OCCUPATION
 import com.lado.travago.tripbook.model.users.User
-import com.lado.travago.tripbook.ui.agency.AgencyRegistrationActivity
-import com.lado.travago.tripbook.ui.users.UserCreationActivity
+import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationActivity
+import com.lado.travago.tripbook.ui.booker.creation.BookerCreationActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.*
@@ -24,19 +24,19 @@ class UserCreationContract: ActivityResultContract<Pair<String?, String?>, User.
     override fun createIntent(context: Context, agencyNameToDBPathPair: Pair<String?, String?>): Intent {
         val agencyName = agencyNameToDBPathPair.first
         val agencyDBPath = agencyNameToDBPathPair.second
-        return Intent(context,  UserCreationActivity::class.java)
-            .putExtra(AgencyRegistrationActivity.KEY_AGENCY_NAME, agencyName)
-            .putExtra(AgencyRegistrationActivity.KEY_OTA_PATH, agencyDBPath)
+        return Intent(context,  BookerCreationActivity::class.java)
+            .putExtra(AgencyCreationActivity.KEY_AGENCY_NAME, agencyName)
+            .putExtra(AgencyCreationActivity.KEY_OTA_PATH, agencyDBPath)
     }
 
     /** Convert result obtained from [Activity.onActivityResult] to Output  */
     override fun parseResult(resultCode: Int, infoIntent: Intent?) = when(resultCode){
         Activity.RESULT_OK -> {
             User.UserBasicInfo(
-                name = infoIntent?.getStringExtra(AgencyRegistrationActivity.KEY_SCANNER_NAME) ?: "name",
-                phoneNumber = infoIntent?.getStringExtra(AgencyRegistrationActivity.KEY_SCANNER_PHONE) ?: "655223344",
-                photoUrl = infoIntent?.getStringExtra(AgencyRegistrationActivity.KEY_SCANNER_URL) ?: "ss",
-                birthdayInMillis = infoIntent?.getLongExtra(AgencyRegistrationActivity.KEY_SCANNER_BIRTHDAY, Date().time) ?: 0L,
+                name = infoIntent?.getStringExtra(AgencyCreationActivity.KEY_SCANNER_NAME) ?: "name",
+                phoneNumber = infoIntent?.getStringExtra(AgencyCreationActivity.KEY_SCANNER_PHONE) ?: "655223344",
+                photoUrl = infoIntent?.getStringExtra(AgencyCreationActivity.KEY_SCANNER_URL) ?: "ss",
+                birthdayInMillis = infoIntent?.getLongExtra(AgencyCreationActivity.KEY_SCANNER_BIRTHDAY, Date().time) ?: 0L,
                 occupation = OCCUPATION.SCANNER
             )
         }

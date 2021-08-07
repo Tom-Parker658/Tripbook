@@ -7,12 +7,18 @@
       <root url="jar://$USER_HOME$/caches/transforms-2/files-2.1/2735a7928d28a9f8bccc43c99ee6f5c5/jetified-firebase-storage-19.2.1/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/2735a7928d28a9f8bccc43c99ee6f5c5/jetified-firebase-storage-19.2.1/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/2735a7928d28a9f8bccc43c99ee6f5c5/jetified-firebase-storage-19.2.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5d04e3293cca121b95ac859049fe14a2/jetified-firebase-storage-19.2.1/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/0ac71f51fd3d9196f8a934478cda3772/transformed/jetified-firebase-storage-19.2.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0ac71f51fd3d9196f8a934478cda3772/transformed/jetified-firebase-storage-19.2.1/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0ac71f51fd3d9196f8a934478cda3772/transformed/jetified-firebase-storage-19.2.1/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/com.google.firebase/firebase-storage/19.2.1/a8d93b4aa73a2326eb995e6c2d56eb494a811f84/firebase-storage-19.2.1-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-storage/19.2.1/a8d93b4aa73a2326eb995e6c2d56eb494a811f84/firebase-storage-19.2.1-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/com.google.firebase/firebase-storage/19.2.1/950d14a28c52507f6b8c7eb217528d8fb1f5bf4e/firebase-storage-19.2.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-storage/19.2.1/950d14a28c52507f6b8c7eb217528d8fb1f5bf4e/firebase-storage-19.2.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

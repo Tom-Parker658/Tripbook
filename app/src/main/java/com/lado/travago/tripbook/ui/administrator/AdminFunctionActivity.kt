@@ -7,7 +7,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityAdminFunctionBinding
-import com.lado.travago.tripbook.viewmodel.admin.AdminFunctionViewModel
 import kotlinx.coroutines.*
 
 /**

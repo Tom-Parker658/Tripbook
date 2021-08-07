@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/agencyJourneyFragment"
-        android:name="com.lado.travago.tripbook.ui.scanner.panel.AgencyBusesFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.AgencyBusesFragment"
         android:label="fragment_agency_journey"
         tools:layout="@layout/fragment_agency_journey" >
         <action
@@ -16,27 +16,27 @@
     </fragment>
     <fragment
         android:id="@+id/myScannerFragment"
-        android:name="com.lado.travago.tripbook.ui.scanner.panel.MyScannerFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.MyScannerFragment"
         android:label="fragment_my_scanner"
         tools:layout="@layout/fragment_my_scanner" />
     <fragment
         android:id="@+id/agencyStatsFragment"
-        android:name="com.lado.travago.tripbook.ui.scanner.panel.AgencyStatsFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.AgencyStatsFragment"
         android:label="fragment_agency_stats"
         tools:layout="@layout/fragment_agency_stats" />
     <fragment
         android:id="@+id/infoScreenFragment"
-        android:name="com.lado.travago.tripbook.ui.scanner.panel.InfoScreenFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.InfoScreenFragment"
         android:label="fragment_info_screen"
         tools:layout="@layout/fragment_info_screen" />
     <fragment
         android:id="@+id/scannerStatsFragment"
-        android:name="com.lado.travago.tripbook.ui.scanner.panel.ScannerStatsFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.ScannerStatsFragment"
         android:label="fragment_scanner_stats"
         tools:layout="@layout/fragment_scanner_stats" />
     <fragment
         android:id="@+id/todayJourneyFragment"
-        android:name="com.lado.travago.tripbook.ui.scanner.panel.TodayBusesFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.TodayBusesFragment"
         android:label="fragment_today_journey"
         tools:layout="@layout/fragment_today_journey" >
         <action
@@ -45,12 +45,12 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentTicketScanPanel"
-        android:name="com.lado.travago.tripbook.ui.scanner.panel.FragmentTicketScanPanel"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.FragmentTicketScanPanel"
         android:label="fragment_ticket_scan_panel"
         tools:layout="@layout/fragment_ticket_scan_panel" />
     <fragment
         android:id="@+id/busContentFragment"
-        android:name="com.lado.travago.tripbook.ui.scanner.panel.BusContentFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.BusContentFragment"
         android:label="fragment_bus_content"
         tools:layout="@layout/fragment_bus_content" />
 </navigation>
