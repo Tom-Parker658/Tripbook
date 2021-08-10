@@ -20,19 +20,170 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phone"
-                style="@style/editTextStyle"
-                android:hint="Support phone:"
-                app:helperText="This number will be contacted for help or complains"
-                app:layout_constraintBottom_toTopOf="@+id/bank"
+            <ImageView
+                android:id="@+id/logoField"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                app:layout_constraintBottom_toTopOf="@+id/name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logo">
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_insert_photo_24" />
+
+            <TextView
+                android:id="@+id/text_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Logo: "
+                app:layout_constraintBottom_toBottomOf="@+id/logoField"
+                app:layout_constraintEnd_toStartOf="@+id/logoField"
+                app:layout_constraintTop_toTopOf="@+id/logoField" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name"
+                style="@style/editTextStyle"
+                android:hint="Agency name:"
+                app:helperText="This name will be shown to all customers"
+                app:layout_constraintBottom_toTopOf="@+id/decree_number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logoField">
+
+                <com.google.android.material.textfield.TextInputEditText style="@style/textInputStyle" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/motto"
+                style="@style/editTextStyle"
+                android:hint="Agency motto:"
+                app:helperText="Enter the motto for your agency"
+                app:layout_constraintBottom_toTopOf="@+id/support_phone_1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/creation_year">
 
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/textInputStyle"
-                    android:inputType="phone" />
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_of_CEO"
+                style="@style/editTextStyle"
+                android:hint="CEO's Name: "
+                app:helperText="Who owns this agency?"
+                app:layout_constraintBottom_toTopOf="@+id/creation_year"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/decree_number">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/creation_year"
+                style="@style/editTextStyle"
+                android:hint="Creation Year: "
+                app:helperText="In which year was your agency created year"
+                app:layout_constraintBottom_toTopOf="@+id/motto"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name_of_CEO">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="number"
+                    android:maxLength="4" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/decree_number"
+                style="@style/editTextStyle"
+                android:hint="Creation Decree number: "
+                app:helperText="Enter the official ministerial decree associated to this agency."
+                app:layout_constraintBottom_toTopOf="@+id/name_of_CEO"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/countryCode_picker_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_contentColor="@color/quantum_grey"
+                app:ccp_textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@+id/support_phone_1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/support_phone_1" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/support_phone_1"
+                style="@style/editTextStyle"
+                android:hint="Support Phone1: "
+                app:helperText="This will be used by bookers to contact"
+                app:layout_constraintBottom_toTopOf="@+id/support_phone_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/countryCode_picker_1"
+                app:layout_constraintTop_toBottomOf="@+id/motto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="phone"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/countryCode_picker_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_contentColor="@color/quantum_grey"
+                app:ccp_textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@+id/support_phone_2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/support_phone_2" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/support_phone_2"
+                style="@style/editTextStyle"
+                android:hint="*Support Phone2: "
+                app:helperText="Optional!"
+                app:layout_constraintBottom_toTopOf="@+id/support_email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/countryCode_picker_2"
+                app:layout_constraintTop_toBottomOf="@+id/support_phone_1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="phone"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/support_email"
+                style="@style/editTextStyle"
+                android:hint="Support email:"
+                app:helperText="This email will be used to channel help or complains"
+                app:layout_constraintBottom_toTopOf="@+id/bank"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/support_phone_2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="textWebEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -43,71 +194,11 @@
                 app:layout_constraintBottom_toTopOf="@+id/momo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/phone">
+                app:layout_constraintTop_toBottomOf="@+id/support_email">
 
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/textInputStyle"
                     android:inputType="number" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/name"
-                style="@style/editTextStyle"
-                android:hint="Agency name:"
-                app:helperText="This name will be shown to all customers"
-                app:layout_constraintBottom_toTopOf="@+id/motto"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView29">
-
-                <com.google.android.material.textfield.TextInputEditText style="@style/textInputStyle" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/logo"
-                style="@style/editTextStyle"
-                android:hint="Agency logo:"
-                app:endIconDrawable="@drawable/baseline_add_photo_alternate_24"
-                app:endIconMode="custom"
-                app:helperText="Leave it empty to use the default logo"
-                app:layout_constraintBottom_toTopOf="@+id/phone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/email">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/textInputStyle"
-                    android:inputType="@{inputType.TYPE_NULL}"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/email"
-                style="@style/editTextStyle"
-                android:hint="Support email:"
-                app:helperText="This email will be used to channel help or complains"
-                app:layout_constraintBottom_toTopOf="@+id/logo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/motto">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/textInputStyle"
-                    android:inputType="textEmailAddress" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/motto"
-                style="@style/editTextStyle"
-                android:hint="Agency motto:"
-                app:helperText="Enter the motto for your agency"
-                app:layout_constraintBottom_toTopOf="@+id/email"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/textInputStyle"
-                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -142,23 +233,13 @@
 
             <Button
                 android:id="@+id/btn_next"
-                style="@style/navButtonStyles"
-                android:text="Next"
-                app:icon="@drawable/baseline_arrow_forward_24"
-                app:iconGravity="end"
+                style="@style/positiveButton"
+                android:text="Save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/orange_money" />
 
-            <TextView
-                android:id="@+id/textView29"
-                style="@style/infoTextStyle"
-                android:text="Carefuly fill in the following infomation about your agency"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

@@ -7,10 +7,15 @@
 
     </data>
 
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:clipToPadding="true"
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -18,149 +23,92 @@
             android:scrollbars="vertical"
             tools:context=".ui.agency.creation.AgencyCreationFinalFragment">
 
-            <!-- TODO: Update blank fragment layout -->
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/cost_per_km"
-                style="@style/editTextStyle"
-                android:hint="Cost per Km:"
-                app:helperText="The total number of your agencies park stations any where"
-                app:hintTextAppearance="@style/editTextStyle"
-                app:layout_constraintBottom_toTopOf="@+id/textView11"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/num_vehicles">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/textInputStyle"
-                    android:inputType="numberDecimal" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/num_vehicles"
-                style="@style/editTextStyle"
-                android:hint="Number of vehicles:"
-                app:helperText="The total number of vehicles owned by your agency"
-                app:hintTextAppearance="@style/editTextStyle"
-                app:layout_constraintBottom_toTopOf="@+id/cost_per_km"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/textInputStyle"
-                    android:inputType="number" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/scrollView2"
+            <Button
+                android:id="@+id/btn_trips2"
+                style="@style/neutralButton"
                 android:layout_width="0dp"
-                android:layout_height="300dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:scrollbarStyle="outsideInset"
-                android:scrollbars="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/btn_create"
+                android:layout_height="wrap_content"
+                android:text="Parks"
+                app:icon="@drawable/baseline_place_24"
+                app:layout_constraintBottom_toTopOf="@+id/money"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:divider="?attr/dividerHorizontal"
-                    android:orientation="vertical"
-                    android:showDividers="middle|beginning|end|none">
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/radio_north"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="false"
-                        android:focusable="true"
-                        android:text="North Region" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/radio_south"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="South Region" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/radio_west"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="West Region" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/radio_east"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="East Region" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/radio_far_north"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="FarNorth Region" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/radio_north_west"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="NorthWest Region" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/radio_south_west"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="SouthWest Region" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/radio_adamawa"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Adamawa Region" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/radio_centre"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Centre Region" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/radio_littoral"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Littoral Region" />
-
-                </LinearLayout>
-            </androidx.core.widget.NestedScrollView>
+                app:layout_constraintTop_toBottomOf="@+id/btn_trips" />
 
             <TextView
-                android:id="@+id/textView11"
-                style="@style/infoTextStyle"
-                android:text="Check all the regions in which your agency are situated:"
-                app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+                android:id="@+id/heading"
+                style="@style/headlineStyle"
+                android:text="Tune Your Agency"
+                app:layout_constraintBottom_toTopOf="@+id/btn_info"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cost_per_km" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <Button
-                android:id="@+id/btn_create"
-                style="@style/navButtonStyles"
-                android:text="Create"
-                app:icon="@drawable/baseline_arrow_forward_24"
-                app:iconGravity="end"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/btn_info"
+                style="@style/neutralButton"
+                android:layout_width="0dp"
+                android:text="My agency's Info"
+                app:icon="@drawable/baseline_settings_24"
+                app:layout_constraintBottom_toTopOf="@+id/btn_trips"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+                app:layout_constraintTop_toBottomOf="@+id/heading" />
+
+            <Button
+                android:id="@+id/btn_trips"
+                style="@style/neutralButton"
+                android:layout_width="0dp"
+                android:text="My Trips"
+                app:icon="@drawable/baseline_directions_bus_24"
+                app:layout_constraintBottom_toTopOf="@+id/btn_trips2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_info" />
+
+            <Button
+                android:id="@+id/btn_scanners"
+                style="@style/neutralButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="My Scanners"
+                app:icon="@drawable/baseline_groups_24"
+                app:layout_constraintBottom_toTopOf="@+id/btn_delete_agency"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/money" />
+
+            <Button
+                android:id="@+id/money"
+                style="@style/positiveButton"
+                android:layout_width="0dp"
+                android:text="Money"
+                app:icon="@drawable/baseline_payments_24"
+                app:layout_constraintBottom_toTopOf="@+id/btn_scanners"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_trips2" />
+
+            <Button
+                android:id="@+id/btn_delete_agency"
+                style="@style/negativeButton"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Delete My Agency!"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
+
 </layout>

@@ -1,20 +1,14 @@
 package com.lado.travago.tripbook.ui.agency.creation
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyCreationFinalBinding
-import com.lado.travago.tripbook.model.enums.Region
-import com.lado.travago.tripbook.ui.booker.creation.BookerCreationActivity
 import kotlinx.coroutines.*
 
 @ExperimentalCoroutinesApi
@@ -22,7 +16,6 @@ import kotlinx.coroutines.*
 class AgencyCreationFinalFragment : Fragment() {
     private lateinit var binding: FragmentAgencyCreationFinalBinding
     private lateinit var viewModel: AgencyCreationViewModel
-    private val uiScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,34 +32,33 @@ class AgencyCreationFinalFragment : Fragment() {
         initViewModel()
 
 
-        //Restore data to the textFields after any configuration change
+    /*    //Restore data to the textFields after any configuration change
         restoreSavedData()
         onFieldChange()
          uiScope.launch {
              onBtnCreateClicked()
          }
         navigateToUserCreation()
-
+*/
         return binding.root
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+  /*  override fun onSaveInstanceState(outState: Bundle) {
         onSaveRadioValues()
         super.onSaveInstanceState(outState)
     }
 
     private fun onFieldChange() {
         binding.numVehicles.editText!!.addTextChangedListener {
-            viewModel.saveField(AgencyCreationViewModel.FieldTags.NUM_VEHICLES, binding.numVehicles.editText!!.text.toString())
+            viewModel.setField(AgencyCreationViewModel.FieldTags.NUM_VEHICLES, binding.numVehicles.editText!!.text.toString())
         }
         binding.costPerKm.editText!!.addTextChangedListener{
-            viewModel.saveField(AgencyCreationViewModel.FieldTags.COST_PER_KM,  binding.costPerKm.editText!!.text.toString())
+            viewModel.setField(AgencyCreationViewModel.FieldTags.COST_PER_KM,  binding.costPerKm.editText!!.text.toString())
         }
     }
-
-    /**
+*/
+    /*
      * Restore all saved data to their respective views
-     */
     private fun restoreSavedData() {
         binding.costPerKm.editText!!.setText(viewModel.costPerKm)
         binding.numVehicles.editText!!.setText(viewModel.vehicleNumberField)
@@ -81,10 +73,9 @@ class AgencyCreationFinalFragment : Fragment() {
         binding.radioFarNorth.isChecked = viewModel.regions.contains(Region.EXTREME_NORTH)
         binding.radioNorthWest.isChecked = viewModel.regions.contains(Region.NORTH_WEST)
     }
-
+    */
     /**
      * Adds the region to the list of regions if it's checked
-     */
     private fun onSaveRadioValues(){
         if (binding.radioCentre.isChecked) viewModel.regions.add(Region.CENTER)
         else viewModel.regions.remove(Region.CENTER)
@@ -115,8 +106,8 @@ class AgencyCreationFinalFragment : Fragment() {
 
         if (binding.radioFarNorth.isChecked) viewModel.regions.add(Region.EXTREME_NORTH)
         else viewModel.regions.remove(Region.EXTREME_NORTH)
-    }
-
+    }*/
+/*
     private suspend fun onBtnCreateClicked() = binding.btnCreate.setOnClickListener {
         onSaveRadioValues()
         val anyError = when {
@@ -165,15 +156,9 @@ class AgencyCreationFinalFragment : Fragment() {
                 )
             }
         }
-    }
+    }*/
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(requireActivity())[AgencyCreationViewModel::class.java]
-        binding.lifecycleOwner = viewLifecycleOwner
-    }
-
-
-    companion object{
-        const val requiredFieldMessage = "This field is required!"
     }
 }

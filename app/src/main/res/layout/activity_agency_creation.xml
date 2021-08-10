@@ -16,8 +16,8 @@
 
 
         <!--  A navigation host fragment to hold our fragments  -->
-        <fragment
-            android:id="@+id/my_booker_nav_host_fragment"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/my_agency_nav_host_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

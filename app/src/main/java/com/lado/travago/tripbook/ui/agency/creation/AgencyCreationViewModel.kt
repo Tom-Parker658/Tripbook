@@ -1,12 +1,10 @@
 package com.lado.travago.tripbook.ui.agency.creation
 
 import android.graphics.Bitmap
-import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lado.travago.tripbook.model.admin.OnlineTravelAgency
-import com.lado.travago.tripbook.model.enums.Region
-import com.lado.travago.tripbook.model.users.User
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.StorageTags
@@ -18,6 +16,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import java.util.*
+import java.util.regex.Pattern
 
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
@@ -31,12 +30,15 @@ class AgencyCreationViewModel : ViewModel() {
     var otaPath = ""
         private set
 
-    //LIVEDATA
+    //LIVEDATA to display messages as toasts
     private val _toastMessage = MutableLiveData("")
     val toastMessage get() = _toastMessage
-
+    //Live data to trigger the save of information into the db
     private val _saveInfo = MutableLiveData(false)
     val saveInfo get() = _saveInfo
+    //Live data to know when to navigate back when all info has been saved
+    private val _onInfoSaved = MutableLiveData(false)
+    val onInfoSaved get() = _onInfoSaved
 
     //Agency Fields
     var logoBitmap: Bitmap? = null
@@ -45,7 +47,7 @@ class AgencyCreationViewModel : ViewModel() {
         private set
     var mottoField = ""
         private set
-    var bankField = ""
+    var bankField = 0
         private set
     var momoField = ""
         private set
@@ -77,21 +79,17 @@ class AgencyCreationViewModel : ViewModel() {
     val countryList = listOf("")
 
     //Loading state
-    private val _onLoading = MutableLiveData(false)
-    val onLoading get() = _onLoading
-
-    //Completion state
-    private val _onOtaCreated = MutableLiveData(false)
-    val onOtaCreated get() = _onOtaCreated
+    private val _loading = MutableLiveData(false)
+    val loading get() = _loading
 
     enum class FieldTags {
-        NAME, MOTTO, SUPPORT_EMAIL, SUPPORT_PHONE_1, SUPPORT_PHONE_2, FULL_SUPPORT_PHONE_1, FULL_SUPPORT_PHONE_2, BANK_NUMBER, MOMO_NUMBER, ORANGE_NUMBER, COST_PER_KM, LOGO_BITMAP, CEO_NAME, CREATION_DECREE, CREATION_YEAR, TOAST_MESSAGE, SAVE_INFO
+        NAME, MOTTO, SUPPORT_EMAIL, SUPPORT_PHONE_1, SUPPORT_PHONE_2, FULL_SUPPORT_PHONE_1, FULL_SUPPORT_PHONE_2, BANK_NUMBER, MOMO_NUMBER, ORANGE_NUMBER, COST_PER_KM, LOGO_BITMAP, CEO_NAME, DECREE_NUMBER, CREATION_YEAR, TOAST_MESSAGE, SAVE_INFO
     }
 
     /**
      * Saves the agency fields to a viewModel variables
      */
-    fun saveField(key: FieldTags, value: Any) {
+    fun setField(key: FieldTags, value: Any) {
         when (key) {
             // Fields
             FieldTags.NAME -> nameField = value.toString()
@@ -101,12 +99,12 @@ class AgencyCreationViewModel : ViewModel() {
             FieldTags.SUPPORT_PHONE_2 -> supportPhone2Field = value.toString()
             FieldTags.FULL_SUPPORT_PHONE_1 -> fullSupportPhone1Field = value.toString()
             FieldTags.FULL_SUPPORT_PHONE_2 -> fullSupportPhone2Field = value.toString()
-            FieldTags.BANK_NUMBER -> bankField = value.toString()
+            FieldTags.BANK_NUMBER -> bankField = if(value.toString().isBlank()) 0 else value.toString().toInt()
             FieldTags.MOMO_NUMBER -> momoField = value.toString()
             FieldTags.ORANGE_NUMBER -> orangeMoneyField = value.toString()
             FieldTags.CEO_NAME -> nameCEOField = value.toString()
             FieldTags.COST_PER_KM -> costPerKm = value.toString()
-            FieldTags.CREATION_DECREE -> decreeNumberField = value.toString()
+            FieldTags.DECREE_NUMBER -> decreeNumberField = value.toString()
             FieldTags.CREATION_YEAR -> creationYearField = if(value.toString().isBlank()) 0 else value.toString().toInt()
             FieldTags.LOGO_BITMAP -> logoBitmap = value as Bitmap
             FieldTags.TOAST_MESSAGE -> _toastMessage.value = value.toString()
@@ -115,16 +113,15 @@ class AgencyCreationViewModel : ViewModel() {
     }
 
     /**
-     * Creates the Agency and adds it to the db. When successful, it makes sure we navigate to the fragment to add scanners
-     * Then finally, it deletes the temporary current account created for the process sake
+     * Saves the Agency information to the database then navigae back to the lobby
      */
     suspend fun saveAgencyInfo() {
+        _loading.value = true
         val logoStream = Utils.convertBitmapToStream(
             logoBitmap,
             Bitmap.CompressFormat.PNG,
             0
         )
-        stopLoading()
         /**
          * Upload the logo to the storage
          */
@@ -137,23 +134,24 @@ class AgencyCreationViewModel : ViewModel() {
             when (storageState) {
                 is State.Loading -> startLoading()
                 is State.Failed -> {
-                    stopLoading()
-                    Log.e(TAG, "Authentication: ${storageState.message}")
+                    _loading.value = false
+                    _toastMessage.value = storageState.message
                 }
                 is State.Success -> {
                     storageState.data
 
                     val agencyMapData = OnlineTravelAgency(
-                        name = nameField,
+                        agencyName = nameField,
                         logoUrl = storageState.data,
                         motto = mottoField,
-                        costPerKm = costPerKm.toDouble(),
-                        numberOfBuses = vehicleNumberField.toInt(),
-                        bankAccountNumber = bankField,
-                        mtnMoMoAccount = momoField,
-                        orangeMoneyAccount = orangeMoneyField,
+                        nameCEO = nameCEOField,
+                        creationDecree = decreeNumberField,
+                        bankNumber = bankField,
+                        mtnMoneyNumber = momoField,
+                        orangeMoneyNumber = orangeMoneyField,
                         supportEmail = supportEmailField,
-                        supportContact = supportPhoneField
+                        supportPhone1 = supportPhone1Field,
+                        supportPhone2 = supportPhone2Field
                     ).otaMap
 
                     /**
@@ -167,81 +165,17 @@ class AgencyCreationViewModel : ViewModel() {
                         when (dbState) {
                             is State.Loading -> startLoading()
                             is State.Failed -> {
-                                stopLoading()
-                                Log.e(TAG, "FireStore OTA: ${dbState.message}")
+                                _loading.value = false
+                                _toastMessage.value = storageState.data
                             }
                             //Returns reference to the new document
                             is State.Success -> {
-                                otaPath = dbState.data
-                                stopLoading()
+                                _loading.value = false
                                 /**
-                                 * Adds the Countries subcollection to the Agency before adding the regions into it
+                                 * Navigates to the main lobby [AgencyCreationFragmentFinal]
                                  */
-                                firestoreRepo.setDocument(
-                                    hashMapOf("list" to regions),
-                                    "${otaPath}/Cameroon/Regions"
-                                ).collect { regionState ->
-                                    when (regionState) {
-                                        is State.Loading -> startLoading()
-                                        is State.Failed -> {
-                                            stopLoading()
-                                            Log.e(
-                                                TAG,
-                                                "FireStore OTA: ${regionState.message}"
-                                            )
-                                        }
-                                        is State.Success -> {
-                                            /**
-                                             * Adds a sub collection to the Record collection and set the first document
-                                             * as the date of today
-                                             */
-                                            firestoreRepo.setDocument(
-                                                hashMapOf(),
-                                                "${FirestoreTags.Records}/${agencyMapData["agencyName"]}/stats/${Date()}",
-                                            ).collect {
-                                                when (it) {
-                                                    is State.Loading -> startLoading()
-                                                    is State.Failed -> {
-                                                        stopLoading()
-                                                        Log.e(
-                                                            TAG,
-                                                            "FireStore OTA: ${it.message}"
-                                                        )
-                                                    }
-                                                    is State.Success -> {
-                                                        stopLoading()
-                                                        _onOtaCreated.value = true
-                                                        //Delete the created anonymous user from the database
-                                                        authRepo.deleteCurrentUser()
-                                                            .collect { deleteState ->
-                                                                when (deleteState) {
-                                                                    is State.Loading -> startLoading()
-                                                                    is State.Failed -> {
-                                                                        Log.e(
-                                                                            TAG,
-                                                                            "FireStore OTA: ${deleteState.message}"
-                                                                        )
-                                                                        authRepo.signOutUser()
-                                                                    }
-                                                                    is State.Success -> {
-                                                                        Log.i(
-                                                                            TAG,
-                                                                            "Anonymous deleted"
-                                                                        )
-                                                                        stopLoading()
-                                                                    }
-                                                                }
-                                                            }
-                                                    }
-                                                }
-
-                                            }
-                                        }
-                                    }
-
-                                }
-
-
+                                _toastMessage.value = "Done! Path=[${dbState.data}]"
+                                _onInfoSaved.value = true
                             }
                         }
                     }
@@ -253,22 +187,39 @@ class AgencyCreationViewModel : ViewModel() {
 
     }
 
-    private fun startLoading() {
-        _onLoading.value = true
-    }
-
-    private fun stopLoading() {
-        _onLoading.value = false
-    }
 
     /**
-     * Cancels the state of [_onOtaCreated] after the navigation has been done
+     * This implements only the most basic checking for an email address's validity -- that it contains
+     * an '@' and contains no characters disallowed by RFC 2822. This is an overly lenient definition of
+     * validity. We want to generally be lenient here since this class is only intended to encapsulate what's
+     * in a barcode, not "judge" it.
      */
-    fun endNavigation() {
-        _onOtaCreated.value = false
+    private fun isBasicallyValidEmailAddress(email: String?): Boolean {
+        val regex = Pattern.compile("[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+")
+        return email != null && regex.matcher(email)
+            .matches() && email.indexOf('@') >= 0
     }
 
-    companion object OTABundleKeys {
-        const val TAG = "AgencyRegistVM"
+    fun checkFields(fragment: Fragment) = when(fragment){
+        is AgencyCreation1Fragment -> {
+            if (nameField.isBlank() || mottoField.isBlank() || nameCEOField.isBlank() || creationYearField == 0 || bankField == 0 || supportEmailField.isBlank() || momoField.isBlank() || momoField.isNotBlank() || orangeMoneyField.isBlank() || decreeNumberField.isBlank()) {
+                _toastMessage.value = "Do not leave some fields empty"
+            }else if(!isBasicallyValidEmailAddress(supportEmailField)){
+                _toastMessage.value = "Invalid Email Address"
+            }else{
+                _saveInfo.value = true
+            }
+        }else -> {
+            //TODO: ADD other things
+        }
     }
+
+    fun startLoading() {
+        _loading.value = true
+    }
+
+    fun stopLoading() {
+        _loading.value = false
+    }
+
 }

@@ -15,34 +15,27 @@ import java.util.*
  *  @property agencyName is the name of the agency which will be displayed on to users. It will also
  *  constitute the name of every OTAP created by this OnlineTransportAgency.
  *  @pricePerKm is the price per km covered which will determine the prices of journeys
- *  @property agencyLogo is the logo that represents that agency and will be shared by all OTAPs created
+ *  @property logoUrl is the logo that represents that agency and will be shared by all OTAPs created
  *  @property motto is the motto of this OnlineTransportAgency
- *  @property numberOfBuses is the number of buses this company owns in all its locations.
- *  These are represented by [Bus] objects with size.
- *  can transport to
- *  the OnlineTransportAgency settings
- *  @see Scanner class for more information
- *
- *  @property bankAccountNumber is a bank account number which the travellers can send money to during payment
- *  @property mtnMoMoAccount is the MTN Mobile Money numbers which travellers can send money to during payment
- *  @property orangeMoneyAccount is the Orange Mobile Money numbers which travellers can send money to during payment
+ *  @property bankNumber is a bank account number which the travellers can send money to during payment
+ *  @property mtnMoneyNumber is the MTN Mobile Money numbers which travellers can send money to during payment
+ *  @property orangeMoneyNumber is the Orange Mobile Money numbers which travellers can send money to during payment
  *  @property reputation is the average ratio of likes to dislike received by the OnlineTransportAgency by travellers reviews. It is
  *  a double /10 e.g 5.6/10
  *  @property likes represent the number of likes(good reviews by travellers)
  *  @property dislikes represent the number of dislikes(bad reviews by travellers)
- *
  */
 
 
 data class OnlineTravelAgency(
     val agencyName: String,
-    val agencyLogo: String = "",
+    var logoUrl: String = "",
     val motto: String,
-    val costPerKm: Double = 10.0,
-    val numberOfBuses: Int,
-    val bankAccountNumber: String,
-    val mtnMoMoAccount: String,
-    val orangeMoneyAccount: String,
+    val nameCEO: String,
+    val creationDecree: String,
+    val bankNumber: Int,
+    val mtnMoneyNumber: String,
+    val orangeMoneyNumber: String,
     val supportEmail: String,
     val supportPhone1: String,
     val supportPhone2: String,
@@ -50,31 +43,30 @@ data class OnlineTravelAgency(
 ) {
 //    @DocumentId
 //    var uid: String =""
-
+    var costPerKm: Double = 10.0
     @ServerTimestamp
     var addedOn: Timestamp = Timestamp.now()
     var likes: Int = 1
     var dislikes: Int = 1
-    val reputation: Double = (likes / (likes + dislikes))*10.0
+    val reputation: Double = (likes / (likes + dislikes)) * 10.0
 
-    val otaMap:HashMap<String, Any?> by lazy {
-        hashMapOf(
-            "agencyName" to agencyName,
-            "agencyLogo" to agencyLogo,
-            "pricePerKm" to costPerKm,
-            "motto" to motto,
-            "numberOfBuses" to numberOfBuses,
-            "bankAccountNumber" to bankAccountNumber,
-            "mtnMoMoAccount" to mtnMoMoAccount,
-            "orangeMoneyAccount" to orangeMoneyAccount,
-            "supportEmail" to supportEmail,
-            "supportContact" to supportContact,
-            "likes" to likes,
-            "dislikes" to dislikes,
-            "reputation" to reputation,
-            "addedOn" to Timestamp(Date()),
-            "isSuspended" to isSuspended
-        )
-    }
-
+    val otaMap = hashMapOf<String, Any?>(
+        "agencyName" to agencyName,
+        "logoUrl" to logoUrl,
+        "pricePerKm" to costPerKm,
+        "motto" to motto,
+        "bankNumber" to bankNumber,
+        "mtnMoneyNumber" to mtnMoneyNumber,
+        "orangeMoneyNumber" to orangeMoneyNumber,
+        "supportEmail" to supportEmail,
+        "supportPhone1" to supportPhone1,
+        "supportPhone2" to supportPhone2,
+        "creationDecree" to creationDecree,
+        "likes" to likes,
+        "dislikes" to dislikes,
+        "reputation" to reputation,
+        "addedOn" to addedOn,
+        "isSuspended" to isSuspended
+    )
 }
+

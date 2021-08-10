@@ -75,7 +75,6 @@ class BookerCreationActivity : AppCompatActivity() {
                 try {
                     findNavController(binding.myBookerNavHostFragment.id).navigate(R.id.action_bookerCreation1Fragment_to_bookerCreation2Fragment)
                 }catch (exception: Exception){/*In case we are resending the sms  already at the booker creation 2 screen */ }
-                viewModel.setField(FieldTags.ON_CODE_SENT, false)
             }
         }
         viewModel.onPhoneVerified.observe(this){
@@ -85,7 +84,6 @@ class BookerCreationActivity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.Main).launch {
                     viewModel.loginOrSignup()
                 }
-                viewModel.setField(FieldTags.ON_PHONE_VERIFIED, false)
             }
         }
         viewModel.startInfoUpload.observe(this){

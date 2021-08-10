@@ -27,8 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
-                android:singleLine="true"
-                tools:text="67766998855" />
+                android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.hbb20.CountryCodePicker

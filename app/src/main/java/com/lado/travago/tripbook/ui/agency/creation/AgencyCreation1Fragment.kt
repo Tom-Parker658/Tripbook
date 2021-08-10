@@ -12,10 +12,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyCreation1Binding
+import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationViewModel.*
+import com.lado.travago.tripbook.ui.booker.creation.BookerCreationViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -40,7 +41,7 @@ class AgencyCreation1Fragment : Fragment() {
 
         initViewModel()
         //Restore data to the textFields after any configuration change
-        restoreSavedData()
+        restoreSavedData(savedInstanceState)
         onFieldChange()
         onNextClicked()
 
@@ -53,58 +54,80 @@ class AgencyCreation1Fragment : Fragment() {
      */
     private fun onFieldChange() {
         binding.name.editText!!.addTextChangedListener {
-            viewModel.saveField(AgencyCreationViewModel.FieldTags.NAME, binding.name.editText!!.text.toString())
+            viewModel.setField(FieldTags.NAME, it.toString())
         }
-        binding.logo.editText!!.addTextChangedListener{
-            viewModel.saveField(AgencyCreationViewModel.FieldTags.LOGO_NAME, binding.logo.editText!!.text.toString())
+        binding.decreeNumber.editText!!.addTextChangedListener{
+            viewModel.setField(FieldTags.DECREE_NUMBER, it.toString())
         }
-        binding.phone.editText!!.addTextChangedListener{
-            viewModel.saveField(AgencyCreationViewModel.FieldTags.PHONE, binding.phone.editText!!.text.toString())
+        binding.nameOfCEO.editText!!.addTextChangedListener{
+            viewModel.setField(FieldTags.CEO_NAME, it.toString())
         }
         binding.momo.editText!!.addTextChangedListener{
-            viewModel.saveField(AgencyCreationViewModel.FieldTags.MOMO, binding.momo.editText!!.text.toString())
+            viewModel.setField(FieldTags.MOMO_NUMBER, it.toString())
         }
         binding.motto.editText!!.addTextChangedListener{
-            viewModel.saveField(AgencyCreationViewModel.FieldTags.MOTTO, binding.motto.editText!!.text.toString())
+            viewModel.setField(FieldTags.MOTTO, it.toString())
         }
         binding.orangeMoney.editText!!.addTextChangedListener{
-            viewModel.saveField(AgencyCreationViewModel.FieldTags.ORANGE, binding.orangeMoney.editText!!.text.toString())
+            viewModel.setField(FieldTags.ORANGE_NUMBER, it.toString())
         }
         binding.bank.editText!!.addTextChangedListener{
-            viewModel.saveField(AgencyCreationViewModel.FieldTags.BANK, binding.bank.editText!!.text.toString())
+            viewModel.setField(FieldTags.BANK_NUMBER, it.toString())
         }
-        binding.email.editText!!.addTextChangedListener{
-            viewModel.saveField(AgencyCreationViewModel.FieldTags.EMAIL, binding.email.editText!!.text.toString())
+        binding.supportEmail.editText!!.addTextChangedListener{
+            viewModel.setField(FieldTags.SUPPORT_EMAIL, it.toString())
+        }
+        binding.supportPhone1.editText!!.addTextChangedListener{
+            viewModel.setField(FieldTags.SUPPORT_PHONE_1, it.toString())
+        }
+        binding.supportPhone2.editText!!.addTextChangedListener{
+            viewModel.setField(FieldTags.SUPPORT_PHONE_2, it.toString())
+        }
+        //Launches logo selection when logo image is tapped
+        binding.logoField.setOnClickListener {
+            initLogoSelection()
         }
         //Launches logo selection when the edit text is tapped
-        binding.logo.editText!!.setOnClickListener {
+        binding.textLogo.setOnClickListener {
             initLogoSelection()
         }
-        //Launches logo selection when the end icon of textField is tapped
-        binding.logo.setEndIconOnClickListener {
-            initLogoSelection()
-        }
+        //Setup the phone formatter
+        binding.countryCodePicker1.registerCarrierNumberEditText(binding.supportPhone1.editText)
+        binding.countryCodePicker2.registerCarrierNumberEditText(binding.supportPhone2.editText)
 
+    }
+    /**
+     * Saves country codes
+     */
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt("COUNTRY_CODE_1", binding.countryCodePicker1.selectedCountryCodeAsInt)
+        outState.putInt("COUNTRY_CODE_2", binding.countryCodePicker2.selectedCountryCodeAsInt)
+        super.onSaveInstanceState(outState)
     }
 
     /**
      * Restore all saved data to their respective views
      */
-    private fun restoreSavedData() {
+    private fun restoreSavedData(bundle: Bundle?) {
         binding.name.editText!!.setText(viewModel.nameField)
-        binding.logo.editText!!.setText(viewModel.logoFilename)
+        binding.creationYear.editText!!.setText(viewModel.creationYearField)
+        binding.supportPhone1.editText!!.setText(viewModel.supportPhone1Field)
+        binding.supportPhone2.editText!!.setText(viewModel.supportPhone2Field)
         binding.momo.editText!!.setText(viewModel.momoField)
+        viewModel.logoBitmap?.let{
+            binding.logoField.setImageBitmap(it)
+        }
+        binding.supportEmail.editText!!.setText(viewModel.supportEmailField)
         binding.motto.editText!!.setText(viewModel.mottoField)
-        binding.email.editText!!.setText(viewModel.supportEmailField)
-        binding.phone.editText!!.setText(viewModel.supportPhoneField)
         binding.orangeMoney.editText!!.setText(viewModel.orangeMoneyField)
         binding.bank.editText!!.setText(viewModel.bankField)
+        bundle?.getInt("COUNTRY_CODE_1")?.let { binding.countryCodePicker1.setCountryForPhoneCode(it) }
+        bundle?.getInt("COUNTRY_CODE_2")?.let { binding.countryCodePicker2.setCountryForPhoneCode(it) }
     }
 
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(requireActivity())[AgencyCreationViewModel::class.java]
-        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     /**
@@ -116,94 +139,53 @@ class AgencyCreation1Fragment : Fragment() {
     /**
      * Navigates to the next screen when the next button is clicked
      */
-    private fun onNextClicked(){
-        binding.btnNext.setOnClickListener {
-            val anyError: String? = when {
-                viewModel.logoBitmap == null -> {
-                    "You must select logo picture"
-                }
-                binding.name.editText!!.text.isBlank() -> {
-                    binding.name.editText!!.requestFocus()
-                    requiredFieldMessage
-                }
-                binding.momo.editText!!.text.isBlank() -> {
-                    binding.momo.editText!!.requestFocus()
-                    requiredFieldMessage
-                }
-                binding.orangeMoney.editText!!.text.isBlank() -> {
-                    binding.orangeMoney.editText!!.requestFocus()
-                    requiredFieldMessage
-                }
-                binding.phone.editText!!.text.isBlank() -> {
-                    binding.phone.editText!!.requestFocus()
-                    requiredFieldMessage
-                }
-                binding.email.editText!!.text.isBlank() -> {
-                    binding.email.editText!!.requestFocus()
-                    requiredFieldMessage
-                }
-                binding.logo.editText!!.text.isBlank() -> {
-                    binding.logo.editText!!.requestFocus()
-                    requiredFieldMessage
-                }
-                binding.bank.editText!!.text.isBlank() -> {
-                    binding.bank.editText!!.requestFocus()
-                    requiredFieldMessage
-                }
-                binding.motto.editText!!.text.isBlank() -> {
-                    binding.motto.editText!!.requestFocus()
-                    requiredFieldMessage
-                }
-                else -> null
-            }
-            when (anyError) {
-                //Navigate to the next screen
-//                null -> it.findNavController().navigate(com.lado.travago.tripbook.ui.agency.AgencyRegistration1FragmentDirections.actionAgencyRegistration1FragmentToAgencyRegistration2Fragment())
-//                else -> showSnackbar(anyError)
+    private fun onNextClicked() = binding.btnNext.setOnClickListener {
+        if(binding.countryCodePicker1.isValidFullNumber ) {
+            viewModel.setField(FieldTags.FULL_SUPPORT_PHONE_1, binding.countryCodePicker1.fullNumberWithPlus)
+            if(binding.countryCodePicker2.isValidFullNumber || binding.supportPhone2.editText!!.text.toString().isBlank()) {
+                try{
+                    binding.countryCodePicker2.fullNumberWithPlus.let {
+                        viewModel.setField(FieldTags.FULL_SUPPORT_PHONE_2, it)
+                    }
+                    //In case we are ok with the phone fields, we can start field checking
+                    viewModel.checkFields(this@AgencyCreation1Fragment)
+                }catch (e: Exception){//In case phone is empty}
             }
         }
+            else{
+                viewModel.setField(FieldTags.TOAST_MESSAGE, "Enter valid number or leave it empty")
+                binding.supportPhone2.requestFocus()
+            }
+        }else{
+            viewModel.setField(FieldTags.TOAST_MESSAGE, "Invalid support phone number")
+            binding.supportPhone1.requestFocus()
+        }
     }
+
+
 
 
     /**
      * A pre-built contract to pick an image from the gallery!
      * If the received photoUri is not null, we convert the uri to a bitmap and set its value to that of [AgencyCreationViewModel.logoBitmap]
-     * Then we set the [FragmentScannerRegistrationBinding.profilePhoto] value to the name of selected image if the image is less than 4000*4000
      * else we re-launch the event
      */
     private val pickAgencyLogo: ActivityResultLauncher<String> = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { logoUri ->
-        logoUri?.let {uri ->
-            val logoStream = requireActivity().contentResolver.openInputStream(uri)!!
-            viewModel.saveField(
-                AgencyCreationViewModel.FieldTags.LOGO_BITMAP,
+        logoUri?.let { it ->
+            val logoStream = requireActivity().contentResolver.openInputStream(it)!!
+            viewModel.setField(
+                FieldTags.LOGO_BITMAP,
                 BitmapFactory.decodeStream(logoStream)
             )
-
-            if (viewModel.logoBitmap!!.width >= 4000 && viewModel.logoBitmap!!.height >= 4000) { //In case image too large
-                showToast("The image is too large!")
+            if (viewModel.logoBitmap?.byteCount!! > (1024*1024*2)) { //In case image larger than 2-MegaByte
+                viewModel.setField(FieldTags.TOAST_MESSAGE, "Photo is too large!!")
                 initLogoSelection()
             }
-
             else // Sets the logo field to the name of the selected photo
-                binding.logo.editText!!.setText(uri.lastPathSegment)
+                binding.logoField.setImageBitmap(viewModel.logoBitmap)
         }
     }
 
-    /**
-     * Helper method to display toasts
-     */
-    private fun showToast(message: String) =
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-
-    /**
-     * Helper method to display snackbars
-     */
-    private fun showSnackbar(message: String) =
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
-
-    companion object{
-        const val requiredFieldMessage = "This field is required!"
-    }
 }

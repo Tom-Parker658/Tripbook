@@ -272,18 +272,18 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="agencyRegistration1Fragment">
+                  <entry key="agencyCreation1Fragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="368" />
+                            <option name="x" value="-51" />
+                            <option name="y" value="58" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_agencyRegistration1Fragment_to_agencyRegistration2Fragment">
+                            <entry key="action_agencyCreation1Fragment_to_agencyCreationFinalFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -293,65 +293,14 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="agencyRegistration2Fragment">
+                  <entry key="agencyCreationFinalFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="368" />
+                            <option name="x" value="219" />
+                            <option name="y" value="59" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_agencyRegistration2Fragment_to_agencyRegistration3Fragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="agencyRegistration3Fragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="492" />
-                            <option name="y" value="338" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_agencyRegistration3Fragment_to_scannerRegistrationFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="scannerRegistrationFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="12" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_scannerRegistrationFragment_to_agencyRegistration3Fragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
