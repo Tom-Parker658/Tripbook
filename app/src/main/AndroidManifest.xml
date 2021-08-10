@@ -16,13 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-
+        <activity
+            android:name=".ui.agency.creation.config.ConfigActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.SplashActivity"
             android:theme="@style/SplashTheme" />
-        <activity android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.AdminPanelActivity" />
+        <activity android:name=".ui.agency.scanner_panel.AdminPanelActivity" />
         <activity android:name=".ui.administrator.AdminFunctionActivity" />
-        <activity android:name=".ui.booker.creation.BookerCreationActivity"
+        <activity
+            android:name=".ui.booker.creation.BookerCreationActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,11 +34,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.agency.creation.AgencyCreationActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".ui.PaymentActivity" /> <!-- Helps for screen orientation during barcode scanning -->
         <activity

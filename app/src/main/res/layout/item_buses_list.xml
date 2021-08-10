@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="busListInfo"
-            type="com.lado.travago.tripbook.model.admin.Bus.BusListInfo" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +15,6 @@
             android:id="@+id/text_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:formatDateFromMillis="@{busListInfo.dateInMillis}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="02/11/2020" />
@@ -35,7 +32,6 @@
             android:id="@+id/text_num_buses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{busListInfo.totalBusNumber}"
             app:layout_constraintBottom_toBottomOf="@+id/textView28"
             app:layout_constraintEnd_toEndOf="@+id/text_date"
             app:layout_constraintTop_toTopOf="@+id/textView28"
