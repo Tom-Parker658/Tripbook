@@ -5,21 +5,24 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.lado.travago.tripbook.R
-import com.lado.travago.tripbook.databinding.ActivityAgencyRegistrationBinding
+import com.lado.travago.tripbook.databinding.ActivityAgencyCreationBinding
+//import com.lado.travago.tripbook.databinding.ActivityAgencyRegistrationBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class AgencyCreationActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAgencyRegistrationBinding
+    private lateinit var binding: ActivityAgencyCreationBinding
     lateinit var viewModel: AgencyCreationViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_registration)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_creation)
 
         viewModel = ViewModelProvider(this)[AgencyCreationViewModel::class.java]
 
@@ -27,7 +30,7 @@ class AgencyCreationActivity : AppCompatActivity() {
         onLoading()
 
         //setups action bar with the back button
-        val navController = findNavController(R.id.myAgencyNavHostFragment)
+        val navController = findNavController(R.id.my_booker_nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
@@ -43,7 +46,7 @@ class AgencyCreationActivity : AppCompatActivity() {
      * Navigate up in the stack when the back button is clicked
      */
     override fun onSupportNavigateUp(): Boolean {
-        val navController = this.findNavController(R.id.myAgencyNavHostFragment)
+        val navController = this.findNavController(R.id.my_booker_nav_host_fragment)
         return navController.navigateUp()
     }
 

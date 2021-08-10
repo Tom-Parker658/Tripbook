@@ -2,12 +2,14 @@ package com.lado.travago.tripbook.ui.booker.creation
 
 import android.graphics.Bitmap
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
 import com.lado.travago.tripbook.model.enums.OCCUPATION
 import com.lado.travago.tripbook.model.enums.SEX
 import com.lado.travago.tripbook.model.users.Booker
-import com.lado.travago.tripbook.model.users.Scanner
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.StorageTags
@@ -21,43 +23,63 @@ import kotlinx.coroutines.flow.collect
 
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
-class BookerCreationViewModel(val agencyName: String?, private val agencyPath: String?) : ViewModel() {
-    //Precise which type of user we are dealing with. if the agencyId and agencyName are not null, we know it is a
-    //Scanner else a Booker
-    private var _isUserAScanner  = MutableLiveData(agencyName != null)
-    val isUserAScanner get() = _isUserAScanner
-
+class BookerCreationViewModel: ViewModel() {
     //FirebaseRepo utilities for db, signIn and cloud storage
     private val firestoreRepo = FirestoreRepo()
     private val storageRepo = StorageRepo()
     private val authRepo = FirebaseAuthRepo()
 
-
     //LiveData to know when a process is in loading state
     private val _loading = MutableLiveData(false)
     val loading get() = _loading
-    
 
-    //LiveData to know when the creation of the User is completed
-    private val _userCreated = MutableLiveData(false)
-    val userCreated get() = _userCreated
+    //LiveData to hold all toast messages
+    private val _toastMessage = MutableLiveData("")
+    val toastMessage get() = _toastMessage
 
+    //LiveData to know when to send verification code by sms
+    private val _sendCode = MutableLiveData(false)
+    val sendCode get() = _sendCode
 
-    //liveData which holds the phone number of
-    private lateinit var generatedID: String
+    //LiveData to know when to navigate to the confirmation screen
+    private val _onCodeSent = MutableLiveData(false)
+    val onCodeSent get() = _onCodeSent
+
+    //LiveData to know when to re-send verification code by sms
+    private val _resendCode = MutableLiveData(false)
+    val resendCode get() = _resendCode
+
+    //LiveData to know when to start phone authentication
+    private val _onPhoneVerified = MutableLiveData(false)
+    val onPhoneVerified get() = _onPhoneVerified
+
+    //Livedata to know when to navigate to the info screen
+    private val _navToInfoScreen = MutableLiveData(false)
+    val navToInfoScreen get() = _navToInfoScreen
+
+    //LiveData to know when or not to upload booker information to the database *True it is a Sign-Up process*
+    private val _startInfoUpload = MutableLiveData(false)
+    val startInfoUpload get() = _startInfoUpload
+
+    //LiveData to know when were are done to navigate away to the launcher UI  after login or signup
+    private val _onBookerCreated = MutableLiveData(false)
+    val onBookerCreated get() = _onBookerCreated
+
+    //Values for phoneAuth screen
+    var phoneField = ""
+        private set
+    var verificationCode = ""
+        private set
+    private lateinit var phoneCredential: PhoneAuthCredential
+    var fullPhone = ""//+XX XXXXXXXX...
+        private set
 
     //Values of the fields from the creationForm
     var nameField = ""
         private set
     var birthdayField = 0L
         private set
-    var email = ""
-        private set
-    var birthplaceField = ""
-        private set
-    var isAdminField = false
-        private set
-    var passwordField = ""
+    var recoveryPhoneField = ""
         private set
     var photoField: Bitmap? = null
         private set
@@ -65,29 +87,42 @@ class BookerCreationViewModel(val agencyName: String?, private val agencyPath: S
         private set
     var sexFieldId = 0
         private set
-    var photoUrl = ""
+    var nationalityField = ""
         private set
-    var occupationField = OCCUPATION.UNKNOWN
+    private var photoUrl = ""
+    var occupationField = OCCUPATION.UNKNOWN.name
         private set
-
+    private var bookerGeneratedID = ""
+    val occupationList = OCCUPATION.values().toList()
 
     /**
      * A function to set the value the fields from the creation form
      * @param fieldTag is the identifier used to specify the field you wish to set or change
      * @param value is the new value you wish to assign to the field
      */
-    fun setFields(fieldTag: FieldTags, value: Any) = when(fieldTag){
+    fun setField(fieldTag: FieldTags, value: Any) = when(fieldTag){
+        FieldTags.PHONE -> phoneField = value.toString()
+        FieldTags.VERIFICATION_CODE -> verificationCode = value.toString()
+        FieldTags.TOAST_MESSAGE -> _toastMessage.value = value.toString()
+        FieldTags.SEND_CODE -> _sendCode.value = value as Boolean
+        FieldTags.NAV_TO_INFO -> navToInfoScreen.value = value as Boolean
+        FieldTags.RESEND_CODE -> _resendCode.value = value as Boolean
+        FieldTags.ON_PHONE_VERIFIED -> onPhoneVerified.value = value as Boolean
+        FieldTags.START_INFO_UPLOAD -> _startInfoUpload.value = value as Boolean
+        FieldTags.ON_BOOKER_CREATED -> _onBookerCreated.value = value as Boolean
+        FieldTags.ON_CODE_SENT -> _onCodeSent.value = value as Boolean
         FieldTags.NAME -> nameField = value.toString()
         FieldTags.BIRTHDAY -> birthdayField = value as Long
-        FieldTags.EMAIL -> email = "$value"
+        FieldTags.RECOVERY_PHONE -> recoveryPhoneField = value.toString()
         FieldTags.SEX_ID -> sexFieldId = value as Int
-        FieldTags.IS_ADMIN -> isAdminField = value as Boolean
+        FieldTags.PHONE_CREDENTIAL -> phoneCredential = value as PhoneAuthCredential
         FieldTags.PROFILE_PHOTO -> photoField = value as Bitmap?
-        FieldTags.BIRTH_PLACE -> birthplaceField = value.toString()
         FieldTags.SEX -> sex = value as SEX
-        FieldTags.ID -> generatedID = value as String
-        FieldTags.PASSWORD -> passwordField = value.toString()
-        FieldTags.OCCUPATION -> occupationField = OCCUPATION.STUDENT
+        FieldTags.NATIONALITY -> nationalityField = value.toString()
+//        FieldTags.ID -> generatedID = value as String
+//        FieldTags.PASSWORD -> passwordField = value.toString()
+        FieldTags.OCCUPATION -> occupationField = value.toString()
+        FieldTags.FULL_PHONE -> fullPhone = value.toString()
     }
 
 
@@ -95,144 +130,133 @@ class BookerCreationViewModel(val agencyName: String?, private val agencyPath: S
      * Contains different identifiers for the fields in our creation form
      */
     enum class FieldTags {
-        NAME, SEX_ID, SEX, IS_ADMIN, EMAIL, BIRTHDAY, BIRTH_PLACE, PROFILE_PHOTO, ID, OCCUPATION, PASSWORD
+        PHONE, NAME, NAV_TO_INFO, SEX_ID, SEX, BIRTHDAY, PROFILE_PHOTO, OCCUPATION, SEND_CODE, RESEND_CODE, ON_PHONE_VERIFIED, VERIFICATION_CODE, TOAST_MESSAGE, RECOVERY_PHONE, PHONE_CREDENTIAL, START_INFO_UPLOAD, ON_BOOKER_CREATED, ON_CODE_SENT, FULL_PHONE, NATIONALITY
     }
 
 
     /**
-     * Adds a [Scanner] or [Booker] instead to the database if the values of [agencyPath] and [agencyName] are all null
+     * Adds a booker to the database
      */
-    suspend fun createUser(){
-        /**
-         * Uses [FirebaseAuthRepo.logInUserWithEmail] to sign in scanner to firestore and generate an id
-         */
-        _loading.value = true
-        authRepo.createUserWithEmail(email, passwordField).collect{ authState ->
-            when(authState) {
+    suspend fun saveBookerInfo(){
+        val photoStream = Utils.convertBitmapToStream(photoField!!, Bitmap.CompressFormat.PNG, 0)
+        //Upload the profile photo to the cloud storage and retrieve url
+        storageRepo.uploadPhoto(
+            photoStream,
+            bookerGeneratedID,
+            FirestoreTags.Users,
+            StorageTags.PROFILE
+        ).collect { storageState ->
+            when (storageState) {
+                is State.Loading -> _loading.value = true
+                is State.Failed -> {
+                    loading.value = false
+                    _toastMessage.value = storageState.message
+                }
                 is State.Success -> {
-                    Log.i("PhoneAuth", "FireAuth OK! ID =${authState.data}")
-                    //Get id from created user
-                    generatedID = authState.data.uid
-
-                    val photoStream =
-                        Utils.convertBitmapToStream(photoField!!, Bitmap.CompressFormat.PNG, 0)
-
-                    //Upload the profile photo to the cloud storage and retrieve url
-                    storageRepo.uploadPhoto(
-                        photoStream,
-                        generatedID,
-                        FirestoreTags.Users,
-                        StorageTags.PROFILE
-                    ).collect { storageState ->
-                        when (storageState) {
+                    _toastMessage.value = "FireStorage OK! link =${storageState.data}"
+                    photoUrl = storageState.data
+                    //The scanner map as a booker
+                    val booker = Booker(
+                        name = nameField,
+                        sex = sex,
+                        birthdayInMillis = birthdayField,
+                        photoUrl = photoUrl,
+                        nationality = nationalityField,
+                        occupation = occupationField.toString(),
+                        recoveryPhoneNumber = fullPhone // Actually recovery now
+                    )
+                    //Complete the creation process for signUp
+                    firestoreRepo.setDocument(
+                        booker.bookerMap,
+                        "${FirestoreTags.Bookers}/${bookerGeneratedID}"
+                    ).collect {
+                        when (it) {
+                            is State.Success -> {
+                                _toastMessage.value =  "Welcome!"
+                                _onBookerCreated.value = true
+                            }
                             is State.Loading -> _loading.value = true
                             is State.Failed -> {
-                                loading.value = false
-                                Log.e(TAG, storageState.message)
-                            }
-                            is State.Success -> {
-                                Log.i("PhoneAuth", "FireStorage OK! link =${storageState.data}")
-                                photoUrl = storageState.data
-                                //The scanner map as a booker
-                                val booker = Booker(
-                                    uid = generatedID,
-                                    name = nameField,
-                                    sex = sex,
-                                    birthdayInMillis = birthdayField,
-                                    photoUrl = photoUrl,
-                                    birthPlace = birthplaceField,
-                                    occupation = occupationField,
-                                    phoneNumber = email
-                                )
-                                //Complete the creation process and logout
-                                //Adds the user as a Booker
-                                firestoreRepo.setDocument(
-                                    booker.userMap,
-                                    "${FirestoreTags.Bookers}/${generatedID}"
-                                ).collect {
-                                    when (it) {
-                                        is State.Success -> {
-                                            Log.i("PhoneAuth", "FireStore OK! Booker done" )
-                                            //Adds the user as a scanner to the database under his agency
-                                            if (isUserAScanner.value!!) {
-                                                Log.i("PhoneAuth", "Booker is a scanner!" )
-
-                                                //The scanner map
-                                                val scanner = Scanner(
-                                                    uid = generatedID,
-                                                    name = nameField,
-                                                    birthdayInMillis = birthdayField,
-                                                    sex = sex,
-                                                    photoUrl = photoUrl,
-                                                    phoneNumber = email,
-                                                    otaName = agencyName?:"",
-                                                    isAdmin = isAdminField,
-                                                    birthPlace = birthplaceField
-                                                )
-                                                firestoreRepo.setDocument(
-                                                    scanner.userMap,
-                                                    "$agencyPath/${FirestoreTags.Scanners}/$generatedID"
-                                                ).collect { dbState ->
-                                                    when (dbState) {
-                                                        is State.Failed -> {
-                                                            authRepo.signOutUser()
-                                                            _loading.value = false
-                                                            Log.e("UserCreation", dbState.message)
-                                                        }
-                                                        is State.Success -> {
-                                                            authRepo.signOutUser()
-                                                            _loading.value = false
-                                                            _userCreated.value = true
-                                                        }
-                                                        is State.Loading -> {
-                                                            authRepo.signOutUser()
-                                                            _loading.value = true
-                                                        }
-                                                    }
-                                                }
-                                            } else {
-                                                authRepo.signOutUser()
-                                                _loading.value = false
-                                                _userCreated.value = true
-                                            }
-                                        }
-                                        is State.Loading -> _loading.value = true
-                                        is State.Failed -> {
-                                            authRepo.signOutUser()
-                                            _loading.value = false
-                                            Log.e(TAG, it.message)
-                                        }
-                                    }
-                                }
-
+                                _toastMessage.value = it.message
+                                _loading.value = false
+                                _toastMessage.value = it.message
                             }
                         }
-
                     }
-                }
-                is State.Failed -> {
-                    Log.e("PhoneAuth", authState.message)
-                }
-                is State.Loading -> {
-                    Log.i("PhoneAuth", "Creating User")
+
                 }
             }
+
         }
 
     }
 
     /**
-     * Adds a [Booker] instead to the database if the values of [agencyPath] and [agencyName] are all null
+     * To phone authenticate the booker.
+     * If there exist a document under  Booker/{uid}, then the user is just login-In else we navigate to the info screen for sign-Up
      */
+    suspend fun loginOrSignup() {
+        authRepo.signInWithPhoneAuthCredential(phoneCredential ).collect { authState ->
+            when (authState) {
+                is State.Success -> {
+                    _toastMessage.value = "Booker phone auth succeeded!"
+                    //Get id from created user
+                    bookerGeneratedID = authState.data.uid
+                    //Checks if the booker is  logging-in or signing-up
+                    firestoreRepo.getDocument("${FirestoreTags.Bookers}/$bookerGeneratedID").collect{
+                        when(it){
+                            is State.Failed -> {
+                                authRepo.signOutUser()
+                                _toastMessage.value = "We could not check your identity: Try later"
+                            }
+                            is State.Success -> {
+
+                                if(!it.data.exists()){ _navToInfoScreen.value = true}
+                                else _onBookerCreated.value = true
+                            }
+                            is State.Loading -> {}
+                        }
+                    }
+                }
+                is State.Failed -> {
+                    _toastMessage.value = authState.message ?:"Wrong verification Code!"
+                }
+                is State.Loading -> {
+                    //
+                }
+            }
+        }
+    }
 
     fun startLoading(){_loading.value = true}
     fun stopLoading(){_loading.value = false}
 
     fun formatDate(timeInMillis: Long) = Utils.formatDate(timeInMillis, "MMMM, dd YYYY")
 
-    companion object{
-        const val TAG = "UserCreationVM"
+    /**
+     * Field checkers for each layout
+     */
+    fun checkFields(fragment: Fragment) = when(fragment){
+        is BookerCreation1Fragment -> {
+            if(fullPhone.isNotBlank())_sendCode.value = true
+            else _toastMessage.value = "Invalid phone numbers!"
+        }
+        is BookerCreation2Fragment -> {
+            if(verificationCode.isNotBlank()) _onPhoneVerified.value = true
+            else _toastMessage.value = "Enter the verification code"
+        }
+        is BookerCreationFinalFragment -> {
+            if(nameField.isBlank() || nationalityField.isBlank() || occupationField == OCCUPATION.UNKNOWN.toString() || sex == SEX.UNKNOWN)
+                _toastMessage.value = "Dont leave a field empty or un touched!"
+            else if (fullPhone.isBlank()) _toastMessage.value = "Invalid phone numbers!"
+            else if (fullPhone == FirebaseAuth.getInstance().currentUser?.phoneNumber) _toastMessage.value = "Recovery phone number should be different from ${FirebaseAuth.getInstance().currentUser?.phoneNumber ?: "phone number"}"
+            else  _startInfoUpload.value = true
+        }
+        else -> {
+            //Never occurs
+        }
     }
+
 }
 
 

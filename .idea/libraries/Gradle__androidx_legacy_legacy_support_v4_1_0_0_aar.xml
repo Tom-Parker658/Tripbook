@@ -8,9 +8,15 @@
       <root url="jar://$USER_HOME$/caches/transforms-2/files-2.1/1828d510098a890aeed8ed4e3eb0cff5/legacy-support-v4-1.0.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/1828d510098a890aeed8ed4e3eb0cff5/legacy-support-v4-1.0.0/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f0253e24696046d2def34b70545f893f/legacy-support-v4-1.0.0/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/7dd724a2b84e0d00e2f57d5b9b8f80a4/transformed/legacy-support-v4-1.0.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7dd724a2b84e0d00e2f57d5b9b8f80a4/transformed/legacy-support-v4-1.0.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7dd724a2b84e0d00e2f57d5b9b8f80a4/transformed/legacy-support-v4-1.0.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/736c2c4d90e9286e5c685eacf15701f2/transformed/legacy-support-v4-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7edadfbf815fe3aa6c7ec33079bc95c8/transformed/legacy-support-v4-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/adf926ed73ffab59ed56670282c6dc50/transformed/legacy-support-v4-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c80ac18c23603a2d70cc0ff9026763e4/transformed/legacy-support-v4-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/df72729ba49b93bb68ad9085ffaf8947/transformed/legacy-support-v4-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2f1fa6b6b1a54d21b13b2dd7cda5c73e/transformed/legacy-support-v4-1.0.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/2f1fa6b6b1a54d21b13b2dd7cda5c73e/transformed/legacy-support-v4-1.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2f1fa6b6b1a54d21b13b2dd7cda5c73e/transformed/legacy-support-v4-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

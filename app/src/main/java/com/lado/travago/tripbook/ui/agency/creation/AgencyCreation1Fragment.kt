@@ -12,9 +12,10 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lado.travago.tripbook.R
-import com.lado.travago.tripbook.databinding.FragmentAgencyRegistration1Binding
+import com.lado.travago.tripbook.databinding.FragmentAgencyCreation1Binding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -22,7 +23,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 @InternalCoroutinesApi
 class AgencyCreation1Fragment : Fragment() {
     private var logoFileName = ""
-    private lateinit var binding: FragmentAgencyRegistration1Binding
+    private lateinit var binding: FragmentAgencyCreation1Binding
     private lateinit var viewModel: AgencyCreationViewModel
 
     override fun onCreateView(
@@ -32,7 +33,7 @@ class AgencyCreation1Fragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.fragment_agency_registration1,
+            R.layout.fragment_agency_creation1,
             container,
             false
         )
@@ -157,8 +158,8 @@ class AgencyCreation1Fragment : Fragment() {
             }
             when (anyError) {
                 //Navigate to the next screen
-                null -> it.findNavController().navigate(com.lado.travago.tripbook.ui.agency.AgencyRegistration1FragmentDirections.actionAgencyRegistration1FragmentToAgencyRegistration2Fragment())
-                else -> showSnackbar(anyError)
+//                null -> it.findNavController().navigate(com.lado.travago.tripbook.ui.agency.AgencyRegistration1FragmentDirections.actionAgencyRegistration1FragmentToAgencyRegistration2Fragment())
+//                else -> showSnackbar(anyError)
             }
         }
     }

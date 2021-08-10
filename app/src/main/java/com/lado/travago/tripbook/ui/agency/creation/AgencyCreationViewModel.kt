@@ -26,15 +26,17 @@ class AgencyCreationViewModel : ViewModel() {
     private val firestoreRepo = FirestoreRepo()
     private val storageRepo = StorageRepo()
 
-    //Contains a list of created scanners
-    private val _listOfScanners = MutableLiveData<MutableList<User.UserBasicInfo>>()
-    val listOfScanners get() = _listOfScanners
-
     var logoFilename = ""
         private set
-
     var otaPath = ""
         private set
+
+    //LIVEDATA
+    private val _toastMessage = MutableLiveData("")
+    val toastMessage get() = _toastMessage
+
+    private val _saveInfo = MutableLiveData(false)
+    val saveInfo get() = _saveInfo
 
     //Agency Fields
     var logoBitmap: Bitmap? = null
@@ -42,10 +44,6 @@ class AgencyCreationViewModel : ViewModel() {
     var nameField = ""
         private set
     var mottoField = ""
-        private set
-    var supportEmailField = ""
-        private set
-    var supportPhoneField = ""
         private set
     var bankField = ""
         private set
@@ -57,8 +55,26 @@ class AgencyCreationViewModel : ViewModel() {
         private set
     var costPerKm = "10.0"
         private set
+    var nameCEOField = ""
+        private set
+    var creationYearField = 0
+        private set
+    var decreeNumberField = ""
+        private set
+    var supportPhone1Field = ""
+        private set
+    var supportPhone2Field = ""
+        private set
+    var fullSupportPhone1Field = ""
+        private set
+    var fullSupportPhone2Field = ""
+        private set
+    var supportEmailField = ""
+        private set
 
-    val regions: MutableList<Region> = mutableListOf()
+    //For the config screen
+    val regionsList = listOf("")
+    val countryList = listOf("")
 
     //Loading state
     private val _onLoading = MutableLiveData(false)
@@ -68,191 +84,173 @@ class AgencyCreationViewModel : ViewModel() {
     private val _onOtaCreated = MutableLiveData(false)
     val onOtaCreated get() = _onOtaCreated
 
-
-    /**
-     * Adds a new scanner object) to the [_listOfScanners]
-     */
-    fun addCreatedScannerToList(userInfo: User.UserBasicInfo) {
-        if (_listOfScanners.value == null)
-            _listOfScanners.value = mutableListOf(userInfo)
-        else
-            _listOfScanners.value!! += userInfo
+    enum class FieldTags {
+        NAME, MOTTO, SUPPORT_EMAIL, SUPPORT_PHONE_1, SUPPORT_PHONE_2, FULL_SUPPORT_PHONE_1, FULL_SUPPORT_PHONE_2, BANK_NUMBER, MOMO_NUMBER, ORANGE_NUMBER, COST_PER_KM, LOGO_BITMAP, CEO_NAME, CREATION_DECREE, CREATION_YEAR, TOAST_MESSAGE, SAVE_INFO
     }
-
 
     /**
      * Saves the agency fields to a viewModel variables
      */
     fun saveField(key: FieldTags, value: Any) {
         when (key) {
+            // Fields
             FieldTags.NAME -> nameField = value.toString()
             FieldTags.MOTTO -> mottoField = value.toString()
-            FieldTags.EMAIL -> supportEmailField = value.toString()
-            FieldTags.PHONE -> supportPhoneField = value.toString()
-            FieldTags.BANK -> bankField = value.toString()
-            FieldTags.MOMO -> momoField = value.toString()
-            FieldTags.ORANGE -> orangeMoneyField = value.toString()
-            FieldTags.NUM_VEHICLES -> vehicleNumberField = value.toString()
+            FieldTags.SUPPORT_EMAIL -> supportEmailField = value.toString()
+            FieldTags.SUPPORT_PHONE_1 -> supportPhone1Field = value.toString()
+            FieldTags.SUPPORT_PHONE_2 -> supportPhone2Field = value.toString()
+            FieldTags.FULL_SUPPORT_PHONE_1 -> fullSupportPhone1Field = value.toString()
+            FieldTags.FULL_SUPPORT_PHONE_2 -> fullSupportPhone2Field = value.toString()
+            FieldTags.BANK_NUMBER -> bankField = value.toString()
+            FieldTags.MOMO_NUMBER -> momoField = value.toString()
+            FieldTags.ORANGE_NUMBER -> orangeMoneyField = value.toString()
+            FieldTags.CEO_NAME -> nameCEOField = value.toString()
             FieldTags.COST_PER_KM -> costPerKm = value.toString()
-            FieldTags.REGIONS -> regions.add(value as Region)
-            FieldTags.LOGO_NAME -> logoFilename = value.toString()
+            FieldTags.CREATION_DECREE -> decreeNumberField = value.toString()
+            FieldTags.CREATION_YEAR -> creationYearField = if(value.toString().isBlank()) 0 else value.toString().toInt()
             FieldTags.LOGO_BITMAP -> logoBitmap = value as Bitmap
+            FieldTags.TOAST_MESSAGE -> _toastMessage.value = value.toString()
+            FieldTags.SAVE_INFO -> _saveInfo.value = true
         }
     }
-
 
     /**
      * Creates the Agency and adds it to the db. When successful, it makes sure we navigate to the fragment to add scanners
      * Then finally, it deletes the temporary current account created for the process sake
      */
-    suspend fun createOTA() {
+    suspend fun saveAgencyInfo() {
         val logoStream = Utils.convertBitmapToStream(
             logoBitmap,
             Bitmap.CompressFormat.PNG,
             0
         )
-
+        stopLoading()
         /**
-         * Generate an anonymous account which can be use by the Scanner to create the Agency and returns
-         * the state of the operation. We then continue if the state is success
+         * Upload the logo to the storage
          */
-        authRepo.signInAnonymously().collect { authState ->
-            when (authState) {
+        storageRepo.uploadPhoto(
+            logoStream,
+            "$nameField.jpg",
+            FirestoreTags.OnlineTransportAgency,
+            StorageTags.LOGO
+        ).collect { storageState ->
+            when (storageState) {
                 is State.Loading -> startLoading()
                 is State.Failed -> {
                     stopLoading()
-                    Log.e(TAG, "Authentication: ${authState.message}")
+                    Log.e(TAG, "Authentication: ${storageState.message}")
                 }
                 is State.Success -> {
-                    stopLoading()
+                    storageState.data
+
+                    val agencyMapData = OnlineTravelAgency(
+                        name = nameField,
+                        logoUrl = storageState.data,
+                        motto = mottoField,
+                        costPerKm = costPerKm.toDouble(),
+                        numberOfBuses = vehicleNumberField.toInt(),
+                        bankAccountNumber = bankField,
+                        mtnMoMoAccount = momoField,
+                        orangeMoneyAccount = orangeMoneyField,
+                        supportEmail = supportEmailField,
+                        supportContact = supportPhoneField
+                    ).otaMap
+
                     /**
-                     * Upload the logo to the storage
+                     * Adds the agency document to the OnlineTravelAgency collection and returns the
+                     * state of the operation.
                      */
-                    storageRepo.uploadPhoto(
-                        logoStream,
-                        "logo_${nameField}.jpg",
-                        FirestoreTags.OnlineTransportAgency,
-                        StorageTags.LOGO
-                    ).collect { storageState ->
-                        when (storageState) {
+                    firestoreRepo.addDocument(
+                        agencyMapData,
+                        FirestoreTags.OnlineTransportAgency.name,
+                    ).collect { dbState ->
+                        when (dbState) {
                             is State.Loading -> startLoading()
                             is State.Failed -> {
                                 stopLoading()
-                                Log.e(TAG, "Authentication: ${storageState.message}")
+                                Log.e(TAG, "FireStore OTA: ${dbState.message}")
                             }
+                            //Returns reference to the new document
                             is State.Success -> {
-                                storageState.data
-
-                                val agencyMapData = OnlineTravelAgency(
-                                    agencyName = nameField,
-                                    agencyLogo = storageState.data,
-                                    motto = mottoField,
-                                    costPerKm = costPerKm.toDouble(),
-                                    numberOfBuses = vehicleNumberField.toInt(),
-                                    bankAccountNumber = bankField,
-                                    mtnMoMoAccount = momoField,
-                                    orangeMoneyAccount = orangeMoneyField,
-                                    supportEmail = supportEmailField,
-                                    supportContact = supportPhoneField
-                                ).otaMap
-
+                                otaPath = dbState.data
+                                stopLoading()
                                 /**
-                                 * Adds the agency document to the OnlineTravelAgency collection and returns the
-                                 * state of the operation.
+                                 * Adds the Countries subcollection to the Agency before adding the regions into it
                                  */
-                                firestoreRepo.addDocument(
-                                    agencyMapData,
-                                    FirestoreTags.OnlineTransportAgency.name,
-                                ).collect { dbState ->
-                                    when (dbState) {
+                                firestoreRepo.setDocument(
+                                    hashMapOf("list" to regions),
+                                    "${otaPath}/Cameroon/Regions"
+                                ).collect { regionState ->
+                                    when (regionState) {
                                         is State.Loading -> startLoading()
                                         is State.Failed -> {
                                             stopLoading()
-                                            Log.e(TAG, "FireStore OTA: ${dbState.message}")
+                                            Log.e(
+                                                TAG,
+                                                "FireStore OTA: ${regionState.message}"
+                                            )
                                         }
-                                        //Returns reference to the new document
                                         is State.Success -> {
-                                            otaPath = dbState.data
-                                            stopLoading()
                                             /**
-                                             * Adds the Countries subcollection to the Agency before adding the regions into it
+                                             * Adds a sub collection to the Record collection and set the first document
+                                             * as the date of today
                                              */
                                             firestoreRepo.setDocument(
-                                                hashMapOf("list" to regions),
-                                                "${otaPath}/Cameroon/Regions"
-                                            ).collect { regionState ->
-                                                when (regionState) {
+                                                hashMapOf(),
+                                                "${FirestoreTags.Records}/${agencyMapData["agencyName"]}/stats/${Date()}",
+                                            ).collect {
+                                                when (it) {
                                                     is State.Loading -> startLoading()
                                                     is State.Failed -> {
                                                         stopLoading()
                                                         Log.e(
                                                             TAG,
-                                                            "FireStore OTA: ${regionState.message}"
+                                                            "FireStore OTA: ${it.message}"
                                                         )
                                                     }
                                                     is State.Success -> {
-                                                        /**
-                                                         * Adds a sub collection to the Record collection and set the first document
-                                                         * as the date of today
-                                                         */
-                                                        firestoreRepo.setDocument(
-                                                            hashMapOf(),
-                                                            "${FirestoreTags.Records}/${agencyMapData["agencyName"]}/stats/${Date()}",
-                                                        ).collect {
-                                                            when (it) {
-                                                                is State.Loading -> startLoading()
-                                                                is State.Failed -> {
-                                                                    stopLoading()
-                                                                    Log.e(
-                                                                        TAG,
-                                                                        "FireStore OTA: ${it.message}"
-                                                                    )
-                                                                }
-                                                                is State.Success -> {
-                                                                    stopLoading()
-                                                                    _onOtaCreated.value = true
-                                                                    //Delete the created anonymous user from the database
-                                                                    authRepo.deleteCurrentUser()
-                                                                        .collect { deleteState ->
-                                                                            when (deleteState) {
-                                                                                is State.Loading -> startLoading()
-                                                                                is State.Failed -> {
-                                                                                    Log.e(
-                                                                                        TAG,
-                                                                                        "FireStore OTA: ${deleteState.message}"
-                                                                                    )
-                                                                                    authRepo.signOutUser()
-                                                                                }
-                                                                                is State.Success -> {
-                                                                                    Log.i(
-                                                                                        TAG,
-                                                                                        "Anonymous deleted"
-                                                                                    )
-                                                                                    stopLoading()
-                                                                                }
-                                                                            }
-                                                                        }
+                                                        stopLoading()
+                                                        _onOtaCreated.value = true
+                                                        //Delete the created anonymous user from the database
+                                                        authRepo.deleteCurrentUser()
+                                                            .collect { deleteState ->
+                                                                when (deleteState) {
+                                                                    is State.Loading -> startLoading()
+                                                                    is State.Failed -> {
+                                                                        Log.e(
+                                                                            TAG,
+                                                                            "FireStore OTA: ${deleteState.message}"
+                                                                        )
+                                                                        authRepo.signOutUser()
+                                                                    }
+                                                                    is State.Success -> {
+                                                                        Log.i(
+                                                                            TAG,
+                                                                            "Anonymous deleted"
+                                                                        )
+                                                                        stopLoading()
+                                                                    }
                                                                 }
                                                             }
-
-                                                        }
                                                     }
                                                 }
 
                                             }
-
-
                                         }
                                     }
+
                                 }
 
 
                             }
                         }
                     }
+
+
                 }
             }
         }
+
     }
 
     private fun startLoading() {
@@ -269,11 +267,6 @@ class AgencyCreationViewModel : ViewModel() {
     fun endNavigation() {
         _onOtaCreated.value = false
     }
-
-    enum class FieldTags {
-        NAME, MOTTO, EMAIL, LOGO_NAME, PHONE, BANK, MOMO, ORANGE, NUM_VEHICLES, COST_PER_KM, REGIONS, LOGO_BITMAP, PRICE_PER_KM
-    }
-
 
     companion object OTABundleKeys {
         const val TAG = "AgencyRegistVM"

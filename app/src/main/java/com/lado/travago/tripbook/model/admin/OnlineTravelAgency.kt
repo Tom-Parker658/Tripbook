@@ -43,15 +43,16 @@ data class OnlineTravelAgency(
     val bankAccountNumber: String,
     val mtnMoMoAccount: String,
     val orangeMoneyAccount: String,
-    val supportEmail: String = "",
-    val supportContact: String = "",
+    val supportEmail: String,
+    val supportPhone1: String,
+    val supportPhone2: String,
     val isSuspended: Boolean = false
 ) {
 //    @DocumentId
 //    var uid: String =""
 
     @ServerTimestamp
-    var addedOn: Timestamp? = null
+    var addedOn: Timestamp = Timestamp.now()
     var likes: Int = 1
     var dislikes: Int = 1
     val reputation: Double = (likes / (likes + dislikes))*10.0

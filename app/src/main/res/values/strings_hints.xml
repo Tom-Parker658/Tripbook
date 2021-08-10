@@ -2,7 +2,6 @@
 <resources>
     <!-- All hints for text views-->
 
-    <string name="hint_user_birthplace" translatable="false">Batcham</string>
     <string name="hint_user_email" translatable="false">abc@example.com</string>
     <string name="hint_user_contact" translatable="false">+237 6 55 14 23 26</string>
     <string name="hint_user_birthday" translatable="false">22/06/2000</string>

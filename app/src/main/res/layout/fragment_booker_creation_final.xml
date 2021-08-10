@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".ui.booker.panel.RegistrationFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/profile_photo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/desc_user_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_account_circle_24" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name"
+                style="@style/editTextStyle"
+                android:hint="@string/text_label_name"
+                app:helperText="Enter all your names"
+                app:layout_constraintBottom_toTopOf="@+id/birthday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_label_user_name"
+                app:layout_constraintTop_toBottomOf="@+id/profile_photo">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/text_profile_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile photo:"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_photo"
+                app:layout_constraintEnd_toStartOf="@+id/profile_photo"
+                app:layout_constraintTop_toTopOf="@+id/profile_photo" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_pick_date"
+                style="@style/navButtonStyles"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/birthday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/birthday"
+                app:layout_constraintVertical_bias="0.555"
+                app:srcCompat="@drawable/baseline_event_24"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/birthday"
+                style="@style/editTextStyle"
+                android:hint="@string/text_label_birthday"
+                app:helperText="Tap and enter your birth day!"
+                app:layout_constraintBottom_toTopOf="@+id/nationality"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_label_user_birthday"
+                app:layout_constraintTop_toBottomOf="@+id/name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nationality"
+                style="@style/editTextStyle"
+                android:hint="Nationality:"
+                app:helperText="From which country are you?"
+                app:layout_constraintBottom_toTopOf="@+id/occupation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_label_user_birthplace"
+                app:layout_constraintTop_toBottomOf="@+id/birthday">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/occupation"
+                style="@style/editTextStyle"
+                app:endIconMode="dropdown_menu"
+                android:hint="Occupation:"
+                app:helperText="Select your occupation from the list!"
+                app:helperTextEnabled="true"
+                app:layout_constraintBottom_toTopOf="@+id/recoveryPhone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_label_user_occupation"
+                app:layout_constraintTop_toBottomOf="@+id/nationality">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    style="@style/textInputStyle.autoComplete"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/countryCode_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_contentColor="@color/quantum_grey"
+                app:ccp_textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@+id/recoveryPhone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/recoveryPhone" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/recoveryPhone"
+                style="@style/editTextStyle"
+                android:hint="Recovery phone:"
+                app:counterEnabled="false"
+                tools:helperText="It should not be +23766559988"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/countryCode_picker"
+                app:layout_constraintTop_toBottomOf="@+id/occupation">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="phone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/text_label_user_occupation"
+                style="@style/style_image_label"
+                app:layout_constraintBottom_toBottomOf="@+id/occupation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/occupation"
+                app:srcCompat="@drawable/baseline_engineering_24" />
+
+            <ImageView
+                android:id="@+id/text_label_user_birthplace"
+                style="@style/style_image_label"
+                app:layout_constraintBottom_toBottomOf="@+id/nationality"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/nationality"
+                app:srcCompat="@drawable/baseline_flag_24" />
+
+            <ImageView
+                android:id="@+id/text_label_user_birthday"
+
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/birthday"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/birthday"
+                app:srcCompat="@drawable/baseline_cake_24"
+                style="@style/style_image_label" />
+
+            <ImageView
+                android:id="@+id/text_label_user_name"
+                app:layout_constraintBottom_toBottomOf="@+id/name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/name"
+                app:srcCompat="@drawable/baseline_person_24"
+                style="@style/style_image_label" />
+
+            <RadioGroup
+                android:id="@+id/radioGroup_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/btn_save_info"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recoveryPhone">
+
+                <RadioButton
+                    android:id="@+id/sex_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Male" />
+
+                <RadioButton
+                    android:id="@+id/sex_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btn_save_info"
+                style="@style/positiveButton"
+                android:text="Save Info"
+                app:icon="@drawable/baseline_save_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

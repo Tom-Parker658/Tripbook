@@ -1,7 +1,7 @@
 package com.lado.travago.tripbook.model.users
 
 import com.google.firebase.Timestamp
-import com.lado.travago.tripbook.model.enums.OCCUPATION
+import com.google.firebase.firestore.ServerTimestamp
 import com.lado.travago.tripbook.model.enums.SEX
 import java.util.*
 
@@ -12,54 +12,34 @@ import java.util.*
  * [Booker] is a model which represents a person who wants to book a ticket.
  *
  * @property name is the name of a booker
- * @property sex is the sex of the booker which can be [SEX.FEMALE], [SEX.MALE] and [SEX.UNKNOWN]
+ * @property sex is the sex of the booker which can be [SEX.FEMALE], [SEX.MALE]
  * @property birthdayInMillis is the place of birth of the booker
  * @property photoUrl is the url link to the face picture of the booker
  * @property occupation is the user's occupation which can be any value among those of the
- *  enum class [OCCUPATION] it is initialise as [OCCUPATION.UNKNOWN]
- * @property phoneNumber is the user's SIM phoneNumber
+ * @property nationality is the country from which the user comes from
+ * @property recoveryPhoneNumber is any SIM phoneNumber which can be used to recover a lost account. It must be different from the
  */
 
 data class Booker(
-    override val uid: String,
-    override var name: String,
-    override var sex: SEX = SEX.UNKNOWN,
-    override var birthdayInMillis: Long,
-    override var photoUrl: String,
-    override var birthPlace: String,
-    override var occupation: OCCUPATION = OCCUPATION.UNKNOWN,
-    override var phoneNumber: String,
+    val name: String,
+    var sex: SEX,
+    val birthdayInMillis: Long,
+    val photoUrl: String,
+    val nationality: String,
+    var occupation: String,
+    var recoveryPhoneNumber: String,
+    ){
+    @ServerTimestamp
+    var addedOn: Timestamp = Timestamp.now()
 
-): User {
-    /**
-     * An inner class which contains some basic information about the Booker.
-     * It inherits from the [User.UserBasicInfo]
-     * This class is used to display bookers info on a recyclerView
-     */
-    data class BookerBasicInfo(
-        override val name: String ,
-        override val birthdayInMillis: Long,
-        override val phoneNumber: String,
-        override val photoUrl: String,
-        override val occupation: OCCUPATION
-    ): User.UserBasicInfo(
-        name,
-        birthdayInMillis,
-        phoneNumber,
-        photoUrl,
-        occupation
-    )
-
-    override val userMap: HashMap<String, Any?> = hashMapOf(
-        "uid" to uid,
+    val bookerMap: HashMap<String, Any?> = hashMapOf(
         "name" to name,
         "sex" to sex,
-        "phone" to phoneNumber,
+        "recoveryPhoneNumber" to recoveryPhoneNumber,
         "birthday" to birthdayInMillis,
-        "birthplace" to birthPlace,
-        "nationality" to "Cameroon",
-        "occupation" to occupation.name,
+        "nationality" to nationality,
+        "occupation" to occupation,
         "photoUrl" to photoUrl,
-        "addedOn" to Timestamp(Date())
+        "addedOn" to addedOn
     )
 }

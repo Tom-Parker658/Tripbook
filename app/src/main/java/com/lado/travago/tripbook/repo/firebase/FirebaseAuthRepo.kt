@@ -1,5 +1,7 @@
 package com.lado.travago.tripbook.repo.firebase
 
+
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
@@ -17,9 +19,11 @@ import kotlinx.coroutines.tasks.await
  * users to firebase
  */
 @ExperimentalCoroutinesApi
-class FirebaseAuthRepo {
+class FirebaseAuthRepo() {
+    private var firebaseAuth = FirebaseAuth.getInstance(FirebaseApp.getInstance())
+
     //Initialising and getting instances of the firebase services
-    private val firebaseAuth = FirebaseAuth.getInstance()
+
 
     /**
      * Uses the phone credentials to signIn a user to firebaseAuth asynchronously
@@ -29,6 +33,7 @@ class FirebaseAuthRepo {
     fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) = flow {
         firebaseAuth.useAppLanguage()
         emit(State.loading())
+
 
         //loading: SignIn process in progress
         val user = firebaseAuth.signInWithCredential(credential).await().user

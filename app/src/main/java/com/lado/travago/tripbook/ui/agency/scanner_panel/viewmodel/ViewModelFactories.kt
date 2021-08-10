@@ -2,6 +2,7 @@
 
 package com.lado.travago.tripbook.ui.agency.scanner_panel.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.tripbook.model.users.Booker
@@ -20,9 +21,8 @@ import kotlinx.coroutines.InternalCoroutinesApi
 //     */
 //@ExperimentalCoroutinesApi
 //@InternalCoroutinesApi
-//class SearchJourneyViewModelFactory(
-//    private val application: Application,
-//    private val placesClient: PlacesClient,
+//class BookerCreationViewModelFactory(
+//    private val context: Context
 //) : ViewModelProvider.Factory {
 //    /**
 //     * Creates a new instance of the given `Class`.
@@ -31,12 +31,12 @@ import kotlinx.coroutines.InternalCoroutinesApi
 //     * @return a newly created ViewModel
 //    </T> */
 //    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//        if (modelClass.isAssignableFrom(JourneySearchViewModel::class.java)) {
-//            return JourneySearchViewModel(application = application, placesClient = placesClient) as T
+//        if (modelClass.isAssignableFrom(BookerCreationViewModel::class.java)) {
+//            return BookerCreationViewModel(context = context) as T
 //        }
 //        throw IllegalArgumentException("Unknown ViewModel class")
 //    }
-//}
+//}bui
 
 /**
  * This is a factory class which will be used to build our custom [BookerCreationViewModel] with arguments
@@ -50,23 +50,3 @@ import kotlinx.coroutines.InternalCoroutinesApi
  * -[Booker] Creation: All the properties must be null
 
  */
-@ExperimentalCoroutinesApi
-@InternalCoroutinesApi
-class UserCreationViewModelFactory(
-    private val agencyName: String?,
-    private val agencyId: String?
-) : ViewModelProvider.Factory {
-    /**
-     * Creates a new instance of the given `Class`.
-     * @param modelClass a `Class` whose instance is requested
-     * @param <T>        The type parameter for the ViewModel.
-     * @return a newly created ViewModel
-    </T> */
-
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(BookerCreationViewModel::class.java))
-            return  BookerCreationViewModel( agencyName, agencyId) as T
-
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}

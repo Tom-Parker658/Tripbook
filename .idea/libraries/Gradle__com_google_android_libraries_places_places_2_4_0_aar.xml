@@ -4,9 +4,9 @@
       <root url="jar://$USER_HOME$/caches/transforms-2/files-2.1/1c6bb8b28c5c0b9e36e82b58f7bc5262/jetified-places-2.4.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/1c6bb8b28c5c0b9e36e82b58f7bc5262/jetified-places-2.4.0/res" />
       <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/1c6bb8b28c5c0b9e36e82b58f7bc5262/jetified-places-2.4.0/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/641b9d854a9a537dd5e0661ab0925d40/transformed/jetified-places-2.4.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/641b9d854a9a537dd5e0661ab0925d40/transformed/jetified-places-2.4.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/641b9d854a9a537dd5e0661ab0925d40/transformed/jetified-places-2.4.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/594fb0ffe05c7968d34a18032f105d92/transformed/jetified-places-2.4.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/594fb0ffe05c7968d34a18032f105d92/transformed/jetified-places-2.4.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/594fb0ffe05c7968d34a18032f105d92/transformed/jetified-places-2.4.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/com.google.android.libraries.places/places/2.4.0/5ed6dd1c8202b5c622548077d727cf02512ccae7/places-2.4.0-javadoc.jar!/" />

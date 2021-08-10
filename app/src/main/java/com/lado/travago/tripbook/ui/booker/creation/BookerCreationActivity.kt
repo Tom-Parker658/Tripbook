@@ -1,234 +1,185 @@
 package com.lado.travago.tripbook.ui.booker.creation
 
 import android.app.Activity
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.MaterialDatePicker
+import androidx.navigation.findNavController
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import com.lado.travago.tripbook.R
-import com.lado.travago.tripbook.databinding.ActivityUserCreationBinding
-import com.lado.travago.tripbook.model.enums.OCCUPATION
-import com.lado.travago.tripbook.model.enums.SEX
-import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationActivity
-import com.lado.travago.tripbook.utils.Utils
-import com.lado.travago.tripbook.ui.agency.scanner_panel.viewmodel.UserCreationViewModelFactory
+import com.lado.travago.tripbook.databinding.ActivityBookerCreationBinding
+//import com.lado.travago.tripbook.databinding.ActivityUserCreationBinding
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationViewModel.FieldTags
 import kotlinx.coroutines.*
-import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
+
 class BookerCreationActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityBookerCreationBinding
     private lateinit var viewModel: BookerCreationViewModel
-    private lateinit var binding: ActivityUserCreationBinding
+    private lateinit var verificationId: String
+    private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Restore all fields after configuration changes
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_user_creation)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_booker_creation)
         initViewModel()
-        regulateRegistrationUI()
         navigateToLauncherUI()
-        onFieldChange()
-        restoreFields()
+
+        observeLiveData()
+        showProgressBar()
+    }
+
+    /**
+     * Observes live-data and reacts accordingly
+     */
+    private fun observeLiveData(){
         viewModel.loading.observe(this){
             if(it) binding.progressBar.visibility = View.VISIBLE
             else binding.progressBar.visibility = View.GONE
         }
-        onBtnCreateClicked()
-        showProgressBar()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        regulateRegistrationUI()
-    }
-
-    /**
-     * This functions regulates the layout depending if we are registering a scanner or booker
-     */
-    private fun regulateRegistrationUI() {
-        viewModel.isUserAScanner.observe(this) {
-            if (!viewModel.isUserAScanner.value!!) {
-                //In this case, we dealing with a booker registration
-                binding.checkBoxAdmin.visibility = View.GONE
-                binding.btnCreateUser.text = "Create Booker"
-            } else {
-                //Here it is a scanner, thus we delete the occupation field, since we are a scanner automatically
-                binding.occupation.visibility = View.GONE
-                binding.btnCreateUser.text = "Create Scanner"
-                viewModel.setFields(FieldTags.OCCUPATION, OCCUPATION.SCANNER)
-                binding.textLabelUserOccupation.visibility = View.GONE
+        viewModel.toastMessage.observe(this){
+            if(it.isNotBlank()) {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                Log.i("BookerCreation", it)
+                viewModel.setField(FieldTags.TOAST_MESSAGE, "")
+            }
+        }
+        viewModel.sendCode.observe(this){
+            if(it){
+                viewModel.startLoading()
+                sendVerificationCode()
+                viewModel.setField(FieldTags.SEND_CODE, false)
+            }
+        }
+        viewModel.resendCode.observe(this){
+            if(it){
+                viewModel.startLoading()
+                resendVerificationCode()
+                viewModel.setField(FieldTags.RESEND_CODE, false)
+            }
+        }
+        viewModel.onCodeSent.observe(this){
+            if(it){
+                try {
+                    findNavController(binding.myBookerNavHostFragment.id).navigate(R.id.action_bookerCreation1Fragment_to_bookerCreation2Fragment)
+                }catch (exception: Exception){/*In case we are resending the sms  already at the booker creation 2 screen */ }
+                viewModel.setField(FieldTags.ON_CODE_SENT, false)
+            }
+        }
+        viewModel.onPhoneVerified.observe(this){
+            if(it){
+                viewModel.startLoading()
+                createCredentials()
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.loginOrSignup()
+                }
+                viewModel.setField(FieldTags.ON_PHONE_VERIFIED, false)
+            }
+        }
+        viewModel.startInfoUpload.observe(this){
+            if(it){
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.setField(FieldTags.START_INFO_UPLOAD, false)
+                    viewModel.saveBookerInfo()
+                }
+            }
+        }
+        viewModel.navToInfoScreen.observe(this){
+            if(it){
+                viewModel.stopLoading()
+                findNavController(binding.myBookerNavHostFragment.id).navigate(R.id.action_bookerCreation2Fragment_to_bookerCreationFinalFragment)
+                viewModel.setField(FieldTags.NAV_TO_INFO, false)
+                viewModel.setField(FieldTags.FULL_PHONE, "")//Renew this field to hold the recovery phone number
             }
         }
 
-    }
-
-    /**
-     *Create user using the password and email
-     */
-    private fun onBtnCreateClicked() {
-        binding.btnCreateUser.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                viewModel.createUser()
+        viewModel.onBookerCreated.observe(this){
+            if(it){
+                navigateToLauncherUI()
             }
         }
     }
 
-    /**
-     * Set ways to get data from the views and assign it to the viewModels
-     * credential represent either email or phoneNumber
-     */
-    private fun onFieldChange() {
-        binding.credential.editText!!.addTextChangedListener {
-            viewModel.setFields(FieldTags.EMAIL, binding.credential.editText!!.text.toString())
-        }
-        binding.password.editText!!.addTextChangedListener {
-            viewModel.setFields(FieldTags.PASSWORD, binding.password.editText!!.text.toString())
-        }
-        binding.name.editText!!.addTextChangedListener {
-            viewModel.setFields(FieldTags.NAME, binding.name.editText!!.text.toString())
-        }
-        binding.credential.editText!!.addTextChangedListener {
-            viewModel.setFields(FieldTags.EMAIL, binding.credential.editText!!.text.toString())
-        }
-        binding.birthplace.editText!!.addTextChangedListener {
-            viewModel.setFields(
-                FieldTags.BIRTH_PLACE,
-                binding.birthplace.editText!!.text.toString()
-            )
-        }
-        binding.checkBoxAdmin.setOnCheckedChangeListener { _, isAdmin ->
-            viewModel.setFields(FieldTags.IS_ADMIN, isAdmin)
-        }
-        // An onClick listener to to initiate the picture selection when the profile photo imageView is clicked
-        binding.profilePhoto.setOnClickListener {
-            initPictureSelection()
-        }
-        // Add an onClick listener to the birthday endIcon to select the birthday
-        binding.fabPickDate.setOnClickListener { selectBirthDay() }
 
-        binding.radioGroupSex.setOnCheckedChangeListener { _, id ->
-            viewModel.setFields(FieldTags.SEX_ID, id)
-            val sex = when (id) {
-                R.id.sex_male -> SEX.MALE
-                R.id.sex_female -> SEX.FEMALE
-                else -> SEX.UNKNOWN
-            }
-            viewModel.setFields(FieldTags.SEX, sex)
+    //Callback to be called during phone verification
+    private val phoneCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+
+            viewModel.setField(FieldTags.PHONE_CREDENTIAL, credential)
+            viewModel.setField(FieldTags.ON_PHONE_VERIFIED, true)
+            viewModel.startLoading()
         }
+
+        override fun onVerificationFailed(exception: FirebaseException) {
+            viewModel.setField(FieldTags.TOAST_MESSAGE, exception.message ?: "Bad connection")
+            viewModel.stopLoading()
+        }
+
+        override fun onCodeSent(
+            id: String,
+            forceResendToken: PhoneAuthProvider.ForceResendingToken
+        ) {
+            resendToken = forceResendToken
+            verificationId = id
+            viewModel.setField(FieldTags.ON_CODE_SENT, true)
+            viewModel.setField(FieldTags.TOAST_MESSAGE, "Check your SMS!")
+            viewModel.stopLoading()
+        }
+
     }
 
-    private fun initPictureSelection() = pickScannerPhoto.launch("image/*")
+    /**
+     * After code has been sent, we use the user's input 6-digit verification code to verify then login or signUp
+     */
+    private fun createCredentials(){
+        val credential = PhoneAuthProvider.getCredential(verificationId, viewModel.verificationCode)
+        viewModel.setField(FieldTags.PHONE_CREDENTIAL, credential)
+    }
+
 
     /**
-     * A pre-built contract to pick an image from the gallery!
-     * If the received photoUri is not null, we convert the uri to a bitmap and set its value to that of [BookerCreationViewModel.photoField]
-     * Then we set the [ActivityUserCreationBinding.profilePhoto] bitmap to the selected image if the image is less than 4000*4000
-     * else we re-launch the selection
+     * Sends a verification code to the user's phone
      */
-    private val pickScannerPhoto: ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { photoUri ->
-            photoUri?.let { uri ->
-                val photoStream = contentResolver.openInputStream(uri)!!
-                viewModel.setFields(
-                    FieldTags.PROFILE_PHOTO,
-                    BitmapFactory.decodeStream(photoStream)
-                )
-                if (viewModel.photoField!!.width >= 4000 && viewModel.photoField!!.height >= 4000) {//In case image too large
-                    Toast.makeText(this, "The image is too large!", Toast.LENGTH_LONG).show()
-                    initPictureSelection()
-                } else // Sets the profile to the selected image
-                    binding.profilePhoto.setImageBitmap(viewModel.photoField!!)
-            }
-        }
+    private fun sendVerificationCode() = PhoneAuthProvider.verifyPhoneNumber(
+        PhoneAuthOptions.newBuilder()
+            .setPhoneNumber(viewModel.fullPhone)
+            .setTimeout(60L, TimeUnit.SECONDS)
+            .setActivity(this)
+            .setCallbacks(phoneCallback)
+            .build()
+    )
 
     /**
-     * Loads all values of the fields from the viewModel in case of config change
+     * Used to resend after time out
      */
-    private fun restoreFields() {
-        binding.occupation.editText!!.setText(viewModel.agencyName)
-        viewModel.photoField?.let { binding.profilePhoto.setImageBitmap(it) }
-        binding.name.editText!!.setText(viewModel.nameField)
-        binding.password.editText!!.setText(viewModel.passwordField)
-        binding.credential.editText!!.setText(viewModel.email)
-        binding.birthday.editText!!.setText(
-            Utils.formatDate(
-                viewModel.birthdayField,
-                "MMMM, dd yyyy"
-            )
+    private fun resendVerificationCode() {
+        val phoneAuthOptions = PhoneAuthOptions.newBuilder()
+            .setPhoneNumber(viewModel.fullPhone)
+            .setTimeout(60L, TimeUnit.SECONDS)
+            .setActivity(this)
+            .setCallbacks(phoneCallback)
+            .setForceResendingToken(resendToken)
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(
+            phoneAuthOptions
         )
-        binding.birthplace.editText!!.setText(viewModel.birthplaceField)
-        binding.radioGroupSex.check(viewModel.sexFieldId)
-        binding.checkBoxAdmin.isChecked = viewModel.isAdminField
     }
 
-    /**
-     * initiate the date picker to select the birthday
-     */
-    private fun selectBirthDay() {
-        packageName
-        val titleText = "Select your birthday"
-        val calendar = Calendar.getInstance()//An instance of the current Calendar
-        val today = calendar.timeInMillis// The current date in millis
-        calendar.set(1900, 1, 1)//Date in 1900s
-        val date1900s = calendar.timeInMillis
 
-        //We create constraint so that the user can only select dates between a particular interval
-        val bounds = CalendarConstraints.Builder()
-            .setStart(date1900s)//Smallest date which can be selected
-            .setEnd(today)//Furthest day which can be selected
-            .build()
-
-        //We create our date picker which the user will use to enter his travel day
-        //Showing the created date picker onScreen
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setCalendarConstraints(bounds)//Constrain the possible dates
-            .setTitleText(titleText)//Set the Title of the Picker
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-            .build()
-        //Sets the value of the edit text to the formatted value of the selection
-        datePicker.addOnPositiveButtonClickListener {
-            viewModel.setFields(FieldTags.BIRTHDAY, it)
-            binding.birthday.editText!!.setText(viewModel.formatDate(viewModel.birthdayField))
-        }
-        datePicker.showNow(supportFragmentManager, "")
-    }
-
-    /**
-     * Initialises [viewModel] using the agencyName and the path gotten from the agency launched-bundle
-     */
     private fun initViewModel() {
-        //Data gotten from the agency
-        val intentData = getIntentData()
-        val viewModelFactory = UserCreationViewModelFactory(
-            agencyName = intentData.first,
-            agencyId = intentData.second,
-        )
-        viewModel = ViewModelProvider(this, viewModelFactory)[BookerCreationViewModel::class.java]
-    }
-
-    /**
-     * Gets the intent data which is passed from the LauncherUI
-     * Depending on the content of the intent, we can know which type of User(Booker or Scanner) we registering
-     * @return A pair where first = agencyName and second = path and third = agencyId
-     */
-    private fun getIntentData(): Pair<String?, String?> {
-        val agencyName = intent.getStringExtra(AgencyCreationActivity.KEY_AGENCY_NAME)
-        val agencyFirestorePath = intent.getStringExtra(AgencyCreationActivity.KEY_OTA_PATH)
-        val agencyId = intent.getStringExtra(AgencyCreationActivity.KEY_AGENCY_ID)
-
-        Log.i("BookerCreationActivity", "agencyName=$agencyName, path=$agencyFirestorePath")
-        return Pair(agencyName, agencyId)
+        viewModel = ViewModelProvider(this)[BookerCreationViewModel::class.java]
     }
 
     /**
@@ -236,7 +187,7 @@ class BookerCreationActivity : AppCompatActivity() {
      * But only with the RESULT status
      */
     private fun navigateToLauncherUI() =
-        viewModel.userCreated.observe(this) {
+        viewModel.onBookerCreated.observe(this) {
             if (it) {
                 setResult(Activity.RESULT_OK, null)
                 finish()
@@ -257,31 +208,6 @@ class BookerCreationActivity : AppCompatActivity() {
 
     //Phone Auth
     /**
-    //Callback to be called during phone verification
-    private val phoneCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-    override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-    credentials = credential
-    viewModel.setFields(FieldTags.ON_PHONE_VERIFIED, true)
-    viewModel.startLoading()
-    }
-
-    override fun onVerificationFailed(exception: FirebaseException) {
-    Log.e("AUTH", exception.message!!)
-    viewModel.stopLoading()
-    }
-
-    override fun onCodeSent(
-    id: String,
-    forceResendToken: PhoneAuthProvider.ForceResendingToken
-    ) {
-    Log.i("PhoneAuth", "Code has been sent")
-    resendToken = forceResendToken
-    verificationId = id
-    viewModel.setFields(FieldTags.ON_CODE_SENT, true)
-    viewModel.stopLoading()
-    }
-
-    }
 
     /**
      * Launches the confirmation screen immediately the sms codehas been sent to the user phone
@@ -332,41 +258,5 @@ class BookerCreationActivity : AppCompatActivity() {
     dialog.show()
     }
 
-    /**
-     * After code has been sent, we use the user's input 6-digit verification code
-    */
-    private fun createCredentials(){
-    credentials = PhoneAuthProvider.getCredential(verificationId, viewModel.smsCodeField)
-    viewModel.setFields(FieldTags.ON_PHONE_VERIFIED, true)
-    }
-
-    /**
-     * Sends a verification code to the user's phone
-    */
-    private fun startPhoneVerification() =
-    PhoneAuthProvider.verifyPhoneNumber(
-    PhoneAuthOptions.newBuilder()
-    .setPhoneNumber(viewModel.emailField)
-    .setTimeout(60L, TimeUnit.SECONDS)
-    .setActivity(this)
-    .setCallbacks(phoneCallback)
-    .build()
-    )
-
-    /**
-     * Used to resend after time out
-    */
-    private fun resendVerificationCode() {
-    val phoneAuthOptions = PhoneAuthOptions.newBuilder()
-    .setPhoneNumber(viewModel.emailField)
-    .setTimeout(60L, TimeUnit.SECONDS)
-    .setActivity(this)
-    .setCallbacks(phoneCallback)
-    .setForceResendingToken(resendToken)
-    .build()
-    PhoneAuthProvider.verifyPhoneNumber(
-    phoneAuthOptions
-    )
-    }
      */
 }

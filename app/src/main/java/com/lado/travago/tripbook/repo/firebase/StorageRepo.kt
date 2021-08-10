@@ -1,5 +1,7 @@
 package com.lado.travago.tripbook.repo.firebase
 
+import android.content.Context
+import com.google.firebase.FirebaseApp
 import com.google.firebase.storage.FirebaseStorage
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
@@ -13,8 +15,10 @@ import kotlinx.coroutines.tasks.await
 import java.io.InputStream
 
 @ExperimentalCoroutinesApi
-class StorageRepo {
-    private val storage = FirebaseStorage.getInstance()
+class StorageRepo(val context: Context? = null) {
+    private var storage: FirebaseStorage = FirebaseStorage.getInstance(FirebaseApp.getInstance())
+
+
 
     /**
      * Adds a photo to FireStorage asynchronously as a .jpg file and return url

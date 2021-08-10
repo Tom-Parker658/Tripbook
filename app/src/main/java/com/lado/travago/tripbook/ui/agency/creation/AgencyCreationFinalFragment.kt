@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
-import com.lado.travago.tripbook.databinding.FragmentAgencyRegistration2Binding
+import com.lado.travago.tripbook.databinding.FragmentAgencyCreationFinalBinding
 import com.lado.travago.tripbook.model.enums.Region
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationActivity
 import kotlinx.coroutines.*
@@ -19,7 +20,7 @@ import kotlinx.coroutines.*
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class AgencyCreationFinalFragment : Fragment() {
-    private lateinit var binding: FragmentAgencyRegistration2Binding
+    private lateinit var binding: FragmentAgencyCreationFinalBinding
     private lateinit var viewModel: AgencyCreationViewModel
     private val uiScope = CoroutineScope(Dispatchers.Main)
 
@@ -31,7 +32,7 @@ class AgencyCreationFinalFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.fragment_agency_registration2,
+            R.layout.fragment_agency_creation_final,
             container,
             false
         )
@@ -55,7 +56,7 @@ class AgencyCreationFinalFragment : Fragment() {
     }
 
     private fun onFieldChange() {
-        binding.numVehicles.editText!!.addTextChangedListener{
+        binding.numVehicles.editText!!.addTextChangedListener {
             viewModel.saveField(AgencyCreationViewModel.FieldTags.NUM_VEHICLES, binding.numVehicles.editText!!.text.toString())
         }
         binding.costPerKm.editText!!.addTextChangedListener{
@@ -144,7 +145,7 @@ class AgencyCreationFinalFragment : Fragment() {
                 .setPositiveButton("Continue!"){dialog, _ ->
                     dialog.dismiss()
                     uiScope.launch {
-                        viewModel.createOTA()
+                        viewModel.saveAgencyInfo()
                     }
                 }
                 .show()

@@ -1,9 +1,8 @@
 package com.lado.travago.tripbook.model.enums
 
 import com.lado.travago.tripbook.model.enums.OCCUPATION.*
-import com.lado.travago.tripbook.model.enums.OCCUPATION.UNKNOWN
 import com.lado.travago.tripbook.model.enums.SEX.*
-import com.lado.travago.tripbook.model.enums.SEX.UNKNOWN
+
 
 
 /**

@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/NGWAN/StudioProjects/Tripbook/app/src/main/res/drawable/baseline_edit_24.xml" value="0.17364864864864865" />
+        <entry key="..\:/Users/NGWAN/StudioProjects/Tripbook/app/src/main/res/drawable/baseline_flag_24.xml" value="0.17364864864864865" />
+        <entry key="..\:/Users/NGWAN/StudioProjects/Tripbook/app/src/main/res/layout/activity_booker_creation.xml" value="0.1361842105263158" />
+        <entry key="..\:/Users/NGWAN/StudioProjects/Tripbook/app/src/main/res/layout/activity_user_creation.xml" value="0.18297101449275363" />
+        <entry key="..\:/Users/NGWAN/StudioProjects/Tripbook/app/src/main/res/layout/fragment_agency_creation1.xml" value="0.13485342019543975" />
+        <entry key="..\:/Users/NGWAN/StudioProjects/Tripbook/app/src/main/res/layout/fragment_booker_creation1.xml" value="0.21" />
+        <entry key="..\:/Users/NGWAN/StudioProjects/Tripbook/app/src/main/res/layout/fragment_booker_creation2.xml" value="0.21" />
+        <entry key="..\:/Users/NGWAN/StudioProjects/Tripbook/app/src/main/res/layout/fragment_booker_creation_final.xml" value="0.33" />
+      </map>
+    </option>
+  </component>
   <component name="EntryPointsManager">
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue="androidx.databinding.BindingAdapter" />

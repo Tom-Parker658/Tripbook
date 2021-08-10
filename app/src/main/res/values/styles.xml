@@ -1,15 +1,15 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme.Dark" parent="Theme.MaterialComponents">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="fontFamily">@font/aclonica</item>
-        <item name="font">@font/aclonica</item>
-    </style>
+<!--    <style name="AppTheme.Dark" parent="Theme.MaterialComponents.DayNight">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+<!--        <item name="colorAccent">@color/colorAccent</item>-->
+<!--        <item name="fontFamily">@font/aclonica</item>-->
+<!--        <item name="font">@font/aclonica</item>-->
+<!--    </style>-->
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -76,6 +76,30 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">8dp</item>
         <item name="backgroundTint">@color/colorAccent</item>
+    </style>
+
+<!--    Positive button-->
+    <style name="positiveButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="backgroundTint">@color/colorPositiveButton</item>
+        <item name="icon">@drawable/baseline_check_circle_24</item>
+    </style>
+<!--    Negative button-->
+    <style name="negativeButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="backgroundTint">@color/colorNegativeButton</item>
+        <item name="icon">@drawable/round_cancel_24</item>
+    </style>
+<!--    Neutral button-->
+    <style name="neutralButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="backgroundTint">@color/colorNeutralButton</item>
     </style>
 
     <style name="infoTextStyle">

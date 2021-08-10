@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "819741617511-atpabgu45baglq90ak14v6tvlnfg5sg0.apps.googleusercontent.com",
+          "client_id": "819741617511-2o9jash9e4ne0j7jgs2a0puvvqb8tbmg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.lado.travago.tripbook",
-            "certificate_hash": "1f7407abdcdeb51bcb7df825fa1b5210fa9c32c2"
+            "certificate_hash": "c2c8df85639df837864268ffad0a003e004a5188"
           }
         },
         {

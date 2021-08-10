@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -85,7 +86,7 @@ class JourneySearchFragment : Fragment() {
      * Set ways to get data from the views and assign it to the viewModels
      */
     private fun onFieldChange() {
-        binding.inputLocation.editText!!.addTextChangedListener{
+        binding.inputLocation.editText!!.addTextChangedListener {
             viewModel.setFields(JourneySearchViewModel.FieldTags.LOCATION, binding.inputLocation.editText!!.text.toString())
         }
         binding.inputDestination.editText!!.addTextChangedListener{

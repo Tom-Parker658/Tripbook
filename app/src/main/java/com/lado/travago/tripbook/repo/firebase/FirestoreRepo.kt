@@ -1,5 +1,7 @@
 package com.lado.travago.tripbook.repo.firebase
 
+import android.content.Context
+import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.*
 import com.lado.travago.tripbook.model.enums.DbOperations
 import com.lado.travago.tripbook.repo.FirestoreTags
@@ -12,9 +14,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
-class FirestoreRepo {
+class FirestoreRepo(context: Context? = null) {
     //Instance of our firestore db
-    private val db = FirebaseFirestore.getInstance()
+    private var db: FirebaseFirestore = FirebaseFirestore.getInstance(FirebaseApp.getInstance())
 
     /**
      * A little prototype class to organise data to enter a batched operation
