@@ -20,7 +20,7 @@ import kotlinx.coroutines.tasks.await
  */
 @ExperimentalCoroutinesApi
 class FirebaseAuthRepo() {
-    private var firebaseAuth = FirebaseAuth.getInstance(FirebaseApp.getInstance())
+    var firebaseAuth = FirebaseAuth.getInstance(FirebaseApp.getInstance())
 
     //Initialising and getting instances of the firebase services
 

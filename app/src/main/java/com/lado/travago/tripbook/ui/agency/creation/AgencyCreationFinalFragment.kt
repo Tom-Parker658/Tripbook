@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyCreationFinalBinding
+import com.lado.travago.tripbook.utils.contracts.AgencyConfigContract
 import kotlinx.coroutines.*
 
 @ExperimentalCoroutinesApi
@@ -30,7 +31,7 @@ class AgencyCreationFinalFragment : Fragment() {
             false
         )
         initViewModel()
-
+        onClickListeners()
 
     /*    //Restore data to the textFields after any configuration change
         restoreSavedData()
@@ -50,10 +51,10 @@ class AgencyCreationFinalFragment : Fragment() {
 
     private fun onFieldChange() {
         binding.numVehicles.editText!!.addTextChangedListener {
-            viewModel.setField(AgencyCreationViewModel.FieldTags.NUM_VEHICLES, binding.numVehicles.editText!!.text.toString())
+            viewModel.setField(AgencyCreationViewModel.IntentTags.NUM_VEHICLES, binding.numVehicles.editText!!.text.toString())
         }
         binding.costPerKm.editText!!.addTextChangedListener{
-            viewModel.setField(AgencyCreationViewModel.FieldTags.COST_PER_KM,  binding.costPerKm.editText!!.text.toString())
+            viewModel.setField(AgencyCreationViewModel.IntentTags.COST_PER_KM,  binding.costPerKm.editText!!.text.toString())
         }
     }
 */
@@ -158,6 +159,20 @@ class AgencyCreationFinalFragment : Fragment() {
         }
     }*/
 
+    /**Start and return the result from the activity config intent*/
+    private val agencyConfigIntent = registerForActivityResult(AgencyConfigContract()){/*Get Results*/}
+
+    private fun onClickListeners(){
+        /**
+         * Launches for configuration of trips or journeys
+         */
+        binding.btnTrips.setOnClickListener {
+            val configBundle = Bundle().apply {
+                putString("START_UP_OPTION", AgencyConfigActivity.AgencyConfigResources.StartUpTags.TRIPS_CONFIG.name)
+            }
+            agencyConfigIntent.launch(configBundle)
+        }
+    }
     private fun initViewModel() {
         viewModel = ViewModelProvider(requireActivity())[AgencyCreationViewModel::class.java]
     }

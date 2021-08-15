@@ -16,8 +16,7 @@ import java.io.InputStream
 
 @ExperimentalCoroutinesApi
 class StorageRepo(val context: Context? = null) {
-    private var storage: FirebaseStorage = FirebaseStorage.getInstance(FirebaseApp.getInstance())
-
+    var storage: FirebaseStorage = FirebaseStorage.getInstance(FirebaseApp.getInstance())
 
 
     /**

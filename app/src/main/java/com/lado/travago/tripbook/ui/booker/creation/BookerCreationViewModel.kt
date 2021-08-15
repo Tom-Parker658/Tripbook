@@ -119,8 +119,8 @@ class BookerCreationViewModel: ViewModel() {
         FieldTags.PROFILE_PHOTO -> photoField = value as Bitmap?
         FieldTags.SEX -> sex = value as SEX
         FieldTags.NATIONALITY -> nationalityField = value.toString()
-//        FieldTags.ID -> generatedID = value as String
-//        FieldTags.PASSWORD -> passwordField = value.toString()
+//        IntentTags.ID -> generatedID = value as String
+//        IntentTags.PASSWORD -> passwordField = value.toString()
         FieldTags.OCCUPATION -> occupationField = value.toString()
         FieldTags.FULL_PHONE -> fullPhone = value.toString()
     }

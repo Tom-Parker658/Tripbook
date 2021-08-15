@@ -3,6 +3,7 @@ package com.lado.travago.tripbook.model.users
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ServerTimestamp
 import com.lado.travago.tripbook.model.enums.SEX
+import com.lado.travago.tripbook.utils.Utils
 import java.util.*
 
 /**
@@ -28,7 +29,7 @@ data class Booker(
     val nationality: String,
     var occupation: String,
     var recoveryPhoneNumber: String,
-    ){
+) {
     @ServerTimestamp
     var addedOn: Timestamp = Timestamp.now()
 
@@ -42,4 +43,29 @@ data class Booker(
         "photoUrl" to photoUrl,
         "addedOn" to addedOn
     )
+
+    data class InvitationMessage(
+        private val agencyId: String,
+        private val agencyName: String,
+        private val logoUrl: String,
+        private val date: Timestamp,
+    ) {
+        //invitation message
+        val message = "$agencyName sent you and  invitation on ${
+            Utils.formatDate(
+                date.toDate().time,
+                "MMMM, dd YYYY"
+            )
+        } at ${
+            Utils.formatDate(
+                date.toDate().time,
+                "HH:mm:ss"
+            )
+        }. They wish to get you as their personalScanner.\n NB: You can be a scanner for only one agency!"
+
+        val messageMap = hashMapOf<String, Any?>(
+            "agencyID" to agencyId,
+            "message" to message
+        )
+    }
 }

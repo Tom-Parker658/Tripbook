@@ -24,6 +24,7 @@ import java.util.*
  *  a double /10 e.g 5.6/10
  *  @property likes represent the number of likes(good reviews by travellers)
  *  @property dislikes represent the number of dislikes(bad reviews by travellers)
+ *  @property modifiedOn tells if we are updating or else crearing the agency
  */
 
 
@@ -32,6 +33,7 @@ data class OnlineTravelAgency(
     var logoUrl: String = "",
     val motto: String,
     val nameCEO: String,
+    val creationYear: Int,
     val creationDecree: String,
     val bankNumber: Int,
     val mtnMoneyNumber: String,
@@ -39,34 +41,66 @@ data class OnlineTravelAgency(
     val supportEmail: String,
     val supportPhone1: String,
     val supportPhone2: String,
-    val isSuspended: Boolean = false
+    val supportCountryCode1: String, //e.g 237
+    val supportCountryCode2: String, //e.g 237
+    val phone1: String,//e.g 677889955
+    val phone2: String,//e.g 677889955
+    val isSuspended: Boolean = false,
+    val modifiedOn: Timestamp?
 ) {
-//    @DocumentId
+    //    @DocumentId
 //    var uid: String =""
     var costPerKm: Double = 10.0
+
     @ServerTimestamp
     var addedOn: Timestamp = Timestamp.now()
     var likes: Int = 1
     var dislikes: Int = 1
     val reputation: Double = (likes / (likes + dislikes)) * 10.0
 
-    val otaMap = hashMapOf<String, Any?>(
-        "agencyName" to agencyName,
-        "logoUrl" to logoUrl,
-        "pricePerKm" to costPerKm,
-        "motto" to motto,
-        "bankNumber" to bankNumber,
-        "mtnMoneyNumber" to mtnMoneyNumber,
-        "orangeMoneyNumber" to orangeMoneyNumber,
-        "supportEmail" to supportEmail,
-        "supportPhone1" to supportPhone1,
-        "supportPhone2" to supportPhone2,
-        "creationDecree" to creationDecree,
-        "likes" to likes,
-        "dislikes" to dislikes,
-        "reputation" to reputation,
-        "addedOn" to addedOn,
-        "isSuspended" to isSuspended
-    )
+    val otaMap =
+        if (modifiedOn == null) {//In this case, we are creating the agency and we instead set addedOn tag
+            hashMapOf<String, Any?>(
+                "agencyName" to agencyName,
+                "logoUrl" to logoUrl,
+                "nameCEO" to nameCEO,
+                "creationYear" to creationYear,
+                "pricePerKm" to costPerKm,
+                "motto" to motto,
+                "bankNumber" to bankNumber,
+                "mtnMoneyNumber" to mtnMoneyNumber,
+                "orangeMoneyNumber" to orangeMoneyNumber,
+                "supportEmail" to supportEmail,
+                "supportPhone1" to supportPhone1,
+                "supportPhone2" to supportPhone2,
+                "phoneCode1" to supportCountryCode1,
+                "phoneCode2" to supportCountryCode2,
+                "phone1" to phone1,
+                "phone2" to phone2,
+                "creationDecree" to creationDecree,
+
+                "likes" to likes,
+                "dislikes" to dislikes,
+                "reputation" to reputation,
+                "addedOn" to addedOn,
+                "modifiedOn" to addedOn,
+                "isSuspended" to isSuspended,
+            )
+        } else {//We are updating agency info instead of creating
+            hashMapOf<String, Any?>(
+                "agencyName" to agencyName,
+                "logoUrl" to logoUrl,
+                "pricePerKm" to costPerKm,
+                "motto" to motto,
+                "bankNumber" to bankNumber,
+                "mtnMoneyNumber" to mtnMoneyNumber,
+                "orangeMoneyNumber" to orangeMoneyNumber,
+                "supportEmail" to supportEmail,
+                "supportPhone1" to supportPhone1,
+                "supportPhone2" to supportPhone2,
+                "creationDecree" to creationDecree,
+                "modifiedOn" to modifiedOn,
+            )
+        }
 }
 

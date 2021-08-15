@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
-class FirestoreRepo(context: Context? = null) {
+class FirestoreRepo() {
     //Instance of our firestore db
-    private var db: FirebaseFirestore = FirebaseFirestore.getInstance(FirebaseApp.getInstance())
+    var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     /**
      * A little prototype class to organise data to enter a batched operation
@@ -39,6 +39,7 @@ class FirestoreRepo(context: Context? = null) {
         collectionPath: String,
     ) = flow {
         emit(State.loading())
+
 
         val collection = db.collection(collectionPath)
         val document = collection.add(data).await()
@@ -172,6 +173,18 @@ class FirestoreRepo(context: Context? = null) {
     }.flowOn(Dispatchers.IO)
 
     /**
+     * Gets a collection reference
+     */
+    fun getCollection(path: String) = flow{
+        emit(State.loading())
+        val collection = db.collection(path).get().await()
+        emit(State.success(collection))
+    }.catch {
+        emit(State.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
+    /**
      * Identifies the current user. If it is a "Booker" or "Scanner"
      * @param uid uses the uid to query the document and then checks the origin of the uid either from
      * Scanner collection of Booker Booker collection
@@ -183,4 +196,5 @@ class FirestoreRepo(context: Context? = null) {
     }.catch {
         emit(State.failed(FirestoreTags.Bookers.toString()))
     }.flowOn(Dispatchers.IO)
+
 }

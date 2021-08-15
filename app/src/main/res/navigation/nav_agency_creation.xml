@@ -7,19 +7,5 @@
     <fragment
         android:id="@+id/agencyCreation1Fragment"
         android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreation1Fragment"
-        android:label="AgencyCreation1Fragment" >
-        <action
-            android:id="@+id/action_agencyCreation1Fragment_to_agencyCreationFinalFragment"
-            app:destination="@id/agencyCreationFinalFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/agencyCreationFinalFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreationFinalFragment"
-        android:label="AgencyCreationFinalFragment" >
-        <action
-            android:id="@+id/action_agencyCreationFinalFragment_to_agencyCreation1Fragment"
-            app:destination="@id/agencyCreation1Fragment"
-            app:popUpTo="@id/agencyCreation1Fragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        android:label="AgencyCreation1Fragment" />
 </navigation>

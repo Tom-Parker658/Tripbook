@@ -24,7 +24,7 @@
             tools:context=".ui.agency.creation.AgencyCreationFinalFragment">
 
             <Button
-                android:id="@+id/btn_trips2"
+                android:id="@+id/btn_parks"
                 style="@style/neutralButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
                 android:layout_width="0dp"
                 android:text="My Trips"
                 app:icon="@drawable/baseline_directions_bus_24"
-                app:layout_constraintBottom_toTopOf="@+id/btn_trips2"
+                app:layout_constraintBottom_toTopOf="@+id/btn_parks"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +95,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_trips2" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_parks" />
 
             <Button
                 android:id="@+id/btn_delete_agency"

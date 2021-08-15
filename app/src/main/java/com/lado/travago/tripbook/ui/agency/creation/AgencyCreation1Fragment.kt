@@ -13,10 +13,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import com.hbb20.CCPCountry
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyCreation1Binding
 import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationViewModel.*
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationViewModel
+import com.lado.travago.tripbook.utils.loadImageFromUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -41,7 +43,7 @@ class AgencyCreation1Fragment : Fragment() {
 
         initViewModel()
         //Restore data to the textFields after any configuration change
-        restoreSavedData(savedInstanceState)
+        restoreSavedData()
         onFieldChange()
         onNextClicked()
 
@@ -53,6 +55,10 @@ class AgencyCreation1Fragment : Fragment() {
      * Saves the content of the fields to the viewModel when any field is changes
      */
     private fun onFieldChange() {
+        //Tries to load the logo gotten from the database
+        if (viewModel.logoUrl.isNotBlank())
+            binding.logoField.loadImageFromUrl(viewModel.logoUrl)
+
         binding.name.editText!!.addTextChangedListener {
             viewModel.setField(FieldTags.NAME, it.toString())
         }
@@ -94,21 +100,13 @@ class AgencyCreation1Fragment : Fragment() {
         //Setup the phone formatter
         binding.countryCodePicker1.registerCarrierNumberEditText(binding.supportPhone1.editText)
         binding.countryCodePicker2.registerCarrierNumberEditText(binding.supportPhone2.editText)
+    }
 
-    }
-    /**
-     * Saves country codes
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt("COUNTRY_CODE_1", binding.countryCodePicker1.selectedCountryCodeAsInt)
-        outState.putInt("COUNTRY_CODE_2", binding.countryCodePicker2.selectedCountryCodeAsInt)
-        super.onSaveInstanceState(outState)
-    }
 
     /**
      * Restore all saved data to their respective views
      */
-    private fun restoreSavedData(bundle: Bundle?) {
+    private fun restoreSavedData() {
         binding.name.editText!!.setText(viewModel.nameField)
         binding.creationYear.editText!!.setText(viewModel.creationYearField)
         binding.supportPhone1.editText!!.setText(viewModel.supportPhone1Field)
@@ -117,14 +115,14 @@ class AgencyCreation1Fragment : Fragment() {
         viewModel.logoBitmap?.let{
             binding.logoField.setImageBitmap(it)
         }
+        binding.nameOfCEO.editText!!.setText(viewModel.nameCEOField)
         binding.supportEmail.editText!!.setText(viewModel.supportEmailField)
         binding.motto.editText!!.setText(viewModel.mottoField)
         binding.orangeMoney.editText!!.setText(viewModel.orangeMoneyField)
         binding.bank.editText!!.setText(viewModel.bankField)
-        bundle?.getInt("COUNTRY_CODE_1")?.let { binding.countryCodePicker1.setCountryForPhoneCode(it) }
-        bundle?.getInt("COUNTRY_CODE_2")?.let { binding.countryCodePicker2.setCountryForPhoneCode(it) }
+        binding.countryCodePicker1.setCountryForPhoneCode(viewModel.phoneCode1.toInt())
+        binding.countryCodePicker2.setCountryForPhoneCode(viewModel.phoneCode2.toInt())
     }
-
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(requireActivity())[AgencyCreationViewModel::class.java]

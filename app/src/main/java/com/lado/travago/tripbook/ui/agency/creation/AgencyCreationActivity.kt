@@ -29,7 +29,6 @@ class AgencyCreationActivity : AppCompatActivity() {
         observeLiveData()
         //setups action bar with the back button
         val navController = findNavController(R.id.my_booker_nav_host_fragment)
-        NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
 
@@ -52,23 +51,17 @@ class AgencyCreationActivity : AppCompatActivity() {
                 }
             }
         }
+        //In this case we go back to the launcher activity which is actually th config activity
         viewModel.onInfoSaved.observe(this){
             if(it){
-                try {
-                    findNavController(binding.myAgencyNavHostFragment.id).navigate(R.id.action_agencyCreation1Fragment_to_agencyCreationFinalFragment)
-                }catch(exception: Exception){
-                    //Incase we are already in that screen
-                }
+                finish()
             }
         }
-    }
-
-    /**
-     * Navigate up in the stack when the back button is clicked
-     */
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = this.findNavController(binding.myAgencyNavHostFragment.id)
-        return navController.navigateUp()
+        viewModel.onVerificationFailed.observe(this){
+            if(it){
+                //TODO Snackbar to display message
+            }
+        }
     }
 
 

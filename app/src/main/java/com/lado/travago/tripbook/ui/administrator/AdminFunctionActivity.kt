@@ -1,6 +1,7 @@
 package com.lado.travago.tripbook.ui.administrator
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -27,11 +28,28 @@ class AdminFunctionActivity : AppCompatActivity() {
             doTheUpload()
             Toast.makeText(this, "Do it!", Toast.LENGTH_LONG).show()
         }
+        observeLiveData()
         binding.root
     }
 
-    private fun doTheUpload() = CoroutineScope(Dispatchers.IO).launch {
-        viewModel.uploadJourney()
+    private fun doTheUpload() = CoroutineScope(Dispatchers.Main).launch {
+        viewModel.addJourneys()
     }
+
+    private fun observeLiveData(){
+        viewModel.text.observe(this){
+            if(it.isNotBlank()) {
+                binding.nameText.text = it
+            }
+        }
+        viewModel.toastMessage.observe(this){
+            if(it.isNotBlank()) {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                Log.d("AdminFunctions", it)
+            }
+        }
+    }
+
+
 
 }

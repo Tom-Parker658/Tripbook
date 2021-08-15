@@ -244,7 +244,7 @@ class BookerCreationActivity : AppCompatActivity() {
     .setPositiveButton("CONFIRM") { dialog, _ ->
     if (codeBinding.code.editText!!.length() == 6) {
     viewModel.setFields(
-    FieldTags.SMS_CODE,
+    IntentTags.SMS_CODE,
     codeBinding.code.editText!!.text.toString()
     )
     createCredentials()
