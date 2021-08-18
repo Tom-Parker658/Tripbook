@@ -6,12 +6,13 @@ import com.lado.travago.tripbook.model.admin.Journey
 import com.lado.travago.tripbook.model.enums.DataResources
 //import com.lado.travago.tripbook.model.enums.Region
 import java.util.*
+import java.util.Collections.*
 
 
 /**
  * contains utilities for the admin panel
  */
-object AdminUtils {
+object  AdminUtils {
 
 
     /**
@@ -28,6 +29,7 @@ object AdminUtils {
     fun Collection<String>.removePredicate(vararg predicate: String): Collection<String>{
         var newList = emptyList<String>() as Collection<String>
         this.forEach {
+            """"""
             if (it !in predicate) newList+=it
         }
         return newList

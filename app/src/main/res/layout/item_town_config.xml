@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Parks"
+                android:textColor="#1E88E5"
                 android:textSize="12sp"
                 app:icon="@drawable/baseline_my_location_24"
                 app:layout_constraintBottom_toBottomOf="parent"

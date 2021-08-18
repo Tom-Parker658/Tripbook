@@ -52,5 +52,6 @@ fun TextView.setAgeFromMillis(birthdayInMillis: Long){
  */
 @BindingAdapter("formatDateFromMillis")
 fun TextView.formatDate(dateInMillis: Long){
-    text = SimpleDateFormat("dd/MM/YYYY", Locale.getDefault()).toString()
+    //TODO:YYYY
+    text = SimpleDateFormat("dd/MM", Locale.getDefault()).toString()
 }
