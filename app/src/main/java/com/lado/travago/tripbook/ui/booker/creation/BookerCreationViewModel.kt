@@ -138,7 +138,7 @@ class BookerCreationViewModel: ViewModel() {
      * Adds a booker to the database
      */
     suspend fun saveBookerInfo(){
-        val photoStream = Utils.convertBitmapToStream(photoField!!, Bitmap.CompressFormat.PNG, 0)
+        val photoStream = Utils.convertBitmapToStream(photoField, Bitmap.CompressFormat.PNG, 0)
         //Upload the profile photo to the cloud storage and retrieve url
         storageRepo.uploadPhoto(
             photoStream,

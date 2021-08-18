@@ -1,5 +1,3 @@
-@file:Suppress("KDocUnresolvedReference")
-
 package com.lado.travago.tripbook.ui.recyclerview.diffutils
 
 import androidx.recyclerview.widget.DiffUtil

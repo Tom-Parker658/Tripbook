@@ -8,7 +8,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.model.admin.Journey
 import com.lado.travago.tripbook.model.enums.TravelTime
 import com.lado.travago.tripbook.repo.State
-import com.lado.travago.tripbook.repo.places.PlacesRepo
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -57,10 +57,10 @@ class JourneySearchViewModel : ViewModel() {
     //We want our coroutine t work background in the uiScope as it will need to update the UI. So we use Dispatcher.Main
     private val uiScope = CoroutineScope(Dispatchers.Main)
 
-
-    /**
+/*
+    *//**
      * Searches Journey and all the agencies which can offer the journey
-     */
+     *//*
     suspend fun searchMyJourney(){
         val placeRepo = PlacesRepo()
 
@@ -96,7 +96,7 @@ class JourneySearchViewModel : ViewModel() {
                 }
             }
         }
-    }
+    }*/
 
     /**
      * Contains different identifiers for the fields in our searching form

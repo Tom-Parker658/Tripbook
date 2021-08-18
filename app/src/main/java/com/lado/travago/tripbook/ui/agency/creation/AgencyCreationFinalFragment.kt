@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyCreationFinalBinding
+import com.lado.travago.tripbook.ui.agency.creation.config_panel.AgencyConfigActivity
 import com.lado.travago.tripbook.utils.contracts.AgencyConfigContract
 import kotlinx.coroutines.*
 
@@ -167,10 +168,10 @@ class AgencyCreationFinalFragment : Fragment() {
          * Launches for configuration of trips or journeys
          */
         binding.btnTrips.setOnClickListener {
-            val configBundle = Bundle().apply {
-                putString("START_UP_OPTION", AgencyConfigActivity.AgencyConfigResources.StartUpTags.TRIPS_CONFIG.name)
-            }
-            agencyConfigIntent.launch(configBundle)
+//            val configBundle = Bundle().apply {
+//                putString("START_UP_OPTION", AgencyConfigActivity.AgencyConfigResources.StartUpTags.TRIPS_CONFIG.name)
+//            }
+//            agencyConfigIntent.launch(configBundle)
         }
     }
     private fun initViewModel() {

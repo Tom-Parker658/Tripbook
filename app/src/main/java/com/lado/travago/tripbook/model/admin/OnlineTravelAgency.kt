@@ -35,7 +35,7 @@ data class OnlineTravelAgency(
     val nameCEO: String,
     val creationYear: Int,
     val creationDecree: String,
-    val bankNumber: Int,
+    val bankNumber: String,
     val mtnMoneyNumber: String,
     val orangeMoneyNumber: String,
     val supportEmail: String,

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_agency_config"
+    app:startDestination="@id/townsConfigFragment">
+    <fragment
+        android:id="@+id/parksConfigFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.ParksConfigFragment"
+        android:label="fragment_parks_config"
+        tools:layout="@layout/fragment_parks_config" />
+    <fragment
+        android:id="@+id/scannerConfigFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.ScannerConfigFragment"
+        android:label="fragment_scanner_config"
+        tools:layout="@layout/fragment_scanner_config" />
+    <fragment
+        android:id="@+id/agencyCreationFinalFragment2"
+        android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreationFinalFragment"
+        android:label="AgencyCreationFinalFragment" >
+        <action
+            android:id="@+id/action_agencyCreationFinalFragment2_to_parksConfigFragment"
+            app:destination="@id/parksConfigFragment" />
+        <action
+            android:id="@+id/action_agencyCreationFinalFragment2_to_scannerConfigFragment"
+            app:destination="@id/scannerConfigFragment" />
+        <action
+            android:id="@+id/action_agencyCreationFinalFragment2_to_agencyCreationActivity"
+            app:destination="@id/agencyCreationActivity" />
+        <action
+            android:id="@+id/action_agencyCreationFinalFragment2_to_townsConfigFragment"
+            app:destination="@id/townsConfigFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/agencyCreationActivity"
+        android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreationActivity"
+        android:label="AgencyCreationActivity" />
+    <fragment
+        android:id="@+id/townsConfigFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.TownsConfigFragment"
+        android:label="TownsConfigFragment" />
+</navigation>

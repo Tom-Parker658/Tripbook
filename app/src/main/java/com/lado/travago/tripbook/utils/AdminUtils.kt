@@ -4,7 +4,7 @@ package com.lado.travago.tripbook.utils
 import com.lado.travago.tripbook.model.admin.Destination
 import com.lado.travago.tripbook.model.admin.Journey
 import com.lado.travago.tripbook.model.enums.DataResources
-import com.lado.travago.tripbook.model.enums.Region
+//import com.lado.travago.tripbook.model.enums.Region
 import java.util.*
 
 
@@ -36,9 +36,9 @@ object AdminUtils {
     /**
      * Removes a predicate
      */
-    /**
+ /*   *//**
      * Takes in a string and returns the corresponding [Region]
-     */
+     *//*
     fun parseRegionFromString(regionInString: String) =
         when (regionInString.toLowerCase(Locale.ROOT)){
             "north" -> Region.NORTH
@@ -54,7 +54,7 @@ object AdminUtils {
             "south" -> Region.SOUTH
             else -> Region.UNKNOWN
         }
-
+*/
 
 
     /**

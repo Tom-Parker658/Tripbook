@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.collect
  */
 @ExperimentalCoroutinesApi
 class AgencyConfigViewModel(
-    var startUpOption: AgencyConfigResources.StartUpTags
+//    var startUpOption: AgencyConfigResources.StartUpTags
 ) : ViewModel() {
     //Ids  of the currently clicked in the recycler views
     private val _masterItemID = MutableLiveData("")
@@ -50,32 +50,32 @@ class AgencyConfigViewModel(
 
 
     //Gets data for master then populates the list of items
-    suspend fun masterData() {
-        when (startUpOption.name) {
-            /**
-             * In this case, the master data is a list of countries from the {Planets/Earth/Continents/Africa} doc and specifically
-             * from the {countryList} Array.
-             */
-            AgencyConfigResources.StartUpTags.TRIPS_CONFIG.name -> {
-                firestoreRepo.getDocument("Planets/Earth/Continents/Africa").collect {
-                    when (it) {
-                        is State.Loading -> _masterLoading.value = true
-                        is State.Failed -> {
-                            _masterLoading.value = false
-                            _onMasterFailed.value = it.message
-                        }
-                        is State.Success -> {
-                            _masterLoading.value = false
-                            //We populate the list of items using the country List
-                            _masterDataList.value = it.data["countryList"]!! as List<String> as MutableList<Any>
-                        }
-                    }
-                }
-            }
-            else -> {
-            }
-        }
-    }
+//    suspend fun masterData() {
+//        when (startUpOption.name) {
+//            /**
+//             * In this case, the master data is a list of countries from the {Planets/Earth/Continents/Africa} doc and specifically
+//             * from the {countryList} Array.
+//             */
+//            AgencyConfigResources.StartUpTags.TRIPS_CONFIG.name -> {
+//                firestoreRepo.getDocument("Planets/Earth/Continents/Africa").collect {
+//                    when (it) {
+//                        is State.Loading -> _masterLoading.value = true
+//                        is State.Failed -> {
+//                            _masterLoading.value = false
+//                            _onMasterFailed.value = it.message
+//                        }
+//                        is State.Success -> {
+//                            _masterLoading.value = false
+//                            //We populate the list of items using the country List
+//                            _masterDataList.value = it.data["countryList"]!! as List<String> as MutableList<Any>
+//                        }
+//                    }
+//                }
+//            }
+//            else -> {
+//            }
+//        }
+//    }
 
     //Gets data for slave then populates the list of items
     suspend fun slaveData(collectionPath: String) {

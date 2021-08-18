@@ -5,13 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContract
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.AgencyConfigActivity.AgencyConfigResources.StartUpTags
+import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationActivity
+//import com.lado.travago.tripbook.ui.agency.creation.config_panel.AgencyConfigActivity.AgencyConfigResources.StartUpTags
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 
 /**
  * This is a contract to launch the configuration activity for an agency
  * Uses the [StartUpTags] to specify what we actually want to do
  */
+@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 class AgencyConfigContract : ActivityResultContract<Bundle, String>() {
 
@@ -19,7 +22,7 @@ class AgencyConfigContract : ActivityResultContract<Bundle, String>() {
     override fun createIntent(
         context: Context,
         dataBundle: Bundle
-    ) = Intent(context, AgencyConfigActivity::class.java)
+    ) = Intent(context, AgencyCreationActivity::class.java)
 
     /** Convert result obtained from [Activity.onActivityResult] to Output  */
     override fun parseResult(resultCode: Int, infoIntent: Intent?) = when (resultCode) {

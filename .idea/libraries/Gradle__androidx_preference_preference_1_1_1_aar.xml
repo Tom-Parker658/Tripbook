@@ -1,16 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.preference:preference:1.1.1@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/4939298ed99282c44bf1cb7733a90108/preference-1.1.1/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/caches/transforms-2/files-2.1/4939298ed99282c44bf1cb7733a90108/preference-1.1.1/res" />
-      <root url="jar://$USER_HOME$/caches/transforms-2/files-2.1/4939298ed99282c44bf1cb7733a90108/preference-1.1.1/jars/classes.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/5d60ce0567f54322f11bc4380252d456/transformed/preference-1.1.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5d60ce0567f54322f11bc4380252d456/transformed/preference-1.1.1/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5d60ce0567f54322f11bc4380252d456/transformed/preference-1.1.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5d60ce0567f54322f11bc4380252d456/transformed/preference-1.1.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/caches/modules-2/files-2.1/androidx.preference/preference/1.1.1/a65e127aa3d1be8feb41a53808f7b3f978503cca/preference-1.1.1-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.preference/preference/1.1.1/a65e127aa3d1be8feb41a53808f7b3f978503cca/preference-1.1.1-sources.jar!/" />
     </SOURCES>
   </library>

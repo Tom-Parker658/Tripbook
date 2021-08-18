@@ -163,7 +163,7 @@ class JourneySearchFragment : Fragment() {
                 it.findNavController().navigate(JourneySearchFragmentDirections.actionJourneySearchFragmentToJourneySearchResultFragment())
                 //Searches for the journeys
                 CoroutineScope(Dispatchers.Main).launch {
-                    viewModel.searchMyJourney()
+//                    viewModel.searchMyJourney()
                 }
             }
             else{

@@ -310,11 +310,6 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_agencyCreationFinalFragment2_to_tripsConfigFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
@@ -344,13 +339,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="tripsConfigFragment">
+                  <entry key="townsConfigFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="724" />
+                            <option name="x" value="259" />
+                            <option name="y" value="675" />
                           </Point>
                         </option>
                       </LayoutPositions>

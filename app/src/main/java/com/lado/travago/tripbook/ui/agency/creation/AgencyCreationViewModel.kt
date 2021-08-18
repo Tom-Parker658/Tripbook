@@ -60,7 +60,7 @@ class AgencyCreationViewModel : ViewModel() {
         private set
     var mottoField = ""
         private set
-    var bankField = 0
+    var bankField = ""
         private set
     var momoField = ""
         private set
@@ -104,34 +104,46 @@ class AgencyCreationViewModel : ViewModel() {
      * Checks if th agency already exist in the database or is under creation
      */
     suspend fun getExistingAgencyData() =
-        firestoreRepo.getDocument("OnlineTransportAgency/${authRepo.firebaseAuth.currentUser!!.uid}")
-            .collect {
-                when (it) {
-                    is State.Loading -> _loading.value = true
-                    is State.Success -> {
-                        _agencyDbData.value = it.data!!
-                        _loading.value = false
-                    }
-                    is State.Failed -> {
-                        _loading.value = false
-                        _onVerificationFailed.value = true
-                    }
+        firestoreRepo.getDocument("Bookers/${authRepo.firebaseAuth.currentUser!!.uid}").collect {
+            when (it) {
+                is State.Success-> {
+                    firestoreRepo.getDocument("OnlineTransportAgency/${it.data["agency"]}")
+                        .collect { it1 ->
+                            when (it1) {
+                                is State.Loading -> _loading.value = true
+                                is State.Success -> {
+                                    _agencyDbData.value = it1.data!!
+                                    _loading.value = false
+                                }
+                                is State.Failed -> {
+                                    _loading.value = false
+                                    _onVerificationFailed.value = true
+                                }
+                            }
+                        }
+                }
+                is State.Loading -> _loading.value = true
+                is State.Failed->{
+                    _loading.value = false
+                    _onVerificationFailed.value = true
                 }
             }
 
+        }
     /**
      * Populate fields with existing data if any
      * Should be called only when the [_onVerificationFailed]==false
      */
     fun fillExistingData() {
         if (_agencyDbData.value!!.exists()) {//If agency already existed we fill fields
+            _toastMessage.value = "Data exist"
             nameField = _agencyDbData.value!!.getString("agencyName")!!
             decreeNumberField = _agencyDbData.value!!.getString("creationDecree")!!
             nameCEOField = _agencyDbData.value!!.getString("nameCEO")!!
             creationYearField = _agencyDbData.value!!.getLong("creationYear")!!.toInt()
             mottoField = _agencyDbData.value!!.getString("motto")!!
             supportEmailField = _agencyDbData.value!!.getString("supportEmail")!!
-            bankField = _agencyDbData.value!!.getLong("bankNumber")!!.toInt()
+            bankField = _agencyDbData.value!!.getLong("bankNumber")!!.toString()
             momoField = _agencyDbData.value!!.getString("mtnMoneyNumber")!!
             orangeMoneyField = _agencyDbData.value!!.getString("orangeMoneyNumber")!!
             logoUrl = _agencyDbData.value!!.getString("logoUrl")!!
@@ -141,7 +153,7 @@ class AgencyCreationViewModel : ViewModel() {
             supportPhone2Field = _agencyDbData.value!!.getString("supportPhone2")!!
             phoneCode1 = _agencyDbData.value!!.getString("phoneCode1")!!
             phoneCode2 = _agencyDbData.value!!.getString("phoneCode2")!!
-        }
+        }else _toastMessage.value = "Doesnot exist yet"
     }
 
     /**
@@ -159,8 +171,7 @@ class AgencyCreationViewModel : ViewModel() {
             FieldTags.FULL_SUPPORT_PHONE_2 -> fullSupportPhone2Field = value.toString()
             FieldTags.PHONE_CODE_1 -> phoneCode1 = value.toString()
             FieldTags.PHONE_CODE_2 -> phoneCode2 = value.toString()
-            FieldTags.BANK_NUMBER -> bankField =
-                if (value.toString().isBlank()) 0 else value.toString().toInt()
+            FieldTags.BANK_NUMBER -> bankField = value.toString()
             FieldTags.MOMO_NUMBER -> momoField = value.toString()
             FieldTags.ORANGE_NUMBER -> orangeMoneyField = value.toString()
             FieldTags.CEO_NAME -> nameCEOField = value.toString()
@@ -320,8 +331,9 @@ class AgencyCreationViewModel : ViewModel() {
 
     fun checkFields(fragment: Fragment) = when (fragment) {
         is AgencyCreation1Fragment -> {
-            if (nameField.isBlank() || mottoField.isBlank() || nameCEOField.isBlank() || creationYearField == 0 || bankField == 0 || supportEmailField.isBlank() || momoField.isBlank() || momoField.isNotBlank() || orangeMoneyField.isBlank() || decreeNumberField.isBlank()) {
+            if (nameField.isBlank()  || nameCEOField.isBlank() || creationYearField == 0 || bankField.isBlank() || supportEmailField.isBlank() || momoField.isBlank() || mottoField.isBlank() || orangeMoneyField.isBlank() || decreeNumberField.isBlank()) {
                 _toastMessage.value = "Do not leave some fields empty"
+                _saveInfo.value = true
             } else if (!isBasicallyValidEmailAddress(supportEmailField)) {
                 _toastMessage.value = "Invalid Email Address"
             } else {

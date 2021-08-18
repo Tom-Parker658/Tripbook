@@ -6,11 +6,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityAgencyCreationBinding
-import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationViewModel.*
+import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationViewModel.FieldTags
 import kotlinx.coroutines.*
 
 @ExperimentalCoroutinesApi
@@ -27,8 +26,6 @@ class AgencyCreationActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[AgencyCreationViewModel::class.java]
 
         observeLiveData()
-        //setups action bar with the back button
-        val navController = findNavController(R.id.my_booker_nav_host_fragment)
     }
 
 
@@ -37,14 +34,14 @@ class AgencyCreationActivity : AppCompatActivity() {
             if (it == true) binding.progressBar.visibility = View.VISIBLE
             else binding.progressBar.visibility = View.GONE
         }
-        viewModel.toastMessage.observe(this){
-            if(it.isNotBlank()) {
+        viewModel.toastMessage.observe(this) {
+            if (it.isNotBlank()) {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "")
             }
         }
-        viewModel.saveInfo.observe(this){
-            if(it){
+        viewModel.saveInfo.observe(this) {
+            if (it) {
                 CoroutineScope(Dispatchers.Main).launch {
                     viewModel.setField(FieldTags.SAVE_INFO, false)
                     viewModel.saveAgencyInfo()
@@ -52,17 +49,26 @@ class AgencyCreationActivity : AppCompatActivity() {
             }
         }
         //In this case we go back to the launcher activity which is actually th config activity
-        viewModel.onInfoSaved.observe(this){
-            if(it){
+        viewModel.onInfoSaved.observe(this) {
+            if (it) {
                 finish()
             }
         }
-        viewModel.onVerificationFailed.observe(this){
-            if(it){
-                //TODO Snackbar to display message
+        viewModel.onVerificationFailed.observe(this) {
+            //We end activity if we can't verify we are editing or creating an agency
+            if (it) {
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Verification failed!")
+                    .setIcon(R.drawable.round_cancel_24)
+                    .setMessage("We could not determine if you are creating or editing an agency!")
+                    .setOnDismissListener { finish() }
+                    .setView(binding.root)
+                    .setOnCancelListener { finish() }
+                    .setPositiveButton("CLOSE") { _, _ ->
+                       finish()
+                    }
+                    .create().show()
             }
         }
     }
-
-
 }

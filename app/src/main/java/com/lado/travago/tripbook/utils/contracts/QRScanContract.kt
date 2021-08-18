@@ -10,7 +10,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 class QRScanContract: ActivityResultContract<Fragment, String>() {
     /**
      * Creates the scan intent using a fragment
-     */
+     */ 
     override fun createIntent(context: Context, fragment: Fragment): Intent =
         IntentIntegrator.forSupportFragment(fragment)
             //Specifies only QR CODES and not bar codes should be scanned

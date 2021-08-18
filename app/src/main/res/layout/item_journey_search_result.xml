@@ -81,14 +81,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:drawableEnd="@drawable/baseline_vip_24"
                 android:text="@string/switch_vip_jouney"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/distance"
                 app:layout_constraintStart_toEndOf="@+id/item_text_journey_day"
-                app:layout_constraintTop_toBottomOf="@+id/item_text_agency_reputation" />
+                app:layout_constraintTop_toBottomOf="@+id/item_text_agency_reputation"
+                app:drawableEndCompat="@drawable/baseline_vip_24" />
 
             <ImageView
                 android:id="@+id/item_image_agency_logo"

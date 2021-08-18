@@ -19,8 +19,7 @@ import com.lado.travago.tripbook.databinding.FragmentAgencyCreation1Binding
 import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationViewModel.*
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationViewModel
 import com.lado.travago.tripbook.utils.loadImageFromUrl
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.*
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
@@ -42,8 +41,17 @@ class AgencyCreation1Fragment : Fragment() {
         )
 
         initViewModel()
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.getExistingAgencyData()
+            viewModel.fillExistingData()
+        }
+
         //Restore data to the textFields after any configuration change
-        restoreSavedData()
+        try {
+            restoreSavedData()
+        }catch (e:Exception){
+            //TODO: NOTHING
+        }
         onFieldChange()
         onNextClicked()
 

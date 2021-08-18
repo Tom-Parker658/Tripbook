@@ -7,8 +7,6 @@ import com.google.firebase.firestore.Source
 import com.lado.travago.tripbook.model.enums.DataResources
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
-import com.lado.travago.tripbook.repo.places.PlacesRepo
-import com.lado.travago.tripbook.utils.AdminUtils.removePredicate
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import java.util.*
@@ -18,14 +16,13 @@ import kotlin.collections.HashMap
 @ExperimentalCoroutinesApi
 class AdminFunctionViewModel : ViewModel() {
     private val db = FirestoreRepo()
-    private val placeRepo = PlacesRepo()
 
     /**
      * Administrator utility
      * Introduces journeys to the TranSpeed database
      * It run through all combination of journeys found in [DataResources.journeyDistanceList] and uploads each to the database
      */
-    @Deprecated("Very Old and inneficient!")
+    /*@Deprecated("Very Old and inneficient!")
     suspend fun uploadJourney() {
         db.getAllDocuments("Destinations").collect { queryState ->
             when (queryState) {
@@ -38,10 +35,10 @@ class AdminFunctionViewModel : ViewModel() {
                 is State.Success -> {
                     Log.i("Transfer Response", "${queryState.data.documents.size}")
 
-                    /**
+                    *//**
                      * Go through all the possible journey combination list and for each combination, uploads it to the database
                      * based on their corresponding regions! e,g Dschang-Yaounde will be stored under West-Centre collection
-                     */
+                     *//*
                     DataResources.journeyDistanceList.trimIndent().reader().buffered()
                         .forEachLine { journeyName ->
                             val names: List<String> = journeyName.split("+")
@@ -91,7 +88,7 @@ class AdminFunctionViewModel : ViewModel() {
 
 
     }
-
+*/
     private val _loading = MutableLiveData(false)
     val loading get() = _loading
 

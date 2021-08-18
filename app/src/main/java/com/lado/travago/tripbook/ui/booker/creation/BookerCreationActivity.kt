@@ -1,6 +1,7 @@
 package com.lado.travago.tripbook.ui.booker.creation
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,6 +16,8 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityBookerCreationBinding
+import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationActivity
+import com.lado.travago.tripbook.ui.agency.creation.config_panel.AgencyConfigActivity
 //import com.lado.travago.tripbook.databinding.ActivityUserCreationBinding
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationViewModel.FieldTags
 import kotlinx.coroutines.*
@@ -35,7 +38,6 @@ class BookerCreationActivity : AppCompatActivity() {
         //Restore all fields after configuration changes
         binding = DataBindingUtil.setContentView(this, R.layout.activity_booker_creation)
         initViewModel()
-        navigateToLauncherUI()
 
         observeLiveData()
         showProgressBar()
@@ -105,7 +107,9 @@ class BookerCreationActivity : AppCompatActivity() {
 
         viewModel.onBookerCreated.observe(this){
             if(it){
-                navigateToLauncherUI()
+                //TODO: For now we navigate to the agency config screen
+                startActivity(Intent(this, AgencyCreationActivity::class.java))
+                finish()
             }
         }
     }

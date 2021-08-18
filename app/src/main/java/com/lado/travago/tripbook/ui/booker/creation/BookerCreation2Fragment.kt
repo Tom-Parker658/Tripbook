@@ -48,7 +48,9 @@ class BookerCreation2Fragment : Fragment() {
         binding.btnConfirmCode.setOnClickListener {
             viewModel.setField(FieldTags.ON_PHONE_VERIFIED, true)
         }
-
+        binding.btnResendCode.setOnClickListener {
+            viewModel.setField(FieldTags.RESEND_CODE, true)
+        }
     }
 
 }
