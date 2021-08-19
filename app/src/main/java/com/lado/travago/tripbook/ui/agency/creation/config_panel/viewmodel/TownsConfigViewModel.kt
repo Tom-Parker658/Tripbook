@@ -53,9 +53,14 @@ class TownsConfigViewModel : ViewModel() {
                                         _toastMessage.value = exemptedDocState.message
                                     }
                                     is State.Success -> {
-                                        //
-                                        exemptedTownList = (exemptedDocState.data["townList"] as List<String>).toMutableList()
-                                        _townDocList.value  = townsListState.data.documents
+                                        exemptedDocState.data
+                                        exemptedTownList =
+                                            (exemptedDocState.data["townList"] as List<String>).toMutableList()
+                                        //We sort ascending order
+                                        _townDocList.value =
+                                            townsListState.data.documents.sortedBy {
+                                                it["name"].toString()
+                                            }
 
                                         // we save an original copy of the document
                                         _originalTownDoc = _townDocList.value!!
@@ -72,9 +77,11 @@ class TownsConfigViewModel : ViewModel() {
     /**
      * This get the town which has been clicked to exempt it
      */
-    fun exemptTown(townId: String) = exemptedTownList.add(townId)
+    fun exemptTown(townId: String) =
+        if (exemptedTownList.contains(townId)) exemptedTownList.remove(townId)
+        else exemptedTownList.add(townId)
 
-    enum class ButtonTags{
+    enum class ButtonTags {
         BUTTON_SWITCH_ACTIVATE, BUTTON_PARKS, BUTTON_TRIPS
     }
 }

@@ -1,11 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'kotlin-kapt'
 
-android {
+android() {
     compileSdkVersion 31
     buildToolsVersion '31.0.0'
 
@@ -47,9 +46,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    androidExtensions {
-        experimental = true
-    }
+
 }
 
 
@@ -79,7 +76,7 @@ dependencies {
 
     //ViewModel & Fragment
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-    implementation 'androidx.fragment:fragment-ktx:1.4.0-alpha06'
+    implementation 'androidx.fragment:fragment-ktx:1.4.0-alpha07'
 
 
     // Fragment Navigation
@@ -97,7 +94,7 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
 
     //Google maps API libraries
-    implementation "com.google.android.libraries.places:places:$places_version"
+//    implementation "com.google.android.libraries.places:places:$places_version"
 
     //FireStore, firebaseAuth, fireStorage
     implementation platform("com.google.firebase:firebase-bom:$bom_version")

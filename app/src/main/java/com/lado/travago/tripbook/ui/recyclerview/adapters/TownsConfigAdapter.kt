@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.databinding.ItemTownConfigBinding
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import android.util.*
 
 /**
  * This adapter adapts  for the town configuration page
@@ -18,27 +19,32 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
  *  @param exemptedTownsList is that agency document which contains exceptions about towns which the agency can offer or not
  *  exceptions doc KEY = "exceptionDoc"
  */
-class TownConfigAdapter (private val exemptedTownsList: List<String>) : ListAdapter< DocumentSnapshot, TownConfigViewHolder>(
+@ExperimentalCoroutinesApi
+class TownConfigAdapter (val clickListener: TownClickListener, private val exemptedTownsList: List<String>) : ListAdapter< DocumentSnapshot, TownConfigViewHolder>(
     TownConfigDiffCallbacks()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TownConfigViewHolder =
         TownConfigViewHolder.from(parent, exemptedTownsList)
 
     override fun onBindViewHolder(holder: TownConfigViewHolder, position: Int) =
-        holder.bind(getItem(position))
+        holder.bind(clickListener, getItem(position))
 
 }
 
-class TownConfigViewHolder private constructor(val binding: ItemTownConfigBinding, val exemptedTownsList: List<String>) :
+@ExperimentalCoroutinesApi
+class TownConfigViewHolder private constructor(val binding: ItemTownConfigBinding, private val exemptedTownsList: List<String>) :
     RecyclerView.ViewHolder(binding.root) {
     /**
      * @param townDoc is a document containing each of the town in firestore
      */
-    fun bind(townDoc: DocumentSnapshot) {
+    fun bind(clickListener: TownClickListener, townDoc: DocumentSnapshot) {
         binding.textTown.text = townDoc["name"].toString()
         binding.textRegion.text = townDoc["region"].toString()
+        binding.clickListener = clickListener
+        binding.townDoc = townDoc
         //If the current town is not found the exception townList, it is checked by default else it is not checked
-        binding.switchActivate.isChecked = exemptedTownsList .contains(townDoc.id)
+        binding.switchActivate.isChecked = !exemptedTownsList .contains(townDoc.id)
+
     }
 
 
@@ -64,11 +70,11 @@ class TownConfigViewHolder private constructor(val binding: ItemTownConfigBindin
  * When ever a button, or check is tapped on the town recucler, we get the id of the town clicked
  */
 @ExperimentalCoroutinesApi
-class TownClickListener(val clickListener: (townID: String) -> Unit){
+class TownClickListener(val clickListener: (townID: String, buttonTag: TownsConfigViewModel.ButtonTags) -> Unit){
     /**
      * @param buttonID is the latout id of the button which has been clicked
      */
-    fun onClick(buttonTags: TownsConfigViewModel.ButtonTags, townDoc: DocumentSnapshot) = clickListener(townDoc.id)
+    fun onClick(buttonTag: TownsConfigViewModel.ButtonTags, townDoc: DocumentSnapshot) = clickListener(townDoc.id, buttonTag)
 }
 
 class TownConfigDiffCallbacks : DiffUtil.ItemCallback<DocumentSnapshot>() {

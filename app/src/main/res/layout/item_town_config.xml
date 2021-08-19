@@ -35,12 +35,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Trips"
+                android:onClickListener="@{()-> clickListener.onClick(buttonTag.BUTTON_TRIPS, townDoc)}"
                 android:textSize="12sp"
                 app:icon="@drawable/baseline_directions_bus_24"
                 app:layout_constraintBaseline_toBaselineOf="@+id/btn_park"
                 app:layout_constraintEnd_toStartOf="@+id/btn_park"
                 app:layout_constraintStart_toStartOf="parent" />
 
+<!--            TODO: Implement the on clck listener-->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_park"
                 style="?attr/borderlessButtonStyle"
@@ -48,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Parks"
+
                 android:textColor="#1E88E5"
                 android:textSize="12sp"
                 app:icon="@drawable/baseline_my_location_24"

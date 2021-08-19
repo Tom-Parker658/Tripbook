@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.util.*
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTownsConfigBinding
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel
+import com.lado.travago.tripbook.ui.recyclerview.adapters.TownClickListener
 import com.lado.travago.tripbook.ui.recyclerview.adapters.TownConfigAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +51,9 @@ class TownsConfigFragment : Fragment() {
      * Configures the towns recycler
      */
     private fun setRecycler(){
-        var recyclerManager = GridLayoutManager(context, 2)
+        var recyclerManager = GridLayoutManager(context, 2 ).apply {
+
+        }
         binding.recyclerTowns.layoutManager = recyclerManager
         binding.recyclerTowns.adapter = adapter
     }
@@ -60,7 +64,17 @@ class TownsConfigFragment : Fragment() {
         }
         //Submit list to inflate recycler view
         viewModel.townDocList.observe(viewLifecycleOwner){
-            adapter = TownConfigAdapter(exemptedTownsList = viewModel.exemptedTownList)
+            adapter = TownConfigAdapter(exemptedTownsList = viewModel.exemptedTownList, clickListener = TownClickListener{townId, buttonTag ->
+                when(buttonTag){//Remove or add a town from the exemption list
+                    TownsConfigViewModel.ButtonTags.BUTTON_SWITCH_ACTIVATE -> {
+                        viewModel.exemptTown(townId)
+                    }
+                    TownsConfigViewModel.ButtonTags.BUTTON_TRIPS ->{
+                        //TODO: Launch trip fragment
+                    }
+                }
+
+            })
             setRecycler()
             adapter.submitList(it)
         }

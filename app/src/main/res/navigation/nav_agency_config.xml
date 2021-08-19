@@ -5,10 +5,14 @@
     android:id="@+id/nav_agency_config"
     app:startDestination="@id/townsConfigFragment">
     <fragment
-        android:id="@+id/parksConfigFragment"
+        android:id="@+id/tripsConfigFragment"
         android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.ParksConfigFragment"
         android:label="fragment_parks_config"
-        tools:layout="@layout/fragment_parks_config" />
+        tools:layout="@layout/fragment_trips_config" >
+        <argument
+            android:name="townID"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/scannerConfigFragment"
         android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.ScannerConfigFragment"
@@ -18,9 +22,6 @@
         android:id="@+id/agencyCreationFinalFragment2"
         android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreationFinalFragment"
         android:label="AgencyCreationFinalFragment" >
-        <action
-            android:id="@+id/action_agencyCreationFinalFragment2_to_parksConfigFragment"
-            app:destination="@id/parksConfigFragment" />
         <action
             android:id="@+id/action_agencyCreationFinalFragment2_to_scannerConfigFragment"
             app:destination="@id/scannerConfigFragment" />
@@ -38,5 +39,10 @@
     <fragment
         android:id="@+id/townsConfigFragment"
         android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.TownsConfigFragment"
-        android:label="TownsConfigFragment" />
+        android:label="TownsConfigFragment" >
+
+        <action
+            android:id="@+id/action_townsConfigFragment_to_tripsConfigFragment"
+            app:destination="@id/tripsConfigFragment" />
+    </fragment>
 </navigation>

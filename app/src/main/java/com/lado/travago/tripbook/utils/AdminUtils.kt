@@ -29,7 +29,6 @@ object  AdminUtils {
     fun Collection<String>.removePredicate(vararg predicate: String): Collection<String>{
         var newList = emptyList<String>() as Collection<String>
         this.forEach {
-            """"""
             if (it !in predicate) newList+=it
         }
         return newList

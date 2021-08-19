@@ -28,7 +28,7 @@
             android:id="@+id/recycler_towns"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_save_towns"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_master_label"
@@ -44,6 +44,32 @@
             app:layout_constraintEnd_toEndOf="@+id/recycler_towns"
             app:layout_constraintStart_toStartOf="@+id/recycler_towns"
             app:layout_constraintTop_toBottomOf="@+id/text_master_label" />
+
+        <Button
+            android:id="@+id/btn_save_towns"
+            style="@style/positiveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_cancel_town"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/recycler_towns"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_cancel_town"
+            style="@style/negativeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="cancel"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_save_towns"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_save_towns"
+            app:layout_constraintTop_toTopOf="@+id/btn_save_towns" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

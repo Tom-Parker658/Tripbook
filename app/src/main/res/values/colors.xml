@@ -15,10 +15,12 @@
     <color name="colorPrimary">#1976D2</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#0097A7</color>
-    <color name="colorPositiveButton">#0D47A1</color>
+    <color name="colorPositiveButton">#4CAF50</color>
     <color name="colorNegativeButton">#FA0000</color>
     <color name="colorNeutralButton">#707070</color>
 
     <color name="colorSecondary">#01579B</color>
     <color name="colorSecondaryDark">#1A237E</color>
+    <color name="quantum_grey">#757474</color>
+    <color name="gold">#FFC107</color>
 </resources>
