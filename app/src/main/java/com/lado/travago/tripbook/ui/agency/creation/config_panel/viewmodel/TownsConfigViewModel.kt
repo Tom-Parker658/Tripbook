@@ -11,9 +11,31 @@ import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
 class TownsConfigViewModel : ViewModel() {
-    //    private val authRepo = FirebaseAuthRepo()
     private val firestoreRepo = FirestoreRepo()
-    lateinit var exemptedTownList: MutableList<String>//and that's agency's exception list
+
+    private val _onLoading = MutableLiveData(true)
+    val onLoading get() = _onLoading
+
+    private val _toastMessage = MutableLiveData("")
+    val toastMessage get() = _toastMessage
+
+    private val _navigateToTrip = MutableLiveData(false)
+    val onNavigateToTrip get() = _navigateToTrip
+
+    //To know when to start searching
+    private val _startTownSearch = MutableLiveData(false)
+    val startTownSearch get() = _startTownSearch
+
+    /**
+     * Tags used to know what the user has clicked on a recycler view item
+     */
+    enum class TownButtonTags {
+        //Town Tags
+        TOWN_SWITCH_ACTIVATE, TOWN_BUTTON_TRIPS,
+    }
+
+    var exemptedTownList = mutableListOf<String>() //and that's agency's exception list
+        private set
 
     //Stores the list of a hashmap of a town document
     //we also store an original copy to compare later
@@ -22,20 +44,22 @@ class TownsConfigViewModel : ViewModel() {
     private val _townDocList = MutableLiveData<List<DocumentSnapshot>>()
     val townDocList get() = _townDocList
 
-    private val _onLoading = MutableLiveData(true)
-    val onLoading get() = _onLoading
+    //Stores the names of the all towns for autocompletion during search
+    val townNamesList = mutableListOf<String>()
 
-    //Do or redo the fetching
-    private val _retry = MutableLiveData(true)
-    val retry get() = _retry
-    private val _toastMessage = MutableLiveData("")
-    val toastMessage get() = _toastMessage
+    //This is the variable to hold arguments to navigate to trips
+    var townId = ""
+    var townName = ""
+
+    //Do or redo the fetching towns
+    private val _retryTowns = MutableLiveData(true)
+    val retryTowns get() = _retryTowns
 
     /**
      * We get all the towns from the database and the document containing the list of exempted towns
      */
-    suspend fun getData() {
-        _retry.value = false
+    suspend fun getTownsData() {
+        _retryTowns.value = false
         firestoreRepo.getCollection("Planets/Earth/Continents/Africa/Cameroon")
             .collect { townsListState ->
                 when (townsListState) {
@@ -59,14 +83,16 @@ class TownsConfigViewModel : ViewModel() {
                                         //We sort ascending order
                                         _townDocList.value =
                                             townsListState.data.documents.sortedBy {
-                                                it["name"].toString()
+                                                it["name"].toString().lowercase()
                                             }
-
                                         // we save an original copy of the document
                                         _originalTownDoc = _townDocList.value!!
+                                        //We then get all the names
+                                        _townDocList.value!!.forEach {
+                                            townNamesList += it["name"]!!.toString()
+                                        }
                                         _onLoading.value = false
                                     }
-
                                 }
                             }
                     }
@@ -75,13 +101,34 @@ class TownsConfigViewModel : ViewModel() {
     }
 
     /**
-     * This get the town which has been clicked to exempt it
+     * This get the town which has been clicked to exempt it if not already found in exemption list of
+     * add him if not found
      */
     fun exemptTown(townId: String) =
         if (exemptedTownList.contains(townId)) exemptedTownList.remove(townId)
         else exemptedTownList.add(townId)
 
-    enum class ButtonTags {
-        BUTTON_SWITCH_ACTIVATE, BUTTON_PARKS, BUTTON_TRIPS
+    enum class FieldTag {
+        TOAST_MESSAGE, START_TOWN_SEARCH, NAVIGATE_TO_TRIP, TOWN_ID, TOWN_NAME
     }
+
+    fun setField(fieldTag: FieldTag, value: Any) {
+        when (fieldTag) {
+            FieldTag.TOAST_MESSAGE -> _toastMessage.value = value.toString()
+            FieldTag.START_TOWN_SEARCH -> _startTownSearch.value = value as Boolean
+            FieldTag.NAVIGATE_TO_TRIP -> _navigateToTrip.value = value as Boolean
+            FieldTag.TOWN_ID -> townId = value.toString()
+            FieldTag.TOWN_NAME -> townName =  value.toString()
+        }
+    }
+
+    /**
+     * A function to search for a specific town name from the doc and return its index in the list
+     */
+    fun searchTown(townName: String): Int =
+        townDocList.value!!.indexOf(
+            townDocList.value!!.find { townDoc ->
+                townDoc["name"] == townName
+            }
+        )
 }

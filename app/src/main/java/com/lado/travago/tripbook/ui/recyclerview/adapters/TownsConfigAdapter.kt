@@ -44,7 +44,6 @@ class TownConfigViewHolder private constructor(val binding: ItemTownConfigBindin
         binding.townDoc = townDoc
         //If the current town is not found the exception townList, it is checked by default else it is not checked
         binding.switchActivate.isChecked = !exemptedTownsList .contains(townDoc.id)
-
     }
 
 
@@ -70,11 +69,11 @@ class TownConfigViewHolder private constructor(val binding: ItemTownConfigBindin
  * When ever a button, or check is tapped on the town recucler, we get the id of the town clicked
  */
 @ExperimentalCoroutinesApi
-class TownClickListener(val clickListener: (townID: String, buttonTag: TownsConfigViewModel.ButtonTags) -> Unit){
+class TownClickListener(val clickListener: (townID: String, townButtonTag: TownsConfigViewModel.TownButtonTags) -> Unit){
     /**
      * @param buttonID is the latout id of the button which has been clicked
      */
-    fun onClick(buttonTag: TownsConfigViewModel.ButtonTags, townDoc: DocumentSnapshot) = clickListener(townDoc.id, buttonTag)
+    fun onClick(townButtonTag: TownsConfigViewModel.TownButtonTags, townDoc: DocumentSnapshot) = clickListener("${townDoc.id}+${townDoc["name"]}", townButtonTag)
 }
 
 class TownConfigDiffCallbacks : DiffUtil.ItemCallback<DocumentSnapshot>() {

@@ -13,7 +13,7 @@
             type="com.google.firebase.firestore.DocumentSnapshot" />
         <variable
             name="buttonTag"
-            type="com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel.ButtonTags" />
+            type="com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel.TownButtonTags" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -35,14 +35,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Trips"
-                android:onClickListener="@{()-> clickListener.onClick(buttonTag.BUTTON_TRIPS, townDoc)}"
+                android:onClickListener="@{()-> clickListener.onClick(buttonTag.TOWN_BUTTON_TRIPS, townDoc)}"
                 android:textSize="12sp"
                 app:icon="@drawable/baseline_directions_bus_24"
                 app:layout_constraintBaseline_toBaselineOf="@+id/btn_park"
                 app:layout_constraintEnd_toStartOf="@+id/btn_park"
                 app:layout_constraintStart_toStartOf="parent" />
 
-<!--            TODO: Implement the on clck listener-->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_park"
                 style="?attr/borderlessButtonStyle"
@@ -95,7 +94,7 @@
                 android:checked="true"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
-                android:onClickListener="@{()-> clickListener.onClick(buttonTag.BUTTON_SWITCH_ACTIVATE, townDoc)}"
+                android:onClickListener="@{()-> clickListener.onClick(buttonTag.TOWN_SWITCH_ACTIVATE, townDoc)}"
                 app:layout_constraintBottom_toBottomOf="@+id/text_region"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"

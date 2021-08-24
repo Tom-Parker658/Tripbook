@@ -155,7 +155,6 @@ class BookerCreationFinalFragment : Fragment() {
     private fun phoneWidgetConfig() = binding.countryCodePicker.registerCarrierNumberEditText(binding.recoveryPhone.editText)
 
 
-
     private fun initPictureSelection() = pickScannerPhoto.launch("image/*")
 
     /**

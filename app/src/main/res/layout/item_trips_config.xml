@@ -5,15 +5,14 @@
 
     <data>
         <variable
-            name="tripDoc"
-            type="com.google.firebase.firestore.DocumentSnapshot" />
-        <!--        The listener to get the id of the current clicked item-->
-        <variable
             name="clickListener"
             type="com.lado.travago.tripbook.ui.recyclerview.adapters.TripsClickListener" />
         <variable
-            name="buttonTag"
-            type="com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel.ButtonTags" />
+            name="tripDoc"
+            type="com.google.firebase.firestore.DocumentSnapshot" />
+        <variable
+            name="tripButtonTag"
+            type="com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel.TripButtonTags" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -29,6 +28,7 @@
             android:layout_height="wrap_content">
 
             <!-- Title, secondary and supporting text -->
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_price"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -37,15 +37,33 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="4dp"
-                android:text="5,000 FCFA"
-                android:onClickListener="@{()-> clickListener.onClick(buttonTag.BUTTON_PRICE, tripDoc)}"
+                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_PRICES, tripDoc)}"
                 android:textColor="@color/colorPositiveButton"
                 app:icon="@drawable/baseline_payments_24"
-                app:layout_constraintBottom_toTopOf="@+id/switch_activate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_trip_distance"
+                tools:ignore="DuplicateSpeakableTextCheck"
+                tools:text="5,000 FCFA" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_price_vip"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_PRICES, tripDoc)}"
+                android:textColor="@color/colorPositiveButton"
+                app:icon="@drawable/baseline_vip_24"
+                app:iconGravity="end"
+                app:iconTint="#FFC107"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_trip_distance" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_price"
+                tools:text="5,000 FCFA" />
 
             <TextView
                 android:id="@+id/text_destination_town"
@@ -83,10 +101,10 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:minWidth="48dp"
-                android:onClickListener="@{()-> clickListener.onClick(buttonTag.SWITCH_TRIPS_ACTIVATE, tripDoc)}"
                 android:minHeight="48dp"
-                app:layout_constraintEnd_toEndOf="@+id/btn_price"
-                app:layout_constraintTop_toBottomOf="@+id/btn_price" />
+                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_SWITCH_ACTIVATE, tripDoc)}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_price_vip" />
 
             <View
                 android:id="@+id/view21"
@@ -138,25 +156,11 @@
                 android:id="@+id/check_vip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
                 android:checked="true"
+                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_CHECK_VIP, tripDoc)}"
                 android:text="VIP"
-                android:onClickListener="@{()-> clickListener.onClick(buttonTag.SWITCH_VIP_ACTIVATE, tripDoc)}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/switch_activate"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/view23"
-                app:layout_constraintTop_toBottomOf="@+id/btn_price" />
-
-            <ImageView
-                android:id="@+id/image_vip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:tint="@color/gold"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView15"
-                app:layout_constraintEnd_toStartOf="@+id/imageView15"
-                app:layout_constraintTop_toTopOf="@+id/imageView15"
-                app:srcCompat="@drawable/baseline_vip_24" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_price_vip" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
