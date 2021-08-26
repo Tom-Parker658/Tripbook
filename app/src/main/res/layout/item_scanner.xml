@@ -73,8 +73,8 @@
 
             <ImageView
                 android:id="@+id/item_image_agency_logo"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:contentDescription="@string/desc_agency_logo"
                 app:imageFromUrl="@{resultInfo.agencyLogoUrl}"
                 app:layout_constraintBottom_toTopOf="@+id/text_name"
@@ -83,63 +83,64 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
 
-            <androidx.appcompat.widget.AppCompatRatingBar
-                android:id="@+id/item_text_agency_reputation"
-                style="@style/Widget.AppCompat.RatingBar.Small"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:indeterminate="false"
-                android:max="10"
-                android:numStars="10"
-                app:layout_constraintEnd_toStartOf="@+id/view24"
-                app:layout_constraintStart_toEndOf="@+id/view23"
-                app:layout_constraintTop_toBottomOf="@+id/item_text_journey_name"
-                tools:rating="7.5" />
-
             <TextView
                 android:id="@+id/item_text_agency_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/aclonica"
                 android:text="@{resultInfo.journeyCostFormatted}"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/item_image_agency_logo"
-                app:layout_constraintTop_toBottomOf="@+id/item_text_agency_reputation"
+                app:layout_constraintTop_toBottomOf="@+id/checkBox"
                 tools:text="5,000 FCFA" />
-
-            <TextView
-                android:id="@+id/item_text_journey_vip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Admin"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:drawableTint="#000000"
-                app:layout_constraintBottom_toTopOf="@+id/text_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:drawableEndCompat="@drawable/baseline_vip_24" />
 
             <TextView
                 android:id="@+id/item_text_journey_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="@{resultInfo.journeyName}"
                 android:textAlignment="center"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_name"
                 tools:text="+237 6 99 88 55 44" />
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="Admin"
+                app:layout_constraintBottom_toTopOf="@+id/item_text_agency_price"
+                app:layout_constraintEnd_toStartOf="@+id/switch1"
+                app:layout_constraintTop_toBottomOf="@+id/item_text_journey_name" />
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="1dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/checkBox"
+                tools:checked="true" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="10sp"
+                tools:layout_editor_absoluteX="101dp"
+                tools:layout_editor_absoluteY="252dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

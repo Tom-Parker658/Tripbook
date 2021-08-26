@@ -19,8 +19,6 @@ class TownsConfigViewModel : ViewModel() {
     private val _toastMessage = MutableLiveData("")
     val toastMessage get() = _toastMessage
 
-    private val _navigateToTrip = MutableLiveData(false)
-    val onNavigateToTrip get() = _navigateToTrip
 
     //To know when to start searching
     private val _startTownSearch = MutableLiveData(false)
@@ -39,10 +37,11 @@ class TownsConfigViewModel : ViewModel() {
 
     //Stores the list of a hashmap of a town document
     //we also store an original copy to compare later
-    private var _originalTownDoc = listOf<DocumentSnapshot>()
-
     private val _townDocList = MutableLiveData<List<DocumentSnapshot>>()
     val townDocList get() = _townDocList
+
+    private val _onClose = MutableLiveData(false)
+    val onClose get() = _onClose
 
     //Stores the names of the all towns for autocompletion during search
     val townNamesList = mutableListOf<String>()
@@ -66,27 +65,28 @@ class TownsConfigViewModel : ViewModel() {
                     is State.Loading -> _onLoading.value = true
                     is State.Failed -> {
                         _toastMessage.value = townsListState.message
+                        _onLoading.value = false
                     }
                     is State.Success -> {
                         //TODO: Get agency id from the current user
-                        firestoreRepo.getDocument("OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Exemptions/town")
+                        firestoreRepo.getDocument("OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Configs/Cameroon/Towns/exemption")
                             .collect { exemptedDocState ->
                                 when (exemptedDocState) {
                                     is State.Loading -> _onLoading.value = true
                                     is State.Failed -> {
                                         _toastMessage.value = exemptedDocState.message
+                                        _onLoading.value = false
                                     }
                                     is State.Success -> {
-                                        exemptedDocState.data
-                                        exemptedTownList =
-                                            (exemptedDocState.data["townList"] as List<String>).toMutableList()
+                                        (exemptedDocState.data["exemptedTownList"] as List<String>?)?.let {
+                                            exemptedTownList.addAll(it)
+                                        }
                                         //We sort ascending order
                                         _townDocList.value =
                                             townsListState.data.documents.sortedBy {
                                                 it["name"].toString().lowercase()
                                             }
-                                        // we save an original copy of the document
-                                        _originalTownDoc = _townDocList.value!!
+
                                         //We then get all the names
                                         _townDocList.value!!.forEach {
                                             townNamesList += it["name"]!!.toString()
@@ -109,26 +109,48 @@ class TownsConfigViewModel : ViewModel() {
         else exemptedTownList.add(townId)
 
     enum class FieldTag {
-        TOAST_MESSAGE, START_TOWN_SEARCH, NAVIGATE_TO_TRIP, TOWN_ID, TOWN_NAME
+        TOAST_MESSAGE, START_TOWN_SEARCH, TOWN_ID, TOWN_NAME, ON_CLOSE
     }
 
     fun setField(fieldTag: FieldTag, value: Any) {
         when (fieldTag) {
             FieldTag.TOAST_MESSAGE -> _toastMessage.value = value.toString()
             FieldTag.START_TOWN_SEARCH -> _startTownSearch.value = value as Boolean
-            FieldTag.NAVIGATE_TO_TRIP -> _navigateToTrip.value = value as Boolean
             FieldTag.TOWN_ID -> townId = value.toString()
-            FieldTag.TOWN_NAME -> townName =  value.toString()
+            FieldTag.TOWN_NAME -> townName = value.toString()
+            FieldTag.ON_CLOSE -> onClose.value = value as Boolean
         }
     }
 
     /**
      * A function to search for a specific town name from the doc and return its index in the list
      */
-    fun searchTown(townName: String): Int =
-        townDocList.value!!.indexOf(
+    fun searchTown(townName: String): Int? =
+        townDocList.value?.indexOf(
             townDocList.value!!.find { townDoc ->
                 townDoc["name"] == townName
             }
         )
+
+    suspend fun uploadTownChanges(){
+        firestoreRepo.setDocument(
+            hashMapOf(
+                "exemptedTownList" to exemptedTownList
+            ),
+            "OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Configs/Cameroon/Towns/exemption"
+        ).collect{
+            when(it) {
+                is State.Loading -> _onLoading.value = true
+                is State.Failed -> {
+                    _onLoading.value = false
+                    _toastMessage.value = it.message
+                }
+                is State.Success -> {
+                    _onLoading.value = false
+                    //We navigate to the original lobby
+                    _onClose.value = true
+                }
+            }
+        }
+    }
 }

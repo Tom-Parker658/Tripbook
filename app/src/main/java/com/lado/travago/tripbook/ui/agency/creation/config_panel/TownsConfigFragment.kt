@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,6 +53,7 @@ class TownsConfigFragment : Fragment() {
         )
         viewModel = ViewModelProvider(requireActivity())[TownsConfigViewModel::class.java]
         observeLiveData()
+        handleClicks()
         try {
             setRecycler()
         } catch (e: Exception) {
@@ -64,7 +66,7 @@ class TownsConfigFragment : Fragment() {
      * Configures the towns recycler
      */
     private fun setRecycler() {
-        var recyclerManager = GridLayoutManager(context, 2)
+        val recyclerManager = GridLayoutManager(context, 2)
         binding.recyclerTowns.layoutManager = recyclerManager
         binding.recyclerTowns.adapter = adapter
     }
@@ -77,6 +79,7 @@ class TownsConfigFragment : Fragment() {
         viewModel.townDocList.observe(viewLifecycleOwner) {
             adapter = TownConfigAdapter(
                 exemptedTownsList = viewModel.exemptedTownList,
+
                 clickListener = TownClickListener { townId, buttonTag ->
                     when (buttonTag) {//Remove or add a town from the exemption list
                         TownsConfigViewModel.TownButtonTags.TOWN_SWITCH_ACTIVATE -> {
@@ -97,6 +100,7 @@ class TownsConfigFragment : Fragment() {
                 })
             setRecycler()
             adapter.submitList(it)
+            binding.fabSearchTown.visibility = View.VISIBLE
         }
         viewModel.onLoading.observe(viewLifecycleOwner) {
             if (it) binding.townProgressBar.visibility = View.VISIBLE
@@ -132,17 +136,19 @@ class TownsConfigFragment : Fragment() {
                     setTitle("Search")
                     setView(searchBinding.root)
                     setPositiveButton("SEARCH") { _, _ ->
-                        viewModel.searchTown(searchBinding.searchBar.editText!!.text.toString())
-                            .let { index ->
-                                if (index != -1) {
-                                    binding.recyclerTowns.smoothScrollToPosition(index)
-                                } else {//If not found
-                                    viewModel.setField(
-                                        TownsConfigViewModel.FieldTag.TOAST_MESSAGE,
-                                        "Not found. Select from dropdown"
-                                    )
+                        if (viewModel.townDocList.value!!.isNotEmpty()) {
+                            viewModel.searchTown(searchBinding.searchBar.editText!!.text.toString())
+                                ?.let { index ->
+                                    if (index != -1) {
+                                        binding.recyclerTowns.smoothScrollToPosition(index)
+                                    } else {//If not found
+                                        viewModel.setField(
+                                            TownsConfigViewModel.FieldTag.TOAST_MESSAGE,
+                                            "Not found. Select from dropdown"
+                                        )
+                                    }
                                 }
-                            }
+                        }
                         viewModel.setField(TownsConfigViewModel.FieldTag.START_TOWN_SEARCH, false)
                     }
                     setOnCancelListener {
@@ -153,7 +159,27 @@ class TownsConfigFragment : Fragment() {
                 }.show()
             }
         }
+        viewModel.onClose.observe(viewLifecycleOwner) {
+            if (it) {
+                onDestroy()
+                findNavController().navigate(
+                    TownsConfigFragmentDirections.actionTownsConfigFragmentToAgencyCreationFinalFragment()
+                )
+                viewModel.setField(TownsConfigViewModel.FieldTag.ON_CLOSE, false)
+
+            }
+        }
+
     }
 
-
+    private fun handleClicks(){
+        binding.btnCancelTown.setOnClickListener {
+            viewModel.setField(TownsConfigViewModel.FieldTag.ON_CLOSE, true)
+        }
+        binding.btnSaveTowns.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                viewModel.uploadTownChanges()
+            }
+        }
+    }
 }

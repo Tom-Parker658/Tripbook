@@ -12,17 +12,18 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/price_normal"
+            android:id="@+id/price"
             style="@style/editTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Normal Price: "
-            app:helperText="The standard price for this trip!"
-            app:layout_constraintBottom_toTopOf="@+id/price_vip"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/imageView17"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:helperText="Leave it as 0 (Zero) for default"
+            tools:hint="Price: ">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -30,38 +31,6 @@
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/price_vip"
-            style="@style/editTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="VIP Price: "
-            app:helperText="The price for vips!"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/image_label_vip"
-            app:layout_constraintTop_toBottomOf="@+id/price_normal">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/image_label_vip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/price_vip"
-            app:layout_constraintEnd_toStartOf="@+id/price_vip"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/price_vip"
-            app:srcCompat="@drawable/baseline_vip_24" />
 
         <ImageView
             android:id="@+id/imageView17"
@@ -69,11 +38,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/price_normal"
-            app:layout_constraintEnd_toStartOf="@+id/price_normal"
+            app:layout_constraintBottom_toBottomOf="@+id/price"
+            app:layout_constraintEnd_toStartOf="@+id/price"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/price_normal"
+            app:layout_constraintTop_toTopOf="@+id/price"
             app:srcCompat="@drawable/baseline_payments_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

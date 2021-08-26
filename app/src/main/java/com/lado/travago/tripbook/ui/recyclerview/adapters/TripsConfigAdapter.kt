@@ -7,31 +7,30 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.ktx.getField
 import com.lado.travago.tripbook.databinding.ItemTripsConfigBinding
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
- * @param optionMapList contains a list of vip Boolean, vip price, normal price, and tripID for all trips
+ * @param exemptedVIPList contains a list of vip Boolean, vip price, normal price, and tripID for all trips
  */
 
 @ExperimentalCoroutinesApi
 class TripsConfigAdapter(
     val clickListener: TripsClickListener,
-    private val exemptedTripsList: List<String>,
-    private val optionMapList: List<Map<String, Any>>,
     private val pricePerKM: Double,
-    private val vipPricePerKM: Double
+    private val vipPricePerKM: Double,
+    private val priceChangesMap: List<MutableMap<String, Any?>>
 ) : ListAdapter<DocumentSnapshot, TripsConfigViewHolder>(
     TripsConfigDiffCallbacks()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripsConfigViewHolder =
         TripsConfigViewHolder.from(
             parent = parent,
-            exemptedTownsList = exemptedTripsList,
-            optionMapList = optionMapList,
             pricePerKM = pricePerKM,
-            vipPricePerKM = vipPricePerKM
+            vipPricePerKM = vipPricePerKM,
+            priceChangesMap = priceChangesMap
         )
 
     override fun onBindViewHolder(holder: TripsConfigViewHolder, position: Int) =
@@ -42,10 +41,9 @@ class TripsConfigAdapter(
 @ExperimentalCoroutinesApi
 class TripsConfigViewHolder private constructor(
     val binding: ItemTripsConfigBinding,
-    private val exemptedTripsList: List<String>,
-    private val optionMapList: List<Map<String, Any>>,
     private val pricePerKM: Double,
-    private val vipPricePerKM: Double
+    private val vipPricePerKM: Double,
+    private val priceChangesMap: List<MutableMap<String, Any?>>
 ) :
     RecyclerView.ViewHolder(binding.root) {
     /**
@@ -57,25 +55,39 @@ class TripsConfigViewHolder private constructor(
         binding.clickListener = clickListener
         binding.tripDoc = tripDoc
 
-        //If the current trip is not found the exception tripList for this town, it is checked by default else it is not checked
-        binding.switchActivate.isChecked = !exemptedTripsList.contains(tripDoc.id)
-        optionMapList.find {
-            it["townID"] == tripDoc.id
-        }.let {
+        val currentTripMap = priceChangesMap.find { it["tripID"] == tripDoc.id }
+
+        currentTripMap.let {
             if (!it.isNullOrEmpty()) {
-                (it["vip"] as Boolean).let { vip ->
-                    binding.checkVip.isChecked = vip
-                    if (vip) binding.btnPriceVip.text = it["vipPrice"].toString()
-                }
-                binding.btnPrice.text = it["normalPrice"].toString()
+                val vipPrice = it.getOrElse(
+                    "vipPrice", {
+                        return@getOrElse (tripDoc.getLong("distance")!! * vipPricePerKM).toLong()
+                    }
+                ) as Long
+
+                val normalPrice = it.getOrElse(
+                    "normalPrice", {
+                        return@getOrElse (tripDoc.getLong("distance")!! * pricePerKM).toLong()
+                    }
+                ) as Long
+
+                val isNotExempted = it.getOrElse("exempted", { return@getOrElse false }) as Boolean
+                val isNotVip = it.getOrElse("vip", { return@getOrElse false }) as Boolean
+
+                binding.btnPriceVip.text = "$vipPrice FCFA"
+                binding.btnPrice.text = "$normalPrice FCFA"
+                binding.switchActivate.isChecked = !isNotExempted
+                binding.checkVip.isChecked = !isNotVip
             } else {
                 binding.btnPrice.text =
                     "${(tripDoc.getLong("distance")!! * pricePerKM).toInt()} FCFA"
-                binding.checkVip.isChecked = true
                 binding.btnPriceVip.text =
                     "${(tripDoc.getLong("distance")!! * vipPricePerKM).toInt()} FCFA"
+                binding.switchActivate.isChecked = true
+                binding.checkVip.isChecked = true
             }
         }
+
         binding.checkVip.isChecked.let {
             if (it) binding.btnPriceVip.visibility = View.VISIBLE
             else binding.btnPriceVip.visibility = View.GONE
@@ -90,10 +102,9 @@ class TripsConfigViewHolder private constructor(
          */
         fun from(
             parent: ViewGroup,
-            exemptedTownsList: List<String>,
-            optionMapList: List<Map<String, Any>>,
             pricePerKM: Double,
-            vipPricePerKM: Double
+            vipPricePerKM: Double,
+            priceChangesMap: List<MutableMap<String, Any?>>
         ): TripsConfigViewHolder {
             val binding = ItemTripsConfigBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -102,10 +113,9 @@ class TripsConfigViewHolder private constructor(
             )
             return TripsConfigViewHolder(
                 binding = binding,
-                exemptedTripsList = exemptedTownsList,
-                optionMapList = optionMapList,
                 pricePerKM = pricePerKM,
-                vipPricePerKM = vipPricePerKM
+                vipPricePerKM = vipPricePerKM,
+                priceChangesMap = priceChangesMap
             )
         }
     }
@@ -135,4 +145,3 @@ class TripsConfigDiffCallbacks : DiffUtil.ItemCallback<DocumentSnapshot>() {
         newItem: DocumentSnapshot
     ) = oldItem == newItem
 }
-

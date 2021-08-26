@@ -10,17 +10,17 @@
         android:label="fragment_scanner_config"
         tools:layout="@layout/fragment_scanner_config" />
     <fragment
-        android:id="@+id/agencyCreationFinalFragment2"
+        android:id="@+id/agencyCreationFinalFragment"
         android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreationFinalFragment"
         android:label="AgencyCreationFinalFragment" >
         <action
-            android:id="@+id/action_agencyCreationFinalFragment2_to_scannerConfigFragment"
+            android:id="@+id/action_agencyCreationFinalFragment_to_scannerConfigFragment"
             app:destination="@id/scannerConfigFragment" />
         <action
-            android:id="@+id/action_agencyCreationFinalFragment2_to_agencyCreationActivity"
+            android:id="@+id/action_agencyCreationFinalFragment_to_agencyCreationActivity"
             app:destination="@id/agencyCreationActivity" />
         <action
-            android:id="@+id/action_agencyCreationFinalFragment2_to_townsConfigFragment"
+            android:id="@+id/action_agencyCreationFinalFragment_to_townsConfigFragment"
             app:destination="@id/townsConfigFragment" />
     </fragment>
     <activity
@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_townsConfigFragment_to_tripsConfigFragment"
             app:destination="@id/tripsConfigFragment" />
+        <action
+            android:id="@+id/action_townsConfigFragment_to_agencyCreationFinalFragment"
+            app:destination="@id/agencyCreationFinalFragment" />
     </fragment>
     <fragment
         android:id="@+id/tripsConfigFragment"

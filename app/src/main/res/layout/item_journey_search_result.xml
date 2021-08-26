@@ -27,7 +27,7 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatRatingBar
-                android:id="@+id/item_text_agency_reputation"
+                android:id="@+id/check_admin"
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:text="@{resultInfo.journeyName}"
-                app:layout_constraintBottom_toTopOf="@+id/item_text_agency_reputation"
+                app:layout_constraintBottom_toTopOf="@+id/check_admin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
@@ -87,7 +87,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/distance"
                 app:layout_constraintStart_toEndOf="@+id/item_text_journey_day"
-                app:layout_constraintTop_toBottomOf="@+id/item_text_agency_reputation"
+                app:layout_constraintTop_toBottomOf="@+id/check_admin"
                 app:drawableEndCompat="@drawable/baseline_vip_24" />
 
             <ImageView
@@ -143,7 +143,7 @@
                 android:text="@{String.valueOf(resultInfo.journeyDistance)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/item_text_agency_reputation"
+                app:layout_constraintTop_toBottomOf="@+id/check_admin"
                 tools:text="589Km" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
@@ -50,6 +51,7 @@ class TripsConfigFragment : Fragment() {
         viewModel = ViewModelProvider(this)[TripsConfigViewModel::class.java]
         setup()
         observeLiveData()
+        handleButtonClick()
         try {
             setRecycler()
         } catch (e: Exception) {
@@ -59,11 +61,9 @@ class TripsConfigFragment : Fragment() {
     }
 
     private fun setup() {
-        viewModel.setField(TripsConfigViewModel.FieldTag.TOWN_ID, requireArguments()["townID"]!!)
-        viewModel.setField(
-            TripsConfigViewModel.FieldTag.TOWN_NAME,
-            requireArguments()["townName"]!!
-        )
+        val tripArgs = TripsConfigFragmentArgs.fromBundle(requireArguments())
+        viewModel.setField(TripsConfigViewModel.FieldTag.TOWN_ID, tripArgs.townID)
+        viewModel.setField(TripsConfigViewModel.FieldTag.TOWN_NAME, tripArgs.townName)
         binding.textMasterLabel.text = "From ${viewModel.townName} to: "
     }
 
@@ -84,28 +84,37 @@ class TripsConfigFragment : Fragment() {
         //Submit list to inflate recycler view
         viewModel.tripDocList.observe(viewLifecycleOwner) {
             adapter = TripsConfigAdapter(
-                exemptedTripsList = viewModel.exemptedTripList,
                 clickListener = TripsClickListener { tripId, buttonTag ->
+                    viewModel.setField(TripsConfigViewModel.FieldTag.TRIP_ID, tripId)
                     when (buttonTag) {//Remove or add a town from the exemption list
-                        TripsConfigViewModel.TripButtonTags.TRIPS_BUTTON_PRICES -> {
-                            viewModel.setField(TripsConfigViewModel.FieldTag.ON_PRICE_FORM, true)
-                            viewModel.setField(TripsConfigViewModel.FieldTag.TRIP_ID, tripId)
+                        TripsConfigViewModel.TripButtonTags.TRIPS_BUTTON_NORMAL_PRICE -> {
+                            viewModel.setField(
+                                TripsConfigViewModel.FieldTag.ON_NORMAL_PRICE_FORM,
+                                true
+                            )
+                        }
+                        TripsConfigViewModel.TripButtonTags.TRIPS_BUTTON_VIP_PRICE -> {
+                            viewModel.setField(
+                                TripsConfigViewModel.FieldTag.ON_VIP_PRICE_FORM,
+                                true
+                            )
                         }
                         TripsConfigViewModel.TripButtonTags.TRIPS_SWITCH_ACTIVATE -> {
                             viewModel.exemptTrip(tripId)
                         }
                         TripsConfigViewModel.TripButtonTags.TRIPS_CHECK_VIP -> {
-//                                viewModel.exemptVIP(tripId)
-//                                tripsAdapter.submitList(viewModel.tripDocList.value!!)
+                            viewModel.exemptVIP(tripId)
+                            viewModel.setField(TripsConfigViewModel.FieldTag.REBIND_ITEM, true)
                         }
                     }
                 },
                 pricePerKM = viewModel.pricePerKM,
                 vipPricePerKM = viewModel.vipPricePerKM,
-                optionMapList = viewModel.optionMapList
+                priceChangesMap = viewModel.tripChangesMapList
             )
             setRecycler()
             adapter.submitList(it)
+            binding.fabSearchTown.visibility = View.VISIBLE
         }
 
         viewModel.onLoading.observe(viewLifecycleOwner) {
@@ -139,7 +148,7 @@ class TripsConfigFragment : Fragment() {
                     setView(searchBinding.root)
                     setPositiveButton("SEARCH") { dialog, _ ->
                         viewModel.searchTrip(searchBinding.searchBar.editText!!.text.toString())
-                            .let { index ->
+                            ?.let { index ->
                                 if (index != -1) {
                                     binding.recyclerTrips.smoothScrollToPosition(index)
                                 } else {//If not found
@@ -164,6 +173,18 @@ class TripsConfigFragment : Fragment() {
                 }.show()
             }
         }
+        /**
+         * Looks for the position of the changed item
+         */
+        viewModel.onRebindItem.observe(viewLifecycleOwner) {
+            if (it) {
+                val tripDoc = viewModel.tripDocList.value!!.find { doc ->
+                    doc.id == viewModel.tripID
+                }
+                adapter.notifyItemChanged(viewModel.tripDocList.value!!.indexOf(tripDoc!!))
+                viewModel.setField(TripsConfigViewModel.FieldTag.REBIND_ITEM, false)
+            }
+        }
 
         viewModel.toastMessage.observe(viewLifecycleOwner) {
             if (it.isNotBlank()) {
@@ -172,17 +193,39 @@ class TripsConfigFragment : Fragment() {
                 viewModel.setField(TripsConfigViewModel.FieldTag.TOAST_MESSAGE, "")
             }
         }
-        viewModel.onPriceForm.observe(viewLifecycleOwner) {
-            if (it) {
-                viewModel.setField(TripsConfigViewModel.FieldTag.TOAST_MESSAGE, "INFLATION")
-                AppDialogFragment(viewModel).showNow(childFragmentManager, "AppDialog")
-            }
+
+        viewModel.onNormalPriceForm.observe(viewLifecycleOwner) {
+            if (it) NormalPriceDialogFragment(viewModel).showNow(
+                childFragmentManager,
+                "AppDialog"
+            )
         }
 
+        viewModel.onVipPriceForm.observe(viewLifecycleOwner) {
+            if (it) VipPriceDialogFragment(viewModel).showNow(childFragmentManager, "AppDialog")
+        }
+
+        viewModel.onClose.observe(viewLifecycleOwner){
+            if(it) {
+                onDestroy()
+                findNavController().navigate(TripsConfigFragmentDirections.actionTripsConfigFragmentToTownsConfigFragment())
+                viewModel.setField(TripsConfigViewModel.FieldTag.ON_CLOSE, false)
+            }
+        }
     }
 
+    private fun handleButtonClick(){
+        binding.btnTripSave.setOnClickListener{
+            CoroutineScope(Dispatchers.Main).launch{
+                viewModel.uploadTripChanges()
+            }
+        }
+        binding.btnTripsBack.setOnClickListener{
+            viewModel.setField(TripsConfigViewModel.FieldTag.ON_CLOSE, true)
+        }
+    }
 
-    class AppDialogFragment(val viewModel: TripsConfigViewModel) : DialogFragment() {
+    class NormalPriceDialogFragment(val viewModel: TripsConfigViewModel) : DialogFragment() {
         @SuppressLint("DialogFragmentCallbacksDetector")
         override fun onCreateDialog(
             savedInstanceState: Bundle?
@@ -196,27 +239,71 @@ class TripsConfigFragment : Fragment() {
 
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
-                .setTitle("PRICES")
+                .setTitle("Normal Price")
                 .setView(priceBinding.root)
                 .setNegativeButton("CANCEL") { dialog, _ ->
                     dialog.cancel()
                     dialog.dismiss()
-                    viewModel.setField(TripsConfigViewModel.FieldTag.ON_PRICE_FORM, false)
+                    viewModel.setField(
+                        TripsConfigViewModel.FieldTag.ON_NORMAL_PRICE_FORM,
+                        false
+                    )
                 }
                 .setOnCancelListener {
-                    viewModel.setField(TripsConfigViewModel.FieldTag.ON_PRICE_FORM, false)
+                    viewModel.setField(
+                        TripsConfigViewModel.FieldTag.ON_NORMAL_PRICE_FORM,
+                        false
+                    )
                 }
                 .setPositiveButton("CONFIRM") { dialog, _ ->
-                    viewModel.setField(
-                        TripsConfigViewModel.FieldTag.NORMAL_PRICE,
-                        priceBinding.priceNormal.editText!!.toString()
-                    )
-                    viewModel.setField(
-                        TripsConfigViewModel.FieldTag.VIP_PRICE,
-                        priceBinding.priceVip.editText!!.toString()
-                    )
+                    val price = if (priceBinding.price.editText!!.text.toString().isBlank()) 0L
+                    else priceBinding.price.editText!!.text.toString().toLong()
+
+                    viewModel.changeNormalPrice(viewModel.tripID, price)
                     dialog.cancel()
-                    viewModel.setField(TripsConfigViewModel.FieldTag.ON_PRICE_FORM, false)
+                    viewModel.setField(
+                        TripsConfigViewModel.FieldTag.ON_NORMAL_PRICE_FORM,
+                        false
+                    )
+                    viewModel.setField(TripsConfigViewModel.FieldTag.REBIND_ITEM, true)
+                }
+                .create()
+        }
+    }
+
+    class VipPriceDialogFragment(val viewModel: TripsConfigViewModel) : DialogFragment() {
+        @SuppressLint("DialogFragmentCallbacksDetector")
+        override fun onCreateDialog(
+            savedInstanceState: Bundle?
+        ): Dialog {
+            val priceBinding: ItemTripPriceFormBinding = DataBindingUtil.inflate(
+                layoutInflater,
+                R.layout.item_trip_price_form,
+                null,
+                true
+            )
+
+            return MaterialAlertDialogBuilder(requireContext())
+                // Add customization options here
+                .setTitle("VIP Price")
+                .setView(priceBinding.root)
+                .setNegativeButton("CANCEL") { dialog, _ ->
+                    dialog.cancel()
+                    dialog.dismiss()
+                    viewModel.setField(TripsConfigViewModel.FieldTag.ON_VIP_PRICE_FORM, false)
+                }
+                .setOnCancelListener {
+                    viewModel.setField(TripsConfigViewModel.FieldTag.ON_VIP_PRICE_FORM, false)
+                }
+                .setPositiveButton("CONFIRM") { dialog, _ ->
+                    val price = if (priceBinding.price.editText!!.text.toString().isBlank()) 0L
+                    else priceBinding.price.editText!!.text.toString().toLong()
+
+                    viewModel.changeVIPPrice(viewModel.tripID, price)
+                    dialog.cancel()
+                    viewModel.setField(TripsConfigViewModel.FieldTag.ON_VIP_PRICE_FORM, false)
+                    //RBind the current item
+                    viewModel.setField(TripsConfigViewModel.FieldTag.REBIND_ITEM, true)
                 }
                 .create()
         }

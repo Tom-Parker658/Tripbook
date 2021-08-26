@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyCreationFinalBinding
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.AgencyConfigActivity
@@ -161,17 +162,17 @@ class AgencyCreationFinalFragment : Fragment() {
     }*/
 
     /**Start and return the result from the activity config intent*/
-    private val agencyConfigIntent = registerForActivityResult(AgencyConfigContract()){/*Get Results*/}
+//    private val agencyConfigIntent = registerForActivityResult(AgencyConfigContract()){/*Get Results*/}
 
     private fun onClickListeners(){
         /**
          * Launches for configuration of trips or journeys
          */
         binding.btnTrips.setOnClickListener {
-//            val configBundle = Bundle().apply {
-//                putString("START_UP_OPTION", AgencyConfigActivity.AgencyConfigResources.StartUpTags.TRIPS_CONFIG.name)
-//            }
-//            agencyConfigIntent.launch(configBundle)
+            onDestroy()
+            findNavController().navigate(
+                AgencyCreationFinalFragmentDirections.actionAgencyCreationFinalFragmentToTownsConfigFragment()
+            )
         }
     }
     private fun initViewModel() {
