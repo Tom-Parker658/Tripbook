@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.lado.travago.tripbook.model.enums.OCCUPATION
 import com.lado.travago.tripbook.model.enums.SEX
+import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.model.users.Booker
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
@@ -150,7 +151,7 @@ class BookerCreationViewModel: ViewModel() {
                 is State.Loading -> _loading.value = true
                 is State.Failed -> {
                     loading.value = false
-                    _toastMessage.value = storageState.message
+                    _toastMessage.value = storageState.exception.handleError{ /**TODO: Handle Error lambda*/ }
                 }
                 is State.Success -> {
                     _toastMessage.value = "FireStorage OK! link =${storageState.data}"
@@ -162,7 +163,7 @@ class BookerCreationViewModel: ViewModel() {
                         birthdayInMillis = birthdayField,
                         photoUrl = photoUrl,
                         nationality = nationalityField,
-                        occupation = occupationField.toString(),
+                        occupation = occupationField,
                         recoveryPhoneNumber = fullPhone // Actually recovery now
                     )
                     //Complete the creation process for signUp
@@ -177,9 +178,9 @@ class BookerCreationViewModel: ViewModel() {
                             }
                             is State.Loading -> _loading.value = true
                             is State.Failed -> {
-                                _toastMessage.value = it.message
+                                _toastMessage.value = it.exception.handleError{ /**TODO: Handle Error lambda*/ }
                                 _loading.value = false
-                                _toastMessage.value = it.message
+                                _toastMessage.value = it.exception.handleError{ /**TODO: Handle Error lambda*/ }
                             }
                         }
                     }
@@ -219,7 +220,7 @@ class BookerCreationViewModel: ViewModel() {
                     }
                 }
                 is State.Failed -> {
-                    _toastMessage.value = authState.message ?:"Wrong verification Code!"
+                    _toastMessage.value = authState.exception.handleError{ /**TODO: Handle Error lambda*/ } ?:"Wrong verification Code!"
                 }
                 is State.Loading -> {
                     //

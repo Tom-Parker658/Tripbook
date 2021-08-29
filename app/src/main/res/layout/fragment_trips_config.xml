@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/text_master_label"
-            style="?attr/textAppearanceHeadline6"
+            style="@style/headlineStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/recycler_trips"
@@ -29,25 +29,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbars="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/btn_trips_back"
+            app:layout_constraintBottom_toTopOf="@+id/btn_trip_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_master_label"
             tools:listitem="@layout/item_trips_config" />
-
-        <Button
-            android:id="@+id/btn_trips_back"
-            style="@style/neutralButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            app:icon="@drawable/baseline_arrow_back_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_trip_save"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/recycler_trips"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/btn_trip_save"
@@ -55,46 +41,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_trips_back"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btn_trips_back"
-            app:layout_constraintTop_toTopOf="@+id/btn_trips_back" />
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <LinearLayout
+        <ProgressBar
             android:id="@+id/tripsProgressBar"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center|center_horizontal"
-            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="gone"
+            style="?android:attr/progressBarStyle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ProgressBar
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/recycler_trips"
-                app:layout_constraintEnd_toEndOf="@+id/recycler_trips"
-                app:layout_constraintStart_toStartOf="@+id/recycler_trips"
-                app:layout_constraintTop_toBottomOf="@+id/text_master_label" />
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_search_town"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:clickable="true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_trip_save"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.90"
             app:srcCompat="@drawable/baseline_search_24"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_sort_trips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@+id/fab_search_town"
+            app:layout_constraintEnd_toEndOf="@+id/fab_search_town"
+            app:layout_constraintStart_toStartOf="@+id/fab_search_town"
+            app:srcCompat="@drawable/baseline_sort_24"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

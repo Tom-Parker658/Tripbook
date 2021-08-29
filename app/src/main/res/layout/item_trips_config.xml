@@ -37,11 +37,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="4dp"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_NORMAL_PRICE, tripDoc)}"
-                android:textColor="@color/colorPositiveButton"
-                app:icon="@drawable/baseline_payments_24"
+                android:textColor="@color/gold"
+                app:icon="@drawable/dollar_coin_24"
+                app:iconTint="@color/colorPositiveButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -57,14 +57,13 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_VIP_PRICE, tripDoc )}"
-                android:textColor="@color/colorPositiveButton"
-                app:icon="@drawable/baseline_vip_24"
-                app:iconGravity="end"
-                app:iconTint="#FFC107"
+                android:textColor="@color/gold"
+                app:icon="@drawable/dollar_coin_24"
+                app:iconGravity="start"
+                app:iconTint="@color/colorPositiveButton"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_price"
                 tools:text="5,000 FCFA" />
 
             <TextView
@@ -75,7 +74,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/text_trip_distance"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -101,12 +100,14 @@
                 android:id="@+id/switch_activate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
                 android:checked="true"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_SWITCH_ACTIVATE, tripDoc)}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_price_vip" />
+                app:layout_constraintBottom_toTopOf="@+id/btn_price"
+                app:layout_constraintEnd_toStartOf="@+id/view24"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/view21"
@@ -144,26 +145,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                app:layout_constraintBottom_toBottomOf="@+id/text_trip_distance"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_destination_town"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/baseline_directions_bus_24" />
-
             <CheckBox
                 android:id="@+id/check_vip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:checked="true"
+                android:drawableEnd="@drawable/baseline_vip_24"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_CHECK_VIP, tripDoc)}"
                 android:text="VIP"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_price_vip" />
+                app:layout_constraintBottom_toTopOf="@+id/btn_price_vip"
+                app:layout_constraintStart_toEndOf="@+id/view23"
+                app:layout_constraintTop_toBottomOf="@+id/btn_price" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

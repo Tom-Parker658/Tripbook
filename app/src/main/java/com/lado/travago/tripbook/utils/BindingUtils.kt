@@ -1,9 +1,16 @@
 package com.lado.travago.tripbook.utils
 
+import android.graphics.BitmapFactory
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LiveData
 import com.bumptech.glide.Glide
+import com.bumptech.glide.annotation.GlideModule
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
 import com.lado.travago.tripbook.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,12 +30,14 @@ import java.util.*
  * We use the [.placeHolder()] to set a pending image while the image is loading
  */
 @BindingAdapter("imageFromUrl")
-fun ImageView.loadImageFromUrl(imageUrl: String){
+fun ImageView.loadImageFromUrl(imageUrl: String) {
+
     Glide.with(this)
         .load(imageUrl)
         .timeout(1200)
-        .placeholder(R.drawable.baseline_insert_photo_24)
+        .placeholder(R.drawable.baseline_account_circle_24)
         .into(this)
+//        .onLoadFailed(BitmapFactory.decodeResource(resources, R.drawable.baseline_broken_image_24).toDrawable(resources))
 }
 
 //@BindingAdapter("statusText")
@@ -43,7 +52,7 @@ fun ImageView.loadImageFromUrl(imageUrl: String){
  * Uses [Utils.getAge] to get the age of the user from their birthday in millisecond
  */
 @BindingAdapter("ageFromMillis")
-fun TextView.setAgeFromMillis(birthdayInMillis: Long){
+fun TextView.setAgeFromMillis(birthdayInMillis: Long) {
     text = Utils.getAge(birthdayInMillis).toString()
 }
 
@@ -51,7 +60,21 @@ fun TextView.setAgeFromMillis(birthdayInMillis: Long){
  * Display dates in a nice form
  */
 @BindingAdapter("formatDateFromMillis")
-fun TextView.formatDate(dateInMillis: Long){
+fun TextView.formatDate(dateInMillis: Long) {
     //TODO:YYYY
-    text = SimpleDateFormat("dd/MM", Locale.getDefault()).toString()
+    text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).toString()
+}
+
+@BindingAdapter("addedOn")
+fun TextView.addedOn(date: Timestamp) {
+    //TODO:YYYY
+    text = "Added on: ${date.toDate()}"
+}
+
+@BindingAdapter("loadingObserver")
+fun View.visibilityObserver(onLoading: Boolean) {
+    visibility = when (onLoading) {
+        true -> View.VISIBLE
+        false -> View.GONE
+    }
 }

@@ -7,10 +7,7 @@ package com.lado.travago.tripbook.model.admin
  * @constructor The constructor of this can only be invoked by an [OnlineTravelAgency] and cannot be called directly
  * So an [OnlineTravelAgencyPark] must be attributed to an OnlineTransportAgency
  */
-class OnlineTravelAgencyPark(
-//    val location: Place? = null, val OTA: OnlineTravelAgency,
-//    var destinations: List<Place> = listOf(),
-) {
+class OnlineTravelAgencyPark {
 //    val name: String = OTA.agencyName
 }
 

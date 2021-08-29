@@ -1,14 +1,10 @@
 package com.lado.travago.tripbook.ui.agency.creation.config_panel
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation.findNavController
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityAgencyConfigBinding
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**

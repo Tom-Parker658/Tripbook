@@ -53,7 +53,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/check_admin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
+                app:layout_constraintStart_toEndOf="@+id/scanner_photo"
                 app:layout_constraintTop_toBottomOf="@+id/item_text_agency_price"
                 tools:text="Dschang - Yaounde" />
 
@@ -72,7 +72,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/item_text_journey_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
+                app:layout_constraintStart_toEndOf="@+id/scanner_photo"
                 app:layout_constraintTop_toBottomOf="@+id/item_text_agency_name"
                 tools:text="5,000 FCFA" />
 
@@ -91,7 +91,7 @@
                 app:drawableEndCompat="@drawable/baseline_vip_24" />
 
             <ImageView
-                android:id="@+id/item_image_agency_logo"
+                android:id="@+id/scanner_photo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="16dp"
@@ -116,7 +116,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/item_text_agency_price"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
+                app:layout_constraintStart_toEndOf="@+id/scanner_photo"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="General Voyage" />
 
@@ -131,7 +131,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/item_text_journey_vip"
                 app:layout_constraintEnd_toStartOf="@+id/item_text_journey_vip"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/item_image_agency_logo"
+                app:layout_constraintStart_toEndOf="@+id/scanner_photo"
                 app:layout_constraintTop_toTopOf="@+id/item_text_journey_vip"
                 tools:text="12/11/2019" />
 

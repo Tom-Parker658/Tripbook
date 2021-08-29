@@ -6,6 +6,6 @@
     app:startDestination="@id/agencyCreation1Fragment">
     <fragment
         android:id="@+id/agencyCreation1Fragment"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreation1Fragment"
+        android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreationFragment"
         android:label="AgencyCreation1Fragment" />
 </navigation>

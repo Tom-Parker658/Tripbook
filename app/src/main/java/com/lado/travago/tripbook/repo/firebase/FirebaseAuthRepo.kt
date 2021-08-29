@@ -45,7 +45,7 @@ class FirebaseAuthRepo {
         emit(State.success(user!!))
     }.catch {
         //Failed to register
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -59,7 +59,7 @@ class FirebaseAuthRepo {
         val user = firebaseAuth.signInWithEmailAndPassword(email, password).await().user
         emit(State.success(user!!))
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -73,7 +73,7 @@ class FirebaseAuthRepo {
         val user = firebaseAuth.createUserWithEmailAndPassword(email, password).await().user
         emit(State.success(user!!))
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -108,7 +108,7 @@ class FirebaseAuthRepo {
         //Returns the user object
         emit(State.success(anonymousUser.user))
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -125,7 +125,7 @@ class FirebaseAuthRepo {
         val deleteTask = firebaseAuth.currentUser!!.delete().await()
         emit(State.success(deleteTask))
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 }
 

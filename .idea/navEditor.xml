@@ -8,40 +8,28 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="agencyCreationActivity">
+                  <entry key="agencyCreationFinalFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="233" />
-                            <option name="y" value="368" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="agencyCreationFinalFragment2">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-282" />
-                            <option name="y" value="153" />
+                            <option name="x" value="242" />
+                            <option name="y" value="313" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_agencyCreationFinalFragment2_to_agencyCreationActivity">
+                            <entry key="action_agencyCreationFinalFragment_to_agencyCreationActivity">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_agencyCreationFinalFragment2_to_scannerConfigFragment">
+                            <entry key="action_agencyCreationFinalFragment_to_scannerConfigFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_agencyCreationFinalFragment2_to_townsConfigFragment">
+                            <entry key="action_agencyCreationFinalFragment_to_townsConfigFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -51,14 +39,35 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="agencyCreationFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="790" />
+                            <option name="y" value="-193" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="scannerConfigFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="233" />
-                            <option name="y" value="12" />
+                            <option name="x" value="202" />
+                            <option name="y" value="-401" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_scannerConfigFragment_to_agencyCreationFinalFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -68,13 +77,13 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="233" />
-                            <option name="y" value="724" />
+                            <option name="x" value="-212" />
+                            <option name="y" value="126" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_townsConfigFragment_to_agencyCreationFinalFragment2">
+                            <entry key="action_townsConfigFragment_to_agencyCreationFinalFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -94,8 +103,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="454" />
-                            <option name="y" value="724" />
+                            <option name="x" value="-458" />
+                            <option name="y" value="109" />
                           </Point>
                         </option>
                         <option name="myPositions">

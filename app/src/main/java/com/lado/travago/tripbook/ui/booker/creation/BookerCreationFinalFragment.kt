@@ -43,7 +43,7 @@ class BookerCreationFinalFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(layoutInflater, com.lado.travago.tripbook.R.layout.fragment_booker_creation_final, null, false)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_booker_creation_final, null, false)
         viewModel = ViewModelProvider(requireActivity())[BookerCreationViewModel::class.java]
         binding.countryCodePicker.setCountryForPhoneCode(savedInstanceState?.getInt("COUNTRY_CODE") ?: 237)
         phoneWidgetConfig()

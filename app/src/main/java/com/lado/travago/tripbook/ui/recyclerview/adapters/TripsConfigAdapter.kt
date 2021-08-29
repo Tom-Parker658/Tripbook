@@ -12,10 +12,6 @@ import com.lado.travago.tripbook.databinding.ItemTripsConfigBinding
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-/**
- * @param exemptedVIPList contains a list of vip Boolean, vip price, normal price, and tripID for all trips
- */
-
 @ExperimentalCoroutinesApi
 class TripsConfigAdapter(
     val clickListener: TripsClickListener,
@@ -25,7 +21,7 @@ class TripsConfigAdapter(
 ) : ListAdapter<DocumentSnapshot, TripsConfigViewHolder>(
     TripsConfigDiffCallbacks()
 ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripsConfigViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         TripsConfigViewHolder.from(
             parent = parent,
             pricePerKM = pricePerKM,

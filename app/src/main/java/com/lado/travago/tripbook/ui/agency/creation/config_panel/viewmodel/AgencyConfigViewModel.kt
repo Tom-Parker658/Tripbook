@@ -3,6 +3,7 @@ package com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lado.travago.tripbook.model.admin.OfflineCollection
+import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirebaseAuthRepo
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
@@ -13,9 +14,7 @@ import kotlinx.coroutines.flow.collect
  * Config Activity to control Master-Slave mechanism e.g Country-Journey, Continent-Country
  */
 @ExperimentalCoroutinesApi
-class AgencyConfigViewModel(
-//    var startUpOption: AgencyConfigResources.StartUpTags
-) : ViewModel() {
+class AgencyConfigViewModel : ViewModel() {
     //Ids  of the currently clicked in the recycler views
     private val _masterItemID = MutableLiveData("")
     private val _slaveItemID = MutableLiveData("")
@@ -84,7 +83,7 @@ class AgencyConfigViewModel(
                 is State.Loading -> _slaveLoading.value = true
                 is State.Failed -> {
                     _slaveLoading.value = false
-                    _onSlaveFailed.value = it.message
+                    _onSlaveFailed.value = it.exception.handleError{ /**TODO: Handle Error lambda*/ }
                 }
                 is State.Success -> {
                     _slaveLoading.value = false
@@ -195,6 +194,6 @@ class AgencyConfigViewModel(
         }
     }
 
-    enum class FieldTags() { MASTER_ID, SLAVE_ID, NAME }
+    enum class FieldTags { MASTER_ID, SLAVE_ID, NAME }
 
 }

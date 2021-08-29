@@ -17,9 +17,9 @@ sealed class State<T> {
 
     /**
      * Process Failed
-     * @param message error message
+     * @param exception is the thing to handle
      */
-    data class Failed<T>(val message: String) : State<T>()
+    data class Failed<T>(val exception: Exception) : State<T>()
 
 
     /**
@@ -34,6 +34,6 @@ sealed class State<T> {
     companion object {
         fun <T> loading() = Loading<T>()
         fun <T> success(data: T) = Success(data)
-        fun <T> failed(message: String) = Failed<T>(message)
+        fun <T> failed(exception: Exception) = Failed<T>(exception)
     }
 }

@@ -13,16 +13,13 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTownsConfigBinding
 import com.lado.travago.tripbook.databinding.ItemSearchFormBinding
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
 import com.lado.travago.tripbook.ui.recyclerview.adapters.TownClickListener
 import com.lado.travago.tripbook.ui.recyclerview.adapters.TownConfigAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -57,7 +54,7 @@ class TownsConfigFragment : Fragment() {
         try {
             setRecycler()
         } catch (e: Exception) {
-            //TODO: LOad list first
+            //TODO: Load list first
         }
         return binding.root
     }
@@ -76,7 +73,7 @@ class TownsConfigFragment : Fragment() {
             if (it) CoroutineScope(Dispatchers.Main).launch { viewModel.getTownsData() }
         }
         //Submit list to inflate recycler view
-        viewModel.townDocList.observe(viewLifecycleOwner) {
+        viewModel.townDocList.observe(viewLifecycleOwner) { doc ->
             adapter = TownConfigAdapter(
                 exemptedTownsList = viewModel.exemptedTownList,
 
@@ -99,12 +96,17 @@ class TownsConfigFragment : Fragment() {
                     }
                 })
             setRecycler()
-            adapter.submitList(it)
-            binding.fabSearchTown.visibility = View.VISIBLE
+            adapter.submitList(doc)
         }
         viewModel.onLoading.observe(viewLifecycleOwner) {
-            if (it) binding.townProgressBar.visibility = View.VISIBLE
-            else binding.townProgressBar.visibility = View.GONE
+            if (it) {
+                binding.townProgressBar.visibility = View.VISIBLE
+                //Makes the screen untouchable
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            } else {
+                binding.townProgressBar.visibility = View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
         }
         viewModel.toastMessage.observe(viewLifecycleOwner) {
             if (it.isNotBlank()) {
@@ -113,7 +115,7 @@ class TownsConfigFragment : Fragment() {
             }
         }
         binding.fabSearchTown.setOnClickListener {
-            viewModel.setField(TownsConfigViewModel.FieldTag.START_TOWN_SEARCH, true)
+            viewModel.setField(TownsConfigViewModel.FieldTags.START_TOWN_SEARCH, true)
         }
         viewModel.startTownSearch.observe(viewLifecycleOwner) {
             if (it) {
@@ -143,16 +145,16 @@ class TownsConfigFragment : Fragment() {
                                         binding.recyclerTowns.smoothScrollToPosition(index)
                                     } else {//If not found
                                         viewModel.setField(
-                                            TownsConfigViewModel.FieldTag.TOAST_MESSAGE,
+                                            TownsConfigViewModel.FieldTags.TOAST_MESSAGE,
                                             "Not found. Select from dropdown"
                                         )
                                     }
                                 }
                         }
-                        viewModel.setField(TownsConfigViewModel.FieldTag.START_TOWN_SEARCH, false)
+                        viewModel.setField(TownsConfigViewModel.FieldTags.START_TOWN_SEARCH, false)
                     }
                     setOnCancelListener {
-                        viewModel.setField(TownsConfigViewModel.FieldTag.START_TOWN_SEARCH, false)
+                        viewModel.setField(TownsConfigViewModel.FieldTags.START_TOWN_SEARCH, false)
                     }
                 }.create().apply {
                     window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
@@ -161,25 +163,46 @@ class TownsConfigFragment : Fragment() {
         }
         viewModel.onClose.observe(viewLifecycleOwner) {
             if (it) {
-                onDestroy()
                 findNavController().navigate(
                     TownsConfigFragmentDirections.actionTownsConfigFragmentToAgencyCreationFinalFragment()
                 )
-                viewModel.setField(TownsConfigViewModel.FieldTag.ON_CLOSE, false)
-
+                viewModel.setField(TownsConfigViewModel.FieldTags.ON_CLOSE, false)
+                viewModel.setField(TownsConfigViewModel.FieldTags.RETRY_TOWNS , true)
             }
         }
 
     }
 
     private fun handleClicks(){
-        binding.btnCancelTown.setOnClickListener {
-            viewModel.setField(TownsConfigViewModel.FieldTag.ON_CLOSE, true)
-        }
         binding.btnSaveTowns.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 viewModel.uploadTownChanges()
             }
+        }
+        binding.fabSortTowns.setOnClickListener {
+            //1-We create a spinner with options
+            MaterialAlertDialogBuilder(requireContext()).apply {
+                setIcon(R.drawable.baseline_sort_24)
+                setTitle("Sort By?")
+                setSingleChoiceItems(
+                    arrayOf("None", "Name", "Region"),
+                    viewModel.sortCheckedItem
+                ) { dialog, which ->
+                    when (which) {
+                        1 -> {
+                            viewModel.sortResult(TownsConfigViewModel.SortTags.TOWN_NAMES)
+                            viewModel.setField(TownsConfigViewModel.FieldTags.CHECKED_ITEM, 1)
+                        }
+                        2 -> {
+                            viewModel.sortResult(TownsConfigViewModel.SortTags.REGIONS)
+                            viewModel.setField(TownsConfigViewModel.FieldTags.CHECKED_ITEM, 2)
+                        }
+                    }
+                    adapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
+
+            }.create().show()
         }
     }
 }

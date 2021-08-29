@@ -62,8 +62,8 @@ class TripsConfigFragment : Fragment() {
 
     private fun setup() {
         val tripArgs = TripsConfigFragmentArgs.fromBundle(requireArguments())
-        viewModel.setField(TripsConfigViewModel.FieldTag.TOWN_ID, tripArgs.townID)
-        viewModel.setField(TripsConfigViewModel.FieldTag.TOWN_NAME, tripArgs.townName)
+        viewModel.setField(TripsConfigViewModel.FieldTags.TOWN_ID, tripArgs.townID)
+        viewModel.setField(TripsConfigViewModel.FieldTags.TOWN_NAME, tripArgs.townName)
         binding.textMasterLabel.text = "From ${viewModel.townName} to: "
     }
 
@@ -85,17 +85,17 @@ class TripsConfigFragment : Fragment() {
         viewModel.tripDocList.observe(viewLifecycleOwner) {
             adapter = TripsConfigAdapter(
                 clickListener = TripsClickListener { tripId, buttonTag ->
-                    viewModel.setField(TripsConfigViewModel.FieldTag.TRIP_ID, tripId)
+                    viewModel.setField(TripsConfigViewModel.FieldTags.TRIP_ID, tripId)
                     when (buttonTag) {//Remove or add a town from the exemption list
                         TripsConfigViewModel.TripButtonTags.TRIPS_BUTTON_NORMAL_PRICE -> {
                             viewModel.setField(
-                                TripsConfigViewModel.FieldTag.ON_NORMAL_PRICE_FORM,
+                                TripsConfigViewModel.FieldTags.ON_NORMAL_PRICE_FORM,
                                 true
                             )
                         }
                         TripsConfigViewModel.TripButtonTags.TRIPS_BUTTON_VIP_PRICE -> {
                             viewModel.setField(
-                                TripsConfigViewModel.FieldTag.ON_VIP_PRICE_FORM,
+                                TripsConfigViewModel.FieldTags.ON_VIP_PRICE_FORM,
                                 true
                             )
                         }
@@ -104,7 +104,7 @@ class TripsConfigFragment : Fragment() {
                         }
                         TripsConfigViewModel.TripButtonTags.TRIPS_CHECK_VIP -> {
                             viewModel.exemptVIP(tripId)
-                            viewModel.setField(TripsConfigViewModel.FieldTag.REBIND_ITEM, true)
+                            viewModel.setField(TripsConfigViewModel.FieldTags.REBIND_ITEM, true)
                         }
                     }
                 },
@@ -118,11 +118,17 @@ class TripsConfigFragment : Fragment() {
         }
 
         viewModel.onLoading.observe(viewLifecycleOwner) {
-            if (it) binding.tripsProgressBar.visibility = View.VISIBLE
-            else binding.tripsProgressBar.visibility = View.GONE
+            if (it) {
+                binding.tripsProgressBar.visibility = View.VISIBLE
+                //Makes the screen untouchable
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            } else {
+                binding.tripsProgressBar.visibility = View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
         }
         binding.fabSearchTown.setOnClickListener {
-            viewModel.setField(TripsConfigViewModel.FieldTag.START_TRIP_SEARCH, true)
+            viewModel.setField(TripsConfigViewModel.FieldTags.START_TRIP_SEARCH, true)
         }
         viewModel.startTripSearch.observe(viewLifecycleOwner) {
             if (it) {
@@ -153,20 +159,20 @@ class TripsConfigFragment : Fragment() {
                                     binding.recyclerTrips.smoothScrollToPosition(index)
                                 } else {//If not found
                                     viewModel.setField(
-                                        TripsConfigViewModel.FieldTag.TOAST_MESSAGE,
+                                        TripsConfigViewModel.FieldTags.TOAST_MESSAGE,
                                         "Not found. Select from dropdown"
                                     )
                                 }
                             }
-                        viewModel.setField(TripsConfigViewModel.FieldTag.START_TRIP_SEARCH, false)
+                        viewModel.setField(TripsConfigViewModel.FieldTags.START_TRIP_SEARCH, false)
                         dialog.dismiss()
                         dialog.cancel()
                     }
                     setOnCancelListener {
-                        viewModel.setField(TripsConfigViewModel.FieldTag.START_TRIP_SEARCH, false)
+                        viewModel.setField(TripsConfigViewModel.FieldTags.START_TRIP_SEARCH, false)
                     }
                     setOnDismissListener {
-                        viewModel.setField(TripsConfigViewModel.FieldTag.START_TRIP_SEARCH, false)
+                        viewModel.setField(TripsConfigViewModel.FieldTags.START_TRIP_SEARCH, false)
                     }
                 }.create().apply {
                     window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
@@ -182,7 +188,7 @@ class TripsConfigFragment : Fragment() {
                     doc.id == viewModel.tripID
                 }
                 adapter.notifyItemChanged(viewModel.tripDocList.value!!.indexOf(tripDoc!!))
-                viewModel.setField(TripsConfigViewModel.FieldTag.REBIND_ITEM, false)
+                viewModel.setField(TripsConfigViewModel.FieldTags.REBIND_ITEM, false)
             }
         }
 
@@ -190,7 +196,7 @@ class TripsConfigFragment : Fragment() {
             if (it.isNotBlank()) {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
                 Log.d("TripsConfig", it)
-                viewModel.setField(TripsConfigViewModel.FieldTag.TOAST_MESSAGE, "")
+                viewModel.setField(TripsConfigViewModel.FieldTags.TOAST_MESSAGE, "")
             }
         }
 
@@ -207,9 +213,8 @@ class TripsConfigFragment : Fragment() {
 
         viewModel.onClose.observe(viewLifecycleOwner){
             if(it) {
-                onDestroy()
                 findNavController().navigate(TripsConfigFragmentDirections.actionTripsConfigFragmentToTownsConfigFragment())
-                viewModel.setField(TripsConfigViewModel.FieldTag.ON_CLOSE, false)
+                viewModel.setField(TripsConfigViewModel.FieldTags.ON_CLOSE, false)
             }
         }
     }
@@ -220,8 +225,38 @@ class TripsConfigFragment : Fragment() {
                 viewModel.uploadTripChanges()
             }
         }
-        binding.btnTripsBack.setOnClickListener{
-            viewModel.setField(TripsConfigViewModel.FieldTag.ON_CLOSE, true)
+        binding.fabSortTrips.setOnClickListener {
+            //1-We create a spinner with options
+            MaterialAlertDialogBuilder(requireContext()).apply {
+                setIcon(R.drawable.baseline_sort_24)
+                setTitle("Sort By?")
+                setSingleChoiceItems(
+                    arrayOf("None", "Name", "Price", "VIP Price", "distance"),
+                    viewModel.sortCheckedItem
+                ) { dialog, which ->
+                    when (which) {
+                        1 -> {
+                            viewModel.sortTripsResult(TripsConfigViewModel.SortTags.TRIP_NAMES)
+                            viewModel.setField(TripsConfigViewModel.FieldTags.CHECKED_ITEM, 1)
+                        }
+                        2 -> {
+                            viewModel.sortTripsResult(TripsConfigViewModel.SortTags.TRIP_PRICES)
+                            viewModel.setField(TripsConfigViewModel.FieldTags.CHECKED_ITEM, 2)
+                        }
+                        3 -> {
+                            viewModel.sortTripsResult(TripsConfigViewModel.SortTags.TRIP_VIP_PRICES)
+                            viewModel.setField(TripsConfigViewModel.FieldTags.CHECKED_ITEM, 3)
+                        }
+                        4 -> {
+                            viewModel.sortTripsResult(TripsConfigViewModel.SortTags.DISTANCE)
+                            viewModel.setField(TripsConfigViewModel.FieldTags.CHECKED_ITEM, 4)
+                        }
+                    }
+                    dialog.dismiss()
+                    adapter.notifyDataSetChanged()
+                }
+
+            }.create().show()
         }
     }
 
@@ -245,13 +280,13 @@ class TripsConfigFragment : Fragment() {
                     dialog.cancel()
                     dialog.dismiss()
                     viewModel.setField(
-                        TripsConfigViewModel.FieldTag.ON_NORMAL_PRICE_FORM,
+                        TripsConfigViewModel.FieldTags.ON_NORMAL_PRICE_FORM,
                         false
                     )
                 }
                 .setOnCancelListener {
                     viewModel.setField(
-                        TripsConfigViewModel.FieldTag.ON_NORMAL_PRICE_FORM,
+                        TripsConfigViewModel.FieldTags.ON_NORMAL_PRICE_FORM,
                         false
                     )
                 }
@@ -262,10 +297,10 @@ class TripsConfigFragment : Fragment() {
                     viewModel.changeNormalPrice(viewModel.tripID, price)
                     dialog.cancel()
                     viewModel.setField(
-                        TripsConfigViewModel.FieldTag.ON_NORMAL_PRICE_FORM,
+                        TripsConfigViewModel.FieldTags.ON_NORMAL_PRICE_FORM,
                         false
                     )
-                    viewModel.setField(TripsConfigViewModel.FieldTag.REBIND_ITEM, true)
+                    viewModel.setField(TripsConfigViewModel.FieldTags.REBIND_ITEM, true)
                 }
                 .create()
         }
@@ -290,10 +325,10 @@ class TripsConfigFragment : Fragment() {
                 .setNegativeButton("CANCEL") { dialog, _ ->
                     dialog.cancel()
                     dialog.dismiss()
-                    viewModel.setField(TripsConfigViewModel.FieldTag.ON_VIP_PRICE_FORM, false)
+                    viewModel.setField(TripsConfigViewModel.FieldTags.ON_VIP_PRICE_FORM, false)
                 }
                 .setOnCancelListener {
-                    viewModel.setField(TripsConfigViewModel.FieldTag.ON_VIP_PRICE_FORM, false)
+                    viewModel.setField(TripsConfigViewModel.FieldTags.ON_VIP_PRICE_FORM, false)
                 }
                 .setPositiveButton("CONFIRM") { dialog, _ ->
                     val price = if (priceBinding.price.editText!!.text.toString().isBlank()) 0L
@@ -301,9 +336,9 @@ class TripsConfigFragment : Fragment() {
 
                     viewModel.changeVIPPrice(viewModel.tripID, price)
                     dialog.cancel()
-                    viewModel.setField(TripsConfigViewModel.FieldTag.ON_VIP_PRICE_FORM, false)
+                    viewModel.setField(TripsConfigViewModel.FieldTags.ON_VIP_PRICE_FORM, false)
                     //RBind the current item
-                    viewModel.setField(TripsConfigViewModel.FieldTag.REBIND_ITEM, true)
+                    viewModel.setField(TripsConfigViewModel.FieldTags.REBIND_ITEM, true)
                 }
                 .create()
         }

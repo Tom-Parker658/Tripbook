@@ -46,7 +46,7 @@ class StorageRepo(val context: Context? = null) {
         emit(State.success(photoUrl))
     }.catch {
         //Process failed
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
 }

@@ -174,6 +174,13 @@ class AgencyCreationFinalFragment : Fragment() {
                 AgencyCreationFinalFragmentDirections.actionAgencyCreationFinalFragmentToTownsConfigFragment()
             )
         }
+        binding.btnScanners.setOnClickListener {
+            onDestroy()
+            findNavController().navigate(
+                AgencyCreationFinalFragmentDirections.actionAgencyCreationFinalFragmentToScannerConfigFragment()
+            )
+        }
+
     }
     private fun initViewModel() {
         viewModel = ViewModelProvider(requireActivity())[AgencyCreationViewModel::class.java]

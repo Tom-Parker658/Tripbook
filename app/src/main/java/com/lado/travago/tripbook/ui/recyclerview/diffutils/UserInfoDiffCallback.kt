@@ -29,6 +29,6 @@ class UserInfoDiffCallback: DiffUtil.ItemCallback<User.UserBasicInfo>(){
     override fun areContentsTheSame(
         oldItem: User.UserBasicInfo,
         newItem: User.UserBasicInfo
-    ) = oldItem.equals(newItem)
+    ) = oldItem == newItem
 
 }

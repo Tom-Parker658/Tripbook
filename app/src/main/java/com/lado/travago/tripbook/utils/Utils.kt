@@ -1,6 +1,7 @@
 package com.lado.travago.tripbook.utils
 
 import android.graphics.Bitmap
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
@@ -146,4 +147,5 @@ object Utils {
         bitmap!!.compress(format, 0, byteArrayOutputStream)
         return ByteArrayInputStream(byteArrayOutputStream.toByteArray())
     }
+
 }

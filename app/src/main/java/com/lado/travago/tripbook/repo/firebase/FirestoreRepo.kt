@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
-class FirestoreRepo() {
+class FirestoreRepo {
     //Instance of our firestore db
     var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -46,7 +46,7 @@ class FirestoreRepo() {
         emit(State.success(document.path))
 
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -67,7 +67,7 @@ class FirestoreRepo() {
         emit(State.success(null))
 
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
     fun batchedWriteDocuments(
@@ -95,7 +95,7 @@ class FirestoreRepo() {
         }.await()
         emit(State.success(null))
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
 
@@ -119,7 +119,7 @@ class FirestoreRepo() {
         emit(State.success(newFieldValue))
 
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -135,7 +135,7 @@ class FirestoreRepo() {
         val documentSnapshot = doc.get(from).await()
         emit(State.success(documentSnapshot))
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -169,9 +169,21 @@ class FirestoreRepo() {
         val allDocuments = collectionRef.get(from).await()
         emit(State.success(allDocuments))
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
+    /**
+     * Deletes a document
+     */
+    fun deleteDocument(
+        documentPath: String
+    ) = flow{
+        emit(State.loading())
+        val docDel = db.document(documentPath).delete().await()
+        emit(State.success(docDel))
+    }.catch {
+        emit(State.failed(it as Exception))
+    }.flowOn(Dispatchers.IO)
     /**
      * Gets a collection reference
      */
@@ -180,7 +192,7 @@ class FirestoreRepo() {
         val collection = db.collection(path).get().await()
         emit(State.success(collection))
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
 
@@ -194,7 +206,7 @@ class FirestoreRepo() {
         val doc = db.document("${FirestoreTags.Scanners}/$uid").get().await()
         emit(State.success(doc))
     }.catch {
-        emit(State.failed(FirestoreTags.Bookers.toString()))
+        emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
 }

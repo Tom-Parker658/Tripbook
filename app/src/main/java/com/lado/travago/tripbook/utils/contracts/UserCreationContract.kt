@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContract
-import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationActivity
+import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationFragment
 //import com.lado.travago.tripbook.ui.agency.creation.config_panel.AgencyConfigActivity.AgencyConfigResources.StartUpTags
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -22,7 +22,7 @@ class AgencyConfigContract : ActivityResultContract<Bundle, String>() {
     override fun createIntent(
         context: Context,
         dataBundle: Bundle
-    ) = Intent(context, AgencyCreationActivity::class.java)
+    ) = Intent(context, AgencyCreationFragment::class.java)
 
     /** Convert result obtained from [Activity.onActivityResult] to Output  */
     override fun parseResult(resultCode: Int, infoIntent: Intent?) = when (resultCode) {

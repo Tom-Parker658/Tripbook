@@ -1,13 +1,15 @@
 package com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ktx.getField
+import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import java.util.*
 
 @ExperimentalCoroutinesApi
 class TripsConfigViewModel : ViewModel() {
@@ -36,8 +38,8 @@ class TripsConfigViewModel : ViewModel() {
     val onRebindItem get() = _onRebindItem
 
     //Holds the value of the trips for the currently selected town
-    private val _tripDocList = MutableLiveData<List<DocumentSnapshot>>()
-    val tripDocList get() = _tripDocList
+    private val _tripDocList = MutableLiveData<MutableList<DocumentSnapshot>>()
+    val tripDocList: LiveData<MutableList<DocumentSnapshot>> get() = _tripDocList
 
     /**
      * Syntax in firestore
@@ -67,6 +69,10 @@ class TripsConfigViewModel : ViewModel() {
      *  },
      * )
      */
+
+    var sortCheckedItem = 0
+        private set
+
     val tripChangesMapList = mutableListOf<MutableMap<String, Any?>>()
 //    var originalChangesCopy = listOf<MutableMap<String, Any?>>()
 
@@ -98,7 +104,8 @@ class TripsConfigViewModel : ViewModel() {
                 when (tripsListState) {
                     is State.Loading -> _onLoading.value = true
                     is State.Failed -> {
-                        _toastMessage.value = tripsListState.message
+                        _toastMessage.value =
+                            tripsListState.exception.handleError { /**TODO: Handle Error lambda*/ }
                         _onLoading.value = false
                     }
                     is State.Success -> {
@@ -108,7 +115,8 @@ class TripsConfigViewModel : ViewModel() {
                                 when (agencyState) {
                                     is State.Loading -> _onLoading.value = true
                                     is State.Failed -> {
-                                        _toastMessage.value = agencyState.message
+                                        _toastMessage.value =
+                                            agencyState.exception.handleError { /**TODO: Handle Error lambda*/ }
                                         _onLoading.value = false
                                     }
                                     is State.Success -> {
@@ -120,7 +128,7 @@ class TripsConfigViewModel : ViewModel() {
                                                     is State.Loading -> _onLoading.value = true
                                                     is State.Failed -> {
                                                         _toastMessage.value =
-                                                            configsDocState.message
+                                                            configsDocState.exception.handleError { /**TODO: Handle Error lambda*/ }
                                                         _onLoading.value = false
                                                         //TODO: Handle failures inorder to retry
                                                     }
@@ -140,11 +148,7 @@ class TripsConfigViewModel : ViewModel() {
 
                                                         //We get the list of destinations for the current town -> A trip
                                                         _tripDocList.value =
-                                                            tripsListState.data.documents.sortedBy {
-                                                                it["destination"].toString()
-                                                                    .lowercase()
-                                                            }
-
+                                                            tripsListState.data.documents
                                                         //We get the names of the destinations
                                                         _tripDocList.value!!.forEach {
                                                             tripNameList += it["destination"]!!.toString()
@@ -228,7 +232,8 @@ class TripsConfigViewModel : ViewModel() {
             try {
                 if (newVIPPrice != 0L) tripChangesMapList[index]["vipPrice"] = newVIPPrice
                 else tripChangesMapList[index].remove("vipPrice")
-            }catch (e: Exception){/*TODO: Handle it*/}
+            } catch (e: Exception) {/*TODO: Handle it*/
+            }
         }
 
     }
@@ -249,14 +254,14 @@ class TripsConfigViewModel : ViewModel() {
             )
         else {//In case it exist already
             val index = tripChangesMapList.indexOf(oldPriceMap)
-            if(newNormalPrice != 0L) tripChangesMapList[index]["normalPrice"] = newNormalPrice
+            if (newNormalPrice != 0L) tripChangesMapList[index]["normalPrice"] = newNormalPrice
             else tripChangesMapList[index].remove("normalPrice")
         }
     }
 
 
-    enum class FieldTag {
-        TOAST_MESSAGE, TOWN_ID, TRIP_ID, TOWN_NAME, ON_NORMAL_PRICE_FORM, START_TRIP_SEARCH, ON_VIP_PRICE_FORM, REBIND_ITEM, ON_CLOSE
+    enum class FieldTags {
+        TOAST_MESSAGE, TOWN_ID, TRIP_ID, TOWN_NAME, ON_NORMAL_PRICE_FORM, START_TRIP_SEARCH, ON_VIP_PRICE_FORM, REBIND_ITEM, ON_CLOSE, CHECKED_ITEM
     }
 
     /**
@@ -266,17 +271,20 @@ class TripsConfigViewModel : ViewModel() {
         TRIPS_CHECK_VIP, TRIPS_SWITCH_ACTIVATE, TRIPS_BUTTON_NORMAL_PRICE, TRIPS_BUTTON_VIP_PRICE
     }
 
-    fun setField(fieldTag: FieldTag, value: Any) {
+    enum class SortTags { TRIP_NAMES, TRIP_PRICES, TRIP_VIP_PRICES, DISTANCE }
+
+    fun setField(fieldTag: FieldTags, value: Any) {
         when (fieldTag) {
-            FieldTag.TOWN_NAME -> townName = value.toString()
-            FieldTag.TOAST_MESSAGE -> _toastMessage.value = value.toString()
-            FieldTag.TOWN_ID -> townID = value.toString()
-            FieldTag.TRIP_ID -> tripID = value.toString()
-            FieldTag.REBIND_ITEM -> _onRebindItem.value = value as Boolean
-            FieldTag.ON_NORMAL_PRICE_FORM -> _onNormalPriceForm.value = value as Boolean
-            FieldTag.ON_VIP_PRICE_FORM -> _onVipPriceForm.value = value as Boolean
-            FieldTag.START_TRIP_SEARCH -> _startTripSearch.value = value as Boolean
-            FieldTag.ON_CLOSE -> _onClose.value = value as Boolean
+            FieldTags.TOWN_NAME -> townName = value.toString()
+            FieldTags.TOAST_MESSAGE -> _toastMessage.value = value.toString()
+            FieldTags.TOWN_ID -> townID = value.toString()
+            FieldTags.TRIP_ID -> tripID = value.toString()
+            FieldTags.REBIND_ITEM -> _onRebindItem.value = value as Boolean
+            FieldTags.ON_NORMAL_PRICE_FORM -> _onNormalPriceForm.value = value as Boolean
+            FieldTags.ON_VIP_PRICE_FORM -> _onVipPriceForm.value = value as Boolean
+            FieldTags.START_TRIP_SEARCH -> _startTripSearch.value = value as Boolean
+            FieldTags.ON_CLOSE -> _onClose.value = value as Boolean
+            FieldTags.CHECKED_ITEM -> sortCheckedItem = value as Int
         }
     }
 
@@ -290,6 +298,12 @@ class TripsConfigViewModel : ViewModel() {
             }
         )
 
+    /*fun clearProperties() {
+        tripChangesMapList.clear()
+        _tripDocList.value!!.clear()
+        tripNameList.clear()
+    }*/
+
     /**
      * Uploads the alterations to db
      */
@@ -297,7 +311,7 @@ class TripsConfigViewModel : ViewModel() {
         val newTripList = mutableListOf<MutableMap<String, Any?>>()
         for (it in tripChangesMapList) {
             if (!(it["vip"] == null && it["vipPrice"] == null && it["normalPrice"] == null && it["exempted"] == null))
-                newTripList+=it
+                newTripList += it
         }
         val tripChanges = hashMapOf<String, Any?>(
             "tripChangesList" to newTripList
@@ -309,7 +323,8 @@ class TripsConfigViewModel : ViewModel() {
             when (it) {
                 is State.Loading -> _onLoading.value = true
                 is State.Failed -> {
-                    _toastMessage.value = it.message
+                    _toastMessage.value =
+                        it.exception.handleError { /**TODO: Handle Error lambda*/ }
                     _onLoading.value = false
                     //TODO: Something
                 }
@@ -320,6 +335,23 @@ class TripsConfigViewModel : ViewModel() {
                     _onClose.value = true
                 }
             }
+        }
+    }
+
+    fun sortTripsResult(sortTags: SortTags) {
+        when (sortTags) {
+            SortTags.TRIP_NAMES -> _tripDocList.value!!.sortBy {
+                    it.getString("destination")
+                }
+            SortTags.TRIP_PRICES -> _tripDocList.value!!.sortBy {
+                it.getLong("distance")!! * pricePerKM
+            }
+            SortTags.TRIP_VIP_PRICES -> _tripDocList.value!!.sortBy {
+                it.getLong("distance")!! * vipPricePerKM
+            }
+            SortTags.DISTANCE -> _tripDocList.value!!.sortBy {
+                    it.getLong("distance")
+                }
         }
     }
 

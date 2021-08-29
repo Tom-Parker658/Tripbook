@@ -66,12 +66,12 @@ class TownConfigViewHolder private constructor(val binding: ItemTownConfigBindin
 
 
 /**
- * When ever a button, or check is tapped on the town recucler, we get the id of the town clicked
+ * When ever a button, or check is tapped on the town recyler, we get the id of the town clicked
  */
 @ExperimentalCoroutinesApi
 class TownClickListener(val clickListener: (townID: String, townButtonTag: TownsConfigViewModel.TownButtonTags) -> Unit){
     /**
-     * @param buttonID is the latout id of the button which has been clicked
+     * @param townButtonTag is the layout id of the button which has been clicked
      */
     fun onClick(townButtonTag: TownsConfigViewModel.TownButtonTags, townDoc: DocumentSnapshot) = clickListener("${townDoc.id}+${townDoc["name"]}", townButtonTag)
 }

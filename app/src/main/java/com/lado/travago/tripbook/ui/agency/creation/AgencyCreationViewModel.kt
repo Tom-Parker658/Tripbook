@@ -2,12 +2,14 @@ package com.lado.travago.tripbook.ui.agency.creation
 
 import android.graphics.Bitmap
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.lado.travago.tripbook.model.admin.OnlineTravelAgency
+import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.StorageTags
@@ -18,7 +20,6 @@ import com.lado.travago.tripbook.utils.Utils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-import java.util.*
 import java.util.regex.Pattern
 
 @InternalCoroutinesApi
@@ -44,6 +45,10 @@ class AgencyCreationViewModel : ViewModel() {
     //Livedata to know when to end the activity in case we could not verify the agency exist already or not
     private val _onVerificationFailed = MutableLiveData(false)
     val onVerificationFailed get() = _onVerificationFailed
+
+    //To either save or re-upload agency logo to FireStorage
+    private val _onSaveLogo = MutableLiveData(false)
+    val onSaveLogo: LiveData<Boolean> get() = _onSaveLogo
 
     //Live data to trigger the save of information into the db
     private val _saveInfo = MutableLiveData(false)
@@ -94,7 +99,7 @@ class AgencyCreationViewModel : ViewModel() {
 
     //Loading state
     private val _loading = MutableLiveData(false)
-    val loading get() = _loading
+    val onLoading get() = _loading
 
     enum class FieldTags {
         PHONE_CODE_1, PHONE_CODE_2, NAME, MOTTO, SUPPORT_EMAIL, SUPPORT_PHONE_1, SUPPORT_PHONE_2, FULL_SUPPORT_PHONE_1, FULL_SUPPORT_PHONE_2, BANK_NUMBER, MOMO_NUMBER, ORANGE_NUMBER, COST_PER_KM, LOGO_BITMAP, CEO_NAME, DECREE_NUMBER, CREATION_YEAR, TOAST_MESSAGE, SAVE_INFO,
@@ -106,13 +111,13 @@ class AgencyCreationViewModel : ViewModel() {
     suspend fun getExistingAgencyData() =
         firestoreRepo.getDocument("Bookers/${authRepo.firebaseAuth.currentUser!!.uid}").collect {
             when (it) {
-                is State.Success-> {
+                is State.Success -> {
                     firestoreRepo.getDocument("OnlineTransportAgency/${it.data["agency"]}")
-                        .collect { it1 ->
-                            when (it1) {
+                        .collect { agencyDataState ->
+                            when (agencyDataState) {
                                 is State.Loading -> _loading.value = true
                                 is State.Success -> {
-                                    _agencyDbData.value = it1.data!!
+                                    _agencyDbData.value = agencyDataState.data!!
                                     _loading.value = false
                                 }
                                 is State.Failed -> {
@@ -123,20 +128,21 @@ class AgencyCreationViewModel : ViewModel() {
                         }
                 }
                 is State.Loading -> _loading.value = true
-                is State.Failed->{
+                is State.Failed -> {
                     _loading.value = false
                     _onVerificationFailed.value = true
                 }
             }
 
         }
+
     /**
      * Populate fields with existing data if any
      * Should be called only when the [_onVerificationFailed]==false
      */
-    fun fillExistingData() {
+    fun fillExistingData() =
         if (_agencyDbData.value!!.exists()) {//If agency already existed we fill fields
-            _toastMessage.value = "Data exist"
+            _toastMessage.value = "Modify your agency"
             nameField = _agencyDbData.value!!.getString("agencyName")!!
             decreeNumberField = _agencyDbData.value!!.getString("creationDecree")!!
             nameCEOField = _agencyDbData.value!!.getString("nameCEO")!!
@@ -153,8 +159,8 @@ class AgencyCreationViewModel : ViewModel() {
             supportPhone2Field = _agencyDbData.value!!.getString("supportPhone2")!!
             phoneCode1 = _agencyDbData.value!!.getString("phoneCode1")!!
             phoneCode2 = _agencyDbData.value!!.getString("phoneCode2")!!
-        }else _toastMessage.value = "Doesnot exist yet"
-    }
+        } else _toastMessage.value = "Create your agency"
+
 
     /**
      * Saves the agency fields to a viewModel variables
@@ -185,6 +191,29 @@ class AgencyCreationViewModel : ViewModel() {
         }
     }
 
+    suspend fun saveLogo(){
+        _loading.value = true
+        val logoStream = Utils.convertBitmapToStream(
+            logoBitmap,
+            Bitmap.CompressFormat.PNG,
+            0
+        )
+        /**
+         * Upload the logo to the storage
+         */
+        storageRepo.uploadPhoto(
+            when (storageState) {
+                is State.Loading -> _loading.value = true
+                is State.Failed -> {
+                    _loading.value = false
+                    _toastMessage.value =
+                        storageState.exception.handleError { /**TODO: Handle Error lambda*/ }
+                }
+                is State.Success -> {
+
+                    )
+    }
+
     /**
      * Saves the Agency information to the database then navigate back to the lobby
      */
@@ -204,13 +233,6 @@ class AgencyCreationViewModel : ViewModel() {
             FirestoreTags.OnlineTransportAgency,
             StorageTags.LOGO
         ).collect { storageState ->
-            when (storageState) {
-                is State.Loading -> _loading.value = true
-                is State.Failed -> {
-                    _loading.value = false
-                    _toastMessage.value = storageState.message
-                }
-                is State.Success -> {
                     storageState.data
                     val db = firestoreRepo.db
                     FirebaseFirestore.getInstance().runTransaction { transaction ->
@@ -330,8 +352,8 @@ class AgencyCreationViewModel : ViewModel() {
     }
 
     fun checkFields(fragment: Fragment) = when (fragment) {
-        is AgencyCreation1Fragment -> {
-            if (nameField.isBlank()  || nameCEOField.isBlank() || creationYearField == 0 || bankField.isBlank() || supportEmailField.isBlank() || momoField.isBlank() || mottoField.isBlank() || orangeMoneyField.isBlank() || decreeNumberField.isBlank()) {
+        is AgencyCreationFragment -> {
+            if (nameField.isBlank() || nameCEOField.isBlank() || creationYearField == 0 || bankField.isBlank() || supportEmailField.isBlank() || momoField.isBlank() || mottoField.isBlank() || orangeMoneyField.isBlank() || decreeNumberField.isBlank()) {
                 _toastMessage.value = "Do not leave some fields empty"
                 _saveInfo.value = true
             } else if (!isBasicallyValidEmailAddress(supportEmailField)) {

@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_agency_config"
-    app:startDestination="@id/townsConfigFragment">
+    app:startDestination="@id/agencyCreationFinalFragment">
     <fragment
         android:id="@+id/scannerConfigFragment"
         android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.ScannerConfigFragment"
-        android:label="fragment_scanner_config"
-        tools:layout="@layout/fragment_scanner_config" />
+        android:label="fragment_scanner_config" >
+        <action
+            android:id="@+id/action_scannerConfigFragment_to_agencyCreationFinalFragment"
+            app:destination="@id/agencyCreationFinalFragment" />
+    </fragment>
     <fragment
         android:id="@+id/agencyCreationFinalFragment"
         android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreationFinalFragment"
@@ -17,16 +20,12 @@
             android:id="@+id/action_agencyCreationFinalFragment_to_scannerConfigFragment"
             app:destination="@id/scannerConfigFragment" />
         <action
-            android:id="@+id/action_agencyCreationFinalFragment_to_agencyCreationActivity"
-            app:destination="@id/agencyCreationActivity" />
+            android:id="@+id/action_agencyCreationFinalFragment_to_agencyCreationFragment"
+            app:destination="@id/agencyCreationFragment" />
         <action
             android:id="@+id/action_agencyCreationFinalFragment_to_townsConfigFragment"
             app:destination="@id/townsConfigFragment" />
     </fragment>
-    <activity
-        android:id="@+id/agencyCreationActivity"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreationActivity"
-        android:label="AgencyCreationActivity" />
     <fragment
         android:id="@+id/townsConfigFragment"
         android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.TownsConfigFragment"
@@ -52,4 +51,8 @@
             android:id="@+id/action_tripsConfigFragment_to_townsConfigFragment"
             app:destination="@id/townsConfigFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/agencyCreationFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreationFragment"
+        android:label="AgencyCreationFragment" />
 </navigation>

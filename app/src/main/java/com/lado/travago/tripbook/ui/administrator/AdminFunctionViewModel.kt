@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.Source
 import com.lado.travago.tripbook.model.enums.DataResources
+import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import kotlinx.coroutines.*
@@ -104,7 +105,7 @@ class AdminFunctionViewModel : ViewModel() {
                 is State.Loading -> _loading.value = true
                 is State.Failed -> {
                     _loading.value = false
-                    _toastMessage.value = getState.message
+                    _toastMessage.value = getState.exception.handleError{}
                 }
                 is State.Success -> {
                     //Gets the documents
@@ -129,7 +130,7 @@ class AdminFunctionViewModel : ViewModel() {
                                     is State.Loading -> _loading.value = true
                                     is State.Failed -> {
                                         _loading.value = false
-                                        _toastMessage.value = state.message
+                                        _toastMessage.value = state.exception.handleError{ /**TODO: Handle Error lambda*/ }
                                     }
                                     is State.Success -> {
                                         _toastMessage.value = "${townMap["name"]}"
@@ -165,7 +166,7 @@ class AdminFunctionViewModel : ViewModel() {
                     is State.Loading -> _loading.value = true
                     is State.Failed -> {
                         _loading.value = false
-                        _toastMessage.value = "QueryState for $town1-$town2 ${queryState.message}"
+                        _toastMessage.value = "QueryState for $town1-$town2 ${queryState.exception.handleError{ /**TODO: Handle Error lambda*/ }}"
                     }
                     is State.Success ->{
                         val documents = queryState.data.documents
@@ -189,7 +190,7 @@ class AdminFunctionViewModel : ViewModel() {
                                     is State.Loading -> {}
                                     is State.Failed -> {
                                         _loading.value = false
-                                        _toastMessage.value = "${town["name"]} - ${otherTownMap["name"]} Failed! ${it.message}"
+                                        _toastMessage.value = "${town["name"]} - ${otherTownMap["name"]} Failed! ${it.exception.handleError{ /**TODO: Handle Error lambda*/ }}"
                                     }
                                     is State.Success ->{
                                         _toastMessage.value = "Success!"
