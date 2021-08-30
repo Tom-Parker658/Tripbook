@@ -9,16 +9,20 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyCreationBinding
 import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationViewModel.*
+import com.lado.travago.tripbook.utils.Utils.removeSpaces
 import com.lado.travago.tripbook.utils.loadImageFromUrl
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
@@ -37,19 +41,9 @@ class AgencyCreationFragment : Fragment() {
             container,
             false
         )
-
         initViewModel()
-        CoroutineScope(Dispatchers.Main).launch {
-            viewModel.getExistingAgencyData()
-            viewModel.fillExistingData()
-        }
-
         //Restore data to the textFields after any configuration change
-        try {
-            restoreSavedData()
-        } catch (e: Exception) {
-            //TODO: NOTHING
-        }
+        restoreSavedData()
         onFieldChange()
         onNextClicked()
         observeLiveData()
@@ -58,6 +52,13 @@ class AgencyCreationFragment : Fragment() {
     }
 
     private fun observeLiveData() {
+        viewModel.retry.observe(viewLifecycleOwner) {
+            if (it) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.getExistingAgencyData()
+                }
+            }
+        }
         viewModel.onLoading.observe(viewLifecycleOwner) {
             if (it) {
                 binding.progressBar.visibility = View.VISIBLE
@@ -68,7 +69,35 @@ class AgencyCreationFragment : Fragment() {
                 )
             } else {
                 binding.progressBar.visibility = View.GONE
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        }
+        //We check to see if to save a new logo or not
+        viewModel.startSaving.observe(viewLifecycleOwner) {
+            if (it) {
+                if (binding.logoField.drawable == viewModel.logoBitmap!!.toDrawable(requireActivity().resources)) {
+                    viewModel.setField(FieldTags.ON_LOGO_SAVED, true)
+                } else {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        viewModel.saveLogo()
+                    }
+                }
+                viewModel.setField(FieldTags.START_SAVING, false)
+            }
+        }
+        //We check to see to create or modify agency
+        viewModel.onLogoSaved.observe(viewLifecycleOwner) {
+            if (it) {
+                viewModel.setField(FieldTags.ON_LOGO_SAVED, false)
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (viewModel.agencyDbData.exists()) /*We update*/ viewModel.updateAgencyInfo().await()
+                    else /*We create*/ viewModel.createAgency().await()
+                }
+            }
+        }
+        viewModel.startFilling.observe(viewLifecycleOwner) {
+            if (it) {
+                viewModel.fillExistingData()
             }
         }
         viewModel.toastMessage.observe(viewLifecycleOwner) {
@@ -77,35 +106,20 @@ class AgencyCreationFragment : Fragment() {
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "")
             }
         }
-        viewModel.saveInfo.observe(viewLifecycleOwner) {
-            if (it) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    viewModel.setField(FieldTags.SAVE_INFO, false)
-                    viewModel.saveAgencyInfo()
-                }
-            }
-
-        }
-
         //In this case we go back to the launcher activity which is actually th config activity
         viewModel.onInfoSaved.observe(viewLifecycleOwner) {
-            if (it) {
-                //TODO:
-            }
+            if (it)
+                findNavController().navigate(
+                    AgencyCreationFragmentDirections.actionAgencyCreationFragmentToAgencyConfigCenterFragment()
+                )
         }
-
         viewModel.onVerificationFailed.observe(viewLifecycleOwner) {
             //We end activity if we can't verify we are editing or creating an agency
             if (it) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Verification failed!")
-                    .setIcon(R.drawable.round_cancel_24)
-                    .setMessage("We could not determine if you are creating or editing an agency!")
-                    .setOnDismissListener {
-
-                    }
-                    .setView(binding.root)
-                    .create().show()
+                viewModel.setField(FieldTags.TOAST_MESSAGE, "Could not verify your authenticity. Check Connection")
+                findNavController().navigate(
+                    AgencyCreationFragmentDirections.actionAgencyCreationFragmentToAgencyConfigCenterFragment()
+                )
             }
         }
     }
@@ -125,6 +139,9 @@ class AgencyCreationFragment : Fragment() {
         binding.nameOfCEO.editText!!.addTextChangedListener {
             viewModel.setField(FieldTags.CEO_NAME, it.toString())
         }
+        binding.creationYear.editText!!.addTextChangedListener {
+            viewModel.setField(FieldTags.CREATION_YEAR, it.toString())
+        }
         binding.momo.editText!!.addTextChangedListener {
             viewModel.setField(FieldTags.MOMO_NUMBER, it.toString())
         }
@@ -142,15 +159,22 @@ class AgencyCreationFragment : Fragment() {
         }
         binding.supportPhone1.editText!!.addTextChangedListener {
             viewModel.setField(FieldTags.SUPPORT_PHONE_1, it.toString())
+            viewModel.setField(
+                FieldTags.PHONE_CODE_1,
+                binding.countryCodePicker1.selectedCountryCodeAsInt
+            )
         }
         binding.supportPhone2.editText!!.addTextChangedListener {
             viewModel.setField(FieldTags.SUPPORT_PHONE_2, it.toString())
+            viewModel.setField(
+                FieldTags.PHONE_CODE_2,
+                binding.countryCodePicker2.selectedCountryCodeAsInt
+            )
         }
         //Launches logo selection when logo image is tapped
         binding.logoField.setOnClickListener {
             initLogoSelection()
         }
-        //Launches logo selection when the edit text is tapped
         binding.textLogo.setOnClickListener {
             initLogoSelection()
         }
@@ -165,8 +189,11 @@ class AgencyCreationFragment : Fragment() {
     private fun restoreSavedData() {
         binding.name.editText!!.setText(viewModel.nameField)
         binding.creationYear.editText!!.setText(viewModel.creationYearField)
-        binding.supportPhone1.editText!!.setText(viewModel.supportPhone1Field)
-        binding.supportPhone2.editText!!.setText(viewModel.supportPhone2Field)
+        binding.decreeNumber.editText!!.setText(viewModel.decreeNumberField)
+        binding.supportPhone1.editText!!.setText(viewModel.supportPhone1Field.removeSpaces())
+        binding.supportPhone2.editText!!.setText(viewModel.supportPhone2Field.removeSpaces())
+        binding.countryCodePicker1.setCountryForPhoneCode(viewModel.phoneCode1)
+        binding.countryCodePicker2.setCountryForPhoneCode(viewModel.phoneCode2)
         binding.momo.editText!!.setText(viewModel.momoField)
         viewModel.logoBitmap?.let {
             binding.logoField.setImageBitmap(it)
@@ -176,8 +203,6 @@ class AgencyCreationFragment : Fragment() {
         binding.motto.editText!!.setText(viewModel.mottoField)
         binding.orangeMoney.editText!!.setText(viewModel.orangeMoneyField)
         binding.bank.editText!!.setText(viewModel.bankField)
-        binding.countryCodePicker1.setCountryForPhoneCode(viewModel.phoneCode1.toInt())
-        binding.countryCodePicker2.setCountryForPhoneCode(viewModel.phoneCode2.toInt())
     }
 
     private fun initViewModel() {
@@ -194,21 +219,11 @@ class AgencyCreationFragment : Fragment() {
      */
     private fun onNextClicked() = binding.btnNext.setOnClickListener {
         if (binding.countryCodePicker1.isValidFullNumber) {
-            viewModel.setField(
-                FieldTags.FULL_SUPPORT_PHONE_1,
-                binding.countryCodePicker1.fullNumberWithPlus
-            )
             if (binding.countryCodePicker2.isValidFullNumber || binding.supportPhone2.editText!!.text.toString()
                     .isBlank()
             ) {
-                try {
-                    binding.countryCodePicker2.fullNumberWithPlus.let {
-                        viewModel.setField(FieldTags.FULL_SUPPORT_PHONE_2, it)
-                    }
-                    //In case we are ok with the phone fields, we can start field checking
-                    viewModel.checkFields(this@AgencyCreationFragment)
-                } catch (e: Exception) {//In case phone is empty}
-                }
+                //In case we are ok with the phone fields, we can start field checking
+                viewModel.checkFields()
             } else {
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "Enter valid number or leave it empty")
                 binding.supportPhone2.requestFocus()

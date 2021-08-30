@@ -9,7 +9,6 @@ import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-import java.util.*
 
 @ExperimentalCoroutinesApi
 class TripsConfigViewModel : ViewModel() {
@@ -97,7 +96,7 @@ class TripsConfigViewModel : ViewModel() {
     var tripID = ""
         private set
 
-    suspend fun getTrips() {
+    suspend fun getTrips(agencyID: String) {
         _retryTrips.value = false
         firestoreRepo.getCollection("Planets/Earth/Continents/Africa/Cameroon/$townID/Trips")
             .collect { tripsListState ->
@@ -110,7 +109,7 @@ class TripsConfigViewModel : ViewModel() {
                     }
                     is State.Success -> {
                         //We get that agency document to get the pricePerKM and vipPricePerKM
-                        firestoreRepo.getDocument("OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0")
+                        firestoreRepo.getDocument("OnlineTransportAgency/${agencyID}")
                             .collect { agencyState ->
                                 when (agencyState) {
                                     is State.Loading -> _onLoading.value = true
@@ -122,7 +121,7 @@ class TripsConfigViewModel : ViewModel() {
                                     is State.Success -> {
                                         //_tripDocList.value = tripsListState.data.documents
                                         //Now we get the configurations about the trips from this town e.g Exemptions, vip prices, normal prices
-                                        firestoreRepo.getDocument("OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Configs/Cameroon/Towns/$townID")
+                                        firestoreRepo.getDocument("OnlineTransportAgency/${agencyID}/Configs/Cameroon/Towns/$townID")
                                             .collect { configsDocState ->
                                                 when (configsDocState) {
                                                     is State.Loading -> _onLoading.value = true
@@ -307,7 +306,7 @@ class TripsConfigViewModel : ViewModel() {
     /**
      * Uploads the alterations to db
      */
-    suspend fun uploadTripChanges() {
+    suspend fun uploadTripChanges(agencyID: String) {
         val newTripList = mutableListOf<MutableMap<String, Any?>>()
         for (it in tripChangesMapList) {
             if (!(it["vip"] == null && it["vipPrice"] == null && it["normalPrice"] == null && it["exempted"] == null))
@@ -318,7 +317,7 @@ class TripsConfigViewModel : ViewModel() {
         )
         firestoreRepo.setDocument(
             data = tripChanges,
-            "OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Configs/Cameroon/Towns/$townID"
+            "OnlineTransportAgency/${agencyID}/Configs/Cameroon/Towns/$townID"
         ).collect {
             when (it) {
                 is State.Loading -> _onLoading.value = true

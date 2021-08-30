@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            tools:context=".ui.agency.creation.AgencyCreationFinalFragment">
+
+            <Button
+                android:id="@+id/btn_parks"
+                style="@style/neutralButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Parks"
+                app:icon="@drawable/baseline_place_24"
+                app:layout_constraintBottom_toTopOf="@+id/money"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_trips" />
+
+            <TextView
+                android:id="@+id/heading"
+                style="@style/headlineStyle"
+                android:text="Tune Your Agency"
+                app:layout_constraintBottom_toTopOf="@+id/btn_info"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <Button
+                android:id="@+id/btn_info"
+                style="@style/neutralButton"
+                android:layout_width="0dp"
+                android:text="My agency's Info"
+                app:icon="@drawable/baseline_settings_24"
+                app:layout_constraintBottom_toTopOf="@+id/btn_trips"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/heading" />
+
+            <Button
+                android:id="@+id/btn_trips"
+                style="@style/neutralButton"
+                android:layout_width="0dp"
+                android:text="My Trips"
+                app:icon="@drawable/baseline_directions_bus_24"
+                app:layout_constraintBottom_toTopOf="@+id/btn_parks"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_info" />
+
+            <Button
+                android:id="@+id/btn_scanners"
+                style="@style/neutralButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="My Scanners"
+                app:icon="@drawable/baseline_groups_24"
+                app:layout_constraintBottom_toTopOf="@+id/btn_delete_agency"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/money" />
+
+            <Button
+                android:id="@+id/money"
+                style="@style/positiveButton"
+                android:layout_width="0dp"
+                android:text="Money"
+                app:icon="@drawable/baseline_payments_24"
+                app:layout_constraintBottom_toTopOf="@+id/btn_scanners"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_parks" />
+
+            <Button
+                android:id="@+id/btn_delete_agency"
+                style="@style/negativeButton"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Delete My Agency!"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

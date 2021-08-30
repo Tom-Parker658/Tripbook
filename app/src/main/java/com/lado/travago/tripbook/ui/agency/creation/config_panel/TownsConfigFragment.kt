@@ -19,6 +19,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTownsConfigBinding
 import com.lado.travago.tripbook.databinding.ItemSearchFormBinding
+import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel
 import com.lado.travago.tripbook.ui.recyclerview.adapters.TownClickListener
 import com.lado.travago.tripbook.ui.recyclerview.adapters.TownConfigAdapter
@@ -30,9 +31,11 @@ import kotlinx.coroutines.launch
 
 /**
  * A fragment used by agency admins to add and subtract towns and access trips from that town.
+ * @property parentViewModel is the viewmodel to hold the booker info and is loaded before launch
  */
 @ExperimentalCoroutinesApi
 class TownsConfigFragment : Fragment() {
+    private lateinit var parentViewModel: AgencyConfigViewModel
     private lateinit var viewModel: TownsConfigViewModel
     private lateinit var binding: FragmentTownsConfigBinding
     private lateinit var adapter: TownConfigAdapter
@@ -41,6 +44,7 @@ class TownsConfigFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        parentViewModel = ViewModelProvider(requireActivity())[AgencyConfigViewModel::class.java]
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             layoutInflater,
@@ -70,7 +74,7 @@ class TownsConfigFragment : Fragment() {
 
     private fun observeLiveData() {
         viewModel.retryTowns.observe(viewLifecycleOwner) {
-            if (it) CoroutineScope(Dispatchers.Main).launch { viewModel.getTownsData() }
+            if (it) CoroutineScope(Dispatchers.Main).launch { viewModel.getTownsData(parentViewModel.bookerDoc.value!!.getString("agencyID")!!) }
         }
         //Submit list to inflate recycler view
         viewModel.townDocList.observe(viewLifecycleOwner) { doc ->
@@ -164,7 +168,7 @@ class TownsConfigFragment : Fragment() {
         viewModel.onClose.observe(viewLifecycleOwner) {
             if (it) {
                 findNavController().navigate(
-                    TownsConfigFragmentDirections.actionTownsConfigFragmentToAgencyCreationFinalFragment()
+                    TownsConfigFragmentDirections.actionTownsConfigFragmentToAgencyConfigCenterFragment()
                 )
                 viewModel.setField(TownsConfigViewModel.FieldTags.ON_CLOSE, false)
                 viewModel.setField(TownsConfigViewModel.FieldTags.RETRY_TOWNS , true)
@@ -176,7 +180,7 @@ class TownsConfigFragment : Fragment() {
     private fun handleClicks(){
         binding.btnSaveTowns.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                viewModel.uploadTownChanges()
+                viewModel.uploadTownChanges(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
             }
         }
         binding.fabSortTowns.setOnClickListener {

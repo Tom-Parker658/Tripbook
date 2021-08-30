@@ -4,7 +4,6 @@ import com.lado.travago.tripbook.model.enums.OCCUPATION.*
 import com.lado.travago.tripbook.model.enums.SEX.*
 
 
-
 /**
  * @author Tom Parkert
  */
@@ -30,13 +29,13 @@ enum class SEX {
  * @property UNKNOWN for initialising occupation variables
  */
 enum class OCCUPATION {
-    PUPIL, STUDENT, EMPLOYEE, WORKER, SCANNER, OTHER, UNKNOWN
+    PUPIL, STUDENT, EMPLOYEE, WORKER, SCANNER, OTHER
 }
 
 /**
  * Contains all operations firestore can carry out
  */
-enum class DbOperations{
+enum class DbOperations {
     SET, DELETE, UPDATE, GET
 }
 

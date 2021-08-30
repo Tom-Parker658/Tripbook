@@ -12,6 +12,7 @@ import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentBookerCreation1Binding
 
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationViewModel.*
+import com.lado.travago.tripbook.utils.Utils.removeSpaces
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -29,49 +30,43 @@ class BookerCreation1Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_booker_creation1, container, false)
+        binding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.fragment_booker_creation1,
+            container,
+            false
+        )
         viewModel = ViewModelProvider(requireActivity())[BookerCreationViewModel::class.java]
 
         phoneWidgetConfig()
         onFieldChanged()
-        binding.countryCodePicker.setCountryForPhoneCode(savedInstanceState?.getInt("COUNTRY_CODE") ?: 237)
         onButtonSendSMS()
         return binding.root
     }
 
-    /**
-     * Saves country code
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt("COUNTRY_CODE", binding.countryCodePicker.selectedCountryCodeAsInt)
-        super.onSaveInstanceState(outState)
-    }
-
-    private fun onFieldChanged(){
-        binding.phone.editText!!.addTextChangedListener { text ->
-            viewModel.setField(FieldTags.PHONE, text.toString())
+    private fun onFieldChanged() {
+        binding.phone.editText!!.setText(viewModel.bookerPhoneField.removeSpaces())
+        binding.countryCodePicker.setCountryForPhoneCode(viewModel.bookerCountryCode)
+        binding.phone.editText!!.addTextChangedListener {
+            viewModel.setField(FieldTags.BOOKER_PHONE, it.toString())
+            viewModel.setField(
+                FieldTags.BOOKER_COUNTRY_CODE,
+                binding.countryCodePicker.selectedCountryCodeAsInt
+            )
         }
-
-        binding.phone.editText!!.setText(viewModel.phoneField)
     }
 
     /**
      * Configure the phone + country_code mechanics
      */
-    private fun phoneWidgetConfig() = binding.countryCodePicker.registerCarrierNumberEditText(binding.phone.editText)
+    private fun phoneWidgetConfig() =
+        binding.countryCodePicker.registerCarrierNumberEditText(binding.phone.editText)
 
-    private fun onButtonSendSMS(){
+    private fun onButtonSendSMS() =
         binding.btnSendSms.setOnClickListener {
-            if(binding.countryCodePicker.isValidFullNumber) {
-                viewModel.setField(
-                    FieldTags.FULL_PHONE,
-                    binding.countryCodePicker.fullNumberWithPlus
-                )
+            if (binding.countryCodePicker.isValidFullNumber) {
                 viewModel.setField(FieldTags.SEND_CODE, true)
-            }
-            else viewModel.setField(FieldTags.TOAST_MESSAGE, "Invalid phone number!")
+            } else viewModel.setField(FieldTags.TOAST_MESSAGE, "Invalid phone number!")
         }
-
-    }
 
 }

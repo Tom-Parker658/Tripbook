@@ -74,9 +74,9 @@ class ScannerConfigViewModel : ViewModel() {
     //Stores the original list
     private var originalScannerList = listOf<DocumentSnapshot>()
 
-    suspend fun getScannerListData() {
+    suspend fun getScannerListData(agencyID: String) {
         firestoreRepo.getAllDocuments(
-            "OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Scanners"
+            "OnlineTransportAgency/$agencyID/Scanners"
         ).collect {
             when (it) {
                 is State.Failed -> {
@@ -122,8 +122,8 @@ class ScannerConfigViewModel : ViewModel() {
     }
 
     //delete a scanner and also removes it from the list
-    suspend fun fireScanner(scannerId: String) {
-        firestoreRepo.deleteDocument("OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Scanners/$scannerId")
+    suspend fun fireScanner(scannerId: String, agencyID: String) {
+        firestoreRepo.deleteDocument("OnlineTransportAgency/$agencyID/Scanners/$scannerId")
             .collect {
                 when (it) {
                     is State.Failed -> {
@@ -196,10 +196,10 @@ class ScannerConfigViewModel : ViewModel() {
     /**
      * Update the ['isAdmin'] field in the database information
      */
-    suspend fun uploadAdmin() {
+    suspend fun uploadAdmin(agencyID: String) {
         _onLoading.value = true
         for (map in adminIDList) {
-            firestoreRepo.db.document("OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Scanners/${map["id"]}")
+            firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Scanners/${map["id"]}")
                 .update(
                     "isAdmin",
                     map["isAdmin"]
@@ -269,7 +269,7 @@ class ScannerConfigViewModel : ViewModel() {
     /**
      * Recruits a booker into your agency from the phone search
      */
-    suspend fun recruitScanner(bookerDoc: DocumentSnapshot) {
+    suspend fun recruitScanner(bookerDoc: DocumentSnapshot, agencyID: String) {
         val scannerMap = hashMapOf<String, Any?>(
             "name" to bookerDoc.getString("name"),
             "phone" to bookerDoc.getString("phone"),
@@ -298,7 +298,7 @@ class ScannerConfigViewModel : ViewModel() {
 
         firestoreRepo.setDocument(
             scannerMap,
-            "OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Scanners/${bookerDoc.id}"
+            "OnlineTransportAgency/${agencyID}/Scanners/${bookerDoc.id}"
         ).collect {
             when (it) {
                 is State.Failed -> {

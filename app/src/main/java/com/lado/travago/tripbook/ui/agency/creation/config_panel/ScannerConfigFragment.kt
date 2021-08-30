@@ -22,6 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentScannerConfigBinding
 import com.lado.travago.tripbook.databinding.LayoutScannerSearchBinding
+import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.ScannerConfigViewModel
 import com.lado.travago.tripbook.ui.recyclerview.adapters.ScannerConfigAdapter
 import com.lado.travago.tripbook.ui.recyclerview.adapters.ScannerConfigClickListener
@@ -34,6 +35,7 @@ import kotlinx.coroutines.*
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 class ScannerConfigFragment : Fragment() {
+    private lateinit var parentViewModel: AgencyConfigViewModel
     private lateinit var binding: FragmentScannerConfigBinding
     private lateinit var viewModel: ScannerConfigViewModel
     private lateinit var adapter: ScannerConfigAdapter
@@ -42,6 +44,7 @@ class ScannerConfigFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        parentViewModel = ViewModelProvider(requireActivity())[AgencyConfigViewModel::class.java]
         binding = DataBindingUtil.inflate(
             layoutInflater,
             R.layout.fragment_scanner_config,
@@ -70,7 +73,7 @@ class ScannerConfigFragment : Fragment() {
     private fun observeLiveData() {
         viewModel.retrySearch.observe(viewLifecycleOwner) {
             if (it) CoroutineScope(Dispatchers.Main).launch {
-                viewModel.getScannerListData()
+                viewModel.getScannerListData(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
             }
         }
         viewModel.myScannerList.observe(viewLifecycleOwner) {
@@ -95,7 +98,9 @@ class ScannerConfigFragment : Fragment() {
                                 setMessage("Are you sure you want to fire this scanner from your agency? ")
                                 setPositiveButton("Fire the Scanner") { dialog, _ ->
                                     CoroutineScope(Dispatchers.Main).launch {
-                                        viewModel.fireScanner(scannerID)
+                                        viewModel.fireScanner(scannerId = scannerID,
+                                            agencyID = parentViewModel.bookerDoc.value!!.getString("agencyID")!!
+                                        )
                                     }
                                     dialog.dismiss()
                                     dialog.cancel()
@@ -139,7 +144,7 @@ class ScannerConfigFragment : Fragment() {
             }
         }
         viewModel.onAddScannerDialog.observe(viewLifecycleOwner) {
-            if (it) AddScannerDialogFragment(viewModel).showNow(
+            if (it) AddScannerDialogFragment(viewModel, parentViewModel).showNow(
                 childFragmentManager,
                 "DIALOG MANAGER"
             )
@@ -203,12 +208,12 @@ class ScannerConfigFragment : Fragment() {
         }
         binding.btnSaveScanners.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                viewModel.uploadAdmin()
+                viewModel.uploadAdmin(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
             }
         }
     }
 
-    class AddScannerDialogFragment(val viewModel: ScannerConfigViewModel) : DialogFragment() {
+    class AddScannerDialogFragment(val viewModel: ScannerConfigViewModel, private val parentViewModel: AgencyConfigViewModel) : DialogFragment() {
         @SuppressLint("DialogFragmentCallbacksDetector")
 
         override fun onCreateDialog(
@@ -263,13 +268,14 @@ class ScannerConfigFragment : Fragment() {
                 if ((scannerBinding.btnRecruitScanner as MaterialButton).text == "Recruit")
                     CoroutineScope(Dispatchers.Main).launch {
                         viewModel.recruitScanner(
-                            viewModel.newScannerDoc.value!!
+                            viewModel.newScannerDoc.value!!,
+                            parentViewModel.bookerDoc.value!!.getString("agencyID")!!
                         )
                     }
                 else
                     CoroutineScope(Dispatchers.Main).launch {
                         viewModel.fireScanner(
-                            viewModel.newScannerDoc.value!!.id
+                            viewModel.newScannerDoc.value!!.id, parentViewModel.bookerDoc.value!!.getString("agencyID")!!
                         )
                     }
 
@@ -318,6 +324,5 @@ class ScannerConfigFragment : Fragment() {
             super.onDismiss(dialog)
         }
     }
-
 
 }

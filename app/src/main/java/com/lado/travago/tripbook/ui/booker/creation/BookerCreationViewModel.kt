@@ -1,12 +1,12 @@
 package com.lado.travago.tripbook.ui.booker.creation
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 import com.lado.travago.tripbook.model.enums.OCCUPATION
 import com.lado.travago.tripbook.model.enums.SEX
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
@@ -21,18 +21,19 @@ import com.lado.travago.tripbook.utils.Utils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import java.util.*
 
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
-class BookerCreationViewModel: ViewModel() {
+class BookerCreationViewModel : ViewModel() {
     //FirebaseRepo utilities for db, signIn and cloud storage
     private val firestoreRepo = FirestoreRepo()
     private val storageRepo = StorageRepo()
     private val authRepo = FirebaseAuthRepo()
 
     //LiveData to know when a process is in loading state
-    private val _loading = MutableLiveData(false)
-    val loading get() = _loading
+    private val _onLoading = MutableLiveData(false)
+    val onLoading get() = _onLoading
 
     //LiveData to hold all toast messages
     private val _toastMessage = MutableLiveData("")
@@ -67,18 +68,19 @@ class BookerCreationViewModel: ViewModel() {
     val onBookerCreated get() = _onBookerCreated
 
     //Values for phoneAuth screen
-    var phoneField = ""
+    var bookerPhoneField = ""
         private set
     var verificationCode = ""
         private set
     private lateinit var phoneCredential: PhoneAuthCredential
-    var fullPhone = ""//+XX XXXXXXXX...
+    var verificationId = ""
         private set
+    lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
 
     //Values of the fields from the creationForm
     var nameField = ""
         private set
-    var birthdayField = 0L
+    var birthdayField = Date().time
         private set
     var recoveryPhoneField = ""
         private set
@@ -91,18 +93,25 @@ class BookerCreationViewModel: ViewModel() {
     var nationalityField = ""
         private set
     private var photoUrl = ""
-    var occupationField = OCCUPATION.UNKNOWN.name
+    var occupationField = ""
         private set
     private var bookerGeneratedID = ""
     val occupationList = OCCUPATION.values().toList()
+
+    //Country Code for recovery
+    var bookerCountryCode = 237
+        private set
+    var recoveryCountryCode = 237
+        private set
+
 
     /**
      * A function to set the value the fields from the creation form
      * @param fieldTag is the identifier used to specify the field you wish to set or change
      * @param value is the new value you wish to assign to the field
      */
-    fun setField(fieldTag: FieldTags, value: Any) = when(fieldTag){
-        FieldTags.PHONE -> phoneField = value.toString()
+    fun setField(fieldTag: FieldTags, value: Any) = when (fieldTag) {
+        FieldTags.BOOKER_PHONE -> bookerPhoneField = value.toString()
         FieldTags.VERIFICATION_CODE -> verificationCode = value.toString()
         FieldTags.TOAST_MESSAGE -> _toastMessage.value = value.toString()
         FieldTags.SEND_CODE -> _sendCode.value = value as Boolean
@@ -123,7 +132,10 @@ class BookerCreationViewModel: ViewModel() {
 //        IntentTags.ID -> generatedID = value as String
 //        IntentTags.PASSWORD -> passwordField = value.toString()
         FieldTags.OCCUPATION -> occupationField = value.toString()
-        FieldTags.FULL_PHONE -> fullPhone = value.toString()
+        FieldTags.RECOVERY_COUNTRY_CODE -> recoveryCountryCode = value as Int
+        FieldTags.BOOKER_COUNTRY_CODE -> bookerCountryCode = value as Int
+        FieldTags.VERIFICATION_ID -> verificationId = value.toString()
+        FieldTags.RESEND_TOKEN -> resendToken = value as PhoneAuthProvider.ForceResendingToken
     }
 
 
@@ -131,14 +143,14 @@ class BookerCreationViewModel: ViewModel() {
      * Contains different identifiers for the fields in our creation form
      */
     enum class FieldTags {
-        PHONE, NAME, NAV_TO_INFO, SEX_ID, SEX, BIRTHDAY, PROFILE_PHOTO, OCCUPATION, SEND_CODE, RESEND_CODE, ON_PHONE_VERIFIED, VERIFICATION_CODE, TOAST_MESSAGE, RECOVERY_PHONE, PHONE_CREDENTIAL, START_INFO_UPLOAD, ON_BOOKER_CREATED, ON_CODE_SENT, FULL_PHONE, NATIONALITY
+        BOOKER_PHONE, NAME, NAV_TO_INFO, SEX_ID, SEX, BIRTHDAY, PROFILE_PHOTO, OCCUPATION, SEND_CODE, RESEND_CODE, ON_PHONE_VERIFIED, VERIFICATION_CODE, TOAST_MESSAGE, RECOVERY_PHONE, PHONE_CREDENTIAL, START_INFO_UPLOAD, ON_BOOKER_CREATED, ON_CODE_SENT, NATIONALITY, RECOVERY_COUNTRY_CODE, BOOKER_COUNTRY_CODE, RESEND_TOKEN, VERIFICATION_ID
     }
 
 
     /**
      * Adds a booker to the database
      */
-    suspend fun saveBookerInfo(){
+    suspend fun saveBookerInfo() {
         val photoStream = Utils.convertBitmapToStream(photoField, Bitmap.CompressFormat.PNG, 0)
         //Upload the profile photo to the cloud storage and retrieve url
         storageRepo.uploadPhoto(
@@ -148,10 +160,11 @@ class BookerCreationViewModel: ViewModel() {
             StorageTags.PROFILE
         ).collect { storageState ->
             when (storageState) {
-                is State.Loading -> _loading.value = true
+                is State.Loading -> _onLoading.value = true
                 is State.Failed -> {
-                    loading.value = false
-                    _toastMessage.value = storageState.exception.handleError{ /**TODO: Handle Error lambda*/ }
+                    onLoading.value = false
+                    _toastMessage.value =
+                        storageState.exception.handleError { /**TODO: Handle Error lambda*/ }
                 }
                 is State.Success -> {
                     _toastMessage.value = "FireStorage OK! link =${storageState.data}"
@@ -164,7 +177,8 @@ class BookerCreationViewModel: ViewModel() {
                         photoUrl = photoUrl,
                         nationality = nationalityField,
                         occupation = occupationField,
-                        recoveryPhoneNumber = fullPhone // Actually recovery now
+                        phone = "+${bookerCountryCode}${bookerPhoneField}",
+                        recoveryPhoneNumber = "+${recoveryCountryCode}${recoveryPhoneField}" // Actually recovery now
                     )
                     //Complete the creation process for signUp
                     firestoreRepo.setDocument(
@@ -173,14 +187,15 @@ class BookerCreationViewModel: ViewModel() {
                     ).collect {
                         when (it) {
                             is State.Success -> {
-                                _toastMessage.value =  "Welcome!"
+                                _toastMessage.value = "Welcome!"
                                 _onBookerCreated.value = true
+                                _onBookerCreated.value = false
                             }
-                            is State.Loading -> _loading.value = true
+                            is State.Loading -> _onLoading.value = true
                             is State.Failed -> {
-                                _toastMessage.value = it.exception.handleError{ /**TODO: Handle Error lambda*/ }
-                                _loading.value = false
-                                _toastMessage.value = it.exception.handleError{ /**TODO: Handle Error lambda*/ }
+                                _toastMessage.value =
+                                    it.exception.handleError { /**TODO: Handle Error lambda*/ }
+                                _onLoading.value = false
                             }
                         }
                     }
@@ -197,64 +212,88 @@ class BookerCreationViewModel: ViewModel() {
      * If there exist a document under  Booker/{uid}, then the user is just login-In else we navigate to the info screen for sign-Up
      */
     suspend fun loginOrSignup() {
-        authRepo.signInWithPhoneAuthCredential(phoneCredential ).collect { authState ->
+        authRepo.signInWithPhoneAuthCredential(phoneCredential).collect { authState ->
             when (authState) {
                 is State.Success -> {
                     _toastMessage.value = "Booker phone auth succeeded!"
                     //Get id from created user
                     bookerGeneratedID = authState.data.uid
                     //Checks if the booker is  logging-in or signing-up
-                    firestoreRepo.getDocument("${FirestoreTags.Bookers}/$bookerGeneratedID").collect{
-                        when(it){
-                            is State.Failed -> {
-                                authRepo.signOutUser()
-                                _toastMessage.value = "We could not check your identity: Try later"
+                    firestoreRepo.getDocument("${FirestoreTags.Bookers}/$bookerGeneratedID")
+                        .collect {
+                            when (it) {
+                                is State.Failed -> {
+                                    authRepo.signOutUser()
+                                    _toastMessage.value = it.exception.handleError { }
+                                    _onLoading.value = false
+                                }
+                                is State.Success -> {
+                                    if (!it.data.exists()) {
+                                        _navToInfoScreen.value = true
+                                        _navToInfoScreen.value = false
+                                    } else {
+                                        _onBookerCreated.value = true
+                                        _onBookerCreated.value = false
+                                    }
+                                }
+                                is State.Loading -> _onLoading.value = true
                             }
-                            is State.Success -> {
-
-                                if(!it.data.exists()){ _navToInfoScreen.value = true}
-                                else _onBookerCreated.value = true
-                            }
-                            is State.Loading -> {}
                         }
-                    }
                 }
                 is State.Failed -> {
-                    _toastMessage.value = authState.exception.handleError{ /**TODO: Handle Error lambda*/ } ?:"Wrong verification Code!"
+                    _toastMessage.value =
+                        authState.exception.handleError { /**TODO: Handle Error lambda*/ }
                 }
                 is State.Loading -> {
-                    //
+                    _onLoading.value = true
                 }
             }
         }
     }
 
-    fun startLoading(){_loading.value = true}
-    fun stopLoading(){_loading.value = false}
+    fun startLoading() {
+        _onLoading.value = true
+    }
+
+    fun stopLoading() {
+        _onLoading.value = false
+    }
 
     fun formatDate(timeInMillis: Long) = Utils.formatDate(timeInMillis, "MMMM, dd YYYY")
 
     /**
      * Field checkers for each layout
      */
-    fun checkFields(fragment: Fragment) = when(fragment){
-        is BookerCreation1Fragment -> {
-            if(fullPhone.isNotBlank())_sendCode.value = true
-            else _toastMessage.value = "Invalid phone numbers!"
-        }
-        is BookerCreation2Fragment -> {
-            if(verificationCode.isNotBlank()) _onPhoneVerified.value = true
-            else _toastMessage.value = "Enter the verification code"
-        }
-        is BookerCreationFinalFragment -> {
-            if(nameField.isBlank() || nationalityField.isBlank() || occupationField == OCCUPATION.UNKNOWN.toString() || sex == SEX.UNKNOWN)
-                _toastMessage.value = "Dont leave a field empty or un touched!"
-            else if (fullPhone.isBlank()) _toastMessage.value = "Invalid phone numbers!"
-            else if (fullPhone == FirebaseAuth.getInstance().currentUser?.phoneNumber) _toastMessage.value = "Recovery phone number should be different from ${FirebaseAuth.getInstance().currentUser?.phoneNumber ?: "phone number"}"
-            else  _startInfoUpload.value = true
-        }
-        else -> {
-            //Never occurs
+    fun checkFields(fragment: Fragment) {
+        when (fragment) {
+            is BookerCreation1Fragment -> {
+                val fullPhone = "+${bookerCountryCode}${bookerPhoneField}"
+                if (fullPhone.isNotBlank()) {
+                    _sendCode.value = true
+                    _sendCode.value = false
+                } else _toastMessage.value = "Invalid phone numbers!"
+            }
+            is BookerCreation2Fragment -> {
+                if (verificationCode.isNotBlank()) {
+                    _onPhoneVerified.value = true
+                    _onPhoneVerified.value = false
+                } else _toastMessage.value = "Enter the verification code"
+            }
+            is BookerCreationFinalFragment -> {
+                val fullPhone = "+${recoveryCountryCode}${recoveryPhoneField}"
+                if (nameField.isBlank() || nationalityField.isBlank() || occupationField == "" || sex == SEX.UNKNOWN)
+                    _toastMessage.value = "Don't leave a field empty or un touched!"
+                else if (fullPhone.isBlank()) _toastMessage.value = "Invalid phone numbers!"
+                else if (fullPhone == FirebaseAuth.getInstance().currentUser?.phoneNumber) _toastMessage.value =
+                    "Recovery phone number should be different from ${FirebaseAuth.getInstance().currentUser?.phoneNumber ?: "phone number"}"
+                else {
+                    _startInfoUpload.value = true
+                    _startInfoUpload.value = false
+                }
+            }
+            else -> {
+                //Never occurs
+            }
         }
     }
 

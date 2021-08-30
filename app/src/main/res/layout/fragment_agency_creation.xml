@@ -26,7 +26,8 @@
                 android:layout_height="75dp"
                 app:layout_constraintBottom_toTopOf="@+id/name"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/text_logo"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/baseline_insert_photo_24" />
 
@@ -34,10 +35,12 @@
                 android:id="@+id/text_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:text="Logo: "
                 app:layout_constraintBottom_toBottomOf="@+id/logoField"
                 app:layout_constraintEnd_toStartOf="@+id/logoField"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/logoField" />
 
             <com.google.android.material.textfield.TextInputLayout

@@ -20,6 +20,7 @@ import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripsConfigBinding
 import com.lado.travago.tripbook.databinding.ItemSearchFormBinding
 import com.lado.travago.tripbook.databinding.ItemTripPriceFormBinding
+import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
 import com.lado.travago.tripbook.ui.recyclerview.adapters.TripsClickListener
 import com.lado.travago.tripbook.ui.recyclerview.adapters.TripsConfigAdapter
@@ -33,6 +34,7 @@ import kotlinx.coroutines.launch
  */
 @ExperimentalCoroutinesApi
 class TripsConfigFragment : Fragment() {
+    private lateinit var parentViewModel: AgencyConfigViewModel
     private lateinit var binding: FragmentTripsConfigBinding
     private lateinit var viewModel: TripsConfigViewModel
     private lateinit var adapter: TripsConfigAdapter
@@ -41,6 +43,7 @@ class TripsConfigFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        parentViewModel = ViewModelProvider(requireActivity())[AgencyConfigViewModel::class.java]
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             layoutInflater,
@@ -78,7 +81,7 @@ class TripsConfigFragment : Fragment() {
 
     private fun observeLiveData() {
         viewModel.retryTrips.observe(viewLifecycleOwner) {
-            if (it) CoroutineScope(Dispatchers.Main).launch { viewModel.getTrips() }
+            if (it) CoroutineScope(Dispatchers.Main).launch { viewModel.getTrips(parentViewModel.bookerDoc.value!!.getString("agencyID")!!) }
         }
 
         //Submit list to inflate recycler view
@@ -222,7 +225,7 @@ class TripsConfigFragment : Fragment() {
     private fun handleButtonClick(){
         binding.btnTripSave.setOnClickListener{
             CoroutineScope(Dispatchers.Main).launch{
-                viewModel.uploadTripChanges()
+                viewModel.uploadTripChanges(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
             }
         }
         binding.fabSortTrips.setOnClickListener {

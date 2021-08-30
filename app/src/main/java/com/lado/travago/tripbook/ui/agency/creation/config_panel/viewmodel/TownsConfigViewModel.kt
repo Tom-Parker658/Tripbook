@@ -29,10 +29,7 @@ class TownsConfigViewModel : ViewModel() {
     /**
      * Tags used to know what the user has clicked on a recycler view item
      */
-    enum class TownButtonTags {
-        //Town Tags
-        TOWN_SWITCH_ACTIVATE, TOWN_BUTTON_TRIPS,
-    }
+    enum class TownButtonTags { TOWN_SWITCH_ACTIVATE, TOWN_BUTTON_TRIPS }
 
     var exemptedTownList = mutableListOf<String>() //and that's agency's exception list
         private set
@@ -62,24 +59,26 @@ class TownsConfigViewModel : ViewModel() {
     /**
      * We get all the towns from the database and the document containing the list of exempted towns
      */
-    suspend fun getTownsData() {
+    suspend fun getTownsData(agencyID: String) {
         _retryTowns.value = false
         firestoreRepo.getCollection("Planets/Earth/Continents/Africa/Cameroon")
             .collect { townsListState ->
                 when (townsListState) {
                     is State.Loading -> _onLoading.value = true
                     is State.Failed -> {
-                        _toastMessage.value = townsListState.exception.handleError{ /**TODO: Handle Error lambda*/ }
+                        _toastMessage.value =
+                            townsListState.exception.handleError { /**TODO: Handle Error lambda*/ }
                         _onLoading.value = false
                     }
                     is State.Success -> {
                         //TODO: Get agency id from the current user
-                        firestoreRepo.getDocument("OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Configs/Cameroon/Towns/exemption")
+                        firestoreRepo.getDocument("OnlineTransportAgency/${agencyID}/Configs/Cameroon/Towns/exemption")
                             .collect { exemptedDocState ->
                                 when (exemptedDocState) {
                                     is State.Loading -> _onLoading.value = true
                                     is State.Failed -> {
-                                        _toastMessage.value = exemptedDocState.exception.handleError{ /**TODO: Handle Error lambda*/ }
+                                        _toastMessage.value =
+                                            exemptedDocState.exception.handleError { /**TODO: Handle Error lambda*/ }
                                         _onLoading.value = false
                                     }
                                     is State.Success -> {
@@ -128,38 +127,28 @@ class TownsConfigViewModel : ViewModel() {
         }
     }
 
-
-    //When fragment is closed, we want to clear all values
-    /*fun clearProperties(){
-        _townDocList.value!!.clear()
-        townNamesList.clear()
-        townName = ""
-        exemptedTownList.clear()
-        sortCheckedItem = 0
-        townId = ""
-    }*/
-
     /**
      * A function to search for a specific town name from the doc and return its index in the list
      */
     fun searchTown(townName: String): Int? = townDocList.value?.indexOf(
-            townDocList.value!!.find { townDoc ->
-                townDoc["name"] == townName
-            }
-        )
+        townDocList.value!!.find { townDoc ->
+            townDoc["name"] == townName
+        }
+    )
 
-    suspend fun uploadTownChanges(){
+    suspend fun uploadTownChanges(agencyID: String) {
         firestoreRepo.setDocument(
             hashMapOf(
                 "exemptedTownList" to exemptedTownList
             ),
-            "OnlineTransportAgency/Bh7XGjKv5AlUMoDQFpv0/Configs/Cameroon/Towns/exemption"
-        ).collect{
-            when(it) {
+            "OnlineTransportAgency/${agencyID}/Configs/Cameroon/Towns/exemption"
+        ).collect {
+            when (it) {
                 is State.Loading -> _onLoading.value = true
                 is State.Failed -> {
                     _onLoading.value = false
-                    _toastMessage.value = it.exception.handleError{ /**TODO: Handle Error lambda*/ }
+                    _toastMessage.value =
+                        it.exception.handleError { /**TODO: Handle Error lambda*/ }
                 }
                 is State.Success -> {
                     _onLoading.value = false
@@ -170,13 +159,13 @@ class TownsConfigViewModel : ViewModel() {
         }
     }
 
-    fun sortResult(sortTag: SortTags) = when(sortTag){
-            SortTags.TOWN_NAMES -> _townDocList.value!!.sortBy {
-                it.getString("name")
-            }
-            SortTags.REGIONS -> _townDocList.value!!.sortBy {
-                it.getString("region")
-            }
+    fun sortResult(sortTag: SortTags) = when (sortTag) {
+        SortTags.TOWN_NAMES -> _townDocList.value!!.sortBy {
+            it.getString("name")
         }
+        SortTags.REGIONS -> _townDocList.value!!.sortBy {
+            it.getString("region")
+        }
+    }
 
 }

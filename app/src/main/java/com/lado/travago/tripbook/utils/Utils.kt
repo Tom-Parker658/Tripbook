@@ -148,4 +148,11 @@ object Utils {
         return ByteArrayInputStream(byteArrayOutputStream.toByteArray())
     }
 
+    /**
+     * A function to remove all spaces
+     */
+    fun String.removeSpaces() = replace(" ", "")
+
+
+
 }

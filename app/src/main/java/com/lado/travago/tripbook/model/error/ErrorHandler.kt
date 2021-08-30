@@ -17,7 +17,7 @@ object ErrorHandler {
         doSomething(this)
         return when(this){
             is FirebaseException -> typeFirestore(this)
-            else -> "Something went wrong"
+            else -> message.toString()
         }
     }
 
@@ -36,6 +36,6 @@ object ErrorHandler {
                 is FirebaseAuthRecentLoginRequiredException -> "You must logIn to access this page"
                 else -> "We could not verify your identity, Please try again"
             }
-            else -> "We are sorry! Something went wrong, please try again later."
+            else -> firebaseException.message.toString()
         }
 }

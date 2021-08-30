@@ -45,11 +45,12 @@ class BookerCreationFinalFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_booker_creation_final, null, false)
         viewModel = ViewModelProvider(requireActivity())[BookerCreationViewModel::class.java]
-        binding.countryCodePicker.setCountryForPhoneCode(savedInstanceState?.getInt("COUNTRY_CODE") ?: 237)
+
         phoneWidgetConfig()
         occupationAutoComplete()
-        onFieldChange()
+        //Restore field should come before field change
         restoreFields()
+        onFieldChange()
         return binding.root
     }
     private fun occupationAutoComplete(){
@@ -64,20 +65,13 @@ class BookerCreationFinalFragment : Fragment() {
     }
 
     /**
-     * Saves country Code
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt("COUNTRY_CODE", binding.countryCodePicker.selectedCountryCodeAsInt)
-        super.onSaveInstanceState(outState)
-    }
-
-    /**
      * Set ways to get data from the views and assign it to the viewModels
      * credential represent either email or phoneNumber
      */
     private fun onFieldChange() {
         binding.recoveryPhone.editText!!.addTextChangedListener{
             viewModel.setField(FieldTags.RECOVERY_PHONE, it.toString())
+            viewModel.setField(FieldTags.RECOVERY_COUNTRY_CODE, binding.countryCodePicker.selectedCountryCodeAsInt)
         }
 
         binding.name.editText!!.addTextChangedListener {
@@ -114,10 +108,12 @@ class BookerCreationFinalFragment : Fragment() {
             }
             viewModel.setField(FieldTags.SEX, sex)
         }
+
         binding.btnSaveInfo.setOnClickListener {
-            if(binding.countryCodePicker.isValidFullNumber)  viewModel.setField(FieldTags.FULL_PHONE, binding.countryCodePicker.fullNumberWithPlus)
-            else viewModel.setField(FieldTags.FULL_PHONE, "")
-            viewModel.checkFields(this)
+            if(binding.countryCodePicker.isValidFullNumber)
+                viewModel.checkFields(this)
+            else
+                viewModel.setField(FieldTags.TOAST_MESSAGE, "Invalid Phone Number")
         }
     }
 
@@ -194,6 +190,7 @@ class BookerCreationFinalFragment : Fragment() {
         )
         binding. nationality.editText!!.setText(viewModel.nationalityField)
         binding.radioGroupSex.check(viewModel.sexFieldId)
+        binding.countryCodePicker.setCountryForPhoneCode(viewModel.recoveryCountryCode)
     }
 
 

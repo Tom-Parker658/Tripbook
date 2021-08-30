@@ -28,6 +28,7 @@ data class Booker(
     val photoUrl: String,
     val nationality: String,
     var occupation: String,
+    val phone: String,
     var recoveryPhoneNumber: String,
 ) {
     @ServerTimestamp
@@ -36,6 +37,7 @@ data class Booker(
     val bookerMap: HashMap<String, Any?> = hashMapOf(
         "name" to name,
         "sex" to sex,
+        "phone" to phone,
         "recoveryPhoneNumber" to recoveryPhoneNumber,
         "birthday" to birthdayInMillis,
         "nationality" to nationality,

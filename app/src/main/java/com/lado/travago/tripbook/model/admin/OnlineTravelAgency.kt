@@ -41,8 +41,8 @@ data class OnlineTravelAgency(
     val supportEmail: String,
     val supportPhone1: String,
     val supportPhone2: String,
-    val supportCountryCode1: String, //e.g 237
-    val supportCountryCode2: String, //e.g 237
+    val supportCountryCode1: Int, //e.g 237
+    val supportCountryCode2: Int, //e.g 237
     val phone1: String,//e.g 677889955
     val phone2: String,//e.g 677889955
     val isSuspended: Boolean = false,
@@ -56,7 +56,7 @@ data class OnlineTravelAgency(
     var addedOn: Timestamp = Timestamp.now()
     var likes: Int = 1
     var dislikes: Int = 1
-    val reputation: Double = (likes / (likes + dislikes)) * 10.0
+    private val reputation: Double = (likes / (likes + dislikes)) * 10.0
 
     val otaMap =
         if (modifiedOn == null) {//In this case, we are creating the agency and we instead set addedOn tag
