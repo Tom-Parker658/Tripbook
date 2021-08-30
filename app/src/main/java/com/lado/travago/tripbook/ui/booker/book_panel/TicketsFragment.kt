@@ -1,4 +1,4 @@
-package com.lado.travago.tripbook.ui.booker.panel
+package com.lado.travago.tripbook.ui.booker.book_panel
 
 import android.os.Bundle
 import android.view.LayoutInflater

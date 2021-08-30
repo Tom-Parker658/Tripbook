@@ -16,21 +16,25 @@ import kotlinx.coroutines.flow.collect
  */
 @ExperimentalCoroutinesApi
 class AgencyConfigViewModel : ViewModel() {
-    private lateinit var firestoreRepo: FirestoreRepo
-    private lateinit var authRepo: FirebaseAuthRepo
+    private var firestoreRepo: FirestoreRepo = FirestoreRepo()
+    private var authRepo: FirebaseAuthRepo = FirebaseAuthRepo()
 
     private val _bookerDoc = MutableLiveData<DocumentSnapshot>()
     val bookerDoc: LiveData<DocumentSnapshot> get() = _bookerDoc
 
+    private val _retry = MutableLiveData(true)
+    val retry: LiveData<Boolean> get() = _retry
+
     /**
      * Get the current booker document
      */
-    suspend fun getCurrentBooker(){
+    suspend fun getCurrentBooker() {
+        _retry.value = false
         firestoreRepo.getDocument(
             "Bookers/${authRepo.currentUser!!.uid}",
             Source.DEFAULT
-        ).collect{
-            when(it){
+        ).collect {
+            when (it) {
                 is State.Success -> {
                     _bookerDoc.value = it.data!!
                 }

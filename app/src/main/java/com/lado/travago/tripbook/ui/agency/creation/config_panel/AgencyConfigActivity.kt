@@ -26,14 +26,15 @@ class AgencyConfigActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[AgencyConfigViewModel::class.java]
 
-        CoroutineScope(Dispatchers.Main).launch {
-            viewModel.getCurrentBooker()
+        viewModel.retry.observe(this) {
+            if (it)
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.getCurrentBooker()
+                }
         }
-
         viewModel.bookerDoc.observe(this) {
-            if (it.exists()) binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
-            else finish()
+            if (it.exists()) binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
+            else binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
         }
     }
 

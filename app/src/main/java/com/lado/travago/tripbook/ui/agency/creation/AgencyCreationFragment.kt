@@ -9,16 +9,17 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyCreationBinding
 import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationViewModel.*
+import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
 import com.lado.travago.tripbook.utils.Utils.removeSpaces
 import com.lado.travago.tripbook.utils.loadImageFromUrl
 import kotlinx.coroutines.*
@@ -27,6 +28,7 @@ import kotlinx.coroutines.tasks.await
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class AgencyCreationFragment : Fragment() {
+    private lateinit var parentViewModel: AgencyConfigViewModel
     private lateinit var binding: FragmentAgencyCreationBinding
     private lateinit var viewModel: AgencyCreationViewModel
 
@@ -41,13 +43,13 @@ class AgencyCreationFragment : Fragment() {
             container,
             false
         )
-        initViewModel()
+        initViewModels()
         //Restore data to the textFields after any configuration change
         restoreSavedData()
         onFieldChange()
         onNextClicked()
-        observeLiveData()
 
+        observeLiveData()
         return binding.root
     }
 
@@ -55,7 +57,7 @@ class AgencyCreationFragment : Fragment() {
         viewModel.retry.observe(viewLifecycleOwner) {
             if (it) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    viewModel.getExistingAgencyData()
+                    viewModel.getExistingAgencyData(parentViewModel.bookerDoc.value!!.getString("agencyID"))
                 }
             }
         }
@@ -75,7 +77,10 @@ class AgencyCreationFragment : Fragment() {
         //We check to see if to save a new logo or not
         viewModel.startSaving.observe(viewLifecycleOwner) {
             if (it) {
-                if (binding.logoField.drawable == viewModel.logoBitmap!!.toDrawable(requireActivity().resources)) {
+                if (viewModel.logoBitmap == null && binding.logoField.drawable == viewModel.logoBitmap!!.toDrawable(
+                        requireActivity().resources
+                    )
+                ) {
                     viewModel.setField(FieldTags.ON_LOGO_SAVED, true)
                 } else {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -88,16 +93,18 @@ class AgencyCreationFragment : Fragment() {
         //We check to see to create or modify agency
         viewModel.onLogoSaved.observe(viewLifecycleOwner) {
             if (it) {
-                viewModel.setField(FieldTags.ON_LOGO_SAVED, false)
                 CoroutineScope(Dispatchers.Main).launch {
-                    if (viewModel.agencyDbData.exists()) /*We update*/ viewModel.updateAgencyInfo().await()
-                    else /*We create*/ viewModel.createAgency().await()
+                    if (viewModel.agencyDbData.exists()) /*We update*/ viewModel.updateAgencyInfo(
+                        parentViewModel.bookerDoc.value!!
+                    )
+                    else /*We create*/ viewModel.createAgency(parentViewModel.bookerDoc.value!!)
                 }
             }
         }
         viewModel.startFilling.observe(viewLifecycleOwner) {
             if (it) {
                 viewModel.fillExistingData()
+                restoreSavedData()
             }
         }
         viewModel.toastMessage.observe(viewLifecycleOwner) {
@@ -108,15 +115,23 @@ class AgencyCreationFragment : Fragment() {
         }
         //In this case we go back to the launcher activity which is actually th config activity
         viewModel.onInfoSaved.observe(viewLifecycleOwner) {
-            if (it)
+            if (it) {
+                if (!viewModel.agencyDbData.exists())
+                    CoroutineScope(Dispatchers.Main).launch {
+                        parentViewModel.getCurrentBooker()
+                    }
                 findNavController().navigate(
                     AgencyCreationFragmentDirections.actionAgencyCreationFragmentToAgencyConfigCenterFragment()
                 )
+            }
         }
         viewModel.onVerificationFailed.observe(viewLifecycleOwner) {
             //We end activity if we can't verify we are editing or creating an agency
             if (it) {
-                viewModel.setField(FieldTags.TOAST_MESSAGE, "Could not verify your authenticity. Check Connection")
+                viewModel.setField(
+                    FieldTags.TOAST_MESSAGE,
+                    "Could not verify your authenticity. Check Connection"
+                )
                 findNavController().navigate(
                     AgencyCreationFragmentDirections.actionAgencyCreationFragmentToAgencyConfigCenterFragment()
                 )
@@ -130,6 +145,8 @@ class AgencyCreationFragment : Fragment() {
     private fun onFieldChange() {
         //Tries to load the logo gotten from the database
         if (viewModel.logoUrl.isNotBlank()) binding.logoField.loadImageFromUrl(viewModel.logoUrl)
+        else viewModel.setField(FieldTags.LOGO_BITMAP, binding.logoField.drawable.toBitmap(75, 75))
+
         binding.name.editText!!.addTextChangedListener {
             viewModel.setField(FieldTags.NAME, it.toString())
         }
@@ -205,7 +222,8 @@ class AgencyCreationFragment : Fragment() {
         binding.bank.editText!!.setText(viewModel.bankField)
     }
 
-    private fun initViewModel() {
+    private fun initViewModels() {
+        parentViewModel = ViewModelProvider(requireActivity())[AgencyConfigViewModel::class.java]
         viewModel = ViewModelProvider(this)[AgencyCreationViewModel::class.java]
     }
 
@@ -255,5 +273,4 @@ class AgencyCreationFragment : Fragment() {
                 binding.logoField.setImageBitmap(viewModel.logoBitmap)
         }
     }
-
 }

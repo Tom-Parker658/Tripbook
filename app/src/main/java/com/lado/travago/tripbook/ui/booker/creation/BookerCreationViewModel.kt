@@ -18,6 +18,7 @@ import com.lado.travago.tripbook.repo.firebase.FirebaseAuthRepo
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import com.lado.travago.tripbook.repo.firebase.StorageRepo
 import com.lado.travago.tripbook.utils.Utils
+import com.lado.travago.tripbook.utils.Utils.removeSpaces
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -177,8 +178,8 @@ class BookerCreationViewModel : ViewModel() {
                         photoUrl = photoUrl,
                         nationality = nationalityField,
                         occupation = occupationField,
-                        phone = "+${bookerCountryCode}${bookerPhoneField}",
-                        recoveryPhoneNumber = "+${recoveryCountryCode}${recoveryPhoneField}" // Actually recovery now
+                        phone = "+${bookerCountryCode}${bookerPhoneField.removeSpaces()}",
+                        recoveryPhoneNumber = "+${recoveryCountryCode}${recoveryPhoneField.removeSpaces()}" // Actually recovery now
                     )
                     //Complete the creation process for signUp
                     firestoreRepo.setDocument(

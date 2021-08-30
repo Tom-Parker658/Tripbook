@@ -6,20 +6,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.tripbook.R
-import com.lado.travago.tripbook.databinding.ActivityMainBinding
-import com.lado.travago.tripbook.ui.booker.panel.viewmodel.JourneySearchViewModel
+import com.lado.travago.tripbook.databinding.ActivityBookerBinding
+
+import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.JourneySearchViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class MainActivity : AppCompatActivity() {
+class BookerActivity : AppCompatActivity() {
     private lateinit var viewModel: JourneySearchViewModel
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityBookerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewModel()
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_booker)
 
         loading()
     }

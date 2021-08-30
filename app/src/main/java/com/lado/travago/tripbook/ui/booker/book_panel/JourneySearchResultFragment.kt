@@ -1,4 +1,4 @@
-package com.lado.travago.tripbook.ui.booker.panel
+package com.lado.travago.tripbook.ui.booker.book_panel
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentJourneySearchResultBinding
 import com.lado.travago.tripbook.ui.recyclerview.adapters.JourneySearchResultAdapter
-import com.lado.travago.tripbook.ui.booker.panel.viewmodel.JourneySearchViewModel
+import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.JourneySearchViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 

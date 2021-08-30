@@ -43,8 +43,6 @@ data class OnlineTravelAgency(
     val supportPhone2: String,
     val supportCountryCode1: Int, //e.g 237
     val supportCountryCode2: Int, //e.g 237
-    val phone1: String,//e.g 677889955
-    val phone2: String,//e.g 677889955
     val isSuspended: Boolean = false,
     val modifiedOn: Timestamp?
 ) {
@@ -75,8 +73,6 @@ data class OnlineTravelAgency(
                 "supportPhone2" to supportPhone2,
                 "phoneCode1" to supportCountryCode1,
                 "phoneCode2" to supportCountryCode2,
-                "phone1" to phone1,
-                "phone2" to phone2,
                 "creationDecree" to creationDecree,
 
                 "likes" to likes,

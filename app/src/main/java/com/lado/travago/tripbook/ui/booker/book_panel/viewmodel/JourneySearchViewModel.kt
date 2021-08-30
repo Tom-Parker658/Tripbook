@@ -1,19 +1,16 @@
-package com.lado.travago.tripbook.ui.booker.panel.viewmodel
+package com.lado.travago.tripbook.ui.booker.book_panel.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.model.admin.Journey
 import com.lado.travago.tripbook.model.enums.TravelTime
-import com.lado.travago.tripbook.repo.State
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import java.util.*
 
 /**

@@ -119,37 +119,25 @@ class AgencyCreationViewModel : ViewModel() {
     /**
      * Checks if th agency already exist in the database or is under creation
      */
-    suspend fun getExistingAgencyData() {
+    suspend fun getExistingAgencyData(agencyID: String?) {
         _retry.value = false
-        firestoreRepo.getDocument("Bookers/${authRepo.firebaseAuth.currentUser!!.uid}").collect {
-            when (it) {
-                is State.Success -> {
-                    firestoreRepo.getDocument("OnlineTransportAgency/${it.data["agency"]}")
-                        .collect { agencyDataState ->
-                            when (agencyDataState) {
-                                is State.Loading -> _onLoading.value = true
-                                is State.Success -> {
-                                    agencyDbData = agencyDataState.data!!
-                                    _startFilling.value = true
-                                    _startFilling.value = false
-                                    _onLoading.value = false
-                                }
-                                is State.Failed -> {
-                                    _onLoading.value = false
-                                    _onVerificationFailed.value = true
-                                    _onVerificationFailed.value = false
-                                }
-                            }
-                        }
-                }
-                is State.Loading -> _onLoading.value = true
-                is State.Failed -> {
-                    _onLoading.value = false
-                    _onVerificationFailed.value = true
-                    _onVerificationFailed.value = false
+        firestoreRepo.getDocument("OnlineTransportAgency/$agencyID")
+            .collect { agencyDataState ->
+                when (agencyDataState) {
+                    is State.Loading -> _onLoading.value = true
+                    is State.Success -> {
+                        agencyDbData = agencyDataState.data!!
+                        _startFilling.value = true
+                        _startFilling.value = false
+                        _onLoading.value = false
+                    }
+                    is State.Failed -> {
+                        _onLoading.value = false
+                        _onVerificationFailed.value = true
+                        _onVerificationFailed.value = false
+                    }
                 }
             }
-        }
     }
 
     /**
@@ -165,7 +153,7 @@ class AgencyCreationViewModel : ViewModel() {
             creationYearField = agencyDbData.getLong("creationYear")!!.toString()
             mottoField = agencyDbData.getString("motto")!!
             supportEmailField = agencyDbData.getString("supportEmail")!!
-            bankField = agencyDbData.getLong("bankNumber")!!.toString()
+            bankField = agencyDbData.getString("bankNumber")!!.toString()
             momoField = agencyDbData.getString("mtnMoneyNumber")!!
             orangeMoneyField = agencyDbData.getString("orangeMoneyNumber")!!
             logoUrl = agencyDbData.getString("logoUrl")!!
@@ -230,7 +218,7 @@ class AgencyCreationViewModel : ViewModel() {
                     _onLogoSaved.value = true
                     _onLogoSaved.value = false
 
-                    _onLoading.value = true
+                    _onLoading.value = false
                 }
             }
         }
@@ -239,70 +227,61 @@ class AgencyCreationViewModel : ViewModel() {
     /**
      * Saves a fresh copy of the agency info for a new agency
      */
-    fun createAgency(): Task<Transaction> =
-        firestoreRepo.db.runTransaction { transaction ->
-            val newAgencyMap = OnlineTravelAgency(
-                agencyName = nameField,
-                logoUrl = logoUrl,
-                motto = mottoField,
-                nameCEO = nameCEOField,
-                creationDecree = decreeNumberField,
-                bankNumber = bankField,
-                mtnMoneyNumber = momoField,
-                orangeMoneyNumber = orangeMoneyField,
-                supportEmail = supportEmailField,
-                supportPhone1 = supportPhone1Field.removeSpaces(),
-                supportPhone2 = supportPhone2Field.removeSpaces(),
-                modifiedOn = null,
-                creationYear = creationYearField.toInt(),
-                phone1 = supportPhone1Field,
-                phone2 = supportPhone2Field,
-                supportCountryCode1 = phoneCode1,
-                supportCountryCode2 = phoneCode2
-            ).otaMap
-            val db = firestoreRepo.db
-            val bookerRef =
-                transaction.get(db.document("Bookers/${authRepo.firebaseAuth.currentUser!!.uid}"))
-            val agencyDoc =
-                transaction.get(db.collection("OnlineTransportAgency").document())
-            val recordDoc =
-                transaction.get(db.document("${agencyDoc.reference.path}/Record/${Timestamp.now()}"))
-            val scannerDoc =
-                transaction.get(db.document("${agencyDoc.reference.path}/Scanners/${authRepo.firebaseAuth.currentUser!!.uid}"))
+    fun createAgency(bookerDoc: DocumentSnapshot): Task<Void> {
+        val newAgencyMap = OnlineTravelAgency(
+            agencyName = nameField,
+            logoUrl = logoUrl,
+            motto = mottoField,
+            nameCEO = nameCEOField,
+            creationDecree = decreeNumberField,
+            bankNumber = bankField,
+            mtnMoneyNumber = momoField,
+            orangeMoneyNumber = orangeMoneyField,
+            supportEmail = supportEmailField,
+            supportPhone1 = supportPhone1Field.removeSpaces(),
+            supportPhone2 = supportPhone2Field.removeSpaces(),
+            modifiedOn = null,
+            creationYear = creationYearField.toInt(),
+            supportCountryCode1 = phoneCode1,
+            supportCountryCode2 = phoneCode2
+        ).otaMap
+        val db = firestoreRepo.db
+        val agencyDocRef = db.collection("OnlineTransportAgency").document()
+        val recordDocRef = db.collection("${agencyDocRef.path}/Record").document()
+        val scannerDocRef =
+            db.document("${agencyDocRef.path}/Scanners/${authRepo.firebaseAuth.currentUser!!.uid}")
+        val creatorScannerMap = hashMapOf<String, Any?>(
+            "name" to bookerDoc.getString("name"),
+            "phone" to bookerDoc.getString("phone"),
+            "photoUrl" to bookerDoc.getString("photoUrl"),
+            "isAdmin" to true,
+            "isOwner" to true,
+            "active" to true,
+            "scansNumber" to 0,
+            "addedOn" to Timestamp.now(),
+        )
+        val changeMap = mapOf<String, Any>(
+            "creatorId" to bookerDoc.id,
+            "name" to "${bookerDoc["name"]}",
+            "action" to "creation",
+            "doneAt" to Timestamp.now()
+        )
 
-            val creatorScannerMap = hashMapOf<String, Any?>(
-                "name" to bookerRef.getString("name"),
-                "phone" to bookerRef.getString("phone"),
-                "photoUrl" to bookerRef.getString("photoUrl"),
-                "isAdmin" to true,
-                "isOwner" to true,
-                "active" to true,
-                "scansNumber" to 0,
-                "addedOn" to Timestamp.now(),
-            )
-
+        return firestoreRepo.db.runBatch { batch ->
             /**1- We Upload the new agency info into firestore*/
-            transaction.set(agencyDoc.reference, newAgencyMap)
+            batch.set(agencyDocRef, newAgencyMap)
 
             /**2- Adds the current user to the list of scanners with the admin tag and owner tag to true*/
-            transaction.set(scannerDoc.reference, creatorScannerMap)
+            batch.set(scannerDocRef, creatorScannerMap)
 
             /**3- We make sure that the creator booker document contains knows that he is affiliated to an agency*/
-            transaction.update(
-                bookerRef.reference,
-                "agency",
-                agencyDoc.id
+            batch.update(
+                bookerDoc.reference,
+                "agencyID",
+                agencyDocRef.id
             )
             /**4-We create a record doc*/
-            val changeMap = mapOf<String, Any>(
-                "creation" to mapOf(
-                    "scannerId" to bookerRef.id,
-                    "name" to "${bookerRef["name"]}",
-                    "action" to "Created Agency",
-                    "doneAt" to Timestamp.now()
-                )
-            )
-            transaction.set(recordDoc.reference, changeMap)
+            batch.set(recordDocRef, changeMap)
         }.addOnSuccessListener {
             _onLoading.value = false
             _onInfoSaved.value = true
@@ -311,62 +290,54 @@ class AgencyCreationViewModel : ViewModel() {
             _onLoading.value = false
             _toastMessage.value = it.handleError { }
         }
-
+    }
 
     /**
      * Updates the agency to db
      */
-    fun updateAgencyInfo(): Task<Transaction> =
-        firestoreRepo.db.runTransaction { transaction ->
-            val agencyMapData = OnlineTravelAgency(
-                agencyName = nameField,
-                logoUrl = logoUrl,
-                motto = mottoField,
-                nameCEO = nameCEOField,
-                creationDecree = decreeNumberField,
-                bankNumber = bankField,
-                mtnMoneyNumber = momoField,
-                orangeMoneyNumber = orangeMoneyField,
-                supportEmail = supportEmailField,
-                supportPhone1 = supportPhone1Field.removeSpaces(),
-                supportPhone2 = supportPhone2Field.removeSpaces(),
-                creationYear = creationYearField.toInt(),
-                phone1 = supportPhone1Field,
-                phone2 = supportPhone2Field,
-                supportCountryCode1 = phoneCode1,
-                supportCountryCode2 = phoneCode2,
-                modifiedOn = Timestamp.now()
-            ).otaMap
-            val db = firestoreRepo.db
-            //Gets before writes
-            val bookerDoc =
-                transaction.get(db.document("Bookers/${authRepo.firebaseAuth.currentUser!!.uid}"))
-            val agencyDoc =
-                transaction.get(db.document("OnlineTransportAgency/${bookerDoc.getString("agencyID")}"))
-            val recordDoc =
-                transaction.get(db.document("${agencyDoc.reference.path}/Record/${Timestamp.now()}"))
+    fun updateAgencyInfo(bookerDoc: DocumentSnapshot): Task<Void> {
+        val agencyMapData = OnlineTravelAgency(
+            agencyName = nameField,
+            logoUrl = logoUrl,
+            motto = mottoField,
+            nameCEO = nameCEOField,
+            creationDecree = decreeNumberField,
+            bankNumber = bankField,
+            mtnMoneyNumber = momoField,
+            orangeMoneyNumber = orangeMoneyField,
+            supportEmail = supportEmailField,
+            supportPhone1 = supportPhone1Field.removeSpaces(),
+            supportPhone2 = supportPhone2Field.removeSpaces(),
+            creationYear = creationYearField.toInt(),
+            supportCountryCode1 = phoneCode1,
+            supportCountryCode2 = phoneCode2,
+            modifiedOn = Timestamp.now()
+        ).otaMap
+        val db = firestoreRepo.db
+        val agencyDocRef = db.document("OnlineTransportAgency/${bookerDoc.getString("agencyID")}")
+        val recordDocRef = db.collection("${agencyDocRef.path}/Record").document()
+        val changeMap = mapOf<String, Any>(
+            "scannerId" to bookerDoc.id,
+            "name" to "${bookerDoc["name"]}",
+            "action" to "modification",
+            "doneAt" to Timestamp.now()
+        )
 
+        return firestoreRepo.db.runBatch { batch ->
             /**1- We Update agency info into firestore*/
-            transaction.update(agencyDoc.reference, agencyMapData)
+            batch.update(agencyDocRef, agencyMapData)
 
             /**2- We add to records that this current admin scanner changed some details*/
-            val changeMap = mapOf<String, Any>(
-                "changes_${bookerDoc["name"]}" to mapOf(
-                    "scannerId" to bookerDoc.id,
-                    "name" to "${bookerDoc["name"]}",
-                    "action" to "Changed some agency details",
-                    "doneAt" to Timestamp.now()
-                )
-            )
-            transaction.update(recordDoc.reference, changeMap)
+            batch.set(recordDocRef, changeMap)
         }.addOnSuccessListener {
-                _onLoading.value = false
-                _onInfoSaved.value = true
-                _onInfoSaved.value = false
+            _onLoading.value = false
+            _onInfoSaved.value = true
+            _onInfoSaved.value = false
         }.addOnFailureListener {
             _onLoading.value = false
             _toastMessage.value = it.handleError { }
         }
+    }
 
     /**
      * This implements only the most basic checking for an email address's validity -- that it contains
@@ -389,5 +360,4 @@ class AgencyCreationViewModel : ViewModel() {
             _startSaving.value = true
             _startSaving.value = false
         }
-
 }

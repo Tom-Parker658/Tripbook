@@ -37,11 +37,11 @@ class SplashActivity : AppCompatActivity() {
 
         when(auth.currentUser){
             //If no user is found, we redirect the user to the Search screen
-            null  -> startActivity(Intent(this, MainActivity::class.java))
+            null  -> startActivity(Intent(this, BookerActivity::class.java))
             else ->{
                 if(auth.currentUser!!.isAnonymous){
                     auth.signOut()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, BookerActivity::class.java))
                 }else {
                     db.identifyUser(auth.currentUser!!.uid).collect {
                         when(it){
