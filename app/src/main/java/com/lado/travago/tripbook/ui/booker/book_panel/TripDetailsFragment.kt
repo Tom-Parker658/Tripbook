@@ -11,14 +11,14 @@ import com.lado.travago.tripbook.R
  * Seat selection and bus customisation fragment
  */
 
-class CustomisationFragment : Fragment() {
+class TripDetailsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_customisation, container, false)
+        return inflater.inflate(R.layout.fragment_trip_detail, container, false)
     }
 
 }

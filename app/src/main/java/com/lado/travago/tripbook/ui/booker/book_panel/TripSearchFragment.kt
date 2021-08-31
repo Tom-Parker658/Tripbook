@@ -6,18 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.lado.travago.tripbook.R
-import com.lado.travago.tripbook.databinding.FragmentSearchJourneyBinding
-import com.lado.travago.tripbook.model.enums.TravelTime
-import com.lado.travago.tripbook.utils.Utils
-import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.JourneySearchViewModel
+import com.lado.travago.tripbook.databinding.FragmentTripSearchBinding
+import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchViewModel
 import kotlinx.coroutines.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -26,9 +23,9 @@ import java.util.*
  */
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class JourneySearchFragment : Fragment() {
-    private lateinit var binding: FragmentSearchJourneyBinding
-    private lateinit var viewModel: JourneySearchViewModel
+class TripSearchFragment : Fragment() {
+    private lateinit var binding: FragmentTripSearchBinding
+    private lateinit var viewModel: TripSearchViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +35,7 @@ class JourneySearchFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(
                 layoutInflater,
-                R.layout.fragment_search_journey,
+                R.layout.fragment_trip_search,
                 container,
                 false
             )
@@ -47,20 +44,20 @@ class JourneySearchFragment : Fragment() {
         adaptDestinations()
         navigateToResultScreen()
 
-        restoreFields()
+//        restoreFields()
         return binding.root
     }
     /**
      * Initialises [viewModel] using the agencyName and the path gotten from the agency launched-bundle
      */
     private fun initViewModel(){
-        viewModel = ViewModelProvider(requireActivity())[JourneySearchViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[TripSearchViewModel::class.java]
     }
 
     /**
      * Loads all values of the fields from the viewModel in case of config change
      */
-    private fun restoreFields() {
+   /* private fun restoreFields() {
         binding.inputLocation.editText!!.setText(viewModel.location)
         binding.inputDestination.editText!!.setText(viewModel.destination)
         binding.checkboxVip.isChecked = viewModel.vip
@@ -78,23 +75,23 @@ class JourneySearchFragment : Fragment() {
                 else -> 0
             }
         )
-    }
+    }*/
 
     /**
      * Set ways to get data from the views and assign it to the viewModels
      */
     private fun onFieldChange() {
         binding.inputLocation.editText!!.addTextChangedListener {
-            viewModel.setFields(JourneySearchViewModel.FieldTags.LOCATION, binding.inputLocation.editText!!.text.toString())
+            viewModel.setFields(TripSearchViewModel.FieldTags.LOCATION, binding.inputLocation.editText!!.text.toString())
         }
         binding.inputDestination.editText!!.addTextChangedListener{
-            viewModel.setFields(JourneySearchViewModel.FieldTags.DESTINATION, binding.inputDestination.editText!!.text.toString())
+            viewModel.setFields(TripSearchViewModel.FieldTags.DESTINATION, binding.inputDestination.editText!!.text.toString())
         }
 
         binding.checkboxVip.setOnCheckedChangeListener { _, isVip ->
-            viewModel.setFields(JourneySearchViewModel.FieldTags.VIP, isVip)
+            viewModel.setFields(TripSearchViewModel.FieldTags.VIP, isVip)
         }
-        // Add an onClick listener to the birthday endIcon to select the birthday
+       /* // Add an onClick listener to the birthday endIcon to select the birthday
         binding.fabSelectDate.setOnClickListener { pickDate() }
 
         binding.optionTravelTime.setOnCheckedChangeListener { _, id ->
@@ -105,7 +102,7 @@ class JourneySearchFragment : Fragment() {
                 else -> TravelTime.UNKNOWN
             }
             viewModel.setFields(JourneySearchViewModel.FieldTags.TRAVEL_TIME, travelTime)
-        }
+        }*/
     }
 
     /**
@@ -129,8 +126,8 @@ class JourneySearchFragment : Fragment() {
         //When the user chooses a date, we format it from milliseconds to a nice looking date
 
         datePicker.addOnPositiveButtonClickListener {
-            viewModel.setFields(JourneySearchViewModel.FieldTags.TRAVEL_DAY, it)
-            binding.inputTravelDate.editText!!.setText(SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(Date(it)))
+            viewModel.setFields(TripSearchViewModel.FieldTags.TRAVEL_DAY, it)
+//            binding.inputTravelDate.editText!!.setText(SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(Date(it)))
 
 //            else {
 //                Toast.makeText(requireContext(),
@@ -157,7 +154,7 @@ class JourneySearchFragment : Fragment() {
      */
     private fun navigateToResultScreen(){
         binding.btnSearchJourney.setOnClickListener {
-            if(viewModel.location!="" && viewModel.destination!="" && viewModel.dateInMillis!=0L && viewModel.travelTime!=TravelTime.UNKNOWN){
+          /*  if(viewModel.location!="" && viewModel.destination!="" && viewModel.dateInMillis!=0L && viewModel.travelTime!=TravelTime.UNKNOWN){
                 it.findNavController().navigate(JourneySearchFragmentDirections.actionJourneySearchFragmentToJourneySearchResultFragment())
                 //Searches for the journeys
                 CoroutineScope(Dispatchers.Main).launch {
@@ -166,7 +163,7 @@ class JourneySearchFragment : Fragment() {
             }
             else{
                 Toast.makeText(requireContext(), "Fill all info!", Toast.LENGTH_LONG).show()
-            }
+            }*/
         }
     }
 

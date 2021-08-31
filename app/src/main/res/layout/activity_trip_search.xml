@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.booker.book_panel.TripSearchActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/trip_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/baseline_arrow_back_24" />
+
+        <SeekBar
+            android:id="@+id/book_progression"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:indeterminate="false"
+            android:max="4"
+            android:progress="0"
+            android:thumb="@drawable/baseline_directions_bus_24"
+            app:layout_constraintEnd_toEndOf="@+id/trip_toolbar"
+            app:layout_constraintStart_toStartOf="@+id/trip_toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/trip_toolbar" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/my_trip_search_nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_progression"
+            app:navGraph="@navigation/nav_agency_config"
+            tools:layout="@layout/fragment_trip_search_result" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

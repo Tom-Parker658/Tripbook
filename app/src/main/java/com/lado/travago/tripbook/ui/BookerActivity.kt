@@ -8,14 +8,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityBookerBinding
 
-import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.JourneySearchViewModel
+import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class BookerActivity : AppCompatActivity() {
-    private lateinit var viewModel: JourneySearchViewModel
+    private lateinit var viewModel: TripSearchViewModel
     private lateinit var binding: ActivityBookerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class BookerActivity : AppCompatActivity() {
      */
 
     private fun initViewModel(){
-        viewModel = ViewModelProvider(this)[JourneySearchViewModel::class.java]
+        viewModel = ViewModelProvider(this)[TripSearchViewModel::class.java]
     }
 
     private fun loading() {

@@ -17,6 +17,9 @@
         android:theme="@style/AppTheme.Dark"
         tools:ignore="AllowBackup">
         <activity
+            android:name=".ui.booker.book_panel.TripSearchActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.agency.creation.config_panel.AgencyConfigActivity"
             android:exported="true">
             <intent-filter>
@@ -32,21 +35,27 @@
         <activity
             android:name=".ui.administrator.AdminFunctionActivity"
             android:exported="true">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".ui.booker.creation.BookerCreationActivity"
             android:exported="true">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity android:name=".ui.agency.creation.AgencyCreationActivity">
 

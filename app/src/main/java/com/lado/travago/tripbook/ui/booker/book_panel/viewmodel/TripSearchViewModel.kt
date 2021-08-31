@@ -14,10 +14,10 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.*
 
 /**
- * This is the viewModel to manage the search screen of the app -> [JourneySearchViewModel]
+ * This is the viewModel to manage the search screen of the app -> [TripSearchViewModel]
  *
- * @property placesClient is passed as argument by the fragment to the [JourneySearchViewModel] for
- * building [JourneySearchViewModel]. The
+ * @property placesClient is passed as argument by the fragment to the [TripSearchViewModel] for
+ * building [TripSearchViewModel]. The
  * viewModel need this [placesClient] to deal with place autocompletion & user's current location
  * which can be fed to our layout autoCompleteTextViews to display
  *
@@ -25,7 +25,7 @@ import java.util.*
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 
-class JourneySearchViewModel : ViewModel() {
+class TripSearchViewModel : ViewModel() {
 
     //LiveData to check if the search results are ready and contains thr agencies info
     private val _resultsReady = MutableLiveData(mutableListOf<Journey.JourneySearchResultInfo>())
