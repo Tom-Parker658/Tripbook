@@ -10,21 +10,20 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.databinding.ItemTownConfigBinding
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import android.util.*
 
 /**
  * This adapter adapts  for the town configuration page
  *  It has as input towns Document and that agencies exception document
  *  towns KEY ="townDoc"
- *  @param exemptedTownsList is that agency document which contains exceptions about towns which the agency can offer or not
+ *  @param toDeleteIDList is that agency document which contains exceptions about towns which the agency can offer or not
  *  exceptions doc KEY = "exceptionDoc"
  */
 @ExperimentalCoroutinesApi
-class TownConfigAdapter (val clickListener: TownClickListener, private val exemptedTownsList: List<String>) : ListAdapter< DocumentSnapshot, TownConfigViewHolder>(
+class TownConfigAdapter (val clickListener: TownClickListener, private val toDeleteIDList: MutableList<String>) : ListAdapter< DocumentSnapshot, TownConfigViewHolder>(
     TownConfigDiffCallbacks()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TownConfigViewHolder =
-        TownConfigViewHolder.from(parent, exemptedTownsList)
+        TownConfigViewHolder.from(parent, toDeleteIDList)
 
     override fun onBindViewHolder(holder: TownConfigViewHolder, position: Int) =
         holder.bind(clickListener, getItem(position))
@@ -32,18 +31,18 @@ class TownConfigAdapter (val clickListener: TownClickListener, private val exemp
 }
 
 @ExperimentalCoroutinesApi
-class TownConfigViewHolder private constructor(val binding: ItemTownConfigBinding, private val exemptedTownsList: List<String>) :
+class TownConfigViewHolder private constructor(val binding: ItemTownConfigBinding, private val deleteIDList: List<String>) :
     RecyclerView.ViewHolder(binding.root) {
     /**
      * @param townDoc is a document containing each of the town in firestore
      */
     fun bind(clickListener: TownClickListener, townDoc: DocumentSnapshot) {
+        binding.townDoc = townDoc
+        binding.clickListener = clickListener
         binding.textTown.text = townDoc["name"].toString()
         binding.textRegion.text = townDoc["region"].toString()
-        binding.clickListener = clickListener
-        binding.townDoc = townDoc
-        //If the current town is not found the exception townList, it is checked by default else it is not checked
-        binding.switchActivate.isChecked = !exemptedTownsList .contains(townDoc.id)
+        binding.checkSelect.isChecked = deleteIDList.contains(townDoc.id)
+        //If the current town is selected, we check it
     }
 
 
@@ -53,13 +52,13 @@ class TownConfigViewHolder private constructor(val binding: ItemTownConfigBindin
          * @param parent is the layout which will host the the view holder
          * @return the town item view holder with this binding.
          */
-        fun from(parent: ViewGroup, exemptedTownsList: List<String>): TownConfigViewHolder {
+        fun from(parent: ViewGroup, toDeleteIDList: List<String>): TownConfigViewHolder {
             val binding = ItemTownConfigBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
-            return TownConfigViewHolder(binding,exemptedTownsList)
+            return TownConfigViewHolder(binding,toDeleteIDList)
         }
     }
 }

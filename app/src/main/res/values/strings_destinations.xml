@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--This contains a list of all destination name-->
 <resources>
-    <string-array name="destinations">
+    <string-array name="localities">
         <item>Abong Mbang</item>
         <item>Akonolinga</item>
         <item>Ambam</item>

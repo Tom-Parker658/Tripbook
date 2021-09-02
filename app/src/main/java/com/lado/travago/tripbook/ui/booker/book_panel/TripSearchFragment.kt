@@ -6,17 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.datepicker.MaterialDatePicker
+import androidx.navigation.fragment.findNavController
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripSearchBinding
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchViewModel
 import kotlinx.coroutines.*
-import java.util.*
-
 
 /**
  * Search screen fragment
@@ -26,6 +25,7 @@ import java.util.*
 class TripSearchFragment : Fragment() {
     private lateinit var binding: FragmentTripSearchBinding
     private lateinit var viewModel: TripSearchViewModel
+    private var localitiesNameList = listOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,131 +40,129 @@ class TripSearchFragment : Fragment() {
                 false
             )
         initViewModel()
+        adaptLocalityNames()
+        restoreFields()
         onFieldChange()
-        adaptDestinations()
+        observeTownInfo()
         navigateToResultScreen()
 
-//        restoreFields()
         return binding.root
     }
-    /**
-     * Initialises [viewModel] using the agencyName and the path gotten from the agency launched-bundle
-     */
-    private fun initViewModel(){
+
+    private fun initViewModel() {
         viewModel = ViewModelProvider(requireActivity())[TripSearchViewModel::class.java]
+    }
+
+    private fun observeTownInfo() {
+        viewModel.onLoading.observe(viewLifecycleOwner) {
+            if (it) binding.progressTrip.visibility = View.VISIBLE
+            else binding.progressTrip.visibility = View.GONE
+        }
+        viewModel.retrySearch.observe(viewLifecycleOwner) {
+            if (it) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.searchLocalityTowns()
+                }
+            }
+        }
+        viewModel.onLocalityResultsFound.observe(viewLifecycleOwner) {
+            if (it && localitiesNameList.contains(viewModel.locality)) {/*Show destination editText*/
+                adaptDestinationNames()
+                binding.inputDestination.visibility = View.VISIBLE
+                binding.imageDestination.visibility = View.VISIBLE
+            } else { /*Close destination editText if visible in this case*/
+                viewModel.setFields(TripSearchViewModel.FieldTags.DESTINATION, "")
+                binding.inputDestination.visibility = View.GONE
+                binding.imageDestination.visibility = View.GONE
+            }
+        }
+
     }
 
     /**
      * Loads all values of the fields from the viewModel in case of config change
      */
-   /* private fun restoreFields() {
-        binding.inputLocation.editText!!.setText(viewModel.location)
+    private fun restoreFields() {
+        binding.inputLocality.editText!!.setText(viewModel.locality)
         binding.inputDestination.editText!!.setText(viewModel.destination)
+        if (viewModel.destinationNameList.contains(viewModel.destination)) {
+            binding.inputDestination.visibility = View.VISIBLE
+            binding.imageDestination.visibility = View.VISIBLE
+        } else {
+            binding.inputDestination.visibility = View.GONE
+            binding.imageDestination.visibility = View.GONE
+        }
         binding.checkboxVip.isChecked = viewModel.vip
-        binding.inputTravelDate.editText!!.setText(
-            Utils.formatDate(
-                viewModel.dateInMillis,
-                "EEEE, dd MMMM yyyy"
-            )
-        )
-        binding.optionTravelTime.check(
-            when(viewModel.travelTime){
-                TravelTime.MORNING -> binding.optionMorning.id
-                TravelTime.NIGHT -> binding.optionNight.id
-                TravelTime.AFTERNOON -> binding.optionNoon.id
-                else -> 0
-            }
-        )
-    }*/
+    }
 
     /**
      * Set ways to get data from the views and assign it to the viewModels
      */
     private fun onFieldChange() {
-        binding.inputLocation.editText!!.addTextChangedListener {
-            viewModel.setFields(TripSearchViewModel.FieldTags.LOCATION, binding.inputLocation.editText!!.text.toString())
+        binding.inputLocality.editText!!.addTextChangedListener {
+            viewModel.setFields(TripSearchViewModel.FieldTags.LOCALITY, it.toString())
+            //To avoid changes when loading
+            if (localitiesNameList.contains(it.toString()))
+                viewModel.setFields(TripSearchViewModel.FieldTags.RETRY_SEARCH, true)
+            else {
+                binding.inputDestination.visibility = View.GONE
+                binding.imageDestination.visibility = View.GONE
+                binding.btnSearchJourney.visibility = View.GONE
+                binding.checkboxVip.visibility = View.GONE
+            }
         }
-        binding.inputDestination.editText!!.addTextChangedListener{
-            viewModel.setFields(TripSearchViewModel.FieldTags.DESTINATION, binding.inputDestination.editText!!.text.toString())
+        binding.inputDestination.editText!!.addTextChangedListener {
+            viewModel.setFields(TripSearchViewModel.FieldTags.DESTINATION, it.toString())
+            //If the booker has selected a valid locality we start the searching for destinations
+            if (viewModel.destinationNameList.contains(it.toString())) {
+                binding.btnSearchJourney.visibility = View.VISIBLE
+                binding.checkboxVip.visibility = View.VISIBLE
+            }else{
+                binding.btnSearchJourney.visibility = View.GONE
+                binding.checkboxVip.visibility = View.GONE
+            }
         }
-
         binding.checkboxVip.setOnCheckedChangeListener { _, isVip ->
             viewModel.setFields(TripSearchViewModel.FieldTags.VIP, isVip)
         }
-       /* // Add an onClick listener to the birthday endIcon to select the birthday
-        binding.fabSelectDate.setOnClickListener { pickDate() }
-
-        binding.optionTravelTime.setOnCheckedChangeListener { _, id ->
-            val travelTime = when (id) {
-                binding.optionNoon.id-> TravelTime.AFTERNOON
-                binding.optionMorning.id-> TravelTime.MORNING
-                binding.optionNight.id-> TravelTime.NIGHT
-                else -> TravelTime.UNKNOWN
-            }
-            viewModel.setFields(JourneySearchViewModel.FieldTags.TRAVEL_TIME, travelTime)
-        }*/
-    }
-
-    /**
-     * Generate a Date picker and return the picked date formatted which then set to
-     * the text of the [textInputEditText]. The travel date can be any day
-     * from the current day to the 2 weeks after
-     */
-    private fun pickDate() {
-        val calendar = Calendar.getInstance()//An instance of the current Calendar
-        val today = calendar.timeInMillis// The current date in millis
-        calendar.roll(Calendar.WEEK_OF_YEAR, 2)//Rolling the current date by 2weeks
-        val oneMonthAfter = calendar.timeInMillis// The date after 2 weeks
-
-
-        //We create our date picker which the user will use to enter his travel day
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Choose your Departure Day!")//Set the Title of the Picker
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)//Set date picker interface to display a calendar
-            .build()
-
-        //When the user chooses a date, we format it from milliseconds to a nice looking date
-
-        datePicker.addOnPositiveButtonClickListener {
-            viewModel.setFields(TripSearchViewModel.FieldTags.TRAVEL_DAY, it)
-//            binding.inputTravelDate.editText!!.setText(SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(Date(it)))
-
-//            else {
-//                Toast.makeText(requireContext(),
-//                    "Invalid Date!! Choose a date from now to 2 week.",
-//                    Toast.LENGTH_LONG).show()
-//                pickDate()
-//            }
-        }
-        datePicker.showNow(parentFragmentManager, "")
     }
 
     /**
      * Adapt the array of destinations to the location and destination auto complete text view
      */
-    private fun adaptDestinations(){
-        val destinations =  resources.getStringArray(R.array.destinations)
-        val adapter = ArrayAdapter(requireContext(), R.layout.item_dropdown_textview, destinations.toList())
-        (binding.inputLocation.editText as AutoCompleteTextView).setAdapter(adapter)
-        (binding.inputDestination.editText as AutoCompleteTextView).setAdapter(adapter)
+    private fun adaptLocalityNames() {
+        localitiesNameList = resources.getStringArray(R.array.localities).toList()
+        val adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.item_dropdown_textview,
+            localitiesNameList
+        )
+        (binding.inputLocality.editText as AutoCompleteTextView).setAdapter(adapter)
+    }
+
+    private fun adaptDestinationNames() {
+        if (viewModel.destinationNameList.isNotEmpty()) {
+            val adapter = ArrayAdapter(
+                requireContext(),
+                R.layout.item_dropdown_textview,
+                viewModel.destinationNameList
+            )
+            (binding.inputDestination.editText as AutoCompleteTextView).setAdapter(adapter)
+        }
     }
 
     /**
      * Navigates to the result screen after the search button is clicked
      */
-    private fun navigateToResultScreen(){
-        binding.btnSearchJourney.setOnClickListener {
-          /*  if(viewModel.location!="" && viewModel.destination!="" && viewModel.dateInMillis!=0L && viewModel.travelTime!=TravelTime.UNKNOWN){
-                it.findNavController().navigate(JourneySearchFragmentDirections.actionJourneySearchFragmentToJourneySearchResultFragment())
-                //Searches for the journeys
-                CoroutineScope(Dispatchers.Main).launch {
-//                    viewModel.searchMyJourney()
-                }
-            }
-            else{
-                Toast.makeText(requireContext(), "Fill all info!", Toast.LENGTH_LONG).show()
-            }*/
-        }
+    private fun navigateToResultScreen() = binding.btnSearchJourney.setOnClickListener {
+        findNavController().navigate(
+            TripSearchFragmentDirections.actionTripSearchFragmentToTripSearchResultsFragment(
+                viewModel.locality,
+                viewModel.destination,
+                viewModel.distance,
+                "",""
+            )
+        )
     }
 
 }

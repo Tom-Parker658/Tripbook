@@ -1,6 +1,7 @@
 package com.lado.travago.tripbook.utils
 
 import android.graphics.Bitmap
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
@@ -16,6 +17,15 @@ import java.util.*
  * Contains a set of utilities for our app_user .
  */
 object Utils {
+
+    /**
+     * This function applies on [Boolean] [LiveData] to switch it on/off once
+     */
+    fun MutableLiveData<Boolean>.switchOnOff(): MutableLiveData<Boolean> {
+        value = true
+        value = false
+        return this
+    }
 
     /**
      * @author Tom Parkert

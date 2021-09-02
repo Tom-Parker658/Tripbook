@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_booker"
-    app:startDestination="@id/addScannerDialogFragment">
-
-    <include app:graph="@navigation/nav_search_trip" />
-    <fragment
-        android:id="@+id/addScannerDialogFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.ScannerConfigFragment.AddScannerDialogFragment"
-        android:label="AddScannerDialogFragment" />
-</navigation>
+    android:id="@+id/nav_booker"/>

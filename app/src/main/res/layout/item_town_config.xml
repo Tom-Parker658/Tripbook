@@ -17,11 +17,12 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:checkable="false"
+        android:checkable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:cardElevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,8 +35,8 @@
                 style="?attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Trips"
                 android:onClickListener="@{()-> clickListener.onClick(buttonTag.TOWN_BUTTON_TRIPS, townDoc)}"
+                android:text="Trips"
                 android:textSize="12sp"
                 app:icon="@drawable/baseline_directions_bus_24"
                 app:layout_constraintBaseline_toBaselineOf="@+id/btn_park"
@@ -66,7 +67,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/text_region"
                 app:layout_constraintStart_toEndOf="@+id/view23"
                 app:layout_constraintTop_toTopOf="parent"
@@ -80,26 +81,22 @@
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/switch_activate"
+                app:layout_constraintEnd_toStartOf="@+id/check_select"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/text_town"
                 app:layout_constraintTop_toBottomOf="@+id/text_town"
                 tools:text=" Adamawa" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_activate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+            <CheckBox
+                android:id="@+id/check_select"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:button="@drawable/btn_select_cancel"
                 android:checked="true"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
-                android:onClickListener="@{()-> clickListener.onClick(buttonTag.TOWN_SWITCH_ACTIVATE, townDoc)}"
-                app:layout_constraintBottom_toBottomOf="@+id/text_region"
+                android:onClickListener="@{()-> clickListener.onClick(buttonTag.TOWN_CHECK_TO_DELETE, townDoc)}"
+                app:buttonTint="@color/colorNegativeButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/text_town"
-                app:layout_constraintTop_toTopOf="@+id/text_town" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/view21"

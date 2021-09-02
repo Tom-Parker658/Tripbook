@@ -15,7 +15,7 @@ import kotlinx.coroutines.tasks.await
 import java.io.InputStream
 
 @ExperimentalCoroutinesApi
-class StorageRepo(val context: Context? = null) {
+class StorageRepo() {
     var storage: FirebaseStorage = FirebaseStorage.getInstance(FirebaseApp.getInstance())
 
 

@@ -18,7 +18,13 @@
         tools:ignore="AllowBackup">
         <activity
             android:name=".ui.booker.book_panel.TripSearchActivity"
-            android:exported="true" />
+            android:exported="true">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
+        </activity>
         <activity
             android:name=".ui.agency.creation.config_panel.AgencyConfigActivity"
             android:exported="true">
@@ -56,15 +62,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             -->
-        </activity>
-        <activity android:name=".ui.agency.creation.AgencyCreationActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".ui.PaymentActivity" /> <!-- Helps for screen orientation during barcode scanning -->
         <activity

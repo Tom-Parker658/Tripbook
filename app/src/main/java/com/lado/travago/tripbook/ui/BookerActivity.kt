@@ -34,9 +34,9 @@ class BookerActivity : AppCompatActivity() {
     }
 
     private fun loading() {
-        viewModel.loading.observe(this) {
-            if (it == true) binding.progressBar.visibility = View.VISIBLE
-            else binding.progressBar.visibility = View.GONE
-        }
+//        viewModel.onLoading.observe(this) {
+//            if (it == true) binding.progressBar.visibility = View.VISIBLE
+//            else binding.progressBar.visibility = View.GONE
+//        }
     }
 }

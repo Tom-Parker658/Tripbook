@@ -5,15 +5,18 @@
 
     <data>
         <variable
-            name="resultInfo"
-            type="com.lado.travago.tripbook.model.admin.Journey.JourneySearchResultInfo" />
-
+            name="clickListener"
+            type="com.lado.travago.tripbook.ui.recyclerview.adapters.TripSearchResultsClickListener" />
+        <variable
+            name="agencyDoc"
+            type="com.google.firebase.firestore.DocumentSnapshot" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/result_journey_tap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClickListener="@{() -> clickListener.onClick(agencyDoc)}"
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
@@ -21,30 +24,41 @@
         android:paddingBottom="8dp">
 
         <ImageView
+            android:id="@+id/verified_bitmap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/baseline_check_circle_24" />
+
+        <ImageView
             android:id="@+id/agency_logo"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="1dp"
             android:contentDescription="@string/desc_agency_logo"
-            app:imageFromUrl="@{resultInfo.agencyLogoUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/divider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/text_agency_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:textAlignment="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/ratingBar"
-            app:layout_constraintEnd_toStartOf="@+id/label_verified"
+            app:layout_constraintEnd_toStartOf="@+id/divider2"
             app:layout_constraintStart_toEndOf="@+id/divider"
             app:layout_constraintTop_toBottomOf="@+id/divider3"
-            tools:text="General Voyage Express" />
+            tools:text="General Voyage Express " />
 
         <androidx.appcompat.widget.AppCompatRatingBar
             android:id="@+id/ratingBar"
@@ -55,6 +69,8 @@
             android:numStars="10"
             android:rating="7.5"
             app:layout_constraintBottom_toTopOf="@+id/text_trip_price"
+            app:layout_constraintEnd_toStartOf="@+id/divider2"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/textView29"
             app:layout_constraintTop_toBottomOf="@+id/text_agency_name"
             tools:ignore="SpeakableTextPresentCheck" />
@@ -67,6 +83,7 @@
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textColor="#FFC107"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/text_agency_motto"
             app:layout_constraintStart_toEndOf="@+id/divider"
@@ -80,6 +97,7 @@
             android:layout_marginStart="4dp"
             android:text="TextView"
             android:textColor="#03A9F4"
+            android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/text_trip_price"
             app:layout_constraintStart_toEndOf="@+id/divider"
             app:layout_constraintTop_toBottomOf="@+id/text_agency_name"
@@ -87,24 +105,15 @@
 
         <TextView
             android:id="@+id/text_agency_motto"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
-            android:textSize="10sp"
+            android:textAlignment="textEnd"
+            android:textSize="8sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toEndOf="@+id/text_agency_name"
             app:layout_constraintStart_toEndOf="@+id/text_trip_price"
             tools:text="Your comfort, Our Priority!" />
-
-        <ImageView
-            android:id="@+id/label_verified"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/ratingBar"
-            app:layout_constraintStart_toEndOf="@+id/text_agency_name"
-            app:layout_constraintTop_toTopOf="@+id/text_agency_name"
-            app:srcCompat="@drawable/baseline_check_circle_24" />
 
         <View
             android:id="@+id/divider"
@@ -121,11 +130,10 @@
         <View
             android:id="@+id/divider2"
             android:layout_width="1dp"
-            android:layout_height="98dp"
-            android:layout_marginStart="8dp"
+            android:layout_height="0dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_agency_motto"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
@@ -146,6 +154,17 @@
             app:layout_constraintBottom_toBottomOf="@+id/agency_logo"
             app:layout_constraintEnd_toStartOf="@+id/divider2"
             app:layout_constraintStart_toEndOf="@+id/divider" />
+
+        <TextView
+            android:id="@+id/text_vip_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:drawableStart="@drawable/baseline_vip_24"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/text_agency_motto"
+            app:layout_constraintEnd_toEndOf="@+id/text_agency_motto"
+            tools:text="6 125 FCFA" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

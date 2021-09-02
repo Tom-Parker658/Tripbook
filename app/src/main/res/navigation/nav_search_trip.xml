@@ -20,6 +20,24 @@
         <action
             android:id="@+id/action_tripSearchResultsFragment_to_tripDetailsFragment"
             app:destination="@id/tripDetailsFragment" />
+        <action
+            android:id="@+id/action_tripSearchResultsFragment_to_tripSearchFragment"
+            app:destination="@id/tripSearchFragment" />
+        <argument
+            android:name="localityName"
+            app:argType="string" />
+        <argument
+            android:name="destinationName"
+            app:argType="string" />
+        <argument
+            android:name="distance"
+            app:argType="long" />
+        <argument
+            android:name="fromID"
+            app:argType="string" />
+        <argument
+            android:name="toID"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/tripDetailsFragment"

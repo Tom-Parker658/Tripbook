@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripSearchResultBinding
-import com.lado.travago.tripbook.ui.recyclerview.adapters.JourneySearchResultAdapter
-import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchViewModel
+import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchResultsViewModel
+import com.lado.travago.tripbook.ui.recyclerview.adapters.TripSearchResultsAdapter
+import com.lado.travago.tripbook.ui.recyclerview.adapters.TripSearchResultsClickListener
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -21,8 +23,8 @@ import kotlinx.coroutines.InternalCoroutinesApi
 @InternalCoroutinesApi
 class TripSearchResultsFragment : Fragment() {
     private lateinit var binding: FragmentTripSearchResultBinding
-    private val adapter = JourneySearchResultAdapter()
-    private lateinit var viewModel: TripSearchViewModel
+    private lateinit var adapter: TripSearchResultsAdapter
+    private lateinit var viewModel: TripSearchResultsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,25 +33,24 @@ class TripSearchResultsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_trip_search_result, container, false)
         initViewModel()
-        setAdapter()
-        updateRecyclerView()
+
+        val agenciesQuery = viewModel.firestoreRepo.db.collection("Cameroon/${viewModel}")
+            .limit(10)
+
+
         return binding.root
     }
 
-    /**
-     * Initialises and sets the recycler view adapter to the defined adapter of [JourneySearchResultAdapter]
-     */
-    private fun setAdapter() {
-        binding.recyclerViewSearchResult.adapter = adapter
-    }
-
     private fun initViewModel(){
-        viewModel = ViewModelProvider(requireActivity())[TripSearchViewModel::class.java]
-    }
-    //Adds the newly created scannerInfo to the adapter list to add it ot the recyclerView
-    private fun updateRecyclerView() = viewModel.resultsList.observe(viewLifecycleOwner) {
-        it?.let {
-            adapter.submitList(it)
+        viewModel = ViewModelProvider(requireActivity())[TripSearchResultsViewModel::class.java]
+        TripSearchResultsFragmentArgs.fromBundle(requireArguments()).let {
+            viewModel.setArguments(
+                fromID = it.fromID,
+                toID = it.toID,
+                fromName = it.localityName,
+                toName = it.destinationName,
+                distance = it.distance
+            )
         }
     }
 

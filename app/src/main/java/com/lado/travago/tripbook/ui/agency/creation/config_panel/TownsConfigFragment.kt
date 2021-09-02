@@ -1,33 +1,41 @@
 package com.lado.travago.tripbook.ui.agency.creation.config_panel
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.util.*
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTownsConfigBinding
 import com.lado.travago.tripbook.databinding.ItemSearchFormBinding
+import com.lado.travago.tripbook.databinding.ItemSimpleRecyclerLayoutBinding
+import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel
+import com.lado.travago.tripbook.ui.recyclerview.adapters.SimpleAdapter
+import com.lado.travago.tripbook.ui.recyclerview.adapters.SimpleClickListener
 import com.lado.travago.tripbook.ui.recyclerview.adapters.TownClickListener
 import com.lado.travago.tripbook.ui.recyclerview.adapters.TownConfigAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-
 
 /**
  * A fragment used by agency admins to add and subtract towns and access trips from that town.
@@ -53,13 +61,11 @@ class TownsConfigFragment : Fragment() {
             false
         )
         viewModel = ViewModelProvider(requireActivity())[TownsConfigViewModel::class.java]
+        snapshotListener
+        handleFabVisibilities()
+
         observeLiveData()
         handleClicks()
-        try {
-            setRecycler()
-        } catch (e: Exception) {
-            //TODO: Load list first
-        }
         return binding.root
     }
 
@@ -74,52 +80,53 @@ class TownsConfigFragment : Fragment() {
 
     private fun observeLiveData() {
         viewModel.retryTowns.observe(viewLifecycleOwner) {
-            if (it) CoroutineScope(Dispatchers.Main).launch { viewModel.getTownsData(parentViewModel.bookerDoc.value!!.getString("agencyID")!!) }
+            if (it) CoroutineScope(Dispatchers.Main).launch {
+                viewModel.getOriginalTownsData()
+            }
+        }
+        //We remove all towns in the current snap-shoted list from the list to be displayed during the addition process
+        viewModel.currentTownsList.observe(viewLifecycleOwner) {
+            //TODO: SHOULD NOT MODIFY VIEW_MODEL FROM FRAGMENT, change it as fast as possible
+            viewModel.townNamesList.clear()
+            if (it.isNotEmpty()) {
+                it.forEach { currentDoc ->
+                    //We also set the names to be use in auto complete
+                        viewModel.setField(
+                            TownsConfigViewModel.FieldTags.TOWN_NAME_LIST,
+                            currentDoc.getString("name")!!
+                        )
+                    val toBeRemovedMap = viewModel.allTownsMapList.find { map ->
+                        map["id"] == currentDoc.id
+                    }
+                    if (toBeRemovedMap != null) {
+                        viewModel.setField(
+                            TownsConfigViewModel.FieldTags.REMOVE_MAP,
+                            toBeRemovedMap
+                        )
+                    }
+                }
+            }
         }
         //Submit list to inflate recycler view
-        viewModel.townDocList.observe(viewLifecycleOwner) { doc ->
-            adapter = TownConfigAdapter(
-                exemptedTownsList = viewModel.exemptedTownList,
-
-                clickListener = TownClickListener { townId, buttonTag ->
-                    when (buttonTag) {//Remove or add a town from the exemption list
-                        TownsConfigViewModel.TownButtonTags.TOWN_SWITCH_ACTIVATE -> {
-                            viewModel.exemptTown(townId.split("+").first())
-                        }
-                        TownsConfigViewModel.TownButtonTags.TOWN_BUTTON_TRIPS -> {
-                            //We navigate to the trip config fragment of that current town
-                            if (townId.isNotBlank()) {
-                                findNavController().navigate(
-                                    TownsConfigFragmentDirections.actionTownsConfigFragmentToTripsConfigFragment(
-                                        townId.split("+").first(),//Being the town id
-                                        townId.split("+").last()//Being the town name
-                                    )
-                                )
-                            }
-                        }
-                    }
-                })
-            setRecycler()
-            adapter.submitList(doc)
-        }
         viewModel.onLoading.observe(viewLifecycleOwner) {
             if (it) {
                 binding.townProgressBar.visibility = View.VISIBLE
                 //Makes the screen untouchable
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                requireActivity().window.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                )
             } else {
                 binding.townProgressBar.visibility = View.GONE
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         }
         viewModel.toastMessage.observe(viewLifecycleOwner) {
             if (it.isNotBlank()) {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
                 Log.d("TownsConfig", it)
+                viewModel.setField(TownsConfigViewModel.FieldTags.TOAST_MESSAGE, "")
             }
-        }
-        binding.fabSearchTown.setOnClickListener {
-            viewModel.setField(TownsConfigViewModel.FieldTags.START_TOWN_SEARCH, true)
         }
         viewModel.startTownSearch.observe(viewLifecycleOwner) {
             if (it) {
@@ -141,8 +148,8 @@ class TownsConfigFragment : Fragment() {
                     setIcon(R.drawable.baseline_search_24)
                     setTitle("Search")
                     setView(searchBinding.root)
-                    setPositiveButton("SEARCH") { _, _ ->
-                        if (viewModel.townDocList.value!!.isNotEmpty()) {
+                    setPositiveButton("SEARCH") { dialog, _ ->
+                        if (viewModel.currentTownsList.value!!.isNotEmpty()) {
                             viewModel.searchTown(searchBinding.searchBar.editText!!.text.toString())
                                 ?.let { index ->
                                     if (index != -1) {
@@ -155,7 +162,7 @@ class TownsConfigFragment : Fragment() {
                                     }
                                 }
                         }
-                        viewModel.setField(TownsConfigViewModel.FieldTags.START_TOWN_SEARCH, false)
+                        dialog.cancel()
                     }
                     setOnCancelListener {
                         viewModel.setField(TownsConfigViewModel.FieldTags.START_TOWN_SEARCH, false)
@@ -171,17 +178,45 @@ class TownsConfigFragment : Fragment() {
                     TownsConfigFragmentDirections.actionTownsConfigFragmentToAgencyConfigCenterFragment()
                 )
                 viewModel.setField(TownsConfigViewModel.FieldTags.ON_CLOSE, false)
-                viewModel.setField(TownsConfigViewModel.FieldTags.RETRY_TOWNS , true)
+                snapshotListener.remove()
+//                viewModel.setField(TownsConfigViewModel.FieldTags.RETRY_TOWNS, true)
             }
         }
-
     }
 
-    private fun handleClicks(){
-        binding.btnSaveTowns.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                viewModel.uploadTownChanges(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun handleFabVisibilities() {
+        // Toggle visibilities fab
+        binding.fabToggleToolbox.setOnClickListener { toggleFab ->
+            binding.fabAddTown.let {
+                if (it.isShown) it.hide() else it.show()
             }
+            binding.fabSearchTown.let {
+                if (it.isShown) it.hide() else it.show()
+            }
+            binding.fabSortTowns.let {
+                if (it.isShown) {
+                    it.hide()
+                    (toggleFab as FloatingActionButton).setImageDrawable(
+                        requireActivity().resources.getDrawable(
+                            R.drawable.baseline_visibility_24
+                        )
+                    )
+                } else {
+                    (toggleFab as FloatingActionButton).setImageDrawable(
+                        requireActivity().resources.getDrawable(
+                            R.drawable.baseline_visibility_off_24
+                        )
+                    )
+                    it.show()
+                }
+            }
+        }
+    }
+
+    private fun handleClicks() {
+        binding.fabSearchTown.setOnClickListener {
+            viewModel.setField(TownsConfigViewModel.FieldTags.START_TOWN_SEARCH, true)
         }
         binding.fabSortTowns.setOnClickListener {
             //1-We create a spinner with options
@@ -202,11 +237,116 @@ class TownsConfigFragment : Fragment() {
                             viewModel.setField(TownsConfigViewModel.FieldTags.CHECKED_ITEM, 2)
                         }
                     }
+                    adapter.submitList(viewModel.currentTownsList.value)
                     adapter.notifyDataSetChanged()
                     dialog.dismiss()
                 }
 
             }.create().show()
         }
+        binding.fabAddTown.setOnClickListener {
+            AddTownsDialogFragment(
+                viewModel,
+                parentViewModel
+            ).showNow(parentFragmentManager, "")
+        }
+        binding.fabRemoveSelection.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                viewModel.commitToDeleteList(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
+            }
+            binding.fabRemoveSelection.hide()
+        }
+    }
+
+    /* Add a snapshot listener to the towns collection */
+    private val snapshotListener
+        get() =
+            viewModel.firestoreRepo.db.collection(
+                "OnlineTransportAgency/${
+                    parentViewModel.bookerDoc.value!!.getString("agencyID")
+                }/Planets/Earth/Continents/Africa/Cameroon/"
+            ).addSnapshotListener(requireActivity()) { snapshot, error ->
+                if (snapshot != null) {
+                    adapter = TownConfigAdapter(
+                        clickListener = TownClickListener { townID, buttonTag ->
+                            when (buttonTag) {
+                                TownsConfigViewModel.TownButtonTags.TOWN_CHECK_TO_DELETE -> {
+                                    viewModel.removeTowns(townID.split("+").first())
+                                    //This to rightly inflate the close button
+                                    val index = snapshot.documents.indexOf(snapshot.documents.find {
+                                        it.id == townID.split("+").first()
+                                    })
+                                    adapter.notifyItemChanged(index)
+                                    //To show or hide the delete town fab
+                                    if (viewModel.toDeleteIDList.value!!.isNotEmpty()) binding.fabRemoveSelection.show()
+                                    else binding.fabRemoveSelection.hide()
+
+                                }
+                                TownsConfigViewModel.TownButtonTags.TOWN_BUTTON_TRIPS -> {
+                                    //We navigate to the trip config fragment of that current town
+                                    if (townID.isNotBlank()) {
+                                        findNavController().navigate(
+                                            TownsConfigFragmentDirections.actionTownsConfigFragmentToTripsConfigFragment(
+                                                townID.split("+").first(),//Being the town id
+                                                townID.split("+").last()//Being the town name
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        },
+                        viewModel.toDeleteIDList.value!!
+                    )
+                    viewModel.setField(
+                        TownsConfigViewModel.FieldTags.CURRENT_TOWNS,
+                        snapshot.documents
+                    )
+                    adapter.submitList(snapshot.documents)
+                    setRecycler()
+                }
+                error?.handleError { }
+            }
+
+
+    class AddTownsDialogFragment(
+        private val viewModel: TownsConfigViewModel,
+        private val parentViewModel: AgencyConfigViewModel
+    ) : DialogFragment() {
+        @SuppressLint("DialogFragmentCallbacksDetector", "RestrictedApi")
+        override fun onCreateDialog(
+            savedInstanceState: Bundle?
+        ): Dialog {
+            val recyclerBinding = ItemSimpleRecyclerLayoutBinding.inflate(
+                layoutInflater,
+                null,
+                false
+            )
+            val adapter = SimpleAdapter(
+                clickListener = SimpleClickListener { townID ->
+                    viewModel.addTown(townID)
+                },
+                viewModel.toAddIDList.value!!
+            )
+            val recyclerManager = LinearLayoutManager(requireContext())
+            recyclerBinding.recyclerView.layoutManager = recyclerManager
+            recyclerBinding.recyclerView.adapter = adapter
+
+            adapter.submitList(
+                viewModel.allTownsMapList
+            )
+            return MaterialAlertDialogBuilder(requireContext())
+                // Add customization options here
+                .setTitle("Towns")
+                .setIcon(R.drawable.baseline_add_24)
+                .setView(recyclerBinding.root)
+                .setPositiveButton("Add Selected Towns") { dialog, _ ->
+                    CoroutineScope(Dispatchers.Main).launch {
+                        viewModel.commitToAddList(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
+                    }
+                    dialog.cancel()
+                }
+                .create()
+        }
+
     }
 }

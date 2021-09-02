@@ -2,8 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/my"
-    app:startDestination="@id/journeySearchFragment">
+    android:id="@+id/my">
     <activity
         android:id="@+id/paymentActivity"
         android:name="com.lado.travago.tripbook.ui.PaymentActivity"
@@ -29,17 +28,4 @@
         android:name="com.lado.travago.tripbook.ui.booker.book_panel.TicketsFragment"
         android:label="fragment_tickets"
         tools:layout="@layout/fragment_tickets" />
-    <fragment
-        android:id="@+id/journeySearchFragment"
-        android:name="com.lado.travago.tripbook.ui.booker.book_panel.TripSearchFragment"
-        android:label="JourneySearchFragment" >
-        <action
-            android:id="@+id/action_journeySearchFragment_to_journeySearchResultFragment"
-            app:destination="@id/journeySearchResultFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/journeySearchResultFragment"
-        android:name="com.lado.travago.tripbook.ui.booker.book_panel.TripSearchResultsFragment"
-        android:label="fragment_journey_search_result"
-        tools:layout="@layout/fragment_trip_search_result" />
 </navigation>

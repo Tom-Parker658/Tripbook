@@ -9,108 +9,119 @@
 
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/logo_tripbook"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
 
-            <ImageView
-                android:id="@+id/logo_tripbook"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                app:layout_constraintBottom_toTopOf="@+id/input_location"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:srcCompat="@drawable/baseline_insert_photo_24" />
+            android:adjustViewBounds="true"
+            app:layout_constraintBottom_toTopOf="@+id/input_locality"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.19999999"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:srcCompat="@mipmap/ic_tripbook_logo_dark_foreground"
+            app:tint="@color/colorAccent" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_location"
-                style="@style/editTextStyle"
-                android:layout_width="363dp"
-                android:layout_marginTop="64dp"
-                android:layout_marginBottom="8dp"
-                android:hint="@string/text_label_location"
-                app:boxBackgroundMode="outline"
-                app:endIconMode="dropdown_menu"
-                app:helperText="@string/hint_location"
-                app:helperTextEnabled="true"
-                app:layout_constraintBottom_toTopOf="@+id/input_destination"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
-                app:layout_constraintTop_toBottomOf="@+id/logo_tripbook">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_locality"
+            style="@style/editTextStyle"
+            android:layout_width="0dp"
+            android:hint="@string/text_label_location"
+            app:boxBackgroundMode="outline"
+            app:endIconMode="dropdown_menu"
+            app:helperText="@string/hint_location"
+            app:helperTextEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/input_destination"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_locality"
+            app:layout_constraintTop_toBottomOf="@+id/logo_tripbook">
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    style="@style/textInputStyle.autoComplete"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                style="@style/textInputStyle.autoComplete"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_destination"
-                style="@style/editTextStyle"
-                android:layout_width="363dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
-                android:hint="@string/text_label_destination"
-                app:endIconMode="dropdown_menu"
-                app:helperText="@string/hint_destination"
-                app:helperTextEnabled="true"
-                app:layout_constraintBottom_toTopOf="@+id/checkbox_vip"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
-                app:layout_constraintTop_toBottomOf="@+id/input_location">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_destination"
+            style="@style/editTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/text_label_destination"
+            android:visibility="gone"
+            app:endIconMode="dropdown_menu"
+            app:helperText="@string/hint_destination"
+            app:helperTextEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/checkbox_vip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/image_destination"
+            app:layout_constraintTop_toBottomOf="@+id/input_locality">
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    style="@style/textInputStyle.autoComplete"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                style="@style/textInputStyle.autoComplete"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <CheckBox
-                android:id="@+id/checkbox_vip"
-                style="@style/navButtonStyles"
-                android:checked="true"
-                android:drawableEnd="@drawable/baseline_vip_24"
-                android:text="VIP Trip"
-                app:layout_constraintBottom_toTopOf="@+id/btn_search_journey"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_destination" />
+        <CheckBox
+            android:id="@+id/checkbox_vip"
+            style="@style/navButtonStyles"
+            android:checked="true"
+            android:drawableEnd="@drawable/baseline_vip_24"
+            android:text="VIP Trip"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/progress_trip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_destination" />
 
-            <Button
-                android:id="@+id/btn_search_journey"
-                style="@style/navButtonStyles"
-                android:text="Search Trip"
-                app:icon="@drawable/baseline_directions_bus_24"
-                app:iconGravity="start"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/checkbox_vip" />
+        <ProgressBar
+            android:id="@+id/progress_trip"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toTopOf="@+id/btn_search_journey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/input_locality"
+            app:layout_constraintTop_toBottomOf="@+id/checkbox_vip" />
 
-            <ImageView
-                android:id="@+id/imageView4"
-                style="@style/style_image_label"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/input_destination"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_location"
-                app:srcCompat="@drawable/baseline_directions_bus_24" />
+        <Button
+            android:id="@+id/btn_search_journey"
+            style="@style/navButtonStyles"
+            android:text="Search Trip"
+            android:visibility="gone"
+            app:icon="@drawable/baseline_directions_bus_24"
+            app:iconGravity="start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progress_trip" />
 
-            <ImageView
-                android:id="@+id/imageView3"
-                style="@style/style_image_label"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/input_location"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/input_location"
-                app:srcCompat="@drawable/baseline_place_24" />
+        <ImageView
+            android:id="@+id/image_destination"
+            style="@style/style_image_label"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/input_destination"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_destination"
+            app:srcCompat="@drawable/baseline_directions_bus_24" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+        <ImageView
+            android:id="@+id/image_locality"
+            style="@style/style_image_label"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/input_locality"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_locality"
+            app:srcCompat="@drawable/baseline_place_24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

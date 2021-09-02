@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="clickListener"
+            type="com.lado.travago.tripbook.ui.recyclerview.adapters.SimpleClickListener" />
+
+        <variable
+            name="itemMap"
+            type="java.util.HashMap&lt;String, String>" />
+    </data>
+<!-- '&lt' means '<' -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/check_selected"
+            app:layout_constraintEnd_toStartOf="@+id/check_selected"
+            app:layout_constraintStart_toEndOf="@+id/text_index"
+            app:layout_constraintTop_toTopOf="@+id/check_selected"
+            tools:text="TextView" />
+
+        <CheckBox
+            android:id="@+id/check_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:onClickListener="@{() -> clickListener.onClick(itemMap)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_index"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="12sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/text_name"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="154" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

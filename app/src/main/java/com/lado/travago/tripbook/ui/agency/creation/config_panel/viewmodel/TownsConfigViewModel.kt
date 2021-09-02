@@ -10,11 +10,13 @@ import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.tasks.await
 import java.util.*
+import kotlin.collections.HashMap
 
 @ExperimentalCoroutinesApi
 class TownsConfigViewModel : ViewModel() {
-    private val firestoreRepo = FirestoreRepo()
+    val firestoreRepo = FirestoreRepo()
 
     private val _onLoading = MutableLiveData(true)
     val onLoading: LiveData<Boolean> get() = _onLoading
@@ -22,31 +24,45 @@ class TownsConfigViewModel : ViewModel() {
     private val _toastMessage = MutableLiveData("")
     val toastMessage: LiveData<String> get() = _toastMessage
 
-    //To know when to start searching
+    //To know when to start searching when the search fab is tapped
     private val _startTownSearch = MutableLiveData(false)
     val startTownSearch: LiveData<Boolean> get() = _startTownSearch
 
     /**
      * Tags used to know what the user has clicked on a recycler view item
      */
-    enum class TownButtonTags { TOWN_SWITCH_ACTIVATE, TOWN_BUTTON_TRIPS }
+    enum class TownButtonTags { TOWN_CHECK_TO_DELETE, TOWN_BUTTON_TRIPS }
 
-    var exemptedTownList = mutableListOf<String>() //and that's agency's exception list
-        private set
+    //The list of all towns from the reference Planet/Earth/.. Path
+    private val _originalTownsList = MutableLiveData<MutableList<DocumentSnapshot>>()
+    val originalTownsList: LiveData<MutableList<DocumentSnapshot>> get() = _originalTownsList
 
-    var sortCheckedItem = 0
-        private set
+    //Hold the ids of towns to be deleted
+    private val _toDeleteIDList =
+        MutableLiveData(mutableListOf<String>()) //and that's agency's exception list
+    val toDeleteIDList: LiveData<MutableList<String>> = _toDeleteIDList
 
-    //Stores the list of a hashmap of a town document
-    //we also store an original copy to compare later
-    private val _townDocList = MutableLiveData<MutableList<DocumentSnapshot>>()
-    val townDocList: LiveData<MutableList<DocumentSnapshot>> get() = _townDocList
+    //Contains the snapshot result
+    private val _currentTownsList = MutableLiveData(mutableListOf<DocumentSnapshot>())
+    val currentTownsList: LiveData<MutableList<DocumentSnapshot>> get() = _currentTownsList
 
-    private val _onClose = MutableLiveData(false)
-    val onClose: LiveData<Boolean> get() = _onClose
+    //Holds the list of the ids to be added
+    private val _toAddIDList =
+        MutableLiveData(mutableListOf<String>()) //and that's agency's exception list
+    val toAddIDList: LiveData<MutableList<String>> = _toAddIDList
+
+    val allTownsMapList = mutableListOf<HashMap<String, String>>()
 
     //Stores the names of the all towns for autocompletion during search
     val townNamesList = mutableListOf<String>()
+
+    //The current index item to be selected when the sort button is tapped
+    var sortCheckedItem = 0
+        private set
+
+    //To navigate away
+    private val _onClose = MutableLiveData(false)
+    val onClose: LiveData<Boolean> get() = _onClose
 
     //This is the variable to hold arguments to navigate to trips
     var townId = ""
@@ -57,9 +73,10 @@ class TownsConfigViewModel : ViewModel() {
     val retryTowns get() = _retryTowns
 
     /**
-     * We get all the towns from the database and the document containing the list of exempted towns
+     * We get all the towns from the database and the document containing the list towns
+     * Launched when the add fab is tapped
      */
-    suspend fun getTownsData(agencyID: String) {
+    suspend fun getOriginalTownsData() {
         _retryTowns.value = false
         firestoreRepo.getCollection("Planets/Earth/Continents/Africa/Cameroon")
             .collect { townsListState ->
@@ -71,46 +88,82 @@ class TownsConfigViewModel : ViewModel() {
                         _onLoading.value = false
                     }
                     is State.Success -> {
-                        //TODO: Get agency id from the current user
-                        firestoreRepo.getDocument("OnlineTransportAgency/${agencyID}/Configs/Cameroon/Towns/exemption")
-                            .collect { exemptedDocState ->
-                                when (exemptedDocState) {
-                                    is State.Loading -> _onLoading.value = true
-                                    is State.Failed -> {
-                                        _toastMessage.value =
-                                            exemptedDocState.exception.handleError { /**TODO: Handle Error lambda*/ }
-                                        _onLoading.value = false
-                                    }
-                                    is State.Success -> {
-                                        (exemptedDocState.data["exemptedTownList"] as List<String>?)?.let {
-                                            exemptedTownList.addAll(it)
-                                        }
-                                        //We sort ascending order
-                                        _townDocList.value = townsListState.data.documents
-
-                                        //We then get all the names for the auto-complete
-                                        _townDocList.value!!.forEach {
-                                            townNamesList += it["name"]!!.toString()
-                                        }
-                                        _onLoading.value = false
-                                    }
-                                }
-                            }
+                        townsListState.data.documents.forEach { townDoc ->
+                            allTownsMapList.add(
+                                hashMapOf(
+                                    "id" to townDoc.id,
+                                    "name" to townDoc.getString("name")!!
+                                )
+                            )
+                        }
+                        _originalTownsList.value = townsListState.data.documents
+                        _onLoading.value = false
                     }
+
                 }
             }
     }
 
-    /**
-     * This get the town which has been clicked to exempt it if not already found in exemption list of
-     * add him if not found
-     */
-    fun exemptTown(townId: String) =
-        if (exemptedTownList.contains(townId)) exemptedTownList.remove(townId)
-        else exemptedTownList.add(townId)
+    //Adds a town into the toDeleteList
+    fun removeTowns(townId: String) =
+        if (_toDeleteIDList.value!!.contains(townId)) _toDeleteIDList.value!!.remove(townId)
+        else _toDeleteIDList.value!!.add(townId)
+
+    //Adds a town into the toAddList
+    fun addTown(townId: String) =
+        if (_toAddIDList.value!!.contains(townId)) _toAddIDList.value!!.remove(townId)
+        else _toAddIDList.value!!.add(townId)
+
+    //Does the deletion of the list from the database
+    suspend fun commitToDeleteList(agencyID: String) {
+        _onLoading.value = true
+        firestoreRepo.db.runBatch { batch ->
+            _toDeleteIDList.value!!.forEach { id ->
+                batch.delete(firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon/$id"))
+            }
+        }.apply {
+            _onLoading.value = true
+        }.addOnCompleteListener {
+            _onLoading.value = false
+            if (it.isSuccessful) {
+                _toDeleteIDList.value!!.clear()
+                _onLoading.value = false
+            } else {
+                _onLoading.value = false
+                _toastMessage.value = it.exception!!.handleError { }
+            }
+        }.await()
+    }
+
+    //Does the addition of the list to database
+    suspend fun commitToAddList(agencyID: String) {
+        _onLoading.value = true
+        firestoreRepo.db.runBatch { batch ->
+            _toAddIDList.value!!.forEach { id ->
+                val doc = _originalTownsList.value!!.find {
+                    it.id == id
+                }!!
+                batch.set(
+                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon/$id"),
+                    doc.data!!.toMap()
+                )
+            }
+        }.apply {
+            if (!isComplete) _onLoading.value = true
+        }.addOnCompleteListener {
+            _onLoading.value = false
+            if (it.isSuccessful) {
+                _toAddIDList.value!!.clear()
+                _onLoading.value = false
+            } else {
+                _onLoading.value = false
+                _toastMessage.value = it.exception!!.handleError { }
+            }
+        }.await()
+    }
 
     enum class FieldTags {
-        TOAST_MESSAGE, START_TOWN_SEARCH, TOWN_ID, TOWN_NAME, ON_CLOSE, CHECKED_ITEM, RETRY_TOWNS
+        TOAST_MESSAGE, START_TOWN_SEARCH, TOWN_ID, TOWN_NAME, ON_CLOSE, CHECKED_ITEM, RETRY_TOWNS, CURRENT_TOWNS, REMOVE_MAP, TOWN_NAME_LIST
     }
 
     enum class SortTags { TOWN_NAMES, REGIONS }
@@ -123,47 +176,29 @@ class TownsConfigViewModel : ViewModel() {
             FieldTags.TOWN_NAME -> townName = value.toString()
             FieldTags.ON_CLOSE -> _onClose.value = value as Boolean
             FieldTags.CHECKED_ITEM -> sortCheckedItem = value as Int
-            FieldTags.RETRY_TOWNS -> _retryTowns.value = value as Boolean
+//            FieldTags.RETRY_TOWNS -> _retryTowns.value = value as Boolean
+            FieldTags.CURRENT_TOWNS -> _currentTownsList.value =
+                value as MutableList<DocumentSnapshot>
+            //Removes a town which is already part of that agencies document so that it can't be added again
+            FieldTags.REMOVE_MAP -> allTownsMapList.remove(value as HashMap<String, String>)
+            FieldTags.TOWN_NAME_LIST -> townNamesList.add(value.toString())
         }
     }
 
     /**
      * A function to search for a specific town name from the doc and return its index in the list
      */
-    fun searchTown(townName: String): Int? = townDocList.value?.indexOf(
-        townDocList.value!!.find { townDoc ->
+    fun searchTown(townName: String): Int? = _currentTownsList.value?.indexOf(
+        _currentTownsList.value!!.find { townDoc ->
             townDoc["name"] == townName
         }
     )
 
-    suspend fun uploadTownChanges(agencyID: String) {
-        firestoreRepo.setDocument(
-            hashMapOf(
-                "exemptedTownList" to exemptedTownList
-            ),
-            "OnlineTransportAgency/${agencyID}/Configs/Cameroon/Towns/exemption"
-        ).collect {
-            when (it) {
-                is State.Loading -> _onLoading.value = true
-                is State.Failed -> {
-                    _onLoading.value = false
-                    _toastMessage.value =
-                        it.exception.handleError { /**TODO: Handle Error lambda*/ }
-                }
-                is State.Success -> {
-                    _onLoading.value = false
-                    //We navigate to the original lobby
-                    _onClose.value = true
-                }
-            }
-        }
-    }
-
     fun sortResult(sortTag: SortTags) = when (sortTag) {
-        SortTags.TOWN_NAMES -> _townDocList.value!!.sortBy {
+        SortTags.TOWN_NAMES -> _currentTownsList.value?.sortBy {
             it.getString("name")
         }
-        SortTags.REGIONS -> _townDocList.value!!.sortBy {
+        SortTags.REGIONS -> _currentTownsList.value?.sortBy {
             it.getString("region")
         }
     }
