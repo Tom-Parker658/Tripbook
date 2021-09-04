@@ -215,7 +215,6 @@ class ScannerConfigFragment : Fragment() {
 
     class AddScannerDialogFragment(val viewModel: ScannerConfigViewModel, private val parentViewModel: AgencyConfigViewModel) : DialogFragment() {
         @SuppressLint("DialogFragmentCallbacksDetector")
-
         override fun onCreateDialog(
             savedInstanceState: Bundle?
         ): Dialog {

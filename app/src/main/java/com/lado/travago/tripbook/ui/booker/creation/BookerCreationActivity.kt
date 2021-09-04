@@ -16,6 +16,7 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityBookerCreationBinding
+import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 //import com.lado.travago.tripbook.databinding.ActivityUserCreationBinding
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationViewModel.FieldTags
 import kotlinx.coroutines.*
@@ -121,7 +122,7 @@ class BookerCreationActivity : AppCompatActivity() {
         }
 
         override fun onVerificationFailed(exception: FirebaseException) {
-            viewModel.setField(FieldTags.TOAST_MESSAGE, exception.message ?: "Bad connection")
+            viewModel.setField(FieldTags.TOAST_MESSAGE, exception.handleError {  } ?: "Bad connection")
             viewModel.stopLoading()
         }
 

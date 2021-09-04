@@ -11,7 +11,6 @@ import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.tasks.await
-import java.util.*
 import kotlin.collections.HashMap
 
 @ExperimentalCoroutinesApi
@@ -37,13 +36,16 @@ class TownsConfigViewModel : ViewModel() {
     private val _originalTownsList = MutableLiveData<MutableList<DocumentSnapshot>>()
     val originalTownsList: LiveData<MutableList<DocumentSnapshot>> get() = _originalTownsList
 
+    private val _onShowAddTrip = MutableLiveData(false)
+    val onShowAddTrip: LiveData<Boolean> get() = _onShowAddTrip
+
     //Hold the ids of towns to be deleted
     private val _toDeleteIDList =
         MutableLiveData(mutableListOf<String>()) //and that's agency's exception list
     val toDeleteIDList: LiveData<MutableList<String>> = _toDeleteIDList
 
     //Contains the snapshot result
-    private val _currentTownsList = MutableLiveData(mutableListOf<DocumentSnapshot>())
+    private val _currentTownsList = MutableLiveData<MutableList<DocumentSnapshot>>()
     val currentTownsList: LiveData<MutableList<DocumentSnapshot>> get() = _currentTownsList
 
     //Holds the list of the ids to be added
@@ -51,7 +53,8 @@ class TownsConfigViewModel : ViewModel() {
         MutableLiveData(mutableListOf<String>()) //and that's agency's exception list
     val toAddIDList: LiveData<MutableList<String>> = _toAddIDList
 
-    val allTownsMapList = mutableListOf<HashMap<String, String>>()
+    //for the simple recycler
+    val townSimpleInfoMap = mutableListOf<HashMap<String, String>>()
 
     //Stores the names of the all towns for autocompletion during search
     val townNamesList = mutableListOf<String>()
@@ -76,7 +79,7 @@ class TownsConfigViewModel : ViewModel() {
      * We get all the towns from the database and the document containing the list towns
      * Launched when the add fab is tapped
      */
-    suspend fun getOriginalTownsData() {
+    suspend fun getOriginalTowns() {
         _retryTowns.value = false
         firestoreRepo.getCollection("Planets/Earth/Continents/Africa/Cameroon")
             .collect { townsListState ->
@@ -89,7 +92,7 @@ class TownsConfigViewModel : ViewModel() {
                     }
                     is State.Success -> {
                         townsListState.data.documents.forEach { townDoc ->
-                            allTownsMapList.add(
+                            townSimpleInfoMap.add(
                                 hashMapOf(
                                     "id" to townDoc.id,
                                     "name" to townDoc.getString("name")!!
@@ -105,7 +108,7 @@ class TownsConfigViewModel : ViewModel() {
     }
 
     //Adds a town into the toDeleteList
-    fun removeTowns(townId: String) =
+    fun removeTown(townId: String) =
         if (_toDeleteIDList.value!!.contains(townId)) _toDeleteIDList.value!!.remove(townId)
         else _toDeleteIDList.value!!.add(townId)
 
@@ -119,7 +122,7 @@ class TownsConfigViewModel : ViewModel() {
         _onLoading.value = true
         firestoreRepo.db.runBatch { batch ->
             _toDeleteIDList.value!!.forEach { id ->
-                batch.delete(firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon/$id"))
+                batch.delete(firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon_Agency/$id"))
             }
         }.apply {
             _onLoading.value = true
@@ -144,7 +147,7 @@ class TownsConfigViewModel : ViewModel() {
                     it.id == id
                 }!!
                 batch.set(
-                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon/$id"),
+                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon_Agency/$id"),
                     doc.data!!.toMap()
                 )
             }
@@ -163,13 +166,14 @@ class TownsConfigViewModel : ViewModel() {
     }
 
     enum class FieldTags {
-        TOAST_MESSAGE, START_TOWN_SEARCH, TOWN_ID, TOWN_NAME, ON_CLOSE, CHECKED_ITEM, RETRY_TOWNS, CURRENT_TOWNS, REMOVE_MAP, TOWN_NAME_LIST
+        TOAST_MESSAGE, START_TOWN_SEARCH, TOWN_ID, TOWN_NAME, ON_CLOSE, CHECKED_ITEM, RETRY_TOWNS, CURRENT_TOWNS, REMOVE_MAP, TOWN_NAME_LIST, ON_SHOW_ADD
     }
 
     enum class SortTags { TOWN_NAMES, REGIONS }
 
     fun setField(fieldTag: FieldTags, value: Any) {
         when (fieldTag) {
+            FieldTags.ON_SHOW_ADD -> _onShowAddTrip.value= value  as Boolean
             FieldTags.TOAST_MESSAGE -> _toastMessage.value = value.toString()
             FieldTags.START_TOWN_SEARCH -> _startTownSearch.value = value as Boolean
             FieldTags.TOWN_ID -> townId = value.toString()
@@ -180,7 +184,7 @@ class TownsConfigViewModel : ViewModel() {
             FieldTags.CURRENT_TOWNS -> _currentTownsList.value =
                 value as MutableList<DocumentSnapshot>
             //Removes a town which is already part of that agencies document so that it can't be added again
-            FieldTags.REMOVE_MAP -> allTownsMapList.remove(value as HashMap<String, String>)
+            FieldTags.REMOVE_MAP -> townSimpleInfoMap.remove(value as HashMap<String, String>)
             FieldTags.TOWN_NAME_LIST -> townNamesList.add(value.toString())
         }
     }

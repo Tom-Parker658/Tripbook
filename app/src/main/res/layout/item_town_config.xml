@@ -92,7 +92,6 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:button="@drawable/btn_select_cancel"
-                android:checked="true"
                 android:onClickListener="@{()-> clickListener.onClick(buttonTag.TOWN_CHECK_TO_DELETE, townDoc)}"
                 app:buttonTint="@color/colorNegativeButton"
                 app:layout_constraintEnd_toEndOf="parent"

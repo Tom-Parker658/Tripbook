@@ -32,6 +32,10 @@ class SimpleViewHolder private constructor(
     fun bind(clickListener: SimpleClickListener, itemMap: HashMap<String, String>, index: Int) {
         binding.textIndex.text = (index + 1).toString()
         binding.textName.text = itemMap["name"]
+        //In case it is a trip, this will work else null
+        itemMap["distance"]?.let {
+            binding.textDistance.text = " $it Km"
+        }
         binding.clickListener = clickListener
         binding.itemMap = itemMap
 

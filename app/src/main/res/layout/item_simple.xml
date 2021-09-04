@@ -15,7 +15,8 @@
 <!-- '&lt' means '<' -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClickListener="@{() -> clickListener.onClick(itemMap)}">
 
         <TextView
             android:id="@+id/text_name"
@@ -23,10 +24,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/check_selected"
-            app:layout_constraintEnd_toStartOf="@+id/check_selected"
+            app:layout_constraintEnd_toStartOf="@+id/text_distance"
             app:layout_constraintStart_toEndOf="@+id/text_index"
             app:layout_constraintTop_toTopOf="@+id/check_selected"
-            tools:text="TextView" />
+            tools:text="Name" />
 
         <CheckBox
             android:id="@+id/check_selected"
@@ -49,5 +50,15 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/text_name"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="154" />
+
+        <TextView
+            android:id="@+id/text_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/check_selected"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Distance" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -30,9 +30,10 @@ class AgencyConfigViewModel : ViewModel() {
      */
     suspend fun getCurrentBooker() {
         _retry.value = false
+        //TODO: CHANGE ${authRepo.currentUser?.uid}, TO ${authRepo.currentUser!!.uid}", it must throw an exception
         firestoreRepo.getDocument(
             "Bookers/${authRepo.currentUser!!.uid}",
-            Source.DEFAULT
+            Source.SERVER
         ).collect {
             when (it) {
                 is State.Success -> {

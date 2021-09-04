@@ -244,6 +244,7 @@ class BookerCreationViewModel : ViewModel() {
                 is State.Failed -> {
                     _toastMessage.value =
                         authState.exception.handleError { /**TODO: Handle Error lambda*/ }
+                    _onLoading.value = false
                 }
                 is State.Loading -> {
                     _onLoading.value = true

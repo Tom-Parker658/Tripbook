@@ -9,8 +9,11 @@
             name="clickListener"
             type="com.lado.travago.tripbook.ui.recyclerview.adapters.TripsClickListener" />
 
+        <!--<variable
+            name="changesMap"
+            type="java.util.Map&lt;String, Object>" />-->
         <variable
-            name="tripDoc"
+            name="changesMap"
             type="com.google.firebase.firestore.DocumentSnapshot" />
 
         <variable
@@ -32,13 +35,13 @@
             <!-- Title, secondary and supporting text -->
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_price"
+                android:id="@+id/btn_normal_price"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
-                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_NORMAL_PRICE, tripDoc)}"
+                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_NORMAL_PRICE, changesMap)}"
                 android:textColor="@color/gold"
                 app:icon="@drawable/dollar_coin_24"
                 app:iconTint="@color/colorPositiveButton"
@@ -56,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
-                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_VIP_PRICE, tripDoc )}"
+                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_VIP_PRICE, changesMap )}"
                 android:textColor="@color/gold"
                 app:icon="@drawable/dollar_coin_24"
                 app:iconGravity="start"
@@ -90,23 +93,20 @@
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/switch_activate"
+                app:layout_constraintEnd_toStartOf="@+id/check_select_trip"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/text_destination_town"
                 app:layout_constraintTop_toBottomOf="@+id/text_destination_town"
                 tools:text="110.20km" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_activate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
-                android:checked="true"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
-                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_SWITCH_ACTIVATE, tripDoc)}"
-                app:layout_constraintBottom_toTopOf="@+id/btn_price"
-                app:layout_constraintEnd_toStartOf="@+id/view24"
+            <CheckBox
+                android:id="@+id/check_select_trip"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:button="@drawable/btn_select_cancel"
+                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIP_CHECK_TO_DELETE, changesMap)}"
+                app:buttonTint="@color/colorNegativeButton"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
@@ -151,12 +151,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
                 android:checked="true"
-                android:drawableEnd="@drawable/baseline_vip_24"
-                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_CHECK_VIP, tripDoc)}"
                 android:text="VIP"
+                android:drawableEnd="@drawable/baseline_vip_24"
+                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_CHECK_VIP, changesMap)}"
                 app:layout_constraintBottom_toTopOf="@+id/btn_price_vip"
                 app:layout_constraintStart_toEndOf="@+id/view23"
-                app:layout_constraintTop_toBottomOf="@+id/btn_price" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_normal_price" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

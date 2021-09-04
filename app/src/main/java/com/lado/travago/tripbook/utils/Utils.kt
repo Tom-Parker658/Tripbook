@@ -3,6 +3,7 @@ package com.lado.travago.tripbook.utils
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.model.Document
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
@@ -17,6 +18,14 @@ import java.util.*
  * Contains a set of utilities for our app_user .
  */
 object Utils {
+    /**
+     * Returns a map with the id as a field
+     */
+    fun DocumentSnapshot.toMapWithIDField(): MutableMap<String, Any>{
+        val map = data!!
+        map["id"] = id
+        return map
+    }
 
     /**
      * This function applies on [Boolean] [LiveData] to switch it on/off once
