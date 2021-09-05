@@ -30,13 +30,7 @@
             android:name="destinationName"
             app:argType="string" />
         <argument
-            android:name="distance"
-            app:argType="long" />
-        <argument
             android:name="fromID"
-            app:argType="string" />
-        <argument
-            android:name="toID"
             app:argType="string" />
     </fragment>
     <fragment

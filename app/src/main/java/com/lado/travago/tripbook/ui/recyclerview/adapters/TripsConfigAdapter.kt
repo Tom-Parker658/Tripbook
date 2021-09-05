@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.ktx.getField
 import com.lado.travago.tripbook.databinding.ItemTripsConfigBinding
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,11 +20,12 @@ class TripsConfigAdapter(
     val clickListener: TripsClickListener,
     private val toDeleteIDList: List<String>,
     private val changesMapList: MutableList<MutableMap<String, Any>>,
+    private val currentTownName: String
 ) : ListAdapter<DocumentSnapshot, TripsConfigViewHolder>(
     TripsConfigDiffCallbacks()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        TripsConfigViewHolder.from(parent, toDeleteIDList, changesMapList)
+        TripsConfigViewHolder.from(parent, toDeleteIDList, changesMapList, currentTownName)
 
     override fun onBindViewHolder(holder: TripsConfigViewHolder, position: Int) =
         holder.bind(clickListener, getItem(position))
@@ -35,6 +37,7 @@ class TripsConfigViewHolder private constructor(
     val binding: ItemTripsConfigBinding,
     private val toDeleteIDList: List<String>,
     private val changesMapList: MutableList<MutableMap<String, Any>>,
+    private val currentTownName: String
 ) :
     RecyclerView.ViewHolder(binding.root) {
     /**
@@ -50,14 +53,21 @@ class TripsConfigViewHolder private constructor(
         val find = changesMapList.withIndex().find { tripDoc.id == it.value["id"] }
         if (find != null) {
             find.let { map ->
-                binding.textDestinationTown.text = map.value["destination"].toString()
+                //We want to get the other town name different from the current town name
+                (map.value["townNames"] as List<String>).also {
+                    if (it.first() == currentTownName) binding.textDestinationTown.text = it.last()
+                    else binding.textDestinationTown.text = it.first()
+                }
                 binding.textTripDistance.text = "${map.value["distance"].toString()} km"
                 binding.checkVip.isChecked = map.value["isVip"] as Boolean
                 binding.btnPriceVip.text = "${map.value["vipPrice"]} FCFA"
                 binding.btnNormalPrice.text = "${map.value["normalPrice"]} FCFA"
             }
         } else {
-            binding.textDestinationTown.text = tripDoc.getString("destination")!!
+            (tripDoc["townNames"] as List<String>).also {
+                if (it.first() == currentTownName) binding.textDestinationTown.text = it.last()
+                else binding.textDestinationTown.text = it.first()
+            }
             binding.textTripDistance.text = "${tripDoc["distance"].toString()} km"
             binding.checkVip.isChecked = tripDoc.getBoolean("isVip")!!
             binding.btnPriceVip.text = "${tripDoc["vipPrice"]} FCFA"
@@ -80,13 +90,14 @@ class TripsConfigViewHolder private constructor(
             parent: ViewGroup,
             toDeleteIDList: List<String>,
             changesMapList: MutableList<MutableMap<String, Any>>,
+            currentTownName: String
         ): TripsConfigViewHolder {
             val binding = ItemTripsConfigBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
-            return TripsConfigViewHolder(binding, toDeleteIDList, changesMapList)
+            return TripsConfigViewHolder(binding, toDeleteIDList, changesMapList, currentTownName)
         }
     }
 }

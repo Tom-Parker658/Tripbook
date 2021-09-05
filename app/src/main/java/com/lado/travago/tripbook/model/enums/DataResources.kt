@@ -1897,11 +1897,10 @@ object DataResources {
     Yaounde	Yokadouma	595
 """
 
-
     /**
      * List
      */
-     const val journeyDistanceList = """
+    const val journeyDistanceList = """
     Abong-Mbang	+	Akonolinga	+	131
     Abong-Mbang	+	Ambam	+	433
     Abong-Mbang	+	Bafang	+	518

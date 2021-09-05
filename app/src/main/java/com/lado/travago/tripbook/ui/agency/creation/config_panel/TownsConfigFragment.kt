@@ -70,7 +70,6 @@ class TownsConfigFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
@@ -289,7 +288,7 @@ class TownsConfigFragment : Fragment() {
             viewModel.firestoreRepo.db.collection(
                 "OnlineTransportAgency/${
                     parentViewModel.bookerDoc.value!!.getString("agencyID")
-                }/Planets/Earth/Continents/Africa/Cameroon_Agency/"
+                }/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/"
             ).addSnapshotListener(requireActivity()) { snapshot, error ->
                 if (snapshot != null) {
                     if (!snapshot.isEmpty) {
@@ -370,7 +369,7 @@ class TownsConfigFragment : Fragment() {
             val recyclerManager = LinearLayoutManager(requireContext())
             recyclerBinding.recyclerView.layoutManager = recyclerManager
             recyclerBinding.recyclerView.adapter = simpleAdapter
-
+            viewModel.townSimpleInfoMap.sortBy { it["name"] }
             simpleAdapter.submitList(
                 viewModel.townSimpleInfoMap
             )
@@ -383,6 +382,7 @@ class TownsConfigFragment : Fragment() {
                     CoroutineScope(Dispatchers.Main).launch {
                         viewModel.commitToAddList(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
                     }
+                    dialog.dismiss()
                     dialog.cancel()
                 }
                 .setOnCancelListener {

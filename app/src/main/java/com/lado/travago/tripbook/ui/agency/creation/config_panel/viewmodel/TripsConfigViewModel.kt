@@ -4,12 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.ktx.getField
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import com.lado.travago.tripbook.utils.Utils.toMapWithIDField
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
@@ -48,7 +52,7 @@ class TripsConfigViewModel : ViewModel() {
 
     //Contains the changes made by the use locally by the user
     private val _localChangesMapList = MutableLiveData(mutableListOf<MutableMap<String, Any>>())
-    val localChangesMapList: LiveData<MutableList<MutableMap<String, Any>>>  get() = _localChangesMapList
+    val localChangesMapList: LiveData<MutableList<MutableMap<String, Any>>> get() = _localChangesMapList
 
     //Contains the snapshot result
     private val _currentTripsList = MutableLiveData<MutableList<DocumentSnapshot>>()
@@ -89,36 +93,63 @@ class TripsConfigViewModel : ViewModel() {
         private set
 
     suspend fun getOriginalTrips() {
+        _toastMessage.value = "$townID , $townName"
         _retryTrips.value = false
-        firestoreRepo.getCollection("Planets/Earth/Continents/Africa/Cameroon/$townID/Trips")
-            .collect { tripsListState ->
-                when (tripsListState) {
-                    is State.Loading -> _onLoading.value = true
-                    is State.Failed -> {
-                        _toastMessage.value =
-                            tripsListState.exception.handleError { /**TODO: Handle Error lambda*/ }
-                        _onLoading.value = false
-                    }
-                    is State.Success -> {
+        //We convert ge all trips associated to that document
+        firestoreRepo.queryCollection("/Planets/Earth/Continents/Africa/Cameroon/all/Trips") {
+            it.whereArrayContains("townIDs", townID)
+            it.whereArrayContains("townNames", townName)
+        }.collect { tripsListState ->
+            when (tripsListState) {
+                is State.Loading -> _onLoading.value = true
+                is State.Failed -> {
+                    _toastMessage.value =
+                        tripsListState.exception.handleError { /**TODO: Handle Error lambda*/ }
+                    _onLoading.value = false
+                }
+                is State.Success -> {
 //                        pricePerKM = 11.0
 //                        // agencyState.data.getDouble("pricePerKM")!!
 //                        vipPricePerKM = 12.0
 //                       //agencyState.data.getDouble("vipPricePerKM")!!
 
-                        tripsListState.data.documents.forEach {
-                            tripsSimpleInfoMap.add(
-                                hashMapOf(
-                                    "id" to it.id,
-                                    "name" to it.getString("destination")!!,
-                                    "distance" to it.getLong("distance").toString()
-                                )
+                    tripsListState.data.documents.forEach {
+                        val otherTownName =
+                            if ((it.get("townNames")!! as List<String>).first() == townName)
+                                (it.get("townNames")!! as List<String>).last()
+                            else (it.get("townNames")!! as List<String>).first()
+                        tripsSimpleInfoMap.add(
+                            hashMapOf(
+                                "id" to it.id,
+                                "name" to otherTownName,
+                                "distance" to it.getLong("distance").toString()
                             )
-                        }
-                        _originalTripsList.value = tripsListState.data.documents
-                        _onLoading.value = false
+                        )
+                    }
+                    _originalTripsList.value = tripsListState.data.documents
+                    _onLoading.value = false
+                }
+            }
+        }
+    }
+
+    /**
+     * Do background job
+     * This works in the background to make sure this current town can be a locality to anther destination
+     */
+    fun doBackGroundJob(currentList: List<DocumentSnapshot>, agencyID: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            currentList.forEach { doc ->
+                (doc["from"] as Map<String, Any>).let {
+                    if (it[townID] == null && it[townName] == null) {
+                        val updatedMap = mutableMapOf<String, Any>(townID to true, townName to true)
+                        updatedMap.putAll(it)
+                        firestoreRepo.db.document("OnlineTransportAgency/${agencyID}/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/${doc.id}")
+                            .update("to", updatedMap.toMap()).await()
                     }
                 }
             }
+        }
     }
 
     //Adds a trip into the toDeleteList
@@ -136,7 +167,9 @@ class TripsConfigViewModel : ViewModel() {
         _onLoading.value = true
         firestoreRepo.db.runBatch { batch ->
             _toDeleteIDList.value!!.forEach { id ->
-                batch.delete(firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon_Agency/$townID/Trips/$id"))
+                batch.delete(
+                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/$id")
+                )
             }
         }.apply {
             _onLoading.value = true
@@ -145,7 +178,8 @@ class TripsConfigViewModel : ViewModel() {
             if (task.isSuccessful) {
                 //We make sure we clear the modification list of deleted content
                 _toDeleteIDList.value!!.forEach { id ->
-                    val index = _localChangesMapList.value!!.withIndex().find { it.value["id"] == id }
+                    val index =
+                        _localChangesMapList.value!!.withIndex().find { it.value["id"] == id }
                     index?.index?.let { _localChangesMapList.value!!.removeAt(it) }
                 }
                 _toDeleteIDList.value!!.clear()
@@ -166,11 +200,18 @@ class TripsConfigViewModel : ViewModel() {
                     it.id == id
                 }!!
                 batch.set(
-                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon_Agency/$townID/Trips/$id"),
+                    /**
+                     * the from map indicates that we can leave from the the current townID and also current townName to the other
+                     * But we don't yet know if vice-versa is true since it is not yet flagged
+                     */
+                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/$id"),
                     hashMapOf(
-                        "destination" to document.getString("destination")!!,
+                        "townNames" to document["townNames"]!! as List<String>,
+                        "townIDs" to document["townIDs"]!! as List<String>,
                         "distance" to document.getLong("distance")!!,
+                        "from" to mapOf(townID to true, townName to true),
                         "isVip" to true,
+                        "agencyID" to agencyID,
                         "flagVipPriceFromDistance" to true,
                         "flagNormalPriceFromDistance" to true,
                         "normalPrice" to pricePerKM * document.getLong("distance")!!,
@@ -202,7 +243,7 @@ class TripsConfigViewModel : ViewModel() {
                 //We remove the id field from the document
                 val id = _localChangesMapList.value!![index].remove("id").toString()
                 batch.update(
-                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon_Agency/$townID/Trips/$id"),
+                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/$id"),
                     tripMap
                 )
             }
@@ -232,7 +273,7 @@ class TripsConfigViewModel : ViewModel() {
             it.value["id"] == tripId
         }
         if (existingChangeMap != null) {
-        //If it was already true we make it false OR the reverse
+            //If it was already true we make it false OR the reverse
             _localChangesMapList.value!![existingChangeMap.index]["isVip"] =
                 !(_currentTripsList.value!![tripDoc.index]["isVip"]!! as Boolean)
         } else {
@@ -263,7 +304,8 @@ class TripsConfigViewModel : ViewModel() {
                  We check to find out if the new price is same as the calculated price, in that case, true else false
               We check if the new price is equal to calculated price from the pricePerKm to set the flag
             */
-            changeMap["flagNormalPriceFromDistance"] = (_currentTripsList.value!![tripDoc.index].getLong("distance")!! * pricePerKM).toLong() == newNormalPrice
+            changeMap["flagNormalPriceFromDistance"] =
+                (_currentTripsList.value!![tripDoc.index].getLong("distance")!! * pricePerKM).toLong() == newNormalPrice
             _localChangesMapList.value!! += changeMap
         }
     }
@@ -288,7 +330,8 @@ class TripsConfigViewModel : ViewModel() {
                  We check to find out if the new price is same as the calculated price, in that case, true else false
               We check if the new price is equal to calculated price from the pricePerKm to set the flag
             */
-            changeMap["flagVipPriceFromDistance"] = (_currentTripsList.value!![tripDoc.index].getLong("distance")!! * pricePerKM).toLong() == newVIPPrice
+            changeMap["flagVipPriceFromDistance"] =
+                (_currentTripsList.value!![tripDoc.index].getLong("distance")!! * pricePerKM).toLong() == newVIPPrice
             _localChangesMapList.value!! += changeMap
         }
     }

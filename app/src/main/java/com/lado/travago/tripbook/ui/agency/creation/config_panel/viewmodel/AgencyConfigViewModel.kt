@@ -32,7 +32,7 @@ class AgencyConfigViewModel : ViewModel() {
         _retry.value = false
         //TODO: CHANGE ${authRepo.currentUser?.uid}, TO ${authRepo.currentUser!!.uid}", it must throw an exception
         firestoreRepo.getDocument(
-            "Bookers/${authRepo.currentUser!!.uid}",
+            "Bookers/${authRepo.currentUser?.uid}",
             Source.SERVER
         ).collect {
             when (it) {

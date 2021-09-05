@@ -122,7 +122,7 @@ class TownsConfigViewModel : ViewModel() {
         _onLoading.value = true
         firestoreRepo.db.runBatch { batch ->
             _toDeleteIDList.value!!.forEach { id ->
-                batch.delete(firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon_Agency/$id"))
+                batch.delete(firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/$id"))
             }
         }.apply {
             _onLoading.value = true
@@ -147,8 +147,10 @@ class TownsConfigViewModel : ViewModel() {
                     it.id == id
                 }!!
                 batch.set(
-                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets/Earth/Continents/Africa/Cameroon_Agency/$id"),
-                    doc.data!!.toMap()
+                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/$id"),
+                    doc.data!!.toMap().apply {
+                        "agencyID" to agencyID
+                    }
                 )
             }
         }.apply {

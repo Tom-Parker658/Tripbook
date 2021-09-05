@@ -36,10 +36,11 @@ class AdminFunctionViewModel : ViewModel() {
                 is State.Success -> {
                     Log.i("Transfer Response", "${queryState.data.documents.size}")
 
-                    *//**
-                     * Go through all the possible journey combination list and for each combination, uploads it to the database
-                     * based on their corresponding regions! e,g Dschang-Yaounde will be stored under West-Centre collection
-                     *//*
+                    */
+    /**
+     * Go through all the possible journey combination list and for each combination, uploads it to the database
+     * based on their corresponding regions! e,g Dschang-Yaounde will be stored under West-Centre collection
+     *//*
                     DataResources.journeyDistanceList.trimIndent().reader().buffered()
                         .forEachLine { journeyName ->
                             val names: List<String> = journeyName.split("+")
@@ -100,111 +101,97 @@ class AdminFunctionViewModel : ViewModel() {
     val text get() = _text
 
     suspend fun addTowns() {
-        db.getAllDocuments("Destinations").collect { getState ->
-            when (getState) {
-                is State.Loading -> _loading.value = true
-                is State.Failed -> {
-                    _loading.value = false
-                    _toastMessage.value = getState.exception.handleError{}
-                }
-                is State.Success -> {
-                    //Gets the documents
-                    val townsList = getState.data.documents
-                    for ((index, town) in townsList.withIndex()) {
-                        //We want to store latitudes and longitudes as different entities instead of geopoints
-                        val (lat, lng) = (town.getGeoPoint("latlng")!!.latitude to town.getGeoPoint(
-                            "latlng"
-                        )!!.longitude)
-                        val percentage = ((index + 1) / townsList.size) * 100
-                        _text.value =
-                            "${town.getString("name")}.......${percentage}"//The name of the town
-                        val townMap = hashMapOf(
-                            "name" to town["name"],
-                            "region" to town["region"],
-                            "latitude" to lat,
-                            "longitude" to lng
-                        )
-                        db.addDocument(townMap, "Planets/Earth/Continents/Africa/Cameroon")
-                            .collect { state ->
-                                when (state) {
-                                    is State.Loading -> _loading.value = true
-                                    is State.Failed -> {
-                                        _loading.value = false
-                                        _toastMessage.value = state.exception.handleError{ /**TODO: Handle Error lambda*/ }
-                                    }
-                                    is State.Success -> {
-                                        _toastMessage.value = "${townMap["name"]}"
-                                    }
-                                }
-                            }
+        val townsList = DataResources.regionList.trimIndent().reader().buffered().readLines()
+        for ((index, town) in townsList.withIndex()) {
+            val percentage = ((index.toDouble()) / townsList.size).toInt() * 100
+            _text.value =
+                "${town.split("+").first()} |----| ${percentage}"//The name of the town
+            val townMap = hashMapOf<String, Any?>(
+                "name" to town.split("+").first(),
+                "region" to town.split("+").last(),
+            )
+            db.addDocument(townMap, "Planets/Earth/Continents/Africa/Cameroon")
+                .collect { state ->
+                    when (state) {
+                        is State.Loading -> _loading.value = true
+                        is State.Failed -> {
+                            _loading.value = false
+                            _toastMessage.value =
+                                state.exception.handleError { /**TODO: Handle Error lambda*/ }
+                        }
+                        is State.Success -> {
+                            _toastMessage.value = "${townMap["name"]}"
+                        }
                     }
-                    _loading.value = false
-                    _text.value = "100%"
                 }
-            }
         }
+        _loading.value = false
+        _text.value = "100%"
     }
 
-    suspend fun addJourneys(){
-        val tripsAndDistance = DataResources.journeyDistanceList.trimIndent().reader().buffered().readLines()//listOf("town1 + town2 + distance", "town1 + tow3 + distance", ..)
-        var count = 0
+    suspend fun addJourneys() {
+        val tripsAndDistance = DataResources.journeyDistanceList.trimIndent().reader().buffered()
+            .readLines()//listOf("town1 + town2 + distance", "town1 + tow3 + distance", ..)
         val total = tripsAndDistance.size
-
-        for (trip in tripsAndDistance){
-            val(text1, text2, text3) = trip.split("+")//stores town1, town2 , distance respectively
-            val town1 = text1.replace("-", " ").trim()//e.g Abong-Mbang to Abong Mbang
+        for ((count, trip) in tripsAndDistance.withIndex()) {
+            val (text1, text2, text3) = trip.split("+")//stores town1, town2 , distance respectively
+            val town1 = text1.replace("-", " ").trim() //e.g Abong-Mbang to Abong Mbang
             val town2 = text2.replace("-", " ").trim()
             val distance = text3.trim()
 
-            _text.value = "Trip: $town1 - $town2 & $distance: ${count}/${total}---${count/total*100}%"
-            count = count.inc()
+            _text.value =
+                "Trip: $town1 - $town2 & $distance: ${
+                    count.toDouble().toInt()
+                }/${total}--->${(count.toDouble() / total * 100).toInt()}%"
             //We query to get a town which is same as that town1 or town2
-            db.queryCollection("Planets/Earth/Continents/Africa/Cameroon", Source.DEFAULT){
+            db.queryCollection("Planets/Earth/Continents/Africa/Cameroon", Source.DEFAULT) {
                 it.whereIn("name", listOf(town1, town2))
-            }.collect{queryState ->
-                when(queryState){
+            }.collect { queryState ->
+                when (queryState) {
                     is State.Loading -> _loading.value = true
                     is State.Failed -> {
                         _loading.value = false
-                        _toastMessage.value = "QueryState for $town1-$town2 ${queryState.exception.handleError{ /**TODO: Handle Error lambda*/ }}"
+                        _toastMessage.value =
+                            "For $town1-$town2 ${queryState.exception.handleError { /*TODO: Handle Error lambda*/ }}"
                     }
-                    is State.Success ->{
-                        val documents = queryState.data.documents
+                    is State.Success -> {
+                        val documents = queryState.data
                         //When we find the 2 towns, in each of the towns document, we add a sub-collection {Trips} and store the other town + distance separating them
-                        for(town in documents){
-                            var otherTownMap: HashMap<String, Any?> = if(town["name"] == town1) {
-                                hashMapOf(
-                                    "destination" to town2,
-                                    "distance" to distance.toInt()
-                                )
-                            }else{
-                                hashMapOf(
-                                    "destination" to town1,
-                                    "distance" to distance.toInt()
-                                )
-                            }
-
-                            //Now we upload to ~/{town}/Trips/{otherTown}
-                            db.addDocument(otherTownMap,"/Planets/Earth/Continents/Africa/Cameroon/${town.id}/Trips").collect {
-                                when(it){
-                                    is State.Loading -> {}
-                                    is State.Failed -> {
-                                        _loading.value = false
-                                        _toastMessage.value = "${town["name"]} - ${otherTownMap["name"]} Failed! ${it.exception.handleError{ /**TODO: Handle Error lambda*/ }}"
-                                    }
-                                    is State.Success ->{
-                                        _toastMessage.value = "Success!"
-
-                                    }
-
+                        val tripMap = hashMapOf<String, Any?>(
+                            "townNames" to listOf(
+                                documents.first().getString("name")!!,
+                                documents.last().getString("name")!!
+                            ),
+                            "townIDs" to listOf(
+                                documents.first().id,
+                                documents.last().id
+                            ),
+                            "distance" to distance.toLong(),
+                        )
+                        //Now we upload to ~/{town}/Trips/{otherTown}
+                        db.addDocument(
+                            tripMap,
+                            "/Planets/Earth/Continents/Africa/Cameroon/all/Trips"
+                        ).collect {
+                            when (it) {
+                                is State.Loading -> {
+                                }
+                                is State.Failed -> {
+                                    _loading.value = false
+                                    _toastMessage.value =
+                                        "${documents.first()["name"]} - ${documents.last()["name"]} Failed! ${it.exception.handleError { /**TODO: Handle Error lambda*/ }}"
+                                }
+                                is State.Success -> {
+                                    _toastMessage.value = "Success!"
                                 }
                             }
                         }
                     }
                 }
             }
-
         }
+
     }
 }
+
 

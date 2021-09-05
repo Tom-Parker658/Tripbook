@@ -27,24 +27,22 @@ import kotlin.collections.HashMap
  */
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-
 class TripSearchViewModel : ViewModel() {
     private var firestoreRepo: FirestoreRepo = FirestoreRepo()
-    private var storageUrl: FirestoreRepo = FirestoreRepo()
 
     //Knows when the locality document have been found
     private val _onLocalityResultsFound = MutableLiveData(false)
     val onLocalityResultsFound: LiveData<Boolean> get() = _onLocalityResultsFound
+
+    var townNames = mutableListOf<String>()
+        private set
 
     //Livedata to know when to start searching
     private val _retrySearch = MutableLiveData(false)
     val retrySearch: LiveData<Boolean> get() = _retrySearch
 
     // This stores the locality firestore document
-    private lateinit var localityDoc: DocumentSnapshot
-
-    // This is a list which stores the list of all possible destinations from that locality
-    private var destinationDocList = listOf<DocumentSnapshot>()
+    lateinit var localityDoc: DocumentSnapshot
 
     private var _onLoading = MutableLiveData(false)
     val onLoading get() = _onLoading
@@ -53,14 +51,11 @@ class TripSearchViewModel : ViewModel() {
     val toastMessage: LiveData<String> get() = _toastMessage
 
     //We set the date to today
-    val destinationNameList = mutableListOf<String>()
     var locality = ""
         private set
     var destination = ""
         private set
     var vip = false
-        private set
-    var distance = 0L
         private set
 
     /**
@@ -69,11 +64,11 @@ class TripSearchViewModel : ViewModel() {
     suspend fun searchLocalityTowns() {
         _retrySearch.value = false
         _onLocalityResultsFound.value = false
-        destinationNameList.clear()
         firestoreRepo.queryCollection(
             "/Planets/Earth/Continents/Africa/Cameroon"
         ) {
             it.whereEqualTo("name", locality)
+            it.limit(1)
         }.collect { localityState ->
             when (localityState) {
                 is State.Loading -> _onLoading.value = true
@@ -82,54 +77,20 @@ class TripSearchViewModel : ViewModel() {
                     _toastMessage.value = localityState.exception.handleError { }
                 }
                 is State.Success -> {
-                    firestoreRepo.getCollection(
-                        "/Planets/Earth/Continents/Africa/Cameroon/${localityState.data.documents.first().id}/Trips"
-                    ).collect { destinationState ->
-                        when (destinationState) {
-                            is State.Loading -> _onLoading.value = true
-                            is State.Failed -> {
-                                _onLoading.value = false
-                                _toastMessage.value = destinationState.exception.handleError { }
-                            }
-                            is State.Success -> {
-                                destinationState.data.documents.forEach {
-                                    destinationNameList += it.getString("destination")!!
-                                }
-                                localityDoc = localityState.data.documents.first()
-                                destinationDocList = destinationState.data.documents
-                                _onLocalityResultsFound.value = true
-                                _onLoading.value = false
-                            }
-                        }
-
-                    }
+                    localityDoc = localityState.data.first()
+                    _onLocalityResultsFound.value = true
+                    _onLoading.value = false
                 }
             }
         }
 
-        // As you see
-        fun setDistance() {
-            val destinationDoc = destinationDocList.find {
-                it["destination"] == destination
-            }
-            val index = destinationDocList.indexOf(destinationDoc)
-            distance = destinationDocList[index].getLong("distance")!!
-        }
-
-//    /**
-//     * Get the destination info
-//     */
-//     fun getDestinationInfo(){
-//    }
-        //For the adapter
     }
-
 
     /**
      * Contains different identifiers for the fields in our searching form
      */
     enum class FieldTags {
-        LOCALITY, DESTINATION, VIP, RETRY_SEARCH
+        LOCALITY, DESTINATION, VIP, RETRY_SEARCH, TOWNS_NAMES
     }
 
     /**
@@ -142,6 +103,7 @@ class TripSearchViewModel : ViewModel() {
         FieldTags.DESTINATION -> destination = value.toString()
         FieldTags.VIP -> vip = value as Boolean
         FieldTags.RETRY_SEARCH -> _retrySearch.value = true
+        FieldTags.TOWNS_NAMES -> townNames = value as MutableList<String>
     }
 
 }

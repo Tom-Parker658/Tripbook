@@ -1,16 +1,11 @@
 package com.lado.travago.tripbook.utils
 
-import android.graphics.BitmapFactory
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.graphics.drawable.toDrawable
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
 import com.bumptech.glide.Glide
-import com.bumptech.glide.annotation.GlideModule
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FirebaseFirestore
 import com.lado.travago.tripbook.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,11 +26,19 @@ import java.util.*
  */
 @BindingAdapter("imageFromUrl")
 fun ImageView.loadImageFromUrl(imageUrl: String) {
-
     Glide.with(this)
         .load(imageUrl)
         .timeout(1200)
         .placeholder(R.drawable.baseline_account_circle_24)
+        .into(this)
+//        .onLoadFailed(BitmapFactory.decodeResource(resources, R.drawable.baseline_broken_image_24).toDrawable(resources))
+}
+@BindingAdapter("logoFromUrl")
+fun ImageView.loadLogoFromUrl(imageUrl: String) {
+    Glide.with(this)
+        .load(imageUrl)
+        .timeout(1200)
+        .placeholder (R.drawable.baseline_insert_photo_24)
         .into(this)
 //        .onLoadFailed(BitmapFactory.decodeResource(resources, R.drawable.baseline_broken_image_24).toDrawable(resources))
 }

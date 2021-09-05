@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -25,22 +24,21 @@ import kotlinx.coroutines.*
 class TripSearchFragment : Fragment() {
     private lateinit var binding: FragmentTripSearchBinding
     private lateinit var viewModel: TripSearchViewModel
-    private var localitiesNameList = listOf<String>()
+    private var townNames = listOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
-        binding =
-            DataBindingUtil.inflate(
-                layoutInflater,
-                R.layout.fragment_trip_search,
-                container,
-                false
-            )
+        binding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.fragment_trip_search,
+            container,
+            false
+        )
         initViewModel()
-        adaptLocalityNames()
+        adaptTownNames()
         restoreFields()
         onFieldChange()
         observeTownInfo()
@@ -66,8 +64,7 @@ class TripSearchFragment : Fragment() {
             }
         }
         viewModel.onLocalityResultsFound.observe(viewLifecycleOwner) {
-            if (it && localitiesNameList.contains(viewModel.locality)) {/*Show destination editText*/
-                adaptDestinationNames()
+            if (it && townNames.contains(viewModel.locality)) {/*Show destination editText*/
                 binding.inputDestination.visibility = View.VISIBLE
                 binding.imageDestination.visibility = View.VISIBLE
             } else { /*Close destination editText if visible in this case*/
@@ -85,14 +82,14 @@ class TripSearchFragment : Fragment() {
     private fun restoreFields() {
         binding.inputLocality.editText!!.setText(viewModel.locality)
         binding.inputDestination.editText!!.setText(viewModel.destination)
-        if (viewModel.destinationNameList.contains(viewModel.destination)) {
+        binding.checkboxVip.isChecked = viewModel.vip
+        if (townNames.contains(viewModel.destination) && viewModel.locality != viewModel.destination) {
             binding.inputDestination.visibility = View.VISIBLE
             binding.imageDestination.visibility = View.VISIBLE
         } else {
             binding.inputDestination.visibility = View.GONE
             binding.imageDestination.visibility = View.GONE
         }
-        binding.checkboxVip.isChecked = viewModel.vip
     }
 
     /**
@@ -102,7 +99,7 @@ class TripSearchFragment : Fragment() {
         binding.inputLocality.editText!!.addTextChangedListener {
             viewModel.setFields(TripSearchViewModel.FieldTags.LOCALITY, it.toString())
             //To avoid changes when loading
-            if (localitiesNameList.contains(it.toString()))
+            if (townNames.contains(it.toString()))
                 viewModel.setFields(TripSearchViewModel.FieldTags.RETRY_SEARCH, true)
             else {
                 binding.inputDestination.visibility = View.GONE
@@ -114,10 +111,10 @@ class TripSearchFragment : Fragment() {
         binding.inputDestination.editText!!.addTextChangedListener {
             viewModel.setFields(TripSearchViewModel.FieldTags.DESTINATION, it.toString())
             //If the booker has selected a valid locality we start the searching for destinations
-            if (viewModel.destinationNameList.contains(it.toString())) {
+            if (townNames.contains(it.toString()) && viewModel.locality != viewModel.destination) {
                 binding.btnSearchJourney.visibility = View.VISIBLE
                 binding.checkboxVip.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.btnSearchJourney.visibility = View.GONE
                 binding.checkboxVip.visibility = View.GONE
             }
@@ -130,25 +127,15 @@ class TripSearchFragment : Fragment() {
     /**
      * Adapt the array of destinations to the location and destination auto complete text view
      */
-    private fun adaptLocalityNames() {
-        localitiesNameList = resources.getStringArray(R.array.localities).toList()
+    private fun adaptTownNames() {
+        townNames = resources.getStringArray(R.array.localities).toList()
         val adapter = ArrayAdapter(
             requireContext(),
             R.layout.item_dropdown_textview,
-            localitiesNameList
+            townNames
         )
         (binding.inputLocality.editText as AutoCompleteTextView).setAdapter(adapter)
-    }
-
-    private fun adaptDestinationNames() {
-        if (viewModel.destinationNameList.isNotEmpty()) {
-            val adapter = ArrayAdapter(
-                requireContext(),
-                R.layout.item_dropdown_textview,
-                viewModel.destinationNameList
-            )
-            (binding.inputDestination.editText as AutoCompleteTextView).setAdapter(adapter)
-        }
+        (binding.inputDestination.editText as AutoCompleteTextView).setAdapter(adapter)
     }
 
     /**
@@ -159,8 +146,7 @@ class TripSearchFragment : Fragment() {
             TripSearchFragmentDirections.actionTripSearchFragmentToTripSearchResultsFragment(
                 viewModel.locality,
                 viewModel.destination,
-                viewModel.distance,
-                "",""
+                viewModel.localityDoc.id
             )
         )
     }
