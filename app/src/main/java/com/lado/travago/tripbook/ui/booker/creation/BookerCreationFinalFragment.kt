@@ -193,6 +193,4 @@ class BookerCreationFinalFragment : Fragment() {
         binding.countryCodePicker.setCountryForPhoneCode(viewModel.recoveryCountryCode)
     }
 
-
-
 }

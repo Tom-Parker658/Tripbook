@@ -105,7 +105,7 @@ class AdminFunctionViewModel : ViewModel() {
         for ((index, town) in townsList.withIndex()) {
             val percentage = ((index.toDouble()) / townsList.size).toInt() * 100
             _text.value =
-                "${town.split("+").first()} |----| ${percentage}"//The name of the town
+                "${town.split("+").first()} |----| $percentage"//The name of the town
             val townMap = hashMapOf<String, Any?>(
                 "name" to town.split("+").first(),
                 "region" to town.split("+").last(),
@@ -142,7 +142,7 @@ class AdminFunctionViewModel : ViewModel() {
             _text.value =
                 "Trip: $town1 - $town2 & $distance: ${
                     count.toDouble().toInt()
-                }/${total}--->${(count.toDouble() / total * 100).toInt()}%"
+                }/${total} \n ${(count.toDouble() / total * 100).toInt()}%"
             //We query to get a town which is same as that town1 or town2
             db.queryCollection("Planets/Earth/Continents/Africa/Cameroon", Source.DEFAULT) {
                 it.whereIn("name", listOf(town1, town2))
@@ -156,11 +156,20 @@ class AdminFunctionViewModel : ViewModel() {
                     }
                     is State.Success -> {
                         val documents = queryState.data
+                        val sortedNames = listOf(
+                            documents.first().getString("name")!!,
+                            documents.last().getString("name")!!
+                        ).sorted()
                         //When we find the 2 towns, in each of the towns document, we add a sub-collection {Trips} and store the other town + distance separating them
                         val tripMap = hashMapOf<String, Any?>(
-                            "townNames" to listOf(
-                                documents.first().getString("name")!!,
-                                documents.last().getString("name")!!
+                            //[townNamesList] is for general detection to get all trips which contain a location
+                            "townNamesList" to listOf(
+                                sortedNames.first(),
+                                sortedNames.last()
+                            ),//[townNames] is for trip search
+                            "townNames" to mapOf(
+                                "town1" to sortedNames.first(),
+                                "town2" to sortedNames.last()
                             ),
                             "townIDs" to listOf(
                                 documents.first().id,

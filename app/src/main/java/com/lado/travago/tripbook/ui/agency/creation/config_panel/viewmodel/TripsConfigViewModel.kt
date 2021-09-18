@@ -4,16 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ktx.getField
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import com.lado.travago.tripbook.utils.Utils.toMapWithIDField
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
@@ -78,10 +74,14 @@ class TripsConfigViewModel : ViewModel() {
     private val _retryTrips = MutableLiveData(true)
     val retryTrips get() = _retryTrips
 
+    //SpanSize
+    private val _spanSize = MutableLiveData(2)
+    val spanSize: LiveData<Int> get() = _spanSize
+
     // Stores the id of the current town for immediate navigation
     var townID = ""
         private set
-    var townName = ""
+    var currentTownName = ""
         private set
 
     //Holds the general price per km
@@ -93,12 +93,12 @@ class TripsConfigViewModel : ViewModel() {
         private set
 
     suspend fun getOriginalTrips() {
-        _toastMessage.value = "$townID , $townName"
+        _toastMessage.value = "$townID , $currentTownName"
         _retryTrips.value = false
         //We convert ge all trips associated to that document
         firestoreRepo.queryCollection("/Planets/Earth/Continents/Africa/Cameroon/all/Trips") {
             it.whereArrayContains("townIDs", townID)
-            it.whereArrayContains("townNames", townName)
+//            it.whereArrayContains("townNames", currentTownName)
         }.collect { tripsListState ->
             when (tripsListState) {
                 is State.Loading -> _onLoading.value = true
@@ -114,10 +114,12 @@ class TripsConfigViewModel : ViewModel() {
 //                       //agencyState.data.getDouble("vipPricePerKM")!!
 
                     tripsListState.data.documents.forEach {
+                        //We get the name of the town that is not same as
                         val otherTownName =
-                            if ((it.get("townNames")!! as List<String>).first() == townName)
-                                (it.get("townNames")!! as List<String>).last()
-                            else (it.get("townNames")!! as List<String>).first()
+                            if ((it.get("townNames")!! as HashMap<String, String>)["town1"] == currentTownName)
+                                (it.get("townNames")!! as HashMap<String, String>)["town2"]!!
+                            else (it.get("townNames")!! as HashMap<String, String>)["town1"]!!
+
                         tripsSimpleInfoMap.add(
                             hashMapOf(
                                 "id" to it.id,
@@ -137,7 +139,7 @@ class TripsConfigViewModel : ViewModel() {
      * Do background job
      * This works in the background to make sure this current town can be a locality to anther destination
      */
-    fun doBackGroundJob(currentList: List<DocumentSnapshot>, agencyID: String) {
+    /*fun doBackGroundJob(currentList: List<DocumentSnapshot>, agencyID: String) {
         CoroutineScope(Dispatchers.IO).launch {
             currentList.forEach { doc ->
                 (doc["from"] as Map<String, Any>).let {
@@ -150,7 +152,7 @@ class TripsConfigViewModel : ViewModel() {
                 }
             }
         }
-    }
+    }*/
 
     //Adds a trip into the toDeleteList
     fun removeTrip(townId: String) =
@@ -199,17 +201,30 @@ class TripsConfigViewModel : ViewModel() {
                 val document = _originalTripsList.value!!.find {
                     it.id == id
                 }!!
+
+                /**
+                 * In the trip document, we store the 2 towns alphabetically in a map called townNames
+                 * where the town1 corresponds to the lowest in alphabetical order while the town2
+                 * corresponds to the highest in alphabetical order
+                 * e.g town1: Ambam, town2: Yaounde
+                 */
                 batch.set(
                     /**
                      * the from map indicates that we can leave from the the current townID and also current townName to the other
-                     * But we don't yet know if vice-versa is true since it is not yet flagged
                      */
                     firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/$id"),
                     hashMapOf(
-                        "townNames" to document["townNames"]!! as List<String>,
+                        "townNames" to mapOf(
+                            "town1" to (document["townNames"]!! as HashMap<String, String>)["town1"]!!,
+                            "town2" to (document["townNames"]!! as HashMap<String, String>)["town2"]!!
+                        ),
+                        /*"busTypes" to mapOf(//TODO: Take care to highlight these names
+                            "seaterSeventy" to false,
+                            "seaterCoaster" to false,
+                            "seaterNormal" to false
+                        ),*/
                         "townIDs" to document["townIDs"]!! as List<String>,
                         "distance" to document.getLong("distance")!!,
-                        "from" to mapOf(townID to true, townName to true),
                         "isVip" to true,
                         "agencyID" to agencyID,
                         "flagVipPriceFromDistance" to true,
@@ -285,6 +300,47 @@ class TripsConfigViewModel : ViewModel() {
     }
 
     /**
+     * Adds the bus types the local cache database
+     * if this document has already been modified, it means its surly stored in the cache [_localChangesMapList]
+     * but if it is not existing, we add a change map with the values of the busTypes as true or false
+     */
+    fun configBusTypes(tripId: String, busType: BusTypes, newValue: Boolean) {
+        val tripDoc = _currentTripsList.value!!.withIndex().find {
+            it.value.id == tripId
+        }!!
+        val existingChangeMap = _localChangesMapList.value!!.withIndex().find {
+            it.value["id"] == tripId
+        }
+        if (existingChangeMap != null) {
+            when (busType) {
+                BusTypes.SEATER_SEVENTY ->
+                    (_localChangesMapList.value!![existingChangeMap.index]["busTypes"] as MutableMap<String, Any>)["seaterSeventy"] =
+                        newValue
+                BusTypes.SEATER_COASTER ->
+                    (_localChangesMapList.value!![existingChangeMap.index]["busTypes"] as MutableMap<String, Any>)["seaterCoaster"] =
+                        newValue
+                BusTypes.SEATER_NORMAL ->
+                    (_localChangesMapList.value!![existingChangeMap.index]["busTypes"] as MutableMap<String, Any>)["seaterNormal"] =
+                        newValue
+            }
+        } else {
+            val changeMap = tripDoc.value.toMapWithIDField()
+            when (busType) {
+                BusTypes.SEATER_SEVENTY ->
+                    (changeMap["busTypes"] as MutableMap<String, Any>)["seaterSeventy"] = newValue
+                BusTypes.SEATER_COASTER ->
+                    (changeMap["busTypes"] as MutableMap<String, Any>)["seaterCoaster"] = newValue
+                BusTypes.SEATER_NORMAL ->
+                    (changeMap["busTypes"] as MutableMap<String, Any>)["seaterNormal"] = newValue
+            }
+            _localChangesMapList.value!!.add(changeMap)
+        }
+
+    }
+
+    enum class BusTypes { SEATER_SEVENTY, SEATER_COASTER, SEATER_NORMAL }
+
+    /**
      * Changes the normal price for another particular price, if the price is not more calculated, we set the "flagNormalPriceFromDistance" to false else true
      */
     fun changeNormalPrice(tripId: String, newNormalPrice: Long) {
@@ -349,22 +405,22 @@ class TripsConfigViewModel : ViewModel() {
         ON_CLOSE,
         CHECKED_ITEM,
         TRIP_NAME_LIST,
-        CURRENT_TRIPS
-
+        CURRENT_TRIPS,
+        SPAN_SIZE,
     }
 
     /**
      * Tags used to know what the user has clicked on a recycler view item
      */
     enum class TripButtonTags {
-        TRIPS_CHECK_VIP, TRIP_CHECK_TO_DELETE, TRIPS_BUTTON_NORMAL_PRICE, TRIPS_BUTTON_VIP_PRICE
+        TRIPS_CHECK_VIP, TRIP_CHECK_TO_DELETE, TRIPS_BUTTON_NORMAL_PRICE, TRIPS_BUTTON_VIP_PRICE, //TRIPS_BUTTON_BUS_TYPES
     }
 
     enum class SortTags { TRIP_NAMES, TRIP_PRICES, TRIP_VIP_PRICES, DISTANCE }
 
     fun setField(fieldTag: FieldTags, value: Any) {
         when (fieldTag) {
-            FieldTags.TOWN_NAME -> townName = value.toString()
+            FieldTags.TOWN_NAME -> currentTownName = value.toString()
             FieldTags.TOAST_MESSAGE -> _toastMessage.value = value.toString()
             FieldTags.TOWN_ID -> townID = value.toString()
             FieldTags.TRIP_ID -> tripID = value.toString()
@@ -375,29 +431,35 @@ class TripsConfigViewModel : ViewModel() {
             FieldTags.START_TRIP_SEARCH -> _startTripSearch.value = value as Boolean
             FieldTags.ON_CLOSE -> _onClose.value = value as Boolean
             FieldTags.CHECKED_ITEM -> sortCheckedItem = value as Int
+            FieldTags.SPAN_SIZE -> _spanSize.value = value as Int
 
             FieldTags.REMOVE_MAP -> tripsSimpleInfoMap.remove(value)
             FieldTags.SHOW_ADD_TRIP -> _onShowAddTrip.value = value as Boolean
             FieldTags.TRIP_NAME_LIST -> tripNamesList.add(value.toString())
             FieldTags.CURRENT_TRIPS -> _currentTripsList.value =
                 value as MutableList<DocumentSnapshot>
-
         }
     }
 
     /**
      * A function to search for a specific trip destination from the doc and return its index in the list
      */
-    fun searchTrip(destination: String) = _currentTripsList.value?.indexOf(
-        _currentTripsList.value!!.find { tripMap ->
-            tripMap["destination"] == destination
-        }
-    )
+    fun searchTrip(destination: String): Int? {
+        return _currentTripsList.value?.indexOf(
+            _currentTripsList.value!!.find { tripMap ->
+                (tripMap["townNames"] as Map<String, String>).containsValue(destination)
+            }
+        )
+    }
 
     fun sortTripsResult(sortTags: SortTags) {
         when (sortTags) {
             SortTags.TRIP_NAMES -> _currentTripsList.value!!.sortBy {
-                it["destination"] as String
+                //Here we are simply sorting by the names but we must get the name of other towns
+                if ((it["townNames"] as Map<String, String>)["town1"] == currentTownName)
+                    (it["townNames"] as Map<String, String>)["town2"].toString()
+                else
+                    (it["townNames"] as Map<String, String>)["town1"].toString()
             }
             SortTags.TRIP_PRICES -> _currentTripsList.value!!.sortBy {
                 (it["normalPrice"]!! as Double).toLong()

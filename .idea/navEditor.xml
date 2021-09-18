@@ -13,8 +13,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="525" />
-                            <option name="y" value="-232" />
+                            <option name="x" value="233" />
+                            <option name="y" value="377" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -34,6 +34,11 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_agencyConfigCenterFragment_to_tripDepartureTimeConfigFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
@@ -44,8 +49,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="733" />
-                            <option name="y" value="132" />
+                            <option name="x" value="12" />
+                            <option name="y" value="377" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -65,8 +70,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="244" />
-                            <option name="y" value="-675" />
+                            <option name="x" value="454" />
+                            <option name="y" value="402" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -86,8 +91,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-203" />
-                            <option name="y" value="-77" />
+                            <option name="x" value="454" />
+                            <option name="y" value="46" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -107,13 +112,34 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="tripDepartureTimeConfigFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="454" />
+                            <option name="y" value="758" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_tripDepartureTimeConfigFragment_to_agencyConfigCenterFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="tripsConfigFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="133" />
-                            <option name="y" value="59" />
+                            <option name="x" value="233" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                         <option name="myPositions">

@@ -29,10 +29,10 @@ import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel.FieldTags
-import com.lado.travago.tripbook.ui.recyclerview.adapters.SimpleAdapter
-import com.lado.travago.tripbook.ui.recyclerview.adapters.SimpleClickListener
-import com.lado.travago.tripbook.ui.recyclerview.adapters.TownClickListener
-import com.lado.travago.tripbook.ui.recyclerview.adapters.TownConfigAdapter
+import com.lado.travago.tripbook.ui.recycler_adapters.SimpleAdapter
+import com.lado.travago.tripbook.ui.recycler_adapters.SimpleClickListener
+import com.lado.travago.tripbook.ui.recycler_adapters.TownClickListener
+import com.lado.travago.tripbook.ui.recycler_adapters.TownConfigAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -82,13 +82,17 @@ class TownsConfigFragment : Fragment() {
     /**
      * Configures the towns recycler
      */
-    private fun setRecycler() {
-        val recyclerManager = GridLayoutManager(context, 2)
+    private fun spanSize(spanSize: Int) {
+        val recyclerManager = GridLayoutManager(context, spanSize)
         binding.recyclerTowns.layoutManager = recyclerManager
         binding.recyclerTowns.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
 
     private fun observeLiveData() {
+        viewModel.spanSize.observe(viewLifecycleOwner){
+            spanSize(it)
+        }
         viewModel.retryTowns.observe(viewLifecycleOwner) {
             if (it) CoroutineScope(Dispatchers.Main).launch {
                 viewModel.getOriginalTowns()
@@ -197,6 +201,15 @@ class TownsConfigFragment : Fragment() {
 //                viewModel.setField(TownsConfigViewModel.FieldTags.RETRY_TOWNS, true)
             }
         }
+        viewModel.toDeleteIDList.observe(viewLifecycleOwner) {
+            try {
+                if (it.isEmpty()) {
+                    adapter.notifyDataSetChanged()
+                }
+            } catch (e: Exception) {
+                /*TODO: Try to check for initialization*/
+            }
+        }
         viewModel.onShowAddTrip.observe(viewLifecycleOwner) {
             if (it) {
                 AddTownsDialogFragment(
@@ -280,6 +293,17 @@ class TownsConfigFragment : Fragment() {
             }
             binding.fabRemoveSelection.hide()
         }
+        binding.fabTownsSpanSize.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("How many items per row")
+                .setSingleChoiceItems(
+                    arrayOf("1", "2", "3", "4", "5", "6"),
+                    viewModel.spanSize.value!!
+                ) { dialogInterface, index ->
+                    viewModel.setField(FieldTags.SPAN_SIZE, index + 1)
+                    dialogInterface.cancel()
+                }
+        }
     }
 
     /* Add a snapshot listener to the towns collection */
@@ -328,7 +352,7 @@ class TownsConfigFragment : Fragment() {
                             snapshot.documents
                         )
                         adapter.submitList(snapshot.documents)
-                        setRecycler()
+                        spanSize(viewModel.spanSize.value!!)
                     } else {
                         try {
                             adapter.notifyDataSetChanged()

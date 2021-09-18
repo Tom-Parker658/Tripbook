@@ -10,7 +10,8 @@
         android:label="fragment_scanner_config" >
         <action
             android:id="@+id/action_scannerConfigFragment_to_agencyConfigCenterFragment"
-            app:destination="@id/agencyConfigCenterFragment" />
+            app:destination="@id/agencyConfigCenterFragment"
+            app:popUpTo="@id/agencyConfigCenterFragment" />
     </fragment>
     <fragment
         android:id="@+id/townsConfigFragment"
@@ -21,7 +22,8 @@
             app:destination="@id/tripsConfigFragment" />
         <action
             android:id="@+id/action_townsConfigFragment_to_agencyConfigCenterFragment"
-            app:destination="@id/agencyConfigCenterFragment" />
+            app:destination="@id/agencyConfigCenterFragment"
+            app:popUpTo="@id/agencyConfigCenterFragment" />
     </fragment>
     <fragment
         android:id="@+id/tripsConfigFragment"
@@ -35,7 +37,8 @@
             app:argType="string" />
         <action
             android:id="@+id/action_tripsConfigFragment_to_townsConfigFragment"
-            app:destination="@id/townsConfigFragment" />
+            app:destination="@id/townsConfigFragment"
+            app:popUpTo="@id/townsConfigFragment" />
     </fragment>
     <fragment
         android:id="@+id/agencyCreationFragment"
@@ -43,7 +46,8 @@
         android:label="AgencyCreationFragment" >
         <action
             android:id="@+id/action_agencyCreationFragment_to_agencyConfigCenterFragment"
-            app:destination="@id/agencyConfigCenterFragment" />
+            app:destination="@id/agencyConfigCenterFragment"
+            app:popUpTo="@id/agencyConfigCenterFragment" />
     </fragment>
     <fragment
         android:id="@+id/agencyConfigCenterFragment"
@@ -58,5 +62,17 @@
         <action
             android:id="@+id/action_agencyConfigCenterFragment_to_townsConfigFragment"
             app:destination="@id/townsConfigFragment" />
+        <action
+            android:id="@+id/action_agencyConfigCenterFragment_to_tripDepartureTimeConfigFragment"
+            app:destination="@id/tripDepartureTimeConfigFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tripDepartureTimeConfigFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.TripDepartureTimeConfigFragment"
+        android:label="fragment_trip_departure_time_config"
+        tools:layout="@layout/fragment_trip_departure_time_config" >
+        <action
+            android:id="@+id/action_tripDepartureTimeConfigFragment_to_agencyConfigCenterFragment"
+            app:destination="@id/agencyConfigCenterFragment" />
     </fragment>
 </navigation>

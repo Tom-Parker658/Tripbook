@@ -1,7 +1,10 @@
 package com.lado.travago.tripbook.utils
 
 import android.graphics.Bitmap
+import android.text.format.Time
+import androidx.core.util.TimeUtils
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.model.Document
 import com.google.zxing.BarcodeFormat
@@ -12,16 +15,32 @@ import com.lado.travago.tripbook.model.users.Booker
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
  * Contains a set of utilities for our app_user .
  */
 object Utils {
+    //We add spaces after every 3 characters except the last character
+    fun formatFCFAPrice(price: Long): String {
+        var formattedPrice = ""
+        price.toString().reversed().forEachIndexed { index, char ->
+            formattedPrice += char
+            if (index != price.toString().length && (index + 1) % 3 == 0) formattedPrice += " ,"
+        }
+        return "${formattedPrice.reversed()} FCFA"
+    }
+
+    fun formatTime(hour: Long, minute: Long, language: String){
+        
+    }
+
     /**
      * Returns a map with the id as a field
      */
-    fun DocumentSnapshot.toMapWithIDField(): MutableMap<String, Any>{
+    fun DocumentSnapshot.toMapWithIDField(): MutableMap<String, Any> {
         val map = data!!
         map["id"] = id
         return map
@@ -44,10 +63,10 @@ object Utils {
      * @return the age in Whole number
      *
      */
-    fun getAge(birthdayInMillis: Long): Int{
+    fun getAge(birthdayInMillis: Long): Int {
         val now = Calendar.getInstance().timeInMillis
         val ageInMillis = now - birthdayInMillis
-        return (ageInMillis/(1000*3600*24*365.25)).toInt()
+        return (ageInMillis / (1000 * 3600 * 24 * 365.25)).toInt()
     }
 
     /**
@@ -95,8 +114,10 @@ object Utils {
         val encryptedSeed = qrCodeEncryptor(ticket.qrSeed)
         //Try to encode the qrSeed to QR code or generate an error
         try {
-            result = MultiFormatWriter().encode(encryptedSeed,
-                BarcodeFormat.QR_CODE, requiredHeight, requiredWidth, null)
+            result = MultiFormatWriter().encode(
+                encryptedSeed,
+                BarcodeFormat.QR_CODE, requiredHeight, requiredWidth, null
+            )
         } catch (iae: IllegalArgumentException) {
             return null
         }
@@ -120,17 +141,17 @@ object Utils {
     /**
      * CERA
      */
-    fun qrCodeEncryptor(qrSeed: String): String{
+    fun qrCodeEncryptor(qrSeed: String): String {
         val reversedQRSeed = qrSeed.reversed()
-        return reversedQRSeed.replace("e", "~",ignoreCase = false)
+        return reversedQRSeed.replace("e", "~", ignoreCase = false)
     }
 
     /**
      * DERA
      */
-    fun qrCodeDecryptor(reversedQrSeed: String): String{
+    fun qrCodeDecryptor(reversedQrSeed: String): String {
         val qrSeedWithoutE = reversedQrSeed.reversed()
-        return qrSeedWithoutE.replace("~", "e",ignoreCase = false)
+        return qrSeedWithoutE.replace("~", "e", ignoreCase = false)
     }
 
     /**
@@ -154,14 +175,19 @@ object Utils {
      * @param pattern is the format pattern
      * @return the formatted date [String]
      */
-    fun formatDate(dateInMillis: Long, pattern: String): String = SimpleDateFormat(pattern, Locale.getDefault()).format(Date(dateInMillis))
+    fun formatDate(dateInMillis: Long, pattern: String): String =
+        SimpleDateFormat(pattern, Locale.getDefault()).format(Date(dateInMillis))
 
     /**
      * Helper method to create a stream from bitmap
      * @param bitmap is the image we which to use for the conversion
      * @return the Stream
      */
-    fun convertBitmapToStream(bitmap: Bitmap?, format: Bitmap.CompressFormat, quality: Int): ByteArrayInputStream {
+    fun convertBitmapToStream(
+        bitmap: Bitmap?,
+        format: Bitmap.CompressFormat,
+        quality: Int
+    ): ByteArrayInputStream {
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap!!.compress(format, 0, byteArrayOutputStream)
         return ByteArrayInputStream(byteArrayOutputStream.toByteArray())
@@ -171,7 +197,6 @@ object Utils {
      * A function to remove all spaces
      */
     fun String.removeSpaces() = replace(" ", "")
-
 
 
 }

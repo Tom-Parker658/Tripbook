@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripSearchBinding
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchViewModel
+import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchViewModel.*
 import kotlinx.coroutines.*
 
 /**
@@ -24,7 +26,6 @@ import kotlinx.coroutines.*
 class TripSearchFragment : Fragment() {
     private lateinit var binding: FragmentTripSearchBinding
     private lateinit var viewModel: TripSearchViewModel
-    private var townNames = listOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,11 +39,15 @@ class TripSearchFragment : Fragment() {
             false
         )
         initViewModel()
-        adaptTownNames()
+        adaptAutoCompleteNames()
         restoreFields()
         onFieldChange()
-        observeTownInfo()
         navigateToResultScreen()
+        viewModel.toastMessage.observe(viewLifecycleOwner) {
+            if (it.isNotBlank()) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+        }
 
         return binding.root
     }
@@ -51,45 +56,13 @@ class TripSearchFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[TripSearchViewModel::class.java]
     }
 
-    private fun observeTownInfo() {
-        viewModel.onLoading.observe(viewLifecycleOwner) {
-            if (it) binding.progressTrip.visibility = View.VISIBLE
-            else binding.progressTrip.visibility = View.GONE
-        }
-        viewModel.retrySearch.observe(viewLifecycleOwner) {
-            if (it) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    viewModel.searchLocalityTowns()
-                }
-            }
-        }
-        viewModel.onLocalityResultsFound.observe(viewLifecycleOwner) {
-            if (it && townNames.contains(viewModel.locality)) {/*Show destination editText*/
-                binding.inputDestination.visibility = View.VISIBLE
-                binding.imageDestination.visibility = View.VISIBLE
-            } else { /*Close destination editText if visible in this case*/
-                viewModel.setFields(TripSearchViewModel.FieldTags.DESTINATION, "")
-                binding.inputDestination.visibility = View.GONE
-                binding.imageDestination.visibility = View.GONE
-            }
-        }
-
-    }
-
     /**
      * Loads all values of the fields from the viewModel in case of config change
      */
     private fun restoreFields() {
         binding.inputLocality.editText!!.setText(viewModel.locality)
         binding.inputDestination.editText!!.setText(viewModel.destination)
-        binding.checkboxVip.isChecked = viewModel.vip
-        if (townNames.contains(viewModel.destination) && viewModel.locality != viewModel.destination) {
-            binding.inputDestination.visibility = View.VISIBLE
-            binding.imageDestination.visibility = View.VISIBLE
-        } else {
-            binding.inputDestination.visibility = View.GONE
-            binding.imageDestination.visibility = View.GONE
-        }
+        binding.checkboxVip.isChecked = viewModel.isVip
     }
 
     /**
@@ -97,38 +70,24 @@ class TripSearchFragment : Fragment() {
      */
     private fun onFieldChange() {
         binding.inputLocality.editText!!.addTextChangedListener {
-            viewModel.setFields(TripSearchViewModel.FieldTags.LOCALITY, it.toString())
+            viewModel.setFields(FieldTags.LOCALITY, it.toString())
             //To avoid changes when loading
-            if (townNames.contains(it.toString()))
-                viewModel.setFields(TripSearchViewModel.FieldTags.RETRY_SEARCH, true)
-            else {
-                binding.inputDestination.visibility = View.GONE
-                binding.imageDestination.visibility = View.GONE
-                binding.btnSearchJourney.visibility = View.GONE
-                binding.checkboxVip.visibility = View.GONE
-            }
         }
+
         binding.inputDestination.editText!!.addTextChangedListener {
-            viewModel.setFields(TripSearchViewModel.FieldTags.DESTINATION, it.toString())
+            viewModel.setFields(FieldTags.DESTINATION, it.toString())
             //If the booker has selected a valid locality we start the searching for destinations
-            if (townNames.contains(it.toString()) && viewModel.locality != viewModel.destination) {
-                binding.btnSearchJourney.visibility = View.VISIBLE
-                binding.checkboxVip.visibility = View.VISIBLE
-            } else {
-                binding.btnSearchJourney.visibility = View.GONE
-                binding.checkboxVip.visibility = View.GONE
-            }
         }
         binding.checkboxVip.setOnCheckedChangeListener { _, isVip ->
-            viewModel.setFields(TripSearchViewModel.FieldTags.VIP, isVip)
+            viewModel.setFields(FieldTags.VIP, isVip)
         }
     }
 
     /**
      * Adapt the array of destinations to the location and destination auto complete text view
      */
-    private fun adaptTownNames() {
-        townNames = resources.getStringArray(R.array.localities).toList()
+    private fun adaptAutoCompleteNames() {
+        val townNames = resources.getStringArray(R.array.localities).toList()
         val adapter = ArrayAdapter(
             requireContext(),
             R.layout.item_dropdown_textview,
@@ -138,17 +97,53 @@ class TripSearchFragment : Fragment() {
         (binding.inputDestination.editText as AutoCompleteTextView).setAdapter(adapter)
     }
 
+    /* private fun adaptDestinationNames() {
+         destinationNames = resources.getStringArray(R.array.localities).toMutableList()
+         val adapter = ArrayAdapter(
+             requireContext(),
+             R.layout.item_dropdown_textview,
+             destinationNames
+         )
+         (binding.inputDestination.editText as AutoCompleteTextView).setAdapter(adapter)
+     }*/
+
     /**
      * Navigates to the result screen after the search button is clicked
      */
-    private fun navigateToResultScreen() = binding.btnSearchJourney.setOnClickListener {
-        findNavController().navigate(
-            TripSearchFragmentDirections.actionTripSearchFragmentToTripSearchResultsFragment(
-                viewModel.locality,
-                viewModel.destination,
-                viewModel.localityDoc.id
-            )
-        )
-    }
+    private fun navigateToResultScreen() {
+        binding.btnSearchJourney.setOnClickListener {
+            when {
+                viewModel.townNames.contains(viewModel.locality) -> {
+                    viewModel.setFields(
+                        FieldTags.TOAST_MESSAGE,
+                        "Please choose your locality from the dropdown"
+                    )
+                    binding.inputLocality.requestFocus()
+                }
+                viewModel.townNames.contains(viewModel.destination) -> {
+                    viewModel.setFields(
+                        FieldTags.TOAST_MESSAGE,
+                        "Please choose your destination from the dropdown"
+                    )
+                    binding.inputLocality.requestFocus()
+                }
+                viewModel.locality == viewModel.destination -> {
+                    viewModel.setFields(
+                        FieldTags.TOAST_MESSAGE,
+                        "It is logically impossible for your locality to be your destination, right?"
+                    )
+                }
+                else -> {
+                    findNavController().navigate(
+                        TripSearchFragmentDirections.actionTripSearchFragmentToTripSearchResultsFragment(
+                            viewModel.locality,
+                            viewModel.destination,
+                            viewModel.isVip
+                        )
+                    )
+                }
+            }
 
+        }
+    }
 }

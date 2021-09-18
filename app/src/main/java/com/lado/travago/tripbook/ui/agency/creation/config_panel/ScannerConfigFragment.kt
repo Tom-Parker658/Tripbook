@@ -24,8 +24,8 @@ import com.lado.travago.tripbook.databinding.FragmentScannerConfigBinding
 import com.lado.travago.tripbook.databinding.LayoutScannerSearchBinding
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.ScannerConfigViewModel
-import com.lado.travago.tripbook.ui.recyclerview.adapters.ScannerConfigAdapter
-import com.lado.travago.tripbook.ui.recyclerview.adapters.ScannerConfigClickListener
+import com.lado.travago.tripbook.ui.recycler_adapters.ScannerConfigAdapter
+import com.lado.travago.tripbook.ui.recycler_adapters.ScannerConfigClickListener
 import com.lado.travago.tripbook.utils.loadImageFromUrl
 import kotlinx.coroutines.*
 

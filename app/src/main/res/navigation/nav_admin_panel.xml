@@ -50,7 +50,7 @@
         tools:layout="@layout/fragment_ticket_scan_panel" />
     <fragment
         android:id="@+id/busContentFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.BusContentFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.TripDepartureTimeConfigFragment"
         android:label="fragment_bus_content"
-        tools:layout="@layout/fragment_bus_content" />
+        tools:layout="@layout/fragment_trip_departure_time_config" />
 </navigation>

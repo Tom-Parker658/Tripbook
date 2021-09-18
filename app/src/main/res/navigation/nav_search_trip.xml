@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_search_trip"
-    app:startDestination="@id/tripSearchFragment">
+    app:startDestination="@id/tripDetailsFragment">
 
     <fragment
         android:id="@+id/tripSearchFragment"
@@ -30,8 +30,8 @@
             android:name="destinationName"
             app:argType="string" />
         <argument
-            android:name="fromID"
-            app:argType="string" />
+            android:name="isVip"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/tripDetailsFragment"

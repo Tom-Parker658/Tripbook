@@ -1,5 +1,6 @@
 package com.lado.travago.tripbook.ui.booker.book_panel.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,10 +13,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 class TripSearchResultsViewModel : ViewModel() {
     var firestoreRepo: FirestoreRepo = FirestoreRepo()
-
-    //These are the id of the localities and destination which is gotten for the search
-    var fromID = ""
-        private set
 
     //These are used to fill the header
     var localityName = ""
@@ -31,6 +28,11 @@ class TripSearchResultsViewModel : ViewModel() {
     private val _onLoading = MutableLiveData(false)
     val onLoading: LiveData<Boolean> get() = _onLoading
 
+    private val _toastMessage = MutableLiveData("")
+    val toastMessage: LiveData<String> get() = _toastMessage
+
+
+    /*
     //This is the list of documents for the trips
     private val _tripsDocList = MutableLiveData<MutableList<DocumentSnapshot>>()
     val tripsDocList: LiveData<MutableList<DocumentSnapshot>> get() = _tripsDocList
@@ -47,10 +49,10 @@ class TripSearchResultsViewModel : ViewModel() {
         MutableLiveData(mutableListOf<Pair<DocumentSnapshot, DocumentSnapshot>>())
     val agencyToTripDocList: LiveData<MutableList<Pair<DocumentSnapshot, DocumentSnapshot>>>
         get() = _agencyToTripDocList
-
-    fun setLists(listTag: ListTag, data: Any) = when (listTag) {
+*/
+    /*fun setLists(listTag: ListTag, data: Any) = when (listTag) {
         ListTag.TRIPS_DOC -> {
-            _agencyDocList.value = data as MutableList<DocumentSnapshot>
+            _tripsDocList.value = data as MutableList<DocumentSnapshot>
         }
         ListTag.AGENCY_IDS -> {
             _agencyIDList.value!! += "$data"
@@ -58,32 +60,35 @@ class TripSearchResultsViewModel : ViewModel() {
         ListTag.AGENCY_DOC -> {
             _agencyDocList.value = data as MutableList<DocumentSnapshot>
         }
-    }
+    }*/
 
     fun setField(fieldTag: FieldTags, value: Any) = when (fieldTag) {
         FieldTags.ON_NO_SUCH_RESULTS -> _onNoSuchResults.value = value as Boolean
         FieldTags.CHECKED_ITEM -> sortCheckedItem = value as Int
         FieldTags.ON_LOADING -> _onLoading.value = value as Boolean
+        FieldTags.TOAST_MESSAGE -> _toastMessage.value = value as String
     }
 
     enum class FieldTags {
         ON_NO_SUCH_RESULTS,
         CHECKED_ITEM,
-        ON_LOADING
+        ON_LOADING,
+        TOAST_MESSAGE
     }
 
-    fun clearAgencyIDList() = _agencyIDList.value!!.clear()
+//    fun clearAgencyIDList() = _agencyIDList.value!!.clear()
 
-    //Matches an agency to its trip and create a pair and saves it into the pair list
+  /*  //Matches an agency to its trip and create a pair and saves it into the pair list
     fun createPairList() {
         _agencyDocList.value!!.forEach { agencyDoc ->
             _tripsDocList.value!!.forEach { tripDoc ->
                 if (agencyDoc.id == tripDoc.getString("agencyID")) {
+                    Log.d("AGENCY_ID", tripDoc.getString("agencyID")!!)
                     _agencyToTripDocList.value!! += (agencyDoc to tripDoc)
                 }
             }
         }
-    }
+    }*/
 
     enum class ListTag {
         TRIPS_DOC, AGENCY_IDS, AGENCY_DOC
@@ -91,15 +96,14 @@ class TripSearchResultsViewModel : ViewModel() {
 
     //Setter for the ids
     fun setArguments(
-        fromID: String,
         fromName: String,
         toName: String,
     ) {
-        this.fromID = fromID
-        this.localityName = fromName
-        this.destinationName = toName
+        localityName = fromName
+        destinationName = toName
     }
-    fun sortTripsResult(sortTag: SortTags) {
+
+    /*fun sortTripsResult(sortTag: SortTags) {
         when (sortTag) {
             SortTags.REPUTATION -> _agencyDocList.value?.sortBy {
                 it["reputation"] as String
@@ -117,7 +121,7 @@ class TripSearchResultsViewModel : ViewModel() {
                 //TODO: Popularity sort
             }
         }
-    }
+    }*/
 
     enum class SortTags {
         REPUTATION, PRICES, VIP_PRICES, POPULARITY, AGENCY_NAME

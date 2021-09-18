@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="actualSeatNumber"
+            type="String" />
+        <variable
+            name="clickListener"
+            type="com.lado.travago.tripbook.ui.recyclerview.adapters.BusSeatClickListener" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2.5dp"
+        android:onClickListener="@{()->clickListener.onClick(actualSeatNumber)}"
+        app:cardElevation="16dp">
+
+        <TextView
+            android:id="@+id/text_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout"
+            android:layout_width="50dp"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:id="@+id/image_is_occupied"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                app:layout_constraintBottom_toTopOf="@+id/seat_number"
+                app:layout_constraintEnd_toEndOf="@+id/seat_number"
+                app:layout_constraintStart_toStartOf="@+id/seat_number"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_person_24" />
+
+            <TextView
+                android:id="@+id/seat_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{actualSeatNumber}"
+                app:layout_constraintBottom_toTopOf="@+id/view22"
+                app:layout_constraintEnd_toStartOf="@+id/image_your_seat"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_is_occupied"
+                app:layout_constraintVertical_bias="1.0"
+                tools:text="70" />
+
+            <ImageView
+                android:id="@+id/image_your_seat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_is_occupied"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_check_circle_24"
+                app:tint="@color/colorPositiveButton" />
+
+            <View
+                android:id="@+id/view21"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view22"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/view23"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view24"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

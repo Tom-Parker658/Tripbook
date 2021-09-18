@@ -75,6 +75,7 @@ data class OnlineTravelAgency(
                 "phoneCode2" to supportCountryCode2,
                 "creationDecree" to creationDecree,
 
+                "isVerified" to false,
                 "likes" to likes,
                 "dislikes" to dislikes,
                 "reputation" to reputation,

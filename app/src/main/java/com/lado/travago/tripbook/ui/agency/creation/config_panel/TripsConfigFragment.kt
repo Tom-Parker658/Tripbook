@@ -29,11 +29,11 @@ import com.lado.travago.tripbook.databinding.ItemTripPriceFormBinding
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel.FieldTags
-import com.lado.travago.tripbook.ui.recyclerview.adapters.SimpleAdapter
-import com.lado.travago.tripbook.ui.recyclerview.adapters.SimpleClickListener
-import com.lado.travago.tripbook.ui.recyclerview.adapters.TripsClickListener
-import com.lado.travago.tripbook.ui.recyclerview.adapters.TripsConfigAdapter
+import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel.*
+import com.lado.travago.tripbook.ui.recycler_adapters.SimpleAdapter
+import com.lado.travago.tripbook.ui.recycler_adapters.SimpleClickListener
+import com.lado.travago.tripbook.ui.recycler_adapters.TripsClickListener
+import com.lado.travago.tripbook.ui.recycler_adapters.TripsConfigAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -75,14 +75,14 @@ class TripsConfigFragment : Fragment() {
         val tripArgs = TripsConfigFragmentArgs.fromBundle(requireArguments())
         viewModel.setField(FieldTags.TOWN_ID, tripArgs.townID)
         viewModel.setField(FieldTags.TOWN_NAME, tripArgs.townName)
-        binding.textMasterLabel.text = "From ${viewModel.townName} to: "
+        binding.textMasterLabel.text = "From ${viewModel.currentTownName} to: "
     }
 
     /**
      * Configures the towns recycler
      */
-    private fun setRecycler() {
-        val recyclerManager = GridLayoutManager(context, 2)
+    private fun initRecycler(spanCount: Int) {
+        val recyclerManager = GridLayoutManager(context, spanCount)
         binding.recyclerTrips.layoutManager = recyclerManager
         binding.recyclerTrips.adapter = adapter
     }
@@ -112,14 +112,21 @@ class TripsConfigFragment : Fragment() {
             if (it.isNotEmpty()) {
                 it.forEach { currentDoc ->
                     /**Donot touch*/
-                    viewModel.doBackGroundJob(
-                        it,
-                        parentViewModel.bookerDoc.value!!.getString("agencyID")!!
-                    )
-                    //We also set the names to be use in auto complete
+                    /*   viewModel.doBackGroundJob(
+                           it,
+                           parentViewModel.bookerDoc.value!!.getString("agencyID")!!
+                       )*/
+                    /**
+                     * We get the town names which are not the current town name
+                     */
+                    val townNamesMap = (currentDoc["townNames"] as Map<String, String>)
+                    val otherTownName =
+                        if (townNamesMap["town1"] == viewModel.currentTownName) townNamesMap["town2"].toString()
+                        else townNamesMap["town1"].toString()
+
                     viewModel.setField(
                         FieldTags.TRIP_NAME_LIST,
-                        currentDoc["destination"].toString()
+                        otherTownName
                     )
                     val toBeRemovedMap = viewModel.tripsSimpleInfoMap.find { map ->
                         map["id"] == currentDoc.id
@@ -131,6 +138,15 @@ class TripsConfigFragment : Fragment() {
                         )
                     }
                 }
+            }
+        }
+        viewModel.toDeleteIDList.observe(viewLifecycleOwner) {
+            try {
+                if (it.isEmpty()) {
+                    adapter.notifyDataSetChanged()
+                }
+            } catch (e: Exception) {
+                //TODO: Try to check for initialization
             }
         }
 
@@ -243,6 +259,9 @@ class TripsConfigFragment : Fragment() {
                 }.show()
             }
         }
+        viewModel.spanSize.observe(viewLifecycleOwner) {
+            initRecycler(it)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -258,6 +277,9 @@ class TripsConfigFragment : Fragment() {
         // Toggle visibilities fab
         binding.fabToggleTripsToolbox.setOnClickListener { toggleFab ->
             binding.fabAddTrips.let {
+                if (it.isShown) it.hide() else it.show()
+            }
+            binding.fabTripSpanSize.let {
                 if (it.isShown) it.hide() else it.show()
             }
             binding.fabSearchTrip.let {
@@ -305,19 +327,19 @@ class TripsConfigFragment : Fragment() {
                 ) { dialog, which ->
                     when (which) {
                         1 -> {
-                            viewModel.sortTripsResult(TripsConfigViewModel.SortTags.TRIP_NAMES)
+                            viewModel.sortTripsResult(SortTags.TRIP_NAMES)
                             viewModel.setField(FieldTags.CHECKED_ITEM, 1)
                         }
                         2 -> {
-                            viewModel.sortTripsResult(TripsConfigViewModel.SortTags.TRIP_PRICES)
+                            viewModel.sortTripsResult(SortTags.TRIP_PRICES)
                             viewModel.setField(FieldTags.CHECKED_ITEM, 2)
                         }
                         3 -> {
-                            viewModel.sortTripsResult(TripsConfigViewModel.SortTags.TRIP_VIP_PRICES)
+                            viewModel.sortTripsResult(SortTags.TRIP_VIP_PRICES)
                             viewModel.setField(FieldTags.CHECKED_ITEM, 3)
                         }
                         4 -> {
-                            viewModel.sortTripsResult(TripsConfigViewModel.SortTags.DISTANCE)
+                            viewModel.sortTripsResult(SortTags.DISTANCE)
                             viewModel.setField(FieldTags.CHECKED_ITEM, 4)
                         }
                     }
@@ -343,7 +365,73 @@ class TripsConfigFragment : Fragment() {
                 viewModel.commitAllChangesToDataBase(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
             }
         }
+        binding.fabTripSpanSize.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("How many items do you want on a row")
+                .setSingleChoiceItems(
+                    arrayOf("1", "2", "3", "4", "5", "6"),
+                    viewModel.spanSize.value!!
+                ) { dialogInterface, index ->
+                    viewModel.setField(FieldTags.SPAN_SIZE, index + 1)
+                    dialogInterface.cancel()
+                }
+        }
     }
+/*
+    */
+    /**
+     * Special function to configure the types of buses
+     *//*
+    private fun showBusTypesDialog(tripID: String) {
+        val tripDoc = viewModel.currentTripsList.value!!.find {
+            it.id == tripID
+        }!!
+        val existingTripMap = viewModel.localChangesMapList.value!!.withIndex().find {
+            it.value["tripID"] == tripID
+        }
+        val booleanArray = BooleanArray(3)
+        if (existingTripMap != null) {
+            booleanArray[0] =
+                (existingTripMap.value["busTypes"] as Map<String, Boolean>)["seaterSeventy"]!!
+            booleanArray[1] =
+                (existingTripMap.value["busTypes"] as Map<String, Boolean>)["seaterCoaster"]!!
+            booleanArray[2] =
+                (existingTripMap.value["busTypes"] as Map<String, Boolean>)["seaterNormal"]!!
+
+        } else {
+            booleanArray[0] = (tripDoc["busTypes"] as Map<String, Boolean>)["seaterSeventy"]!!
+            booleanArray[1] = (tripDoc["busTypes"] as Map<String, Boolean>)["seaterCoaster"]!!
+            booleanArray[2] = (tripDoc["busTypes"] as Map<String, Boolean>)["seaterNormal"]!!
+        }
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Types of Bus")
+            .setMessage("Choose the different types of bus which can be used by bookers for this trip.")
+            .setMultiChoiceItems(
+                arrayOf("70 Seater Bus", "Coaster Bus", "Normal Bus"),
+                booleanArray
+            ) { _: DialogInterface, index: Int, value: Boolean ->
+                when (index) {
+                    0 -> viewModel.configBusTypes(tripID, BusTypes.SEATER_SEVENTY, value)
+                    1 -> viewModel.configBusTypes(tripID, BusTypes.SEATER_COASTER, value)
+                    2 -> viewModel.configBusTypes(tripID, BusTypes.SEATER_NORMAL, value)
+                }
+            }
+            .setIcon(R.drawable.baseline_directions_bus_24)
+            .setNeutralButton("Done") { dialogInterface, _ ->
+                dialogInterface.dismiss()
+                dialogInterface.cancel()
+                //We re-bind object to show
+                viewModel.setField(FieldTags.REBIND_ITEM, true)
+            }
+            .setOnDismissListener {
+                viewModel.setField(FieldTags.REBIND_ITEM, true)
+            }
+            .setOnCancelListener {
+                viewModel.setField(FieldTags.REBIND_ITEM, true)
+            }
+    }
+    */
+
 
     /* Add a snapshot listener to the trips collection */
     private val snapshotListener
@@ -361,36 +449,40 @@ class TripsConfigFragment : Fragment() {
                                 clickListener = TripsClickListener { tripID, buttonTag ->
                                     viewModel.setField(FieldTags.TRIP_ID, tripID)
                                     when (buttonTag) {//Remove
-                                        TripsConfigViewModel.TripButtonTags.TRIP_CHECK_TO_DELETE -> {
+                                        TripButtonTags.TRIP_CHECK_TO_DELETE -> {
                                             viewModel.removeTrip(tripID)
                                             //This to rightly inflate the close button
                                             viewModel.setField(FieldTags.REBIND_ITEM, true)
                                             viewModel.setField(FieldTags.REBIND_ITEM, false)
                                             //To show or hide the delete town fab
+
                                             if (viewModel.toDeleteIDList.value!!.isNotEmpty()) binding.fabRemoveTripSelection.show()
                                             else binding.fabRemoveTripSelection.hide()
                                         }
-                                        TripsConfigViewModel.TripButtonTags.TRIPS_BUTTON_NORMAL_PRICE -> {
+                                        TripButtonTags.TRIPS_BUTTON_NORMAL_PRICE -> {
                                             viewModel.setField(
                                                 FieldTags.ON_NORMAL_PRICE_FORM,
                                                 true
                                             )
                                         }
-                                        TripsConfigViewModel.TripButtonTags.TRIPS_BUTTON_VIP_PRICE -> {
+                                        TripButtonTags.TRIPS_BUTTON_VIP_PRICE -> {
                                             viewModel.setField(
                                                 FieldTags.ON_VIP_PRICE_FORM,
                                                 true
                                             )
                                         }
-                                        TripsConfigViewModel.TripButtonTags.TRIPS_CHECK_VIP -> {
+                                        TripButtonTags.TRIPS_CHECK_VIP -> {
                                             viewModel.exemptVIP(tripID)
                                             viewModel.setField(FieldTags.REBIND_ITEM, true)
                                         }
+//                                        TripButtonTags.TRIPS_BUTTON_BUS_TYPES -> {
+//                                            showBusTypesDialog(tripID)
+//                                        }
                                     }
                                 },
                                 toDeleteIDList = viewModel.toDeleteIDList.value!!,
                                 changesMapList = viewModel.localChangesMapList.value!!,
-                                currentTownName = viewModel.townName
+                                currentTownName = viewModel.currentTownName
                             )
                             viewModel.setField(
                                 FieldTags.CURRENT_TRIPS,
@@ -400,7 +492,7 @@ class TripsConfigFragment : Fragment() {
 //                    viewModel.convertToNewChangeMap(snapshot)
 
                             adapter.submitList(snapshot.documents)
-                            setRecycler()
+                            initRecycler(viewModel.spanSize.value!!)
                         } else {
                             try {
                                 adapter.notifyDataSetChanged()
@@ -450,7 +542,7 @@ class TripsConfigFragment : Fragment() {
             )
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
-                .setTitle("Trips From ${viewModel.townName} To: ")
+                .setTitle("Trips From ${viewModel.currentTownName} To: ")
                 .setIcon(R.drawable.baseline_add_24)
                 .setView(recyclerBinding.root)
                 .setPositiveButton("Add Selected Trips") { dialog, _ ->

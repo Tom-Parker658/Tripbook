@@ -13,6 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/progress_trip"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_search_journey" />
+
         <ImageView
             android:id="@+id/logo_tripbook"
             android:layout_width="150dp"
@@ -53,7 +64,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/text_label_destination"
-            android:visibility="gone"
             app:endIconMode="dropdown_menu"
             app:helperText="@string/hint_destination"
             app:helperTextEnabled="true"
@@ -74,41 +84,26 @@
             android:checked="true"
             android:drawableEnd="@drawable/baseline_vip_24"
             android:text="VIP Trip"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/progress_trip"
+            app:layout_constraintBottom_toTopOf="@+id/btn_search_journey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_destination" />
 
-        <ProgressBar
-            android:id="@+id/progress_trip"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:indeterminate="true"
-            app:layout_constraintBottom_toTopOf="@+id/btn_search_journey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/input_locality"
-            app:layout_constraintTop_toBottomOf="@+id/checkbox_vip" />
-
         <Button
             android:id="@+id/btn_search_journey"
             style="@style/navButtonStyles"
+            android:layout_marginTop="286dp"
             android:text="Search Trip"
-            android:visibility="gone"
             app:icon="@drawable/baseline_directions_bus_24"
             app:iconGravity="start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progress_trip" />
+            app:layout_constraintTop_toBottomOf="@+id/checkbox_vip" />
 
         <ImageView
             android:id="@+id/image_destination"
             style="@style/style_image_label"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/input_destination"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/input_destination"
@@ -122,6 +117,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/input_locality"
             app:srcCompat="@drawable/baseline_place_24" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_locate_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="32dp"
+            app:srcCompat="@drawable/baseline_my_location_24"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

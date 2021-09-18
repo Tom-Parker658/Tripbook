@@ -21,7 +21,6 @@ class BookerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initViewModel()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_booker)
-
         loading()
     }
 

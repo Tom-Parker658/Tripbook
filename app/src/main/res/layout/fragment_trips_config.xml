@@ -121,5 +121,17 @@
             app:layout_constraintStart_toStartOf="@+id/recycler_trips"
             app:layout_constraintTop_toTopOf="@+id/fab_toggle_trips_toolbox" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_trip_span_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@+id/fab_sort_trips"
+            app:layout_constraintEnd_toEndOf="@+id/fab_sort_trips"
+            app:layout_constraintStart_toStartOf="@+id/fab_sort_trips"
+            app:srcCompat="@drawable/baseline_settings_24"
+            tools:ignore="SpeakableTextPresentCheck" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

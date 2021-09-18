@@ -1,20 +1,14 @@
 package com.lado.travago.tripbook.ui.booker.book_panel.viewmodel
 
+import android.content.Intent
+import android.telephony.CarrierConfigManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.DocumentSnapshot
-import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
-import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
-
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * This is the viewModel to manage the search screen of the app -> [TripSearchViewModel]
@@ -26,26 +20,10 @@ import kotlin.collections.HashMap
  *
  */
 @ExperimentalCoroutinesApi
-@InternalCoroutinesApi
 class TripSearchViewModel : ViewModel() {
-    private var firestoreRepo: FirestoreRepo = FirestoreRepo()
-
-    //Knows when the locality document have been found
-    private val _onLocalityResultsFound = MutableLiveData(false)
-    val onLocalityResultsFound: LiveData<Boolean> get() = _onLocalityResultsFound
-
+    val firestoreRepo = FirestoreRepo()
     var townNames = mutableListOf<String>()
         private set
-
-    //Livedata to know when to start searching
-    private val _retrySearch = MutableLiveData(false)
-    val retrySearch: LiveData<Boolean> get() = _retrySearch
-
-    // This stores the locality firestore document
-    lateinit var localityDoc: DocumentSnapshot
-
-    private var _onLoading = MutableLiveData(false)
-    val onLoading get() = _onLoading
 
     private val _toastMessage = MutableLiveData("")
     val toastMessage: LiveData<String> get() = _toastMessage
@@ -55,42 +33,14 @@ class TripSearchViewModel : ViewModel() {
         private set
     var destination = ""
         private set
-    var vip = false
+    var isVip = false
         private set
-
-    /**
-     * Gets the trip detail doc
-     */
-    suspend fun searchLocalityTowns() {
-        _retrySearch.value = false
-        _onLocalityResultsFound.value = false
-        firestoreRepo.queryCollection(
-            "/Planets/Earth/Continents/Africa/Cameroon"
-        ) {
-            it.whereEqualTo("name", locality)
-            it.limit(1)
-        }.collect { localityState ->
-            when (localityState) {
-                is State.Loading -> _onLoading.value = true
-                is State.Failed -> {
-                    _onLoading.value = false
-                    _toastMessage.value = localityState.exception.handleError { }
-                }
-                is State.Success -> {
-                    localityDoc = localityState.data.first()
-                    _onLocalityResultsFound.value = true
-                    _onLoading.value = false
-                }
-            }
-        }
-
-    }
 
     /**
      * Contains different identifiers for the fields in our searching form
      */
     enum class FieldTags {
-        LOCALITY, DESTINATION, VIP, RETRY_SEARCH, TOWNS_NAMES
+        LOCALITY, DESTINATION, VIP, TOWNS_NAMES, TOAST_MESSAGE
     }
 
     /**
@@ -101,9 +51,21 @@ class TripSearchViewModel : ViewModel() {
     fun setFields(fieldTag: FieldTags, value: Any) = when (fieldTag) {
         FieldTags.LOCALITY -> locality = value.toString()
         FieldTags.DESTINATION -> destination = value.toString()
-        FieldTags.VIP -> vip = value as Boolean
-        FieldTags.RETRY_SEARCH -> _retrySearch.value = true
+        FieldTags.VIP -> isVip = value as Boolean
         FieldTags.TOWNS_NAMES -> townNames = value as MutableList<String>
+        FieldTags.TOAST_MESSAGE -> _toastMessage.value = value as String
     }
+
+    /**
+     * This is a powerful tool to get the gps location of the booker, compare it with database, then gets his approximate locality
+     * It approximates the current locality by comparing Latitudes and Longitudes
+     */
+//    fun locateMe(){
+//        firestoreRepo.queryCollection("Planets/Earth/Continents/Africa/Cameroon/"){
+//            it.whereEqualTo("latitude", 4.1256356)
+//            it.whereEqualTo("longitude", 4.562356)
+//            it.whereGreaterThan("", )
+//        }
+//    }
 
 }
