@@ -5,10 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
+import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import com.lado.travago.tripbook.repo.firebase.StorageRepo
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+
+/**
+ * @property tripDateTimeInMillis is the combined TripDate+TripTime to helps us avoid all events
+ */
 
 @ExperimentalCoroutinesApi
 class TripSearchResultsViewModel : ViewModel() {
@@ -19,6 +24,9 @@ class TripSearchResultsViewModel : ViewModel() {
         private set
     var destinationName = ""
         private set
+
+    lateinit var tripTime: TimeModel
+    var tripDateTimeInMillis = 0L
 
     var sortCheckedItem = 0
 
@@ -98,9 +106,14 @@ class TripSearchResultsViewModel : ViewModel() {
     fun setArguments(
         fromName: String,
         toName: String,
+        dateInMillis: Long,
+        tripHour: Int,
+        tripMinutes: Int
     ) {
         localityName = fromName
         destinationName = toName
+        tripDateTimeInMillis = dateInMillis
+        tripTime = TimeModel.from24Format(tripHour, tripMinutes, null)
     }
 
     /*fun sortTripsResult(sortTag: SortTags) {

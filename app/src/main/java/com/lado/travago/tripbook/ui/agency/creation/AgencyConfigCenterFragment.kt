@@ -53,7 +53,16 @@ class AgencyConfigCenterFragment : Fragment() {
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyCreationFragment()
             )
         }
-        binding.btnTripdepartureTimePeriods
+        binding.btnTripdepartureTimePeriods.setOnClickListener {
+            findNavController().navigate(
+                AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTripDepartureTimeConfigFragment()
+            )
+        }
+        binding.btnAgencyEvents.setOnClickListener {
+            findNavController().navigate(
+                AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyEventPlannerFragment()
+            )
+        }
         //TODO: For now, we navigate to the creation for bookers
         binding.btnDeleteAgency.setOnClickListener {
             startActivity(Intent(requireContext(), BookerCreationActivity::class.java))

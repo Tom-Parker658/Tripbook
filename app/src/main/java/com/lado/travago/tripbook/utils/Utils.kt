@@ -32,10 +32,7 @@ object Utils {
         }
         return "${formattedPrice.reversed()} FCFA"
     }
-
-    fun formatTime(hour: Long, minute: Long, language: String){
-        
-    }
+    
 
     /**
      * Returns a map with the id as a field

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.databinding.ItemTripSearchResultsBinding
+import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.utils.Utils
 import com.lado.travago.tripbook.utils.loadLogoFromUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,14 +16,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 class TripSearchResultsAdapter(
     private val clickListener: TripSearchResultsClickListener
-) : ListAdapter<Pair<DocumentSnapshot, DocumentSnapshot>, TripSearchResultsViewHolder>(
+) : ListAdapter<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>, TripSearchResultsViewHolder>(
     TripSearchResultDiffUtils()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         TripSearchResultsViewHolder.from(parent)
 
     override fun onBindViewHolder(holder: TripSearchResultsViewHolder, position: Int) =
-        holder.bind(clickListener, getItem(position).first, getItem(position).second)
+        holder.bind(clickListener, getItem(position).first, getItem(position).second, getItem(position).third)
 }
 
 class TripSearchResultsViewHolder(
@@ -32,7 +33,8 @@ class TripSearchResultsViewHolder(
     fun bind(
         clickListener: TripSearchResultsClickListener,
         agencyDoc: DocumentSnapshot,
-        tripDoc: DocumentSnapshot
+        tripDoc: DocumentSnapshot,
+        departureTime: TimeModel
     ) {
         // Data def
         binding.agencyDoc = agencyDoc
@@ -44,12 +46,11 @@ class TripSearchResultsViewHolder(
         binding.textAgencyName.let {
             it.text = agencyDoc.getString("agencyName")
             //We set the verification drawable if the agency is verified
-            val checkDrawable = binding.verifiedBitmap.drawable
             if (agencyDoc.getBoolean("isVerified")!!) {
                 binding.verifiedBitmap.visibility = View.VISIBLE
             } else binding.verifiedBitmap.visibility = View.GONE
-
         }
+        binding.textIntervalDeparture.text = departureTime.formattedTime(TimeModel.TimeFormat.FORMAT_24H)
         binding.ratingBar.progress = agencyDoc.getDouble("reputation")!!.toInt()
         binding.textAgencyMotto.text = agencyDoc.getString("motto")
 
@@ -79,17 +80,15 @@ class TripSearchResultsClickListener(val clickListener: (agencyId: String) -> Un
     fun onClick(agencyDoc: DocumentSnapshot) = clickListener(agencyDoc.id)
 }
 
-class TripSearchResultDiffUtils :
-    DiffUtil.ItemCallback<Pair<DocumentSnapshot, DocumentSnapshot>>() {
+class TripSearchResultDiffUtils : DiffUtil.ItemCallback<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>>(){
     override fun areItemsTheSame(
-        oldItem: Pair<DocumentSnapshot, DocumentSnapshot>,
-        newItem: Pair<DocumentSnapshot, DocumentSnapshot>
-    ) =
-        oldItem.first.id == newItem.first.id
+        oldItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>,
+        newItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>
+    ) = oldItem.first.id == oldItem.first.id
 
     override fun areContentsTheSame(
-        oldItem: Pair<DocumentSnapshot, DocumentSnapshot>,
-        newItem: Pair<DocumentSnapshot, DocumentSnapshot>
-    ) =
-        oldItem.first == newItem.first
+        oldItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>,
+        newItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>
+    ) = oldItem == newItem
+
 }

@@ -8,9 +8,9 @@
         <variable
             name="actualSeatNumber"
             type="String" />
-        <variable
-            name="clickListener"
-            type="com.lado.travago.tripbook.ui.recyclerview.adapters.BusSeatClickListener" />
+<!--        <variable-->
+<!--            name="clickListener"-->
+<!--            type="com.lado.travago.tripbook.ui.recycler_adapters.BusSeatClickListener" />-->
 
     </data>
 
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2.5dp"
-        android:onClickListener="@{()->clickListener.onClick(actualSeatNumber)}"
+
         app:cardElevation="16dp">
 
         <TextView

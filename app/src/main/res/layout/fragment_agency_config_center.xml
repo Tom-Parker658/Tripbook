@@ -73,6 +73,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/btn_scanners" />
 
             <Button
+                android:id="@+id/btn_agency_events"
+                style="@style/neutralButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Events"
+                app:icon="@drawable/baseline_event_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_tripdeparture_time_periods" />
+
+            <Button
                 android:id="@+id/btn_trips"
                 style="@style/neutralButton"
                 android:layout_width="0dp"

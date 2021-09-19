@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.protobuf.TimestampOrBuilder
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
@@ -11,6 +12,7 @@ import com.lado.travago.tripbook.utils.Utils.toMapWithIDField
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.tasks.await
+import java.security.Timestamp
 
 @ExperimentalCoroutinesApi
 class TripsConfigViewModel : ViewModel() {
@@ -258,7 +260,9 @@ class TripsConfigViewModel : ViewModel() {
                 //We remove the id field from the document
                 val id = _localChangesMapList.value!![index].remove("id").toString()
                 batch.update(
-                    firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/$id"),
+                    firestoreRepo.db.document(
+                        "OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/$id"
+                    ),
                     tripMap
                 )
             }
@@ -273,6 +277,10 @@ class TripsConfigViewModel : ViewModel() {
                 _toastMessage.value = it.exception!!.handleError { }
             }
         }.await()
+    }
+
+    suspend fun createEvent(){
+
     }
 
     /**

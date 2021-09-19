@@ -30,8 +30,14 @@
             android:name="destinationName"
             app:argType="string" />
         <argument
-            android:name="isVip"
-            app:argType="boolean" />
+            android:name="tripDateInMillis"
+            app:argType="long" />
+        <argument
+            android:name="tripHour"
+            app:argType="integer" />
+        <argument
+            android:name="tripMinutes"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/tripDetailsFragment"

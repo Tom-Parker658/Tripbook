@@ -15,7 +15,7 @@
 
         <variable
             name="clickListener"
-            type="com.lado.travago.tripbook.ui.recyclerview.adapters.ScannerConfigClickListener" />
+            type="com.lado.travago.tripbook.ui.recycler_adapters.ScannerConfigClickListener" />
 
 
     </data>

@@ -17,10 +17,10 @@
             android:id="@+id/recyclerView_search_result"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
             android:clipChildren="true"
             android:clipToPadding="true"
+            android:fadeScrollbars="true"
+            android:scrollbars="vertical"
             android:text="@string/hello_blank_fragment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -32,15 +32,14 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_sort_results"
-            style="@style/navButtonStyles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:maxImageSize="32dp"
-            app:srcCompat="@drawable/baseline_sort_24"
+            app:srcCompat="@drawable/baseline_filter_list_24"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView

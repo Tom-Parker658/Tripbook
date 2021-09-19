@@ -6,7 +6,7 @@
     <data>
         <variable
             name="clickListener"
-            type="com.lado.travago.tripbook.ui.recyclerview.adapters.SimpleClickListener" />
+            type="com.lado.travago.tripbook.ui.recycler_adapters.SimpleClickListener" />
 
         <variable
             name="itemMap"

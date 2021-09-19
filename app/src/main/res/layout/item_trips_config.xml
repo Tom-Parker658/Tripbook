@@ -74,7 +74,6 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_BUS_TYPES, changesMap )}"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="14sp"
                 android:textStyle="bold"

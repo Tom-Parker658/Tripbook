@@ -199,13 +199,13 @@ class TripDepartureTimeConfigFragment : Fragment() {
         )
 
         private fun validateFields() {
-            if (viewModel.fromHour == null || viewModel.fromMinute == null) {
+            if (viewModel.fromHour == null || viewModel.fromMinutes == null) {
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "You must set Initial Time.")
                 creationBinding.editTextFrom.requestFocus()
-            } else if (viewModel.toHour == null || viewModel.toMinute == null) {
+            } else if (viewModel.toHour == null || viewModel.toMinutes == null) {
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "You must set Final Time.")
                 creationBinding.editTextTo.requestFocus()
-            } else if (viewModel.departureHour == null && viewModel.departureMinute == null) {
+            } else if (viewModel.departureHour == null && viewModel.departureMinutes == null) {
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "You must set Departure Time.")
                 creationBinding.editTextDepartureTime.requestFocus()
             } else if (viewModel.intervalName.isBlank()) {
@@ -216,8 +216,8 @@ class TripDepartureTimeConfigFragment : Fragment() {
                 creationBinding.editTextName.requestFocus()
             } else if (
                 TimeModel.timesDifferenceInMinutes(
-                    TimeModel.from24Format(viewModel.toHour!!, viewModel.toMinute!!, null),
-                    TimeModel.from24Format(viewModel.fromHour!!, viewModel.fromMinute!!, null),
+                    TimeModel.from24Format(viewModel.toHour!!, viewModel.toMinutes!!, null),
+                    TimeModel.from24Format(viewModel.fromHour!!, viewModel.fromMinutes!!, null),
                 ) == null
             ) {
                 viewModel.setField(
@@ -231,7 +231,7 @@ class TripDepartureTimeConfigFragment : Fragment() {
                         viewModel.departureHour!!,
                         null
                     ),
-                    TimeModel.from24Format(viewModel.toHour!!, viewModel.toMinute!!, null),
+                    TimeModel.from24Format(viewModel.toHour!!, viewModel.toMinutes!!, null),
                 ) == null
             ) {
                 viewModel.setField(
@@ -245,7 +245,7 @@ class TripDepartureTimeConfigFragment : Fragment() {
                         viewModel.departureHour!!,
                         null
                     ),
-                    TimeModel.from24Format(viewModel.toHour!!, viewModel.toMinute!!, null),
+                    TimeModel.from24Format(viewModel.toHour!!, viewModel.toMinutes!!, null),
                 )!! < 15
             ) {
                 viewModel.setField(

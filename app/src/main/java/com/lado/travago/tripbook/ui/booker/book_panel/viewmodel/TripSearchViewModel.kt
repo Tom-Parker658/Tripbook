@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
@@ -33,14 +34,16 @@ class TripSearchViewModel : ViewModel() {
         private set
     var destination = ""
         private set
-    var isVip = false
+    var tripTime : TimeModel? =null
+        private set
+    var tripDateInMillis = 0L
         private set
 
     /**
      * Contains different identifiers for the fields in our searching form
      */
     enum class FieldTags {
-        LOCALITY, DESTINATION, VIP, TOWNS_NAMES, TOAST_MESSAGE
+        LOCALITY, DESTINATION, TOWNS_NAMES, TOAST_MESSAGE, TRIP_DATE, TRIP_TIME
     }
 
     /**
@@ -48,24 +51,13 @@ class TripSearchViewModel : ViewModel() {
      * @param fieldTag is the identifier used to specify the field you wish to set or change
      * @param value is the new value you wish to assign to the field
      */
-    fun setFields(fieldTag: FieldTags, value: Any) = when (fieldTag) {
+    fun setField(fieldTag: FieldTags, value: Any) = when (fieldTag) {
         FieldTags.LOCALITY -> locality = value.toString()
         FieldTags.DESTINATION -> destination = value.toString()
-        FieldTags.VIP -> isVip = value as Boolean
         FieldTags.TOWNS_NAMES -> townNames = value as MutableList<String>
         FieldTags.TOAST_MESSAGE -> _toastMessage.value = value as String
+        FieldTags.TRIP_DATE -> tripDateInMillis = value as Long
+        FieldTags.TRIP_TIME -> tripTime = value as TimeModel
     }
-
-    /**
-     * This is a powerful tool to get the gps location of the booker, compare it with database, then gets his approximate locality
-     * It approximates the current locality by comparing Latitudes and Longitudes
-     */
-//    fun locateMe(){
-//        firestoreRepo.queryCollection("Planets/Earth/Continents/Africa/Cameroon/"){
-//            it.whereEqualTo("latitude", 4.1256356)
-//            it.whereEqualTo("longitude", 4.562356)
-//            it.whereGreaterThan("", )
-//        }
-//    }
 
 }

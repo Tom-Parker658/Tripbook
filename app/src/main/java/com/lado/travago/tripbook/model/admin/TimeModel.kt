@@ -19,9 +19,9 @@ class TimeModel private constructor(
         when (format) {
             TimeFormat.FORMAT_12H -> {
                 if (hour > 12) "${hour % 12}:$minutes:${millisecond ?: ""} ${Meridian.PM}"
-                else "${hour}:$minutes:${millisecond ?: ""} ${Meridian.AM}"
+                else "$hour : $minutes ${millisecond ?: ""} ${Meridian.AM}"
             }
-            TimeFormat.FORMAT_24H -> "${hour}:$minutes:${millisecond ?: ""} "
+            TimeFormat.FORMAT_24H -> "$hour : $minutes ${millisecond ?: ""} "
         }
 
     override fun equals(other: Any?): Boolean {
