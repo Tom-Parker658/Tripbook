@@ -45,36 +45,9 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/text_scanner_phone"
                 app:layout_constraintEnd_toStartOf="@+id/view24"
-                app:layout_constraintStart_toEndOf="@+id/view23"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/scanner_photo"
                 tools:text="Ngarby Jean Eve" />
-
-            <View
-                android:id="@+id/view21"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view23"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view22"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
 
             <View
                 android:id="@+id/view24"
@@ -116,19 +89,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClickListener="@{() -> clickListener.onClick(buttonTag.BUTTON_FIRE_SCANNER, scannerDoc)}"
-                android:text="Fire!"
+                android:text="@string/text_btn_scanner_config_fire"
+                android:textColor="#000000"
                 app:icon="@drawable/round_cancel_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/view24"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_added_on" />
 
-            <CheckBox
+            <com.google.android.material.chip.Chip
                 android:id="@+id/check_is_admin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checkable="true"
+                android:checked="false"
+                android:fontFamily="@font/aclonica"
                 android:onClickListener="@{()-> clickListener.onClick(buttonTag.BUTTON_IS_ADMIN, scannerDoc)}"
-                android:text="Admin"
+                android:text="@string/text_chip_scanner_config_admin"
                 app:layout_constraintBottom_toTopOf="@+id/text_number_scan"
                 app:layout_constraintEnd_toStartOf="@+id/adminLogo"
                 app:layout_constraintStart_toStartOf="parent"
@@ -140,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                tools:text="N° Scans: 150"
+                tools:text="Total Scans: 150"
                 android:textAlignment="center"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toTopOf="@+id/text_added_on"
@@ -153,10 +130,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 app:layout_constraintBottom_toTopOf="@+id/btn_fire_scanner"
                 app:layout_constraintEnd_toStartOf="@+id/view24"
-                app:layout_constraintStart_toEndOf="@+id/view23"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_number_scan"
                 tools:text="Added on: 26/10/2015" />
 
@@ -164,20 +141,19 @@
                 android:id="@+id/adminLogo"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginEnd="8dp"
+                app:tint="@color/vip"
                 app:layout_constraintBottom_toTopOf="@+id/text_number_scan"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_scanner_phone"
-                app:srcCompat="@drawable/baseline_engineering_24" />
+                app:srcCompat="@drawable/baseline_supervised_user_circle_24" />
 
             <ImageView
                 android:id="@+id/imageView16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view21"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/baseline_check_circle_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,6 +32,15 @@ class AgencyCreationFragment : Fragment() {
     private lateinit var binding: FragmentAgencyCreationBinding
     private lateinit var viewModel: AgencyCreationViewModel
 
+    /**
+     * Inorder to stop any loading blocking the ui
+     */
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -84,23 +93,30 @@ class AgencyCreationFragment : Fragment() {
                     viewModel.setField(FieldTags.ON_LOGO_SAVED, true)
                 } else {
                     CoroutineScope(Dispatchers.Main).launch {
-                        viewModel.saveLogo()
+                        //TODO: Emulator commenting
+//                        viewModel.saveLogo()
+                        if (viewModel.agencyDbData.exists()) /*We update*/ viewModel.updateAgencyInfo(
+                            parentViewModel.bookerDoc.value!!
+                        )
+                        else /*We create*/ viewModel.createAgency(parentViewModel.bookerDoc.value!!)
+
                     }
                 }
                 viewModel.setField(FieldTags.START_SAVING, false)
             }
         }
         //We check to see to create or modify agency
-        viewModel.onLogoSaved.observe(viewLifecycleOwner) {
-            if (it) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    if (viewModel.agencyDbData.exists()) /*We update*/ viewModel.updateAgencyInfo(
-                        parentViewModel.bookerDoc.value!!
-                    )
-                    else /*We create*/ viewModel.createAgency(parentViewModel.bookerDoc.value!!)
-                }
-            }
-        }
+        //TODO: Emulator commenting
+//        viewModel.onLogoSaved.observe(viewLifecycleOwner) {
+//            if (it) {
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    if (viewModel.agencyDbData.exists()) /*We update*/ viewModel.updateAgencyInfo(
+//                        parentViewModel.bookerDoc.value!!
+//                    )
+//                    else /*We create*/ viewModel.createAgency(parentViewModel.bookerDoc.value!!)
+//                }
+//            }
+//        }
         viewModel.startFilling.observe(viewLifecycleOwner) {
             if (it) {
                 viewModel.fillExistingData()
@@ -266,7 +282,7 @@ class AgencyCreationFragment : Fragment() {
                 FieldTags.LOGO_BITMAP,
                 BitmapFactory.decodeStream(logoStream)
             )
-            if (viewModel.logoBitmap?.byteCount!! > (1024 * 1024 * 2)) { //In case image larger than 2-MegaByte
+            if (viewModel.logoBitmap?.byteCount!! < 0) { //In case image larger than 10-MegaByte
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "Photo is too large!!")
                 initLogoSelection()
             } else // Sets the logo field to the name of the selected photo

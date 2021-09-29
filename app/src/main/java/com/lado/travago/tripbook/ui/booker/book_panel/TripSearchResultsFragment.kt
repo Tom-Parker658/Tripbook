@@ -1,5 +1,6 @@
 package com.lado.travago.tripbook.ui.booker.book_panel
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
@@ -21,6 +23,7 @@ import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchResult
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchResultsViewModel.*
 import com.lado.travago.tripbook.ui.recycler_adapters.TripSearchResultsAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.TripSearchResultsClickListener
+import com.lado.travago.tripbook.utils.contracts.BookerSignUpContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -35,6 +38,15 @@ class TripSearchResultsFragment : Fragment() {
     private lateinit var binding: FragmentTripSearchResultBinding
     private lateinit var adapter: TripSearchResultsAdapter
     private lateinit var viewModel: TripSearchResultsViewModel
+
+    /**
+     * Inorder to stop any loading blocking the ui
+     */
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +79,21 @@ class TripSearchResultsFragment : Fragment() {
             )
         }
     }
+
+    //To start the booker signUp or LogIn if the user hasn't logIn already
+    private val bookerSignUpContract =
+        registerForActivityResult(BookerSignUpContract()) { content ->
+            viewModel.setField(
+                FieldTags.TOAST_MESSAGE, when (content) {
+                    Activity.RESULT_OK -> {
+                        "Welcome! Dear Booker, select your trip"
+                        tripsListener
+                    }
+                    else -> "Something went wrong, try again now or later"
+                }
+            )
+
+        }
 
     /**
      * We get all agency generated trips with the characteristics(locality, destination) searched by the booker
@@ -141,7 +168,7 @@ class TripSearchResultsFragment : Fragment() {
                                                             A hindering event will be one planned for the 21/10/2021 at 14:25, or even 22/10/2021 at 14:00,
                                                             */
                                                             val hinderingEvent = eventsList.find {
-                                                                viewModel.tripDateTimeInMillis > it
+                                                                viewModel.tripDateInMillis > it
                                                             }
                                                             if (hinderingEvent == null/*No hindering event found*/ && currentAgencyDepartureTimeDoc != null) {
                                                                 val correspondingTripDoc =
@@ -165,8 +192,27 @@ class TripSearchResultsFragment : Fragment() {
                                                         }
                                                         /*4- We inflate the adapter and stop loading*/
                                                         adapter = TripSearchResultsAdapter(
-                                                            TripSearchResultsClickListener {
-                                                                //TODO: When an item is selected by the booker
+                                                            TripSearchResultsClickListener { agencyID, tripDoc, tripTime, isVip ->
+                                                                //We check if he has an account or not
+                                                                if (viewModel.authRepo.currentUser == null) {
+                                                                    //Navigate to creation
+                                                                    bookerSignUpContract.launch(
+                                                                        Bundle.EMPTY
+                                                                    )
+                                                                } else {
+                                                                    //Navigate to config and stop all snapshot listeners
+                                                                    tripsListener.remove()
+                                                                    findNavController().navigate(
+                                                                        TripSearchResultsFragmentDirections.actionTripSearchResultsFragmentToTripDetailsFragment(
+                                                                            tripDoc.id,
+                                                                            agencyID,
+                                                                            isVip,
+                                                                            tripTime.hour,
+                                                                            tripTime.minutes,
+                                                                            viewModel.tripDateInMillis
+                                                                        )
+                                                                    )
+                                                                }
                                                             }
                                                         ).also {
                                                             it.submitList(agencyToTripPairList)
@@ -205,57 +251,6 @@ class TripSearchResultsFragment : Fragment() {
         }
 
 
-    /*       binding.fabSortResults.setOnClickListener {
-        //1-We create a spinner with options
-        MaterialAlertDialogBuilder(requireContext()).apply {
-            setIcon(R.drawable.baseline_sort_24)
-            setTitle("Sort By?")
-            setSingleChoiceItems(
-                arrayOf(
-                    "Agency Reputation",
-                    "Agency Name",
-                    "Trip Price",
-                    "Trip VIP Price",
-                    "Agency Popularity"
-                ),
-                viewModel.sortCheckedItem
-            ) { dialog, which ->
-                when (which) {
-                    0 -> {
-                        viewModel.sortTripsResult(SortTags.REPUTATION)
-                        viewModel.setField(FieldTags.CHECKED_ITEM, 0)
-                    }
-                    1 -> {
-                        viewModel.sortTripsResult(SortTags.AGENCY_NAME)
-                        viewModel.setField(FieldTags.CHECKED_ITEM, 1)
-                    }
-                    2 -> {
-                        viewModel.sortTripsResult(SortTags.PRICES)
-                        viewModel.setField(FieldTags.CHECKED_ITEM, 2)
-                    }
-                    3 -> {
-                        viewModel.sortTripsResult(SortTags.VIP_PRICES)
-                        viewModel.setField(FieldTags.CHECKED_ITEM, 3)
-                    }
-                    4 -> {
-                        viewModel.sortTripsResult(SortTags.POPULARITY)
-                        viewModel.setField(FieldTags.CHECKED_ITEM, 4)
-                    }
-                }
-                try {
-                    adapter.notifyDataSetChanged()
-                } catch (e: Exception) {
-
-                }
-                dialog.dismiss()
-            }
-
-        }.create().show()
-    }
-
-*/
-
-
     /**
      * Configures the results recycler
      */
@@ -291,45 +286,95 @@ class TripSearchResultsFragment : Fragment() {
                 Log.d("NO REASULT", "NOT FOUND")
             }
         }
-    }
+/*
+binding.fabSortResults.setOnClickListener{
+//1-We create a spinner with options
+MaterialAlertDialogBuilder(requireContext()).apply {
+setIcon(R.drawable.baseline_sort_24)
+setTitle("Sort By?")
+setSingleChoiceItems(
+arrayOf(
+"Agency Reputation",
+"Agency Name",
+"Trip Price",
+"Trip VIP Price",
+"Agency Popularity"
+),
+viewModel.sortCheckedItem
+) { dialog, which ->
+when (which) {
+0 -> {
+viewModel.sortTripsResult(SortTags.REPUTATION)
+viewModel.setField(FieldTags.CHECKED_ITEM, 0)
+}
+1 -> {
+viewModel.sortTripsResult(SortTags.AGENCY_NAME)
+viewModel.setField(FieldTags.CHECKED_ITEM, 1)
+}
+2 -> {
+viewModel.sortTripsResult(SortTags.PRICES)
+viewModel.setField(FieldTags.CHECKED_ITEM, 2)
+}
+3 -> {
+viewModel.sortTripsResult(SortTags.VIP_PRICES)
+viewModel.setField(FieldTags.CHECKED_ITEM, 3)
+}
+4 -> {
+viewModel.sortTripsResult(SortTags.POPULARITY)
+viewModel.setField(FieldTags.CHECKED_ITEM, 4)
+}
+}
+try {
+adapter.notifyDataSetChanged()
+} catch (e: Exception) {
 
-    /* private val tripsQueryListener: ListenerRegistration
-    get() {
-        //We sort the town names alphabetically
-        val sortedTownList = listOf(viewModel.localityName, viewModel.destinationName).sorted()
-        val town1 = sortedTownList.first()
-        val town2 = sortedTownList.last()
-        viewModel.setField(FieldTags.ON_LOADING, true)
-        return viewModel.firestoreRepo.db.collectionGroup("Trips_agency")
-            .whereEqualTo("townNames.town1", town1)
-            .whereEqualTo("townNames.town2", town2)
-            .limit(10L)
-            .addSnapshotListener(requireActivity()) { tripSnapshot, error ->
-                if (tripSnapshot != null) {
-                    viewModel.setField(FieldTags.ON_LOADING, false)
-                    if (!tripSnapshot.isEmpty) {
-//                            Log.d("DO IT", tripSnapshot.documents.toString())
-                        viewModel.setLists(ListTag.TRIPS_DOC, tripSnapshot.documents)
-                    } else {
-                        viewModel.setField(FieldTags.ON_NO_SUCH_RESULTS, true)
+}
+dialog.dismiss()
+}
+
+}.create().show()
+}
+}
+*/
+
+        /* private val tripsQueryListener: ListenerRegistration
+        get() {
+            //We sort the town names alphabetically
+            val sortedTownList = listOf(viewModel.localityName, viewModel.destinationName).sorted()
+            val town1 = sortedTownList.first()
+            val town2 = sortedTownList.last()
+            viewModel.setField(FieldTags.ON_LOADING, true)
+            return viewModel.firestoreRepo.db.collectionGroup("Trips_agency")
+                .whereEqualTo("townNames.town1", town1)
+                .whereEqualTo("townNames.town2", town2)
+                .limit(10L)
+                .addSnapshotListener(requireActivity()) { tripSnapshot, error ->
+                    if (tripSnapshot != null) {
+                        viewModel.setField(FieldTags.ON_LOADING, false)
+                        if (!tripSnapshot.isEmpty) {
+    //                            Log.d("DO IT", tripSnapshot.documents.toString())
+                            viewModel.setLists(ListTag.TRIPS_DOC, tripSnapshot.documents)
+                        } else {
+                            viewModel.setField(FieldTags.ON_NO_SUCH_RESULTS, true)
+                        }
+                    }
+                    if (error != null) {
+                        Log.e("ERROR", "FAILURE: ${error.message.toString()}")
+                        viewModel.setField(FieldTags.ON_LOADING, false)
                     }
                 }
-                if (error != null) {
-                    Log.e("ERROR", "FAILURE: ${error.message.toString()}")
-                    viewModel.setField(FieldTags.ON_LOADING, false)
-                }
-            }
-    }
+        }
 
-private val agencyQueryListener
-    get() = viewModel.firestoreRepo.db.collection("OnlineTransportAgency")
-//            .whereIn("id", viewModel.agencyIDList.value!!)
-//            .orderBy("reputation")
-        .addSnapshotListener(requireActivity()) { agencySnapshot, error ->
-            if (agencySnapshot != null) {
-                Log.d("DO IT KNOW", agencySnapshot.documents.toString())
-                viewModel.setLists(ListTag.AGENCY_DOC, agencySnapshot.documents)
-            }
-            if (error != null) viewModel.setField(FieldTags.ON_LOADING, false)
-        }*/
+    private val agencyQueryListener
+        get() = viewModel.firestoreRepo.db.collection("OnlineTransportAgency")
+    //            .whereIn("id", viewModel.agencyIDList.value!!)
+    //            .orderBy("reputation")
+            .addSnapshotListener(requireActivity()) { agencySnapshot, error ->
+                if (agencySnapshot != null) {
+                    Log.d("DO IT KNOW", agencySnapshot.documents.toString())
+                    viewModel.setLists(ListTag.AGENCY_DOC, agencySnapshot.documents)
+                }
+                if (error != null) viewModel.setField(FieldTags.ON_LOADING, false)
+            }*/
+    }
 }

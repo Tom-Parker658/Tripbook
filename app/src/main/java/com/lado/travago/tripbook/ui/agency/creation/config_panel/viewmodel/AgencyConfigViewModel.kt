@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.collect
 @ExperimentalCoroutinesApi
 class AgencyConfigViewModel : ViewModel() {
     private var firestoreRepo: FirestoreRepo = FirestoreRepo()
-    private var authRepo: FirebaseAuthRepo = FirebaseAuthRepo()
+    var authRepo: FirebaseAuthRepo = FirebaseAuthRepo()
 
     private val _bookerDoc = MutableLiveData<DocumentSnapshot>()
     val bookerDoc: LiveData<DocumentSnapshot> get() = _bookerDoc
@@ -31,6 +31,18 @@ class AgencyConfigViewModel : ViewModel() {
     suspend fun getCurrentBooker() {
         _retry.value = false
         //TODO: CHANGE ${authRepo.currentUser?.uid}, TO ${authRepo.currentUser!!.uid}", it must throw an exception
+        //TODO: For testing
+        firestoreRepo.getDocument(
+            "Bookers/ptUDtYNmuTZNjdXBAfDcLFQ7Z6aq",
+            Source.SERVER
+        ).collect {
+            when (it) {
+                is State.Success -> {
+                    _bookerDoc.value = it.data!!
+                }
+            }
+        }
+        /*
         firestoreRepo.getDocument(
             "Bookers/${authRepo.currentUser?.uid}",
             Source.SERVER
@@ -40,7 +52,7 @@ class AgencyConfigViewModel : ViewModel() {
                     _bookerDoc.value = it.data!!
                 }
             }
-        }
+        }*/
     }
 
 }

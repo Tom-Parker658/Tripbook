@@ -260,7 +260,11 @@ class TripsConfigFragment : Fragment() {
             }
         }
         viewModel.spanSize.observe(viewLifecycleOwner) {
-            initRecycler(it)
+            try {
+                initRecycler(it)
+            }catch(e:Exception){
+
+            }
         }
     }
 
@@ -621,6 +625,14 @@ class TripsConfigFragment : Fragment() {
         }
     }
 
+    /**
+     * Inorder to stop any loading blocking the ui
+     */
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
+    }
     class VipPriceDialogFragment(val viewModel: TripsConfigViewModel) :
         DialogFragment() {
         @SuppressLint("DialogFragmentCallbacksDetector")

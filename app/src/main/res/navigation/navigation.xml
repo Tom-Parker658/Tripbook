@@ -25,7 +25,7 @@
         tools:layout="@layout/fragment_help" />
     <fragment
         android:id="@+id/ticketsFragment"
-        android:name="com.lado.travago.tripbook.ui.booker.book_panel.TicketsFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.book_panel.MyBooksFragment"
         android:label="fragment_tickets"
-        tools:layout="@layout/fragment_tickets" />
+        tools:layout="@layout/fragment_my_books" />
 </navigation>

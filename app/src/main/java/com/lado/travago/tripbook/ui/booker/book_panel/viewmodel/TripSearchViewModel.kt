@@ -36,7 +36,7 @@ class TripSearchViewModel : ViewModel() {
         private set
     var tripTime : TimeModel? =null
         private set
-    var tripDateInMillis = 0L
+    var tripDateInMillis = Date().time
         private set
 
     /**
@@ -59,5 +59,7 @@ class TripSearchViewModel : ViewModel() {
         FieldTags.TRIP_DATE -> tripDateInMillis = value as Long
         FieldTags.TRIP_TIME -> tripTime = value as TimeModel
     }
+
+
 
 }

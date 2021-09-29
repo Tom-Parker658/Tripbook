@@ -25,8 +25,7 @@
         android:id="@+id/card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardElevation="4dp">
+        android:layout_margin="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -38,11 +37,14 @@
                 android:id="@+id/btn_normal_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="4dp"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_NORMAL_PRICE, changesMap)}"
+                android:singleLine="true"
                 android:textStyle="bold"
                 app:icon="@drawable/baseline_payments_24"
+                app:iconPadding="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -56,11 +58,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_VIP_PRICE, changesMap )}"
+                android:singleLine="true"
                 android:textColor="@color/gold"
                 android:textStyle="bold"
                 app:backgroundTint="@color/vip"
                 app:icon="@drawable/baseline_vip_24"
-                app:iconGravity="start"
                 app:iconTint="@color/gold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -71,16 +73,16 @@
                 android:id="@+id/text_destination_town"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginBottom="8dp"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/text_trip_distance"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/check_select_trip"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/view23"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Yaounde" />
 
@@ -89,11 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/check_select_trip"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/text_destination_town"
                 app:layout_constraintTop_toBottomOf="@+id/text_destination_town"
                 tools:text="110.20km" />
@@ -105,55 +103,24 @@
                 android:button="@drawable/btn_select_cancel"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIP_CHECK_TO_DELETE, changesMap)}"
                 app:buttonTint="@color/colorNegativeButton"
+                app:layout_constraintBottom_toTopOf="@+id/btn_normal_price"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/view21"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view22"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <View
-                android:id="@+id/view23"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view24"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/check_vip"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_vip"
+                style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:checkable="true"
                 android:checked="true"
+                android:fontFamily="@font/aclonica"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_CHECK_VIP, changesMap)}"
-                android:text="VIP"
-                app:buttonTint="@color/vip"
+                android:text="@string/switch_vip_trip"
+                android:textSize="12sp"
+                app:chipIcon="@drawable/outline_diamond_20"
                 app:layout_constraintBottom_toTopOf="@+id/btn_price_vip"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_normal_price" />
 
@@ -163,7 +130,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@+id/btn_price_vip"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/check_vip" />
+                app:layout_constraintStart_toEndOf="@+id/chip_vip" />
 
 <!--      Bus types      -->
 

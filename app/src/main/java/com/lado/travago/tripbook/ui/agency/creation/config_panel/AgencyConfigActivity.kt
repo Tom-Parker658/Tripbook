@@ -25,7 +25,7 @@ class AgencyConfigActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[AgencyConfigViewModel::class.java]
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
         viewModel.retry.observe(this) {
             if (it)
                 CoroutineScope(Dispatchers.Main).launch {
@@ -34,7 +34,7 @@ class AgencyConfigActivity : AppCompatActivity() {
         }
         viewModel.bookerDoc.observe(this) {
             if (it.exists()) binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
-            else binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
+            viewModel.authRepo.signInAnonymously()
         }
     }
 

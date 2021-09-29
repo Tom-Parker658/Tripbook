@@ -2,6 +2,8 @@ package com.lado.travago.tripbook.model.error
 
 import com.google.firebase.*
 import com.google.firebase.auth.*
+import com.lado.travago.tripbook.model.admin.AsyncTaskRunnable
+import java.util.concurrent.TimeoutException
 import kotlin.Exception
 
 /**
@@ -9,6 +11,9 @@ import kotlin.Exception
  * to the user when a bug, an error, exception occurs
  * */
 object ErrorHandler {
+    enum class TaskCategory(val ){
+        TRIP_SEARCH, PHONE_SMS, 
+    }
 
     /**
      * general error handler
@@ -16,6 +21,7 @@ object ErrorHandler {
     fun Exception.handleError(doSomething: (exception: Exception ) -> Unit): String {
         doSomething(this)
         return when(this){
+            is TimeoutException ->
             is FirebaseException -> typeFirestore(this)
             else -> message.toString()
         }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -32,6 +33,14 @@ class AgencyConfigCenterFragment : Fragment() {
         onClickListeners()
 
         return binding.root
+    }
+    /**
+     * Inorder to stop any loading blocking the ui
+     */
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
     }
 
     private fun onClickListeners() {

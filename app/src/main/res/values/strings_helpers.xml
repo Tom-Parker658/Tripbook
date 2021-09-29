@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_help_event_planner" translatable="false">
+        NB: Please, inorder to delete town(s), delete trip(s) or even delete your agency, you must plan in advance
+        so that Bookers will not be able to bookers from your agency during that time. This is to avoid cases where a booker
+        Books in advance a trip which will not exist in the future anymore or Books from an agency which will go off before the
+        departure time. Please, understand that we want to protect all our customers interest.
+        So it will not be good for Booker to pay for a trip which he will never consume.
+        Thanks
+    </string>
+</resources>

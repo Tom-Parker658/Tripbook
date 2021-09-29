@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.databinding.ItemTripsConfigBinding
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
+import com.lado.travago.tripbook.utils.Utils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
@@ -28,7 +29,6 @@ class TripsConfigAdapter(
 
     override fun onBindViewHolder(holder: TripsConfigViewHolder, position: Int) =
         holder.bind(clickListener, getItem(position))
-
 }
 
 @ExperimentalCoroutinesApi
@@ -65,10 +65,10 @@ class TripsConfigViewHolder private constructor(
                             Resources.getSystem().getColor(R.color.colorNegativeButton)
                         )
                 }*/
-                binding.textTripDistance.text = "${map.value["distance"].toString()} km"
-                binding.checkVip.isChecked = map.value["isVip"] as Boolean
-                binding.btnPriceVip.text = "${map.value["vipPrice"]} FCFA"
-                binding.btnNormalPrice.text = "${map.value["normalPrice"]} FCFA"
+                binding.textTripDistance.text = Utils.formatDistance(map.value["distance"] as Long)
+                binding.chipVip.isChecked = map.value["isVip"] as Boolean
+                binding.btnPriceVip.text = Utils.formatFCFAPrice(map.value["vipPrice"] as Long)
+                binding.btnNormalPrice.text = Utils.formatFCFAPrice(map.value["normalPrice"] as Long)
             }
         } else {
             (tripDoc["townNames"] as Map<String, String>).also {
@@ -85,13 +85,13 @@ class TripsConfigViewHolder private constructor(
                         Resources.getSystem().getColor(R.color.colorNegativeButton)
                     )
             }*/
-            binding.textTripDistance.text = "${tripDoc["distance"].toString()} km"
-            binding.checkVip.isChecked = tripDoc.getBoolean("isVip")!!
-            binding.btnPriceVip.text = "${tripDoc["vipPrice"]} FCFA"
-            binding.btnNormalPrice.text = "${tripDoc["normalPrice"]} FCFA"
+            binding.chipVip.isChecked = tripDoc.getBoolean("isVip")!!
+            binding.textTripDistance.text = Utils.formatDistance(tripDoc.getLong("distance")!!)
+            binding.chipVip.isChecked = tripDoc.getBoolean("isVip")!!
+            binding.btnPriceVip.text = Utils.formatFCFAPrice(tripDoc.getLong("vipPrice")!!)
+            binding.btnNormalPrice.text = Utils.formatFCFAPrice(tripDoc.getLong("normalPrice")!!)
 
-
-            binding.checkVip.isChecked.let {
+            binding.chipVip.isChecked.let {
                 if (it) binding.btnPriceVip.visibility = View.VISIBLE
                 else binding.btnPriceVip.visibility = View.GONE
             }

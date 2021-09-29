@@ -41,7 +41,7 @@
             style="@style/positiveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
+            android:text="@string/text_btn_save_changes"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -56,8 +56,9 @@
             app:layout_constraintBottom_toTopOf="@+id/fab_add_scanner"
             app:layout_constraintEnd_toEndOf="@+id/fab_add_scanner"
             app:layout_constraintStart_toStartOf="@+id/fab_add_scanner"
-            app:srcCompat="@drawable/baseline_sort_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            app:srcCompat="@drawable/baseline_filter_list_24"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:focusable="true" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -69,31 +70,6 @@
             app:layout_constraintEnd_toEndOf="@+id/scanner_recycler"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/not_found"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/scanner_recycler"
-            app:layout_constraintEnd_toEndOf="@+id/scanner_recycler"
-            app:layout_constraintStart_toStartOf="@+id/scanner_recycler"
-            app:layout_constraintTop_toTopOf="@+id/scanner_recycler">
-
-            <ImageView
-                android:id="@+id/imageView18"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                app:srcCompat="@drawable/not_found_24" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No previous scanner found"
-                android:textAlignment="center" />
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

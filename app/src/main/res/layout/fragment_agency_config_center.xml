@@ -28,7 +28,7 @@
                 style="@style/neutralButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Parks"
+                android:text="@string/text_label_agency_config_parks"
                 app:icon="@drawable/baseline_place_24"
                 app:layout_constraintBottom_toTopOf="@+id/money"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -36,36 +36,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_trips" />
 
-            <TextView
-                android:id="@+id/heading"
-                style="@style/headlineStyle"
-                android:text="Tune Your Agency"
-                app:layout_constraintBottom_toTopOf="@+id/btn_info"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:layout_constraintVertical_chainStyle="packed" />
 
             <Button
                 android:id="@+id/btn_info"
                 style="@style/neutralButton"
                 android:layout_width="0dp"
-                android:text="My agency's Info"
+                android:text="@string/text_label_agency_config_info"
                 app:icon="@drawable/baseline_settings_24"
                 app:layout_constraintBottom_toTopOf="@+id/btn_trips"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/heading" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/btn_tripdeparture_time_periods"
+                android:id="@+id/btn_trip_departure_time_periods"
                 style="@style/neutralButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Departure Time"
+                android:text="@string/text_label_agency_config_departures"
                 app:icon="@drawable/baseline_departure_board_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -78,17 +67,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Events"
+                android:text="@string/text_label_agency_config_events_planner"
                 app:icon="@drawable/baseline_event_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_tripdeparture_time_periods" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_trip_departure_time_periods" />
 
             <Button
                 android:id="@+id/btn_trips"
                 style="@style/neutralButton"
                 android:layout_width="0dp"
-                android:text="My Trips"
+                android:text="@string/text_label_agency_config_trips"
                 app:icon="@drawable/baseline_directions_bus_24"
                 app:layout_constraintBottom_toTopOf="@+id/btn_parks"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +90,7 @@
                 style="@style/neutralButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="My Scanners"
+                android:text="@string/text_label_agency_config_scanners"
                 app:icon="@drawable/baseline_groups_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -112,7 +101,7 @@
                 android:id="@+id/money"
                 style="@style/positiveButton"
                 android:layout_width="0dp"
-                android:text="Money"
+                android:text="@string/text_label_agency_config_money"
                 app:icon="@drawable/baseline_payments_24"
                 app:layout_constraintBottom_toTopOf="@+id/btn_scanners"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +114,7 @@
                 style="@style/negativeButton"
                 android:layout_width="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Delete My Agency!"
+                android:text="@string/text_label_agency_config_delete_agency"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

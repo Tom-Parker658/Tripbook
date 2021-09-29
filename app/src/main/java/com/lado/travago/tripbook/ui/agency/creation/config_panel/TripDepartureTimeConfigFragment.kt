@@ -40,6 +40,15 @@ class TripDepartureTimeConfigFragment : Fragment() {
     private lateinit var parentViewModel: AgencyConfigViewModel
     private lateinit var viewModel: TripsDepartureTimeConfigViewModel
 
+    /**
+     * Inorder to stop any loading blocking the ui
+     */
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -183,7 +192,11 @@ class TripDepartureTimeConfigFragment : Fragment() {
         }
         viewModel.spanSize.observe(viewLifecycleOwner)
         {
-            initRecycler(it)
+            try {
+                initRecycler(it)
+            } catch (e: Exception) {
+                //
+            }
         }
     }
 
@@ -352,10 +365,10 @@ class TripDepartureTimeConfigFragment : Fragment() {
                         adapter.submitList(snapshot.documents)
                         adapter.notifyDataSetChanged()
                         initRecycler(viewModel.spanSize.value!!)
-                    }else{
-                        try{
+                    } else {
+                        try {
                             adapter.notifyDataSetChanged()
-                        }catch (e: Exception ){
+                        } catch (e: Exception) {
                             //Incase the list has been cleared completely
                         }
                     }

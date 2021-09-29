@@ -90,8 +90,12 @@ class TownsConfigFragment : Fragment() {
     }
 
     private fun observeLiveData() {
-        viewModel.spanSize.observe(viewLifecycleOwner){
-            spanSize(it)
+        viewModel.spanSize.observe(viewLifecycleOwner) {
+            try {
+                spanSize(it)
+            } catch (e: Exception) {
+                //
+            }
         }
         viewModel.retryTowns.observe(viewLifecycleOwner) {
             if (it) CoroutineScope(Dispatchers.Main).launch {
@@ -306,6 +310,15 @@ class TownsConfigFragment : Fragment() {
         }
     }
 
+    /**
+     * Inorder to stop any loading blocking the ui
+     */
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
+    }
+
     /* Add a snapshot listener to the towns collection */
     private val snapshotListener
         get() =
@@ -352,7 +365,11 @@ class TownsConfigFragment : Fragment() {
                             snapshot.documents
                         )
                         adapter.submitList(snapshot.documents)
-                        spanSize(viewModel.spanSize.value!!)
+                        try {
+                            spanSize(viewModel.spanSize.value!!)
+                        } catch (e: Exception) {
+                            //
+                        }
                     } else {
                         try {
                             adapter.notifyDataSetChanged()

@@ -222,7 +222,7 @@ class TownsConfigViewModel : ViewModel() {
             )
 
             //3- Writes the trips doc to database
-            toAddTripDocList.forEach { originalTripDoc ->
+            for (originalTripDoc in toAddTripDocList) {
                 transaction.set(
                     firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/${originalTripDoc.id}"),
                     hashMapOf(
@@ -231,10 +231,10 @@ class TownsConfigViewModel : ViewModel() {
                             "town2" to (originalTripDoc["townNames"]!! as Map<String, String>)["town2"]
                         ),
                         /*"busTypes" to mapOf(//TODO: Take care to highlight these names
-                            "seaterSeventy" to false,
-                            "seaterCoaster" to false,
-                            "seaterNormal" to false
-                        ),*/
+                                    "seaterSeventy" to false,
+                                    "seaterCoaster" to false,
+                                    "seaterNormal" to false
+                                ),*/
                         "townIDs" to originalTripDoc["townIDs"]!! as List<String>,
                         "distance" to originalTripDoc.getLong("distance")!!,
                         "isVip" to true,

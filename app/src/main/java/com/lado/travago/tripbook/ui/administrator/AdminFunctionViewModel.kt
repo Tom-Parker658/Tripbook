@@ -129,7 +129,7 @@ class AdminFunctionViewModel : ViewModel() {
         _text.value = "100%"
     }
 
-    suspend fun addJourneys() {
+    suspend fun addTrips() {
         val tripsAndDistance = DataResources.journeyDistanceList.trimIndent().reader().buffered()
             .readLines()//listOf("town1 + town2 + distance", "town1 + tow3 + distance", ..)
         val total = tripsAndDistance.size

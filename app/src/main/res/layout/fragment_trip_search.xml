@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/text_label_destination"
                 app:endIconMode="dropdown_menu"
-                app:helperText="@string/hint_destination"
+                app:helperText="@string/text_e_helper_trip_search_destination"
                 app:helperTextEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/edit_text_dates"
                 app:layout_constraintEnd_toEndOf="parent"

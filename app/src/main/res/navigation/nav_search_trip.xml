@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_search_trip"
-    app:startDestination="@id/tripDetailsFragment">
+    app:startDestination="@id/tripSearchFragment">
 
     <fragment
         android:id="@+id/tripSearchFragment"
@@ -43,5 +43,24 @@
         android:id="@+id/tripDetailsFragment"
         android:name="com.lado.travago.tripbook.ui.booker.book_panel.TripDetailsFragment"
         android:label="fragment_trip_detail"
-        tools:layout="@layout/fragment_trip_detail" />
+        tools:layout="@layout/fragment_trip_detail" >
+        <argument
+            android:name="tripId"
+            app:argType="string" />
+        <argument
+            android:name="agencyId"
+            app:argType="string" />
+        <argument
+            android:name="vip"
+            app:argType="boolean" />
+        <argument
+            android:name="tripTimeHour"
+            app:argType="integer" />
+        <argument
+            android:name="tripTimeMinutes"
+            app:argType="integer" />
+        <argument
+            android:name="tripDateInMillis"
+            app:argType="long" />
+    </fragment>
 </navigation>

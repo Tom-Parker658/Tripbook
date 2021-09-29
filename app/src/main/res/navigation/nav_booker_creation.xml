@@ -24,9 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/bookerCreationFinalFragment"
-        android:name="com.lado.travago.tripbook.ui.booker.creation.BookerCreationFinalFragment"
-        android:label="fragment_booker_creation_final"
-        tools:layout="@layout/fragment_booker_creation2" >
+        android:name="com.lado.travago.tripbook.ui.booker.creation.BookerCreationFinalFragment">
         <action
             android:id="@+id/action_bookerCreationFinalFragment_to_bookerCreation1Fragment"
             app:destination="@id/bookerCreation1Fragment" />

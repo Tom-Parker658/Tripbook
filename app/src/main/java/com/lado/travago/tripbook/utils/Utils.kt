@@ -1,12 +1,8 @@
 package com.lado.travago.tripbook.utils
 
 import android.graphics.Bitmap
-import android.text.format.Time
-import androidx.core.util.TimeUtils
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.model.Document
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
@@ -15,9 +11,8 @@ import com.lado.travago.tripbook.model.users.Booker
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.math.roundToInt
 
 /**
  * Contains a set of utilities for our app_user .
@@ -32,7 +27,7 @@ object Utils {
         }
         return "${formattedPrice.reversed()} FCFA"
     }
-    
+
 
     /**
      * Returns a map with the id as a field
@@ -41,6 +36,14 @@ object Utils {
         val map = data!!
         map["id"] = id
         return map
+    }
+
+    fun timeTakenCalculator(distance: Double, velocity: Long): String {
+        val timeTakenInMinutes = distance / velocity
+        val hours = (timeTakenInMinutes / 60).toInt()
+        val minutes = (((timeTakenInMinutes / 60) - hours) * 60).toInt()
+        return if (hours == 0) "${minutes}M"
+        else "${hours}H ${minutes}M"
     }
 
     /**
@@ -194,6 +197,7 @@ object Utils {
      * A function to remove all spaces
      */
     fun String.removeSpaces() = replace(" ", "")
+    fun formatDistance(distance: Long) = "$distance km"
 
 
 }

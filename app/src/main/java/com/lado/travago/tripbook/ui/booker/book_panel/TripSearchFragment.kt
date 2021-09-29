@@ -5,6 +5,7 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
@@ -89,7 +90,7 @@ class TripSearchFragment : Fragment() {
         val titleText = "Trip Date"
         val calendar = Calendar.getInstance()//An instance of the current Calendar
         val minDate = calendar.timeInMillis // The current date(today) in millis
-        calendar.roll(Calendar.DATE, 29)
+        calendar.roll(Calendar.DAY_OF_YEAR, 29)
         val maxDate = calendar.timeInMillis
         //We create constraint so that the user can only select dates between a particular interval
         val bounds = CalendarConstraints.Builder()
@@ -101,12 +102,11 @@ class TripSearchFragment : Fragment() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(bounds)//Constrain the possible dates
             .setTitleText(titleText)//Set the Title of the Picker
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
         //Sets the value of the edit text to the formatted value of the selection
         datePicker.addOnPositiveButtonClickListener {
             viewModel.setField(FieldTags.TRIP_DATE, it)
-            binding.editTextDates.editText!!.setText(Utils.formatDate(it, "MMMM, dd YYYY"))
+            binding.editTextDates.editText!!.setText(Utils.formatDate(it, "EEEE, dd MMMM YYYY"))
         }
         datePicker.showNow(childFragmentManager, "")
     }
@@ -116,7 +116,6 @@ class TripSearchFragment : Fragment() {
         val titleText = "Trip Time"
         val timePicker = MaterialTimePicker.Builder()
             .setTitleText(titleText)
-            .setTimeFormat(TimeFormat.CLOCK_24H)
             .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
             .build()
         timePicker.addOnPositiveButtonClickListener {
@@ -143,16 +142,24 @@ class TripSearchFragment : Fragment() {
         binding.editTextLocality.editText!!.setText(viewModel.locality)
         binding.editTextDestination.editText!!.setText(viewModel.destination)
         binding.editTextTime.editText!!.setText(
-            viewModel.tripTime!!.formattedTime(
+            viewModel.tripTime?.formattedTime(
                 TimeModel.TimeFormat.FORMAT_24H
             )
         )
         binding.editTextDates.editText!!.setText(
             Utils.formatDate(
                 viewModel.tripDateInMillis,
-                "MMMM, dd YYYY"
+                "EEEE, dd MMMM YYYY"
             )
         )
+    }
+    /**
+     * Inorder to stop any loading blocking the ui
+     */
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
     }
 
     /**
@@ -178,7 +185,7 @@ class TripSearchFragment : Fragment() {
             townNames
         )
         (binding.editTextLocality.editText as AutoCompleteTextView).setAdapter(adapter)
-        (binding.editTextLocality.editText as AutoCompleteTextView).setAdapter(adapter)
+        (binding.editTextDestination.editText as AutoCompleteTextView).setAdapter(adapter)
     }
 
     /**

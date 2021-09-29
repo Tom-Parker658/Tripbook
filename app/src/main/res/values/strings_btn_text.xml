@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--    All button switch text-->
-    <string name="btn_search_journey">Search Journey</string>
-    <string name="switch_vip_jouney">VIP</string>
+    <string name="text_btn_event_planner_add">Plan an event</string>
+    <string name="text_btn_booker_creation_send_sms">Send SMS</string>
+
+    <string name="btn_search_journey">Search Trip</string>
+    <string name="switch_vip_trip">VIP</string>
     <string name="btn_save_profile">Save Profile</string>
     <string name="btn_delete_profile">Delete Profile</string>
+    <string name="text_add_trips">Add Trip</string>
+    <string name="text_btn_booker_creation_resend">Re-send Code</string>
+    <string name="text_btn_continue">Continue</string>
+    <string name="text_btn_save_info">Save Info</string>
+    <string name="text_btn_save_changes">Save Changes</string>
+
+    <string name="text_btn_scanner_addition_recruit">Recruit</string>
+    <string name="text_btn_town_config_trips">Trips</string>
+    <string name="text_btn_town_config_parks">Parks</string>
+    <string name="text_chip_scanner_config_admin">Administrator</string>
+    <string name="text_btn_scanner_config_fire">Fire!</string>
 </resources>

@@ -39,6 +39,14 @@ class ScannerConfigFragment : Fragment() {
     private lateinit var binding: FragmentScannerConfigBinding
     private lateinit var viewModel: ScannerConfigViewModel
     private lateinit var adapter: ScannerConfigAdapter
+    /**
+     * Inorder to stop any loading blocking the ui
+     */
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -313,8 +321,7 @@ class ScannerConfigFragment : Fragment() {
                 }
             }
             viewModel.onNoResult.observe(this) {
-                if (it) scannerBinding.textNotFound.visibility = View.VISIBLE
-                else scannerBinding.textNotFound.visibility = View.GONE
+                //TODO: On No results found
             }
         }
 

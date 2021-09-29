@@ -44,13 +44,13 @@ class ScannerConfigViewHolder private constructor(
     fun bind(clickListener: ScannerConfigClickListener, scannerDoc: DocumentSnapshot) {
         binding.scannerDoc = scannerDoc
         binding.scannerPhoto.loadImageFromUrl(scannerDoc.getString("photoUrl")!!)
-        binding.textNumberScan.text = "N° Scans: ${scannerDoc["scansNumber"]}"
+        binding.textNumberScan.text = "Total Scans: ${scannerDoc["scansNumber"]}"
         binding.textScannerName.text = scannerDoc["name"].toString()
         binding.textScannerPhone.text = scannerDoc["phone"].toString()
         binding.checkIsAdmin.isChecked = scannerDoc["isAdmin"] as Boolean
         binding.textAddedOn.text = "Added on: ${
             Utils.formatDate(
-                scannerDoc.getTimestamp("addedOn")!!.toDate().time,
+                scannerDoc.getTimestamp("addedOn")!!.toDate().time,  
                 SimpleDateFormat("dd MMMM yyyy, HH:mm:ss").toPattern()
             )
         }"

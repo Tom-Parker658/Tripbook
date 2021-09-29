@@ -14,6 +14,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.emulators.EmulatedServiceSettings
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityBookerCreationBinding
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
@@ -105,8 +106,7 @@ class BookerCreationActivity : AppCompatActivity() {
 
         viewModel.onBookerCreated.observe(this) {
             if (it) {
-                //TODO: For now we navigate to the agency config screen
-//                startActivity(Intent(this, AgencyCreationActivity::class.java))
+                navigateToLauncherUI()
                 finish()
             }
         }
@@ -122,7 +122,9 @@ class BookerCreationActivity : AppCompatActivity() {
         }
 
         override fun onVerificationFailed(exception: FirebaseException) {
-            viewModel.setField(FieldTags.TOAST_MESSAGE, exception.handleError {  } ?: "Bad connection")
+            viewModel.setField(
+                FieldTags.TOAST_MESSAGE,
+                exception.handleError { } ?: "Bad connection")
             viewModel.stopLoading()
         }
 
@@ -170,7 +172,7 @@ class BookerCreationActivity : AppCompatActivity() {
             .setTimeout(60L, TimeUnit.SECONDS)
             .setActivity(this)
             .setCallbacks(phoneCallback)
-            .setForceResendingToken(viewModel.resendToken)
+//            .setForceResendingToken(viewModel.resendToken)
             .build()
         PhoneAuthProvider.verifyPhoneNumber(
             phoneAuthOptions
@@ -181,6 +183,7 @@ class BookerCreationActivity : AppCompatActivity() {
     private fun initViewModel() {
         viewModel = ViewModelProvider(this)[BookerCreationViewModel::class.java]
     }
+
 
     /**
      * Navigates back to the UI which originally launched this creation as an intent. It returns with no data as intent,

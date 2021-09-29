@@ -14,21 +14,13 @@
             android:id="@+id/action_agencyJourneyFragment_to_todayJourneyFragment"
             app:destination="@id/todayJourneyFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/myScannerFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.MyScannerFragment"
-        android:label="fragment_my_scanner"
-        tools:layout="@layout/fragment_my_scanner" />
+
     <fragment
         android:id="@+id/agencyStatsFragment"
         android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.AgencyStatsFragment"
         android:label="fragment_agency_stats"
         tools:layout="@layout/fragment_agency_stats" />
-    <fragment
-        android:id="@+id/infoScreenFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.InfoScreenFragment"
-        android:label="fragment_info_screen"
-        tools:layout="@layout/fragment_info_screen" />
+
     <fragment
         android:id="@+id/scannerStatsFragment"
         android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.ScannerStatsFragment"

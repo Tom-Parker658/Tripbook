@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tripbook</string>
+    <string name="btn_search_journey">"Recherchez un Voyage "</string>
+    <string name="switch_vip_trip">VIP</string>
+    <string name="btn_save_profile">Enregistrer le Profile</string>
+    <string name="btn_delete_profile">Supprimer le Profile</string>
+    <string name="text_add_trips">Ajouter un Voyage</string>
+    <string name="text_btn_booker_creation_resend">Renvoyer le Code</string>
+    <string name="text_btn_continue">Poursuivre</string>
+    <string name="text_btn_save_info">Enregistrer</string>
+    <string name="text_label_trips_config_price">Prix Standard</string>
+    <string name="text_label_trips_config_vip_price">Prix VIP</string>
+    <string name="text_e_hint_booker_creation_phone">Téléphone</string>
+    <string name="text_e_hint_booker_creation_occupation">Profession</string>
+    <string name="text_e_hint_booker_creation_birthday">Né(e) le</string>
+    <string name="text_e_hint_booker_creation_name">Nom</string>
+    <string name="text_e_hint_booker_creation_nationality">Nationalité</string>
+    <string name="text_e_hint_booker_creation_recovery_phone">Tél de Récuperation</string>
+    <string name="text_e_hint_booker_creation_sms_code">Code de Validation</string>
+    <string name="text_e_helper_booker_creation_sms_code">Entrez le code de récuperation à 6 chiffres</string>
+    <string name="text_chip_booker_creation_sex_male">Homme</string>
+    <string name="text_chip_booker_creation_sex_female">Femme</string>
+    <string name="text_e_helper_booker_creation_locality">Appuyez sur le button pour obtenir votre emplacement actuel</string>
+    <string name="text_e_helper_booker_creation_email">abc@exemple.fr</string>
+    <string name="text_helper_booker_creation_check_sms_at">Vérifiez vos SMS au:</string>
+    <string name="text_label_booker_creation_profile_photo">Photo de Profil</string>
+    <string name="text_e_hint_trip_search_location">Ville Actuelle</string>
+    <string name="text_e_hint_trip_search_destination">Ville de Destination</string>
+</resources>

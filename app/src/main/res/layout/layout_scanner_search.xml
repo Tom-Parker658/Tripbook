@@ -21,15 +21,12 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phone_field"
                 style="@style/editTextStyle"
-                android:layout_marginBottom="8dp"
-                android:hint="Phone:"
-                app:helperText="Enter your scanner's phone number"
+                android:hint="@string/text_e_hint_booker_creation_phone"
+                app:helperText="@string/text_e_helper_scanner_addition_phone"
                 app:layout_constraintBottom_toTopOf="@+id/search_progress_bar"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/country_code_field"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -57,7 +54,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:checkable="false"
-                android:visibility="gone"
                 app:cardElevation="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,46 +74,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:textAlignment="center"
-                        app:layout_constraintEnd_toStartOf="@+id/view24"
-                        app:layout_constraintStart_toEndOf="@+id/view23"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/scanner_photo"
                         tools:text="Ngarby Jean Eve" />
-
-                    <View
-                        android:id="@+id/view21"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/view23"
-                        android:layout_width="1dp"
-                        android:layout_height="0dp"
-                        android:background="?android:attr/listDivider"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/view22"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <View
-                        android:id="@+id/view24"
-                        android:layout_width="1dp"
-                        android:layout_height="0dp"
-                        android:background="?android:attr/listDivider"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/scanner_photo"
@@ -148,10 +108,10 @@
                         style="@style/positiveButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Recruit"
+                        android:text="@string/text_btn_scanner_addition_recruit"
                         app:icon="@drawable/baseline_add_24"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/view24"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -171,18 +131,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/country_code_field"
-                app:layout_constraintTop_toBottomOf="@+id/phone_field" />
-
-            <TextView
-                android:id="@+id/text_not_found"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Not found!!"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/phone_field" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

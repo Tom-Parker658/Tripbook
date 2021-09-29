@@ -8,66 +8,285 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.booker.book_panel.TripDetailsFragment">
+        android:fillViewport="true">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edit_text_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="4dp"
-            android:hint="Travel Time:"
-            app:boxBackgroundMode="outline"
-            app:endIconDrawable="@drawable/outline_schedule_24"
-            app:endIconMode="custom"
-            app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/edit_text_date">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.booker.book_panel.TripDetailsFragment">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/btn_proceed_to_pay"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginBottom="8dp"
+                android:text="Proceed to payment"
+                app:backgroundTint="@color/colorPositiveButton"
+                app:icon="@drawable/baseline_wallet_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_modify_details" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edit_text_date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="2dp"
-            android:hint="Travel Date:"
-            app:boxBackgroundMode="outline"
-            app:endIconDrawable="@drawable/baseline_calendar_today_24"
-            app:endIconMode="custom"
-            app:layout_constraintEnd_toStartOf="@+id/edit_text_time"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_trip_details"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/btn_proceed_to_pay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Proceed to payment"
-            app:backgroundTint="@color/colorPositiveButton"
-            app:icon="@drawable/baseline_wallet_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-        <!--<androidx.cardview.widget.CardView
+                    <TextView
+                        android:id="@+id/text_agency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/rating_reputation_bar"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="General Voyages Express" />
+
+                    <TextView
+                        android:id="@+id/text_locality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:drawablePadding="4dp"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/text_distances"
+                        app:layout_constraintEnd_toStartOf="@+id/text_destination"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/rating_reputation_bar"
+                        tools:text="Dschang"
+                        app:drawableStartCompat="@drawable/baseline_my_location_24" />
+
+                    <TextView
+                        android:id="@+id/text_destination"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:drawablePadding="4dp"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_locality"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/text_locality"
+                        tools:text="Yaounde"
+                        app:drawableEndCompat="@drawable/baseline_directions_bus_24" />
+
+                    <TextView
+                        android:id="@+id/textView35"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="->"
+                        android:textAlignment="center"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_destination"
+                        app:layout_constraintEnd_toStartOf="@+id/text_destination"
+                        app:layout_constraintStart_toEndOf="@+id/text_locality"
+                        app:layout_constraintTop_toTopOf="@+id/text_locality" />
+
+                    <TextView
+                        android:id="@+id/text_distances"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/text_time_taken"
+                        app:layout_constraintEnd_toEndOf="@+id/text_destination"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/text_locality"
+                        app:layout_constraintTop_toBottomOf="@+id/text_locality"
+                        tools:text="500.25 km" />
+
+                    <TextView
+                        android:id="@+id/text_time_taken"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toTopOf="@+id/text_region_to_region"
+                        app:layout_constraintEnd_toEndOf="@+id/text_destination"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/text_locality"
+                        app:layout_constraintTop_toBottomOf="@+id/text_distances"
+                        tools:text="3H 30M, 60km/h" />
+
+                    <TextView
+                        android:id="@+id/text_region_to_region"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toTopOf="@+id/text_trip_date"
+                        app:layout_constraintEnd_toEndOf="@+id/text_destination"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/text_locality"
+                        app:layout_constraintTop_toBottomOf="@+id/text_time_taken"
+                        tools:text="Region: West -> Center" />
+
+                    <TextView
+                        android:id="@+id/text_trip_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/baseline_event_24"
+                        app:layout_constraintBottom_toTopOf="@+id/text_trip_departure_time"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/text_region_to_region"
+                        tools:text="samedi, 25 Avril 2021" />
+
+                    <TextView
+                        android:id="@+id/text_trip_departure_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/text_trip_date"
+                        tools:text="01:30 PM"
+                        app:drawableStartCompat="@drawable/baseline_departure_board_24" />
+
+                    <RatingBar
+                        android:id="@+id/rating_reputation_bar"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:max="10"
+                        android:numStars="10"
+                        android:rating="7.5"
+                        app:layout_constraintBottom_toTopOf="@+id/text_locality"
+                        app:layout_constraintEnd_toEndOf="@+id/text_agency"
+                        app:layout_constraintStart_toStartOf="@+id/text_agency"
+                        app:layout_constraintTop_toBottomOf="@+id/text_agency" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_modify_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_trip_details"
+                app:strokeColor="@color/colorSecondaryDark"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/text_total_price"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:drawablePadding="4dp"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/colorPositiveButton"
+                        android:textSize="34sp"
+                        android:textStyle="bold|italic"
+                        app:drawableTint="@color/colorPositiveButton"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView34"
+                        tools:text="17,500 FCFA" />
+
+                    <CheckBox
+                        android:id="@+id/check_is_vip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:checked="true"
+                        android:drawableEnd="@drawable/outline_diamond_20"
+                        android:drawablePadding="4dp"
+                        android:text="VIP"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <NumberPicker
+                        android:id="@+id/numberPicker"
+                        android:layout_width="65dp"
+                        android:layout_height="135dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_total_tickets_number"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/text_total_tickets_number"
+                        app:layout_constraintTop_toTopOf="@+id/text_total_tickets_number" />
+
+
+                    <TextView
+                        android:id="@+id/text_total_tickets_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Number of Books: "
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/numberPicker"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/check_is_vip"
+                        app:drawableStartCompat="@drawable/baseline_books_24" />
+
+                    <TextView
+                        android:id="@+id/textView34"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Total price: "
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/baseline_payments_24"
+                        app:layout_constraintBottom_toBottomOf="@+id/numberPicker"
+                        app:layout_constraintStart_toStartOf="@+id/text_total_tickets_number"
+                        app:layout_constraintTop_toBottomOf="@+id/text_total_tickets_number" />
+
+                    <TextView
+                        android:id="@+id/text_seats_times_unit_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="1dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView34"
+                        app:layout_constraintStart_toEndOf="@+id/textView34"
+                        app:layout_constraintTop_toTopOf="@+id/textView34"
+                        tools:text="5 x 4500 FCFA" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!--<androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -169,5 +388,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

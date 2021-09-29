@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.Timestamp
@@ -29,6 +31,7 @@ import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.Agenc
 import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyEventPlannerViewModel.*
 import com.lado.travago.tripbook.ui.recycler_adapters.AgencyEventPlannerAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.AgencyEventPlannerClickListener
+import com.lado.travago.tripbook.utils.Utils
 import kotlinx.coroutines.*
 import java.lang.Exception
 import java.util.*
@@ -62,11 +65,13 @@ class AgencyEventPlannerFragment : Fragment() {
             false
         )
         initViewModel()
+
         eventsListener
         observeLiveData()
 
         return binding.root
     }
+
 
     private fun observeLiveData() {
         viewModel.onLoading.observe(viewLifecycleOwner) {
@@ -95,65 +100,92 @@ class AgencyEventPlannerFragment : Fragment() {
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "")
             }
         }
-        binding.btnPlanEvent.setOnClickListener {
-            childFragmentManager.executePendingTransactions()
-            CreateEventAlertDialogFragment(viewModel, parentViewModel).showNow(
-                childFragmentManager,
-                "AddDialog"
-            )
+        binding.fabPlanEvent.setOnClickListener {
+            showAddDialog()
+        }
+        binding.fabHelpEventPlanner.setOnClickListener {
+            showHelpSnackBar().show()
         }
     }
 
-    private fun initViewModel() {
-        viewModel = ViewModelProvider(this)[AgencyEventPlannerViewModel::class.java]
-        parentViewModel = ViewModelProvider(requireActivity())[AgencyConfigViewModel::class.java]
+    private fun showHelpSnackBar() =
+        MaterialAlertDialogBuilder(requireContext())
+            .setIcon(R.drawable.baseline_help_24)
+            .setMessage(R.string.text_help_event_planner)
+            .setPositiveButton(getString(R.string.text_btn_event_planner_add)) { dialog, _ ->
+                showAddDialog()
+                dialog.dismiss()
+            }
+            .create()
+
+
+    /**
+     * Inorder to stop any loading blocking the ui
+     */
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
     }
 
-    class CreateEventAlertDialogFragment(
-        private val viewModel: AgencyEventPlannerViewModel,
-        private val parentViewModel: AgencyConfigViewModel
-    ) :
-        DialogFragment() {
-        private lateinit var eventBinding:LayoutCreateEventBinding
+    private fun showAddDialog() {
+        val eventBinding = DataBindingUtil.inflate<LayoutCreateEventBinding>(
+            layoutInflater,
+            R.layout.layout_create_event,
+            null,
+            false
+        )
 
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            super.onCreateDialog(savedInstanceState)
-           eventBinding = DataBindingUtil.inflate(
-                layoutInflater,
-                R.layout.layout_create_event,
-                null,
-                false
-            )
-            clickListeners()
-            return MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Create an Event")
-                .setView(eventBinding.root)
-                .setNegativeButton("Cancel") { dialogInterface, _ ->
-                    dialogInterface.cancel()
-                }
-                .setPositiveButton("Create") { dialogInterface, _ ->
-                    if (eventBinding.editTextReason.editText!!.text.isNotBlank() || viewModel.eventTime == null || viewModel.eventDateInMillis == 0L)
-                        viewModel.setField(
-                            FieldTags.TOAST_MESSAGE,
-                            "Give all information required!"
-                        )
-                    else
-                        CoroutineScope(Dispatchers.Main).launch {
-                            viewModel.createEvent(
-                                parentViewModel.bookerDoc.value!!.getString("agencyID")!!,
-                                parentViewModel.bookerDoc.value!!.id
-                            )
-                        }
-                    dialogInterface.cancel()
-                }
-                .create()
+        fun datePicker() {
+            val titleText = "Event Date"
+            val calendar = Calendar.getInstance()//An instance of the current Calendar
+            val minDate = calendar.timeInMillis // The current date(today) in millis
+
+            //We create constraint so that the user can only select dates between a particular interval
+            val bounds = CalendarConstraints.Builder()
+                .setStart(minDate)//Smallest date which can be selected
+                .build()
+            //We create our date picker which the user will use to enter his travel day
+            //Showing the created date picker onScreen
+            val datePicker = MaterialDatePicker.Builder.datePicker()
+                .setCalendarConstraints(bounds)//Constrain the possible dates
+                .setTitleText(titleText)//Set the Title of the Picker
+                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+                .build()
+            //Sets the value of the edit text to the formatted value of the selection
+            datePicker.addOnPositiveButtonClickListener {
+                viewModel.setField(FieldTags.EVENT_DATE, it)
+                eventBinding.editTextDate.editText!!.setText(
+                    Utils.formatDate(it, "EEEE dd MMMM YYYY")
+                )
+            }
+            datePicker.showNow(childFragmentManager, "")
         }
 
-        override fun onDismiss(dialog: DialogInterface) {
-            dialog.cancel()
+        fun timePicker() {
+            val titleText = "At what time?"
+            val timePicker = MaterialTimePicker.Builder()
+                .setTitleText(titleText)
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+                .build()
+            timePicker.addOnPositiveButtonClickListener {
+                viewModel.setField(
+                    FieldTags.EVENT_TIME,
+                    TimeModel.from24Format(
+                        timePicker.hour, timePicker.minute, null
+                    )
+                )
+                eventBinding.editTextTime.editText!!.setText(
+                    viewModel.eventTime!!.formattedTime(
+                        TimeModel.TimeFormat.FORMAT_24H
+                    )
+                )
+            }
+            timePicker.showNow(childFragmentManager, "")
         }
 
-        private fun clickListeners() {
+        fun clickListeners() {
             eventBinding.editTextDate.setOnClickListener {
                 datePicker()
             }
@@ -176,49 +208,40 @@ class AgencyEventPlannerFragment : Fragment() {
                 )
             }
         }
-
-        private fun datePicker() {
-            val titleText = "Event Date"
-            val calendar = Calendar.getInstance()//An instance of the current Calendar
-            val minDate = calendar.timeInMillis // The current date(today) in millis
-
-            //We create constraint so that the user can only select dates between a particular interval
-            val bounds = CalendarConstraints.Builder()
-                .setStart(minDate)//Smallest date which can be selected
-                .build()
-            //We create our date picker which the user will use to enter his travel day
-            //Showing the created date picker onScreen
-            val datePicker = MaterialDatePicker.Builder.datePicker()
-                .setCalendarConstraints(bounds)//Constrain the possible dates
-                .setTitleText(titleText)//Set the Title of the Picker
-                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-                .build()
-            //Sets the value of the edit text to the formatted value of the selection
-            datePicker.addOnPositiveButtonClickListener {
-                viewModel.setField(FieldTags.EVENT_DATE, it)
-                eventBinding.editTextDate.editText!!.setText(Date(it).toString())
-            }
-            datePicker.showNow(childFragmentManager, "")
+        clickListeners()
+        eventBinding.apply {
+            editTextReason.editText!!.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            editTextDate.editText!!.inputType = InputType.TYPE_NULL
+            editTextTime.editText!!.inputType = InputType.TYPE_NULL
         }
-
-        private fun timePicker() {
-            val titleText = "At what time?"
-            val timePicker = MaterialTimePicker.Builder()
-                .setTitleText(titleText)
-                .setTimeFormat(TimeFormat.CLOCK_24H)
-                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                .build()
-            timePicker.addOnPositiveButtonClickListener {
-                viewModel.setField(
-                    FieldTags.EVENT_TIME,
-                    TimeModel.from24Format(
-                        timePicker.hour, timePicker.minute, null
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Create an Event")
+            .setView(eventBinding.root)
+            .setNegativeButton("Cancel") { dialogInterface, _ ->
+                dialogInterface.cancel()
+            }
+            .setPositiveButton("Create") { dialogInterface, _ ->
+                if (eventBinding.editTextReason.editText!!.text.isBlank() || viewModel.eventTime == null || viewModel.eventDateInMillis == 0L)
+                    viewModel.setField(
+                        FieldTags.TOAST_MESSAGE,
+                        "Give all information required!"
                     )
-                )
-                eventBinding.editTextTime.editText!!.setText(viewModel.eventTime!!.formattedTime(TimeModel.TimeFormat.FORMAT_24H))
+                else
+                    CoroutineScope(Dispatchers.Main).launch {
+                        viewModel.createEvent(
+                            parentViewModel.bookerDoc.value!!.getString("agencyID")!!,
+                            parentViewModel.bookerDoc.value!!.id
+                        )
+                    }
+                dialogInterface.cancel()
             }
-            timePicker.showNow(childFragmentManager, "")
-        }
+            .create().show()
+    }
+
+    private fun initViewModel() {
+        viewModel = ViewModelProvider(this)[AgencyEventPlannerViewModel::class.java]
+        parentViewModel =
+            ViewModelProvider(requireActivity())[AgencyConfigViewModel::class.java]
     }
 
     private val eventsListener
@@ -226,7 +249,7 @@ class AgencyEventPlannerFragment : Fragment() {
             "OnlineTransportAgency/${
                 parentViewModel.bookerDoc.value?.getString(
                     "agencyID"
-                )?:"dsfsd" //TODO: Remove this 
+                ) ?: "dsfsd" //TODO: Remove this 
             }/Events"
         ).addSnapshotListener(requireActivity()) { snapShot, error ->
             if (snapShot != null) {
@@ -259,9 +282,13 @@ class AgencyEventPlannerFragment : Fragment() {
                             }
                         }
                     )
-                    binding.recyclerEvents.layoutManager = LinearLayoutManager(requireContext())
-                    adapter.submitList(snapShot.documents)
-                    binding.recyclerEvents.adapter = adapter
+                    try {
+                        binding.recyclerEvents.layoutManager = LinearLayoutManager(requireContext())
+                        adapter.submitList(snapShot.documents)
+                        binding.recyclerEvents.adapter = adapter
+                    } catch (e: Exception) {
+                        //
+                    }
                 } else {
                     try {
                         adapter.notifyDataSetChanged()

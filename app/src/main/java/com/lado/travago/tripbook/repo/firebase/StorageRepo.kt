@@ -3,6 +3,7 @@ package com.lado.travago.tripbook.repo.firebase
 import android.content.Context
 import com.google.firebase.FirebaseApp
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.StorageTags
@@ -16,7 +17,14 @@ import java.io.InputStream
 
 @ExperimentalCoroutinesApi
 class StorageRepo() {
-    var storage: FirebaseStorage = FirebaseStorage.getInstance(FirebaseApp.getInstance())
+    var storage = FirebaseStorage.getInstance()
+    //TODO: Emulator
+    init{
+        storage.useEmulator(
+            "192.168.186.47",
+            9199
+        )
+    }
 
 
     /**

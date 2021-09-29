@@ -33,7 +33,7 @@ class AdminFunctionActivity : AppCompatActivity() {
     }
 
     private fun doTheUpload() = CoroutineScope(Dispatchers.Main).launch {
-        viewModel.addJourneys()
+        viewModel.addTrips()
     }
 
     private fun observeLiveData(){

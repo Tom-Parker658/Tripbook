@@ -12,87 +12,57 @@
         android:layout_height="match_parent"
         tools:context=".ui.agency.creation.config_panel.AgencyEventPlannerFragment">
 
-
-        <TextView
-            android:id="@+id/text_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="NB: Please, Inorder to delete town(s) , delete trip(s) or even delete your agency, you must plan in advance so that Bookers will not be able to bookers from your agency during that time. This is to avoid cases where a booker Books in advance a trip which will not exist in the future anymore or Books from an agency which will go off before the departure time."
-            android:textAlignment="center"
-            android:textStyle="bold|italic"
-            app:layout_constraintBottom_toTopOf="@+id/text_appeal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/text_appeal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Please, understand that we want to protect all our customers interest. So it will not be good for Booker to pay for a trip which he will never consume. Thanks"
-            android:textAlignment="center"
-            android:textStyle="italic"
-            app:layout_constraintBottom_toTopOf="@+id/text_instructions"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_info" />
-
-
-        <TextView
-            android:id="@+id/text_instructions"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="Tap the 'Plan button to plan any event"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/btn_plan_event"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_appeal" />
-
-        <Button
-            android:id="@+id/btn_plan_event"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Plan An Event"
-            app:icon="@drawable/baseline_calendar_today_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_instructions" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_events"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/event_progress_bar"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/event_progress_bar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:itemCount="5"
             tools:listitem="@layout/item_agency_event" />
 
         <ProgressBar
             android:id="@+id/event_progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:indeterminate="true"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_plan_event" />
+            app:layout_constraintTop_toBottomOf="@+id/recycler_events" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_help_event_planner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/baseline_help_24"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_plan_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@color/colorPositiveButton"
+            app:layout_constraintBottom_toTopOf="@+id/fab_help_event_planner"
+            app:layout_constraintEnd_toEndOf="@+id/fab_help_event_planner"
+            app:layout_constraintStart_toStartOf="@+id/fab_help_event_planner"
+            app:srcCompat="@drawable/baseline_calendar_today_24"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

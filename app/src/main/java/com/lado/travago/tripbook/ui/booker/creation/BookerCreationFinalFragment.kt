@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -96,10 +97,10 @@ class BookerCreationFinalFragment : Fragment() {
         }
 
         // Add an onClick listener to the birthday endIcon to select the birthday
-        binding.fabPickDate.setOnClickListener { selectBirthDay() }
+        binding.birthday.setEndIconOnClickListener { selectBirthDay() }
         binding.birthday.setOnClickListener {  selectBirthDay() }
 
-        binding.radioGroupSex.setOnCheckedChangeListener { _, id ->
+        binding.chipGroupSex.setOnCheckedChangeListener { _, id ->
             viewModel.setField(FieldTags.SEX_ID, id)
             val sex = when (id) {
                 R.id.sex_male -> SEX.MALE
@@ -189,8 +190,16 @@ class BookerCreationFinalFragment : Fragment() {
             )
         )
         binding. nationality.editText!!.setText(viewModel.nationalityField)
-        binding.radioGroupSex.check(viewModel.sexFieldId)
+        binding.chipGroupSex.check(viewModel.sexFieldId)
         binding.countryCodePicker.setCountryForPhoneCode(viewModel.recoveryCountryCode)
+    }
+    /**
+     * Inorder to stop any loading blocking the ui
+     */
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
     }
 
 }

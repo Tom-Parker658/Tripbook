@@ -51,7 +51,7 @@ class TimeModel private constructor(
             if (meridian == Meridian.AM) TimeModel(hour, minutes, millisecond)
             else TimeModel(hour + 12, minutes, millisecond)
 
-        fun from24Format(hour: Int, minutes: Int, millisecond: Int?) =
+        fun from24Format(hour: Int, minutes: Int, millisecond: Int? = null) =
             TimeModel(hour, minutes, millisecond)
 
         fun timesDifferenceInMinutes(largerTime: TimeModel, lowerTime: TimeModel): Int? {

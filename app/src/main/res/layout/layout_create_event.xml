@@ -7,106 +7,90 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edit_text_reason"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:hint="Event Reason:"
-            app:boxBackgroundMode="outline"
-            app:counterEnabled="true"
-            app:helperText="Short description about your event"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chip_group_event_types">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLength="300" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_text_reason"
+                style="@style/editTextStyle"
+                android:hint="@string/text_e_hint_event_creation_reason"
+                app:counterEnabled="true"
+                app:helperText="@string/text_e_helper_interval_creation_reason"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chip_group_event_types">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edit_text_date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:hint="Event Date:"
-            app:boxBackgroundMode="outline"
-            app:endIconDrawable="@drawable/baseline_event_24"
-            app:endIconMode="custom"
-            app:helperText="Tap the end icon, to set date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_text_reason">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLength="300" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_text_date"
+                style="@style/editTextStyle"
+                android:hint="@string/text_e_hint_event_creation_date"
+                app:endIconDrawable="@drawable/baseline_event_24"
+                app:endIconMode="custom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_text_reason">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edit_text_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:hint="Event Time:"
-            app:boxBackgroundMode="outline"
-            app:endIconDrawable="@drawable/outline_schedule_24"
-            app:endIconMode="custom"
-            app:helperText="Tap the end icon, to set time"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_text_date"
-            app:layout_constraintStart_toStartOf="parent">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_text_time"
+                style="@style/editTextStyle"
+                android:hint="@string/text_e_hint_event_creation_time"
+                app:endIconDrawable="@drawable/outline_schedule_24"
+                app:endIconMode="custom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edit_text_date">
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chip_group_event_types"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:checkedChip="@id/chip_maintenance"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:singleSelection="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_maintenance"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_event_types"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text=" Maintenance"
-                android:textColor="@color/colorPositiveButton"
-                app:checkedIconTint="@color/colorPositiveButton"
-                tools:ignore="DuplicateSpeakableTextCheck" />
+                android:layout_marginTop="8dp"
+                app:checkedChip="@id/chip_maintenance"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:singleSelection="true">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_deletion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Agency Deletion"
-                android:textColor="@color/colorNegativeButton"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:checkedIconTint="@color/colorNegativeButton" />
-        </com.google.android.material.chip.ChipGroup>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_maintenance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/text_chip_event_creation_maintenance"
+                    app:chipIcon="@drawable/baseline_engineering_24" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_deletion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/text_chip_event_creation_deletion"
+                    app:chipIcon="@drawable/round_cancel_24"
+                    app:checkedIconTint="@color/colorNegativeButton" />
+            </com.google.android.material.chip.ChipGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

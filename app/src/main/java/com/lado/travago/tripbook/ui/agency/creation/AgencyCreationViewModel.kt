@@ -249,11 +249,11 @@ class AgencyCreationViewModel : ViewModel() {
         val agencyDocRef = db.collection("OnlineTransportAgency").document()
         val recordDocRef = db.collection("${agencyDocRef.path}/Record").document()
         val scannerDocRef =
-            db.document("${agencyDocRef.path}/Scanners/${authRepo.firebaseAuth.currentUser!!.uid}")
+            db.document("${agencyDocRef.path}/Scanners/${bookerDoc.id}")
         val creatorScannerMap = hashMapOf<String, Any?>(
             "name" to bookerDoc.getString("name"),
             "phone" to bookerDoc.getString("phone"),
-            "photoUrl" to bookerDoc.getString("photoUrl"),
+            "photoUrl" to (bookerDoc.getString("photoUrl")?:""),
             "isAdmin" to true,
             "isOwner" to true,
             "active" to true,

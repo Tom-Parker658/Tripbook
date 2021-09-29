@@ -1,7 +1,5 @@
 package com.lado.travago.tripbook.repo.firebase
 
-import android.content.Context
-import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.*
 import com.lado.travago.tripbook.model.enums.DbOperations
 import com.lado.travago.tripbook.repo.FirestoreTags
@@ -10,13 +8,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
 class FirestoreRepo {
     //Instance of our firestore db
-    var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    var db = FirebaseFirestore.getInstance()
+
+    //TODO: Emulator
+    init {
+        val settings = FirebaseFirestoreSettings.Builder()
+            .setHost("192.168.186.47:8081")
+            .setSslEnabled(false)
+            .build()
+        db.firestoreSettings = settings
+    }
 
     /**
      * A little prototype class to organise data to enter a batched operation
@@ -41,9 +49,9 @@ class FirestoreRepo {
     ) = flow {
         emit(State.loading())
 
-
         val collection = db.collection(collectionPath)
-        val document = collection.add(data).await()
+        val document = collection.add(data).addOnCompleteListener {  }
+
         emit(State.success(document.path))
 
     }.catch {
@@ -60,7 +68,7 @@ class FirestoreRepo {
     fun setDocument(
         data: HashMap<String, Any?>,
         documentPath: String,
-    )= flow{
+    ) = flow {
         emit(State.loading())
 
         val document = db.document(documentPath)
@@ -73,11 +81,11 @@ class FirestoreRepo {
 
     fun batchedWriteDocuments(
         batchedWritesInfoList: List<BatchedWritesInfo>
-    ) = flow{
+    ) = flow {
         emit(State.loading())
-        db.runBatch {batchWriter ->
-            for (info in batchedWritesInfoList){
-                when(info.dbOperation){
+        db.runBatch { batchWriter ->
+            for (info in batchedWritesInfoList) {
+                when (info.dbOperation) {
                     DbOperations.SET -> {
                         batchWriter.set(
                             db.document(info.documentPath),
@@ -85,7 +93,7 @@ class FirestoreRepo {
                         )
                     }
                     DbOperations.DELETE -> {
-                       // TODO("What to do when we instead need to delete a field using batched write")
+                        // TODO("What to do when we instead need to delete a field using batched write")
                     }
                     DbOperations.UPDATE -> {
                         //TODO("What to do when we instead need to update a field sing batched write")
@@ -100,8 +108,6 @@ class FirestoreRepo {
     }.flowOn(Dispatchers.IO)
 
 
-
-
     /**
      * Increments a number in the database and returns the new value of the field
      * @param byValue the number to be added to the number
@@ -113,7 +119,7 @@ class FirestoreRepo {
         byValue: Number,
         documentPath: String,
         fieldName: String
-    ) = flow{
+    ) = flow {
         emit(State.loading())
 
         val document = db.document(documentPath)
@@ -180,17 +186,18 @@ class FirestoreRepo {
      */
     fun deleteDocument(
         documentPath: String
-    ) = flow{
+    ) = flow {
         emit(State.loading())
         val docDel = db.document(documentPath).delete().await()
         emit(State.success(docDel))
     }.catch {
         emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
+
     /**
      * Gets a collection reference
      */
-    fun getCollection(path: String) = flow{
+    fun getCollection(path: String) = flow {
         emit(State.loading())
         val collection = db.collection(path).get().await()
         emit(State.success(collection))

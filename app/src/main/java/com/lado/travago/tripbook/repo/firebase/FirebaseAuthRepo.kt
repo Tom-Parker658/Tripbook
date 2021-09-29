@@ -3,8 +3,10 @@ package com.lado.travago.tripbook.repo.firebase
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthSettings
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.emulators.EmulatedServiceSettings
 import com.lado.travago.tripbook.repo.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +22,15 @@ import kotlinx.coroutines.tasks.await
  */
 @ExperimentalCoroutinesApi
 class FirebaseAuthRepo {
-    var firebaseAuth = FirebaseAuth.getInstance(FirebaseApp.getInstance())
+    var firebaseAuth = FirebaseAuth.getInstance()
+    //TODO: Emulator
+    init{
+        firebaseAuth.useEmulator(
+            "192.168.186.47",
+            9099
+        )
+
+    }
 
     //Initialising and getting instances of the firebase services
 
@@ -37,7 +47,6 @@ class FirebaseAuthRepo {
     fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) = flow {
         firebaseAuth.useAppLanguage()
         emit(State.loading())
-
 
         //loading: SignIn process in progress
         val user = firebaseAuth.signInWithCredential(credential).await().user

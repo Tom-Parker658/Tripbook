@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClickListener="@{()-> clickListener.onClick(buttonTag.TOWN_BUTTON_TRIPS, townDoc)}"
-                android:text="Trips"
+                android:text="@string/text_btn_town_config_trips"
                 android:textSize="12sp"
                 app:icon="@drawable/baseline_directions_bus_24"
                 app:layout_constraintBaseline_toBaselineOf="@+id/btn_park"
@@ -49,9 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Parks"
-
-                android:textColor="#1E88E5"
+                android:text="@string/text_btn_town_config_parks"
                 android:textSize="12sp"
                 app:icon="@drawable/baseline_my_location_24"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -63,13 +61,15 @@
                 android:id="@+id/text_town"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/text_region"
-                app:layout_constraintStart_toEndOf="@+id/view23"
+                app:layout_constraintEnd_toStartOf="@+id/check_select"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Yaounde" />
 
@@ -94,42 +94,6 @@
                 android:button="@drawable/btn_select_cancel"
                 android:onClickListener="@{()-> clickListener.onClick(buttonTag.TOWN_CHECK_TO_DELETE, townDoc)}"
                 app:buttonTint="@color/colorNegativeButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view21"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view22"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <View
-                android:id="@+id/view23"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view24"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

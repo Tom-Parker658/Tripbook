@@ -23,7 +23,12 @@ class TripSearchResultsAdapter(
         TripSearchResultsViewHolder.from(parent)
 
     override fun onBindViewHolder(holder: TripSearchResultsViewHolder, position: Int) =
-        holder.bind(clickListener, getItem(position).first, getItem(position).second, getItem(position).third)
+        holder.bind(
+            clickListener,
+            getItem(position).first,
+            getItem(position).second,
+            getItem(position).third
+        )
 }
 
 class TripSearchResultsViewHolder(
@@ -39,6 +44,9 @@ class TripSearchResultsViewHolder(
         // Data def
         binding.agencyDoc = agencyDoc
         binding.clickListener = clickListener
+        binding.tripTime = departureTime
+        binding.tripDoc = tripDoc
+
         // pending bindings
         binding.agencyLogo.loadLogoFromUrl(
             agencyDoc.getString("logoUrl")!!
@@ -50,7 +58,8 @@ class TripSearchResultsViewHolder(
                 binding.verifiedBitmap.visibility = View.VISIBLE
             } else binding.verifiedBitmap.visibility = View.GONE
         }
-        binding.textIntervalDeparture.text = departureTime.formattedTime(TimeModel.TimeFormat.FORMAT_24H)
+        binding.textIntervalDeparture.text =
+            departureTime.formattedTime(TimeModel.TimeFormat.FORMAT_24H)
         binding.ratingBar.progress = agencyDoc.getDouble("reputation")!!.toInt()
         binding.textAgencyMotto.text = agencyDoc.getString("motto")
 
@@ -76,11 +85,17 @@ class TripSearchResultsViewHolder(
     }
 }
 
-class TripSearchResultsClickListener(val clickListener: (agencyId: String) -> Unit) {
-    fun onClick(agencyDoc: DocumentSnapshot) = clickListener(agencyDoc.id)
+class TripSearchResultsClickListener(val clickListener: (agencyId: String, tripDoc: DocumentSnapshot, tripTime: TimeModel, vip: Boolean) -> Unit) {
+    fun onClick(
+        agencyDoc: DocumentSnapshot,
+        tripDoc: DocumentSnapshot,
+        tripTime: TimeModel,
+        isVip: Boolean
+    ) = clickListener(agencyDoc.id, tripDoc, tripTime, isVip)
 }
 
-class TripSearchResultDiffUtils : DiffUtil.ItemCallback<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>>(){
+class TripSearchResultDiffUtils :
+    DiffUtil.ItemCallback<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>>() {
     override fun areItemsTheSame(
         oldItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>,
         newItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>
