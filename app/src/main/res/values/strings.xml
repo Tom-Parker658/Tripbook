@@ -13,7 +13,7 @@
     <string name="text_label_agency_config_money">Money</string>
     <string name="text_label_agency_config_scanners">Scanners</string>
     <string name="text_label_agency_config_delete_agency">Delete The Agency</string>
-    <string name="text_label_agency_creation_logo">Logo</string>
+    <string name="text_label_agency_creation_logo">LOGO</string>
     <string name="text_e_hint_booker_creation_nationality">Nationality</string>
 </resources>
 

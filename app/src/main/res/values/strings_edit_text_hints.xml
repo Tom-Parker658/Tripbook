@@ -32,12 +32,12 @@
     <!--    Agency Creation Info-->
     <string name="text_e_agency_creation_label_name">Agency Name</string>
     <string name="text_e_agency_creation_label_decree">Ministerial Decree Number</string>
-    <string name="text_e_agency_creation_label_phone_1">Support Phone 1</string>
-    <string name="text_e_agency_creation_label_ceo">CEO\'s Name</string>
-    <string name="text_e_agency_creation_label_creation_year">Physical Agency Creation Year</string>
-    <string name="text_e_agency_creation_label_motto">Agency Motto</string>
-    <string name="text_e_agency_creation_label_phone_2">*Support Phone 2</string>
-    <string name="text_e_agency_creation_label_email">Support Email</string>
+    <string name="text_e_agency_creation_label_phone_1">"Customer Assistance Phone "</string>
+    <string name="text_e_agency_creation_label_ceo">Agency\'s CEO Name</string>
+    <string name="text_e_agency_creation_label_creation_year">Agency\'s Creation year</string>
+    <string name="text_e_agency_creation_label_motto">Agency Motto or Slogan</string>
+    <string name="text_e_agency_creation_label_phone_2">*Customer Assistance Phone 2</string>
+    <string name="text_e_agency_creation_label_email">"Customer Assistance Email "</string>
     <string name="text_e_agency_creation_label_bank_account">Bank Account Number</string>
     <string name="text_e_agency_creation_label_mtn_momo">MTN MoMo Number</string>
     <string name="text_e_agency_creation_label_orange_money">Orange Money Number:</string>
@@ -46,27 +46,27 @@
 
     <!--Descriptions-->
     <string name="desc_user_image">Tap to change photo.</string>
-    <string name="desc_agency_logo">Transport agency\'s logo</string>
+    <string name="desc_agency_logo">Agency\'s logo</string>
     <string name="desc_qr_code">Your journey QR code</string>
     <string name="desc_tripbook_logo">Tripbook logo</string>
 
 <!--    Scanner Addition-->
-    <string name="text_e_helper_scanner_addition_phone">Enter your scanner\'s phone number</string>
+    <string name="text_e_helper_scanner_addition_phone">Enter the future scanner\'s phone number</string>
 
     <!--    Interval Creation-->
     <string name="text_e_helper_optional">Optional!</string>
-    <string name="text_e_helper_interval_creation_name">e.g from: 5:00 to:10:00 is \'MORNING\'</string>
+    <string name="text_e_helper_interval_creation_name">e.g from: 5:00AM to:10:00AM is \'MORNING\'</string>
     <string name="text_e_hint_interval_creation_from_time">From</string>
-    <string name="text_e_hint_interval_creation_to_time">To:</string>
+    <string name="text_e_hint_interval_creation_to_time">To</string>
     <string name="text_e_hint_interval_creation_departure_time">Departure Time</string>
     <string name="text_e_hint_interval_creation_name">Name of the interval</string>
     <string name="text_e_helper_interval_creation_reason">Short description about your event</string>
-    <string name="text_e_helper_interval_creation_departure_time">Make sure it is at least 30 minutes after the to time</string>
+    <string name="text_e_helper_interval_creation_departure_time">Make sure it is at least 30 minutes after the End time of the interval</string>
 
     <!--    Event creation-->
     <string name="text_e_hint_event_creation_reason">Event Reason</string>
-    <string name="text_e_hint_event_creation_date">Event Date:</string>
-    <string name="text_e_hint_event_creation_time">Event Time:</string>
+    <string name="text_e_hint_event_creation_date">Event Starting Date</string>
+    <string name="text_e_hint_event_creation_time">Event Starting Time</string>
     <string name="text_chip_event_creation_maintenance">Maintenance</string>
     <string name="text_chip_event_creation_deletion">Agency Deletion</string>
 
