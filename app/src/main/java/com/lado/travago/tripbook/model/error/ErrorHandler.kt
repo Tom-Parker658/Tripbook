@@ -11,7 +11,7 @@ import kotlin.Exception
  * to the user when a bug, an error, exception occurs
  * */
 object ErrorHandler {
-    enum class TaskCategory(val ){
+    enum class TaskCategory(){
         TRIP_SEARCH, PHONE_SMS, 
     }
 
@@ -21,7 +21,7 @@ object ErrorHandler {
     fun Exception.handleError(doSomething: (exception: Exception ) -> Unit): String {
         doSomething(this)
         return when(this){
-            is TimeoutException ->
+
             is FirebaseException -> typeFirestore(this)
             else -> message.toString()
         }

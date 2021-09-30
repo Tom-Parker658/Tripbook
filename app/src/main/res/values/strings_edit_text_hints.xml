@@ -9,7 +9,7 @@
     <string name="text_e_hint_booker_creation_occupation">Occupation</string>
     <string name="text_e_hint_booker_creation_birthday">Birthday</string>
     <string name="text_e_hint_booker_creation_name">Name</string>
-    <string name="text_e_hint_booker_creation_recovery_phone">Recovery phone:</string>
+    <string name="text_e_hint_booker_creation_recovery_phone">Recovery phone</string>
     <string name="text_e_hint_booker_creation_sms_code">Validation Code</string>
     <string name="text_e_helper_booker_creation_sms_code">Enter 6 digit code from your sms</string>
 
@@ -26,7 +26,7 @@
     <string name="text_e_hint_trip_search_date">Travel Date</string>
     <string name="text_e_hint_trip_search_time">Travel Time</string>
     <string name="text_e_helper_trip_search_destination">Where are you going to?</string>
-    <string name="text_e_helper_trip_search_time">What time?</string>
+    <string name="">What time?</string>
     <string name="text_e_helper_trip_search_day">Which day?</string>
 
     <!--    Agency Creation Info-->
@@ -40,12 +40,12 @@
     <string name="text_e_agency_creation_label_email">"Customer Assistance Email "</string>
     <string name="text_e_agency_creation_label_bank_account">Bank Account Number</string>
     <string name="text_e_agency_creation_label_mtn_momo">MTN MoMo Number</string>
-    <string name="text_e_agency_creation_label_orange_money">Orange Money Number:</string>
+    <string name="text_e_agency_creation_label_orange_money">Orange Money Number</string>
     <string name="text_e_agency_creation_btn_save">Save Profile</string>
     <string name="text_e_helper_agency_creation_decree">Enter the official ministerial decree associated to this agency.</string>
 
     <!--Descriptions-->
-    <string name="desc_user_image">Tap to change photo.</string>
+    <string name="desc_user_image">Tap to change photo</string>
     <string name="desc_agency_logo">Agency\'s logo</string>
     <string name="desc_qr_code">Your journey QR code</string>
     <string name="desc_tripbook_logo">Tripbook logo</string>

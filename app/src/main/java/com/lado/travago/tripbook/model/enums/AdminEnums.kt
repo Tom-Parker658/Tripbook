@@ -8,12 +8,6 @@ package com.lado.travago.tripbook.model.enums
  */
 
 enum class Region {
-    NORTH, SOUTH, EAST, WEST, SOUTH_WEST, NORTH_WEST, ADAMAWA, EXTREME_NORTH, LITTORAL, CENTER, UNKNOWN
+    NORTH, SOUTH, EAST, WEST, SOUTH_WEST, NORTH_WEST, ADAMAWA, EXTREME_NORTH, LITTORAL, CENTER,
 }
 
-/**
- * Different possible travel times
- */
-enum class TravelTime {
-    MORNING, AFTERNOON, NIGHT, UNKNOWN
-}

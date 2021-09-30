@@ -25,28 +25,26 @@
         android:id="@+id/card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        android:checkable="false"
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="4dp">
 
             <!-- Title, secondary and supporting text -->
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_normal_price"
-                android:layout_width="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="4dp"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_NORMAL_PRICE, changesMap)}"
-                android:singleLine="true"
                 android:textStyle="bold"
                 app:icon="@drawable/baseline_payments_24"
-                app:iconPadding="1dp"
+                app:iconGravity="end"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_trip_distance"
                 tools:ignore="DuplicateSpeakableTextCheck"
@@ -55,42 +53,38 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_price_vip"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_BUTTON_VIP_PRICE, changesMap )}"
-                android:singleLine="true"
-                android:textColor="@color/gold"
+                android:textColor="@color/vip"
                 android:textStyle="bold"
-                app:backgroundTint="@color/vip"
                 app:icon="@drawable/baseline_vip_24"
+                app:iconGravity="end"
                 app:iconTint="@color/gold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_normal_price"
                 tools:text="5,000 FCFA" />
 
             <TextView
                 android:id="@+id/text_destination_town"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="8dp"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/text_trip_distance"
                 app:layout_constraintEnd_toStartOf="@+id/check_select_trip"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Yaounde" />
+                tools:text="Abong Mbang" />
 
             <TextView
                 android:id="@+id/text_trip_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:textAppearance="?attr/textAppearanceBody2"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/text_destination_town"
                 app:layout_constraintTop_toBottomOf="@+id/text_destination_town"
@@ -100,6 +94,7 @@
                 android:id="@+id/check_select_trip"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
                 android:button="@drawable/btn_select_cancel"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIP_CHECK_TO_DELETE, changesMap)}"
                 app:buttonTint="@color/colorNegativeButton"
@@ -109,20 +104,15 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_vip"
-                style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
                 android:checkable="true"
-                android:checked="true"
                 android:fontFamily="@font/aclonica"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_CHECK_VIP, changesMap)}"
                 android:text="@string/switch_vip_trip"
-                android:textSize="12sp"
-                app:chipIcon="@drawable/outline_diamond_20"
-                app:layout_constraintBottom_toTopOf="@+id/btn_price_vip"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_normal_price" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_price_vip" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -131,26 +121,6 @@
                 app:layout_constraintBottom_toTopOf="@+id/btn_price_vip"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/chip_vip" />
-
-<!--      Bus types      -->
-
-            <!--<Button
-                android:id="@+id/btn_buses"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginStart="4dp"
-                android:text="Types"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                app:backgroundTint="@color/quantum_grey"
-                app:icon="@drawable/baseline_directions_bus_24"
-                app:iconGravity="end"
-                app:iconPadding="1dp"
-                app:iconSize="18dp"
-                app:layout_constraintBottom_toTopOf="@+id/btn_price_vip"
-                app:layout_constraintStart_toEndOf="@+id/view23"
-                app:layout_constraintTop_toBottomOf="@+id/btn_normal_price" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

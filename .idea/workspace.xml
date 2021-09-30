@@ -3,14 +3,14 @@
   <component name="AndroidLayouts">
     <shared>
       <config>
-        <device id="pixel" />
         <device id="pixel_4_xl" />
-        <device id="pixel_c" />
+        <device id="pixel_3_xl" />
         <device id="Nexus 10" />
+        <device id="pixel" />
+        <device id="pixel_c" />
         <device id="pixel_4" />
         <device id="Nexus 9" />
         <device id="tv_1080p" />
-        <device id="pixel_3_xl" />
         <device id="pixel_3" />
         <device id="pixel_2" />
       </config>
@@ -24,12 +24,41 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe1abd30-5f7d-4de3-8900-da5a84a0b536" name="Default Changelist" comment="Text extractions + translation in progress">
+    <list default="true" id="fe1abd30-5f7d-4de3-8900-da5a84a0b536" name="Default Changelist" comment="Text extractions + translation in finished">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/enums/AdminEnums.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/enums/AdminEnums.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/error/ErrorHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/error/ErrorHandler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/repo/State.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/repo/State.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/repo/firebase/FirestoreRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/repo/firebase/FirestoreRepo.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/creation/config_panel/ScannerConfigFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/creation/config_panel/ScannerConfigFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/creation/config_panel/viewmodel/TripsConfigViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/creation/config_panel/viewmodel/TripsConfigViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/creation/config_panel/viewmodel/TripsDepartureTimeConfigViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/creation/config_panel/viewmodel/TripsDepartureTimeConfigViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/creation/BookerCreationActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/creation/BookerCreationActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout-land/fragment_trip_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout-land/fragment_trip_detail.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_admin_function.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_admin_function.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_agency_config_center.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_agency_config_center.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_agency_creation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_agency_creation.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_booker_creation1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_booker_creation1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_booker_creation2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_booker_creation2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_scanner_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_scanner_config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_towns_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_towns_config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_departure_time_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_departure_time_config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_detail.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_search.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_search.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trips_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trips_config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_agency_event.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_agency_event.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_code_confirmation.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_time_interval.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_time_interval.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_town_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_town_config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_trip_price_form.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_trip_price_form.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_trip_search_results.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_trip_search_results.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_trips_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_trips_config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_scanner_search.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_scanner_search.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values-fr/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-fr/strings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings_btn_text.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings_btn_text.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings_edit_text_hints.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings_edit_text_hints.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -357,7 +386,14 @@
       <option name="project" value="LOCAL" />
       <updated>1632934705253</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Text extractions + translation in finished">
+      <created>1632938188869</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1632938188869</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -400,7 +436,8 @@
     <MESSAGE value="More robust Admin Panel with an Interval System added" />
     <MESSAGE value="Perfect TripSearch with event checker + departure time loader&#10;Next Mission: Trips Details" />
     <MESSAGE value="Text extractions + translation in progress" />
-    <option name="LAST_COMMIT_MESSAGE" value="Text extractions + translation in progress" />
+    <MESSAGE value="Text extractions + translation in finished" />
+    <option name="LAST_COMMIT_MESSAGE" value="Text extractions + translation in finished" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

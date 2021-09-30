@@ -15,6 +15,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/phone"
             style="@style/editTextStyle"
+            android:layout_marginBottom="8dp"
             android:hint="@string/text_e_hint_booker_creation_phone"
             app:layout_constraintBottom_toTopOf="@+id/btn_send_sms"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,9 +59,9 @@
         <Button
             android:id="@+id/btn_send_sms"
             style="@style/positiveButton"
+            android:layout_marginTop="8dp"
             android:text="@string/text_btn_booker_creation_send_sms"
             app:icon="@drawable/baseline_sms"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"

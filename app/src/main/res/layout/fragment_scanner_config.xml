@@ -41,6 +41,7 @@
             style="@style/positiveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:text="@string/text_btn_save_changes"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

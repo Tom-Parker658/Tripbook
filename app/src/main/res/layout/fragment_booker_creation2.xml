@@ -54,8 +54,9 @@
         <Button
             android:id="@+id/btn_resend_code"
             style="@style/neutralButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:text="@string/text_btn_booker_creation_resend"
             app:icon="@drawable/sync"
             app:layout_constraintBottom_toBottomOf="@+id/btn_confirm_code"
@@ -68,7 +69,7 @@
         <Button
             android:id="@+id/btn_confirm_code"
             style="@style/positiveButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/text_btn_continue"
             app:icon="@drawable/baseline_arrow_forward_24"

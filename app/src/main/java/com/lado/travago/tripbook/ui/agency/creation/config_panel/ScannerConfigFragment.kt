@@ -148,7 +148,7 @@ class ScannerConfigFragment : Fragment() {
                 )
             } else {
                 binding.progressBar.visibility = View.GONE
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         }
         viewModel.onAddScannerDialog.observe(viewLifecycleOwner) {

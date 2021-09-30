@@ -21,10 +21,10 @@ sealed class State<T> {
      */
     data class Failed<T>(val exception: Exception) : State<T>()
 
-    /**
-     * Process Timed Out
-     */
-    class TimeOut<T>: State<T>()
+//    /**
+//     * Process Timed Out
+//     */
+//    class TimeOut<T>: State<T>()
 
 
     /**
@@ -38,7 +38,7 @@ sealed class State<T> {
 
     companion object {
         fun <T> loading() = Loading<T>()
-        fun <T> timedOut() = TimeOut<T>()
+
         fun <T> success(data: T) = Success(data)
         fun <T> failed(exception: Exception) = Failed<T>(exception)
 

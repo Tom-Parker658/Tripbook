@@ -18,7 +18,7 @@
             style="?attr/textAppearanceHeadline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Towns"
+            android:text="@string/text_label_towns"
             app:layout_constraintBottom_toTopOf="@+id/recycler_towns"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,9 +90,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:clickable="true"
-            android:visibility="gone"
             app:backgroundTint="@color/colorNegativeButton"
-            app:layout_constraintBottom_toTopOf="@+id/fab_sort_towns"
+            app:layout_constraintBottom_toTopOf="@+id/fab_towns_span_size"
             app:layout_constraintEnd_toEndOf="@+id/fab_sort_towns"
             app:layout_constraintStart_toStartOf="@+id/fab_sort_towns"
             app:srcCompat="@drawable/ic_clear_black_24dp"
@@ -120,7 +119,8 @@
             app:layout_constraintBottom_toTopOf="@+id/fab_sort_towns"
             app:layout_constraintEnd_toEndOf="@+id/fab_sort_towns"
             app:layout_constraintStart_toStartOf="@+id/fab_sort_towns"
-            app:srcCompat="@drawable/baseline_settings_24" />
+            app:srcCompat="@drawable/baseline_settings_24"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

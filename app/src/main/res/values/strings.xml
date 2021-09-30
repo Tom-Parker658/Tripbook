@@ -15,6 +15,14 @@
     <string name="text_label_agency_config_delete_agency">Delete The Agency</string>
     <string name="text_label_agency_creation_logo">LOGO</string>
     <string name="text_e_hint_booker_creation_nationality">Nationality</string>
+    <string name="text_e_helper_agency_creation_support_email">For your passengers to report problems or suggestions</string>
+    <string name="text_label_towns">Towns</string>
+    <string name="text_label_town">Town</string>
+    <string name="text_btn_delete">Delete</string>
+    <string name="text_label_to">to</string>
+    <string name="text_e_helper_trip_search_location">Select your current location from the list</string>
+    <string name="text_btn_save">Save</string>
+    <string name="text_e_helper_trip_search_time">At what time do you wish to go?</string>
 </resources>
 
 

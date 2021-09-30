@@ -20,14 +20,12 @@
 
             <Button
                 android:id="@+id/btn_proceed_to_pay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                style="@style/positiveButton"
                 android:text="Proceed to payment"
-                app:backgroundTint="@color/colorPositiveButton"
                 app:icon="@drawable/baseline_wallet_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/card_modify_details" />
 

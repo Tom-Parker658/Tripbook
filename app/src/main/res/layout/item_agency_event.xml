@@ -69,13 +69,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="1dp"
-                    android:drawableStart="@drawable/outline_schedule_24"
                     android:textAlignment="textEnd"
                     android:textAppearance="@style/headlineStyle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/text_event_reason"
-                    tools:text="Monday, 15 September 2022, 10:12:30 PM " />
+                    tools:text="Monday, 15 September 2022, 10:12:30 PM "
+                    app:drawableStartCompat="@drawable/outline_schedule_24" />
 
                 <ImageView
                     android:id="@+id/btn_action"

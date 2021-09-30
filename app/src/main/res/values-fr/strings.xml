@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="btn_search_journey">"Recherchez un Voyage "</string>
+    <string name="btn_search_journey">Recherchez un Voyage</string>
     <string name="switch_vip_trip">VIP</string>
     <string name="btn_save_profile">Enregistrer le Profile</string>
     <string name="btn_delete_profile">Supprimer le Profile</string>
@@ -29,7 +29,7 @@
     <string name="text_e_hint_trip_search_date">Date du Voyage</string>
     <string name="text_e_hint_trip_search_time">Heure du Voyage</string>
     <string name="text_e_helper_trip_search_destination">Où allez vous?</string>
-    <string name="text_e_helper_trip_search_time">A Quelle heure voulez-vous voyager?</string>
+    <string name="">A Quelle heure voulez-vous voyager?</string>
     <string name="text_e_helper_trip_search_day">Quand voulez vous voyager?</string>
     <string name="text_e_agency_creation_label_name">Nom d\'Agence</string>
     <string name="text_e_agency_creation_label_decree">Décrét Ministériel</string>
@@ -49,25 +49,25 @@
     <string name="desc_qr_code">Le code QR de votre Billet de voyage</string>
     <string name="desc_tripbook_logo">Logo de Tripbook</string>
     <string name="text_e_helper_optional">Facultatif!</string>
-    <string name="text_e_helper_interval_creation_name">"exemple: L'intervalle 5:00 - 10:00 peut etre nommée \"Matin\" "</string>
+    <string name="text_e_helper_interval_creation_name">exemple: L\'intervalle 5:00 – 10:00 peut etre nommée \"Matin\" </string>
     <string name="text_e_hint_interval_creation_from_time">Debut</string>
     <string name="text_e_hint_interval_creation_to_time">Fin</string>
     <string name="text_e_hint_interval_creation_departure_time">Heure du départ</string>
     <string name="text_e_hint_interval_creation_name">Nom de l\'intervalle</string>
-    <string name="text_e_helper_interval_creation_departure_time">Il est prudent que l\'heure de départ soit au moins 30 minutes après la fin dune Interval de voyage</string>
-    <string name="text_e_hint_event_creation_reason">Raison de L\'événement</string>
-    <string name="text_e_hint_event_creation_date">Date de Lévénement</string>
-    <string name="text_e_hint_event_creation_time">Temp du début de L\'événement</string>
+    <string name="text_e_helper_interval_creation_departure_time">Il est prudent que l\'heure de départ soit au moins 30 minutes après la fin d\'une Interval de voyage</string>
+    <string name="text_e_hint_event_creation_reason">Raison pour L\'événement</string>
+    <string name="text_e_hint_event_creation_date">Date de l\'événement</string>
+    <string name="text_e_hint_event_creation_time">Heure du début de l\'événement</string>
     <string name="text_chip_event_creation_maintenance">Maintenance</string>
     <string name="text_chip_event_creation_deletion">Suppression de L\'Agence</string>
     <string name="text_e_helper_interval_creation_reason">Donner une Brève déscription sur votre événement</string>
-    <string name="text_e_helper_scanner_addition_phone">"Entrez le tèl du future scanneur "</string>
+    <string name="text_e_helper_scanner_addition_phone">Entrez le tèl de votre future scanneur </string>
     <string name="text_btn_event_planner_add">Planifier un événement</string>
     <string name="text_btn_booker_creation_send_sms">Envoyer un SMS</string>
-    <string name="text_btn_save_changes">Enregistrez le modification</string>
+    <string name="text_btn_save_changes">Enregistrez les modifications</string>
     <string name="text_btn_scanner_addition_recruit">Recruiter</string>
     <string name="text_btn_town_config_trips">Voyages</string>
-    <string name="text_btn_town_config_parks">Garre Routières</string>
+    <string name="text_btn_town_config_parks">Garre</string>
     <string name="text_chip_scanner_config_admin">Administrateur</string>
     <string name="text_btn_scanner_config_fire">Licencier le Scanneur!</string>
     <string name="text_label_agency_config_parks">Garre Routières</string>
@@ -79,4 +79,11 @@
     <string name="text_label_agency_config_scanners">Scanneurs</string>
     <string name="text_label_agency_config_delete_agency">Supprimer l\'Agence</string>
     <string name="text_label_agency_creation_logo">LOGO</string>
+    <string name="text_e_helper_agency_creation_support_email">Pour permettre a vos passagers de faire des suggestion</string>
+    <string name="text_label_towns">Villes</string>
+    <string name="text_label_town">Ville</string>
+    <string name="text_btn_delete">Supprimer</string>
+    <string name="text_label_to">à</string>
+    <string name="text_e_helper_trip_search_location">Choissisez votre localité dans la liste</string>
+    <string name="text_btn_save">Enregistrer</string>
 </resources>

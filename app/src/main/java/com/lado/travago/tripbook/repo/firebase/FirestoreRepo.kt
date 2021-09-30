@@ -50,7 +50,7 @@ class FirestoreRepo {
         emit(State.loading())
 
         val collection = db.collection(collectionPath)
-        val document = collection.add(data).addOnCompleteListener {  }
+        val document = collection.add(data).await()
 
         emit(State.success(document.path))
 

@@ -74,35 +74,43 @@
         <item name="android:textAlignment">center</item>
     </style>
     <!--next and previous Button styles-->
-    <style name="navButtonStyles">
+    <style name="navButtonStyles" parent="Widget.MaterialComponents.TimePicker.ImageButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">8dp</item>
         <item name="backgroundTint">@color/colorAccent</item>
+        <item name="iconPadding">8dp</item>
+        <item name="iconTintMode">src_in</item>
     </style>
 
 <!--    Positive button-->
-    <style name="positiveButton">
+    <style name="positiveButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">8dp</item>
         <item name="backgroundTint">@color/colorPositiveButton</item>
         <item name="icon">@drawable/baseline_check_circle_24</item>
+        <item name="iconPadding">8dp</item>
+        <item name="iconTintMode">src_in</item>
     </style>
 <!--    Negative button-->
-    <style name="negativeButton">
+    <style name="negativeButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">8dp</item>
         <item name="backgroundTint">@color/colorNegativeButton</item>
         <item name="icon">@drawable/round_cancel_24</item>
+        <item name="iconPadding">8dp</item>
+        <item name="iconTintMode">src_in</item>
     </style>
 <!--    Neutral button-->
-    <style name="neutralButton">
+    <style name="neutralButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">8dp</item>
-        <item name="backgroundTint">@color/colorNeutralButton</item>
+        <item name="backgroundTint">@color/quantum_grey</item>
+        <item name="iconPadding">8dp</item>
+        <item name="iconTintMode">src_in</item>
     </style>
 
     <style name="infoTextStyle">
@@ -144,6 +152,7 @@
         <item name="fontFamily">@font/aclonica</item>
         <item name="font">@font/aclonica</item>
     </style>
+
 
 
     <color name="textDark">#000000</color>

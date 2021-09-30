@@ -24,7 +24,8 @@
             app:layout_constraintEnd_toEndOf="@+id/fab_toggle_visibility"
             app:layout_constraintStart_toStartOf="@+id/fab_toggle_visibility"
             app:srcCompat="@drawable/baseline_add_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:focusable="true" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_intervals"
@@ -56,7 +57,8 @@
             app:layout_constraintEnd_toEndOf="@+id/fab_add_interval"
             app:layout_constraintStart_toStartOf="@+id/fab_add_interval"
             app:srcCompat="@drawable/outline_schedule_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:focusable="true" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_settings_span"
@@ -68,7 +70,8 @@
             app:layout_constraintEnd_toEndOf="@+id/fab_time_format"
             app:layout_constraintStart_toStartOf="@+id/fab_time_format"
             app:srcCompat="@drawable/baseline_settings_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:focusable="true" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_toggle_visibility"
@@ -81,7 +84,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/baseline_visibility_off_24"
-            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck"
+            android:focusable="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

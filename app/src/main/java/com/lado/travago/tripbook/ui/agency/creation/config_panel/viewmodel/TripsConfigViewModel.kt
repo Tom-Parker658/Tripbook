@@ -279,7 +279,7 @@ class TripsConfigViewModel : ViewModel() {
         }.await()
     }
 
-    suspend fun createEvent(){
+    fun createEvent(){
 
     }
 

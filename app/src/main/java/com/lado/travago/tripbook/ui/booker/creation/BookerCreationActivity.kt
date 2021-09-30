@@ -124,7 +124,7 @@ class BookerCreationActivity : AppCompatActivity() {
         override fun onVerificationFailed(exception: FirebaseException) {
             viewModel.setField(
                 FieldTags.TOAST_MESSAGE,
-                exception.handleError { } ?: "Bad connection")
+                exception.handleError { })
             viewModel.stopLoading()
         }
 
@@ -215,7 +215,7 @@ class BookerCreationActivity : AppCompatActivity() {
                 )
             } else {
                 binding.progressBar.visibility = View.GONE
-                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         }
 
