@@ -7,7 +7,6 @@
 
     </data>
 
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,101 +22,14 @@
             android:scrollbars="vertical"
             tools:context=".ui.agency.creation.AgencyCreationFinalFragment">
 
-            <Button
-                android:id="@+id/btn_parks"
-                style="@style/neutralButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_label_agency_config_parks"
-                app:icon="@drawable/baseline_place_24"
-                app:layout_constraintBottom_toTopOf="@+id/money"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_trips" />
-
-
-            <Button
-                android:id="@+id/btn_info"
-                style="@style/neutralButton"
-                android:layout_width="wrap_content"
-                android:text="@string/text_label_agency_config_info"
-                app:icon="@drawable/baseline_settings_24"
-                app:layout_constraintBottom_toTopOf="@+id/btn_trips"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/btn_trip_departure_time_periods"
-                style="@style/neutralButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_label_agency_config_departures"
-                app:icon="@drawable/baseline_departure_board_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_scanners" />
-
-            <Button
-                android:id="@+id/btn_agency_events"
-                style="@style/neutralButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/text_label_agency_config_events_planner"
-                app:icon="@drawable/baseline_event_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_trip_departure_time_periods" />
-
-            <Button
-                android:id="@+id/btn_trips"
-                style="@style/neutralButton"
-                android:layout_width="wrap_content"
-                android:text="@string/text_label_agency_config_trips"
-                app:icon="@drawable/baseline_directions_bus_24"
-                app:layout_constraintBottom_toTopOf="@+id/btn_parks"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_info" />
-
-            <Button
-                android:id="@+id/btn_scanners"
-                style="@style/neutralButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_label_agency_config_scanners"
-                app:icon="@drawable/baseline_groups_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/money" />
-
-            <Button
-                android:id="@+id/money"
-                style="@style/positiveButton"
-                android:layout_width="wrap_content"
-                android:text="@string/text_label_agency_config_money"
-                app:icon="@drawable/baseline_payments_24"
-                app:layout_constraintBottom_toTopOf="@+id/btn_scanners"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_parks" />
-
-            <Button
-                android:id="@+id/btn_delete_agency"
-                style="@style/negativeButton"
-                android:layout_width="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@string/text_label_agency_config_delete_agency"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_config_admin"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

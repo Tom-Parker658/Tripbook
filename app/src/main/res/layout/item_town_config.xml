@@ -13,7 +13,7 @@
             type="com.google.firebase.firestore.DocumentSnapshot" />
         <variable
             name="buttonTag"
-            type="com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel.TownButtonTags" />
+            type="com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TownsConfigViewModel.TownButtonTags" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

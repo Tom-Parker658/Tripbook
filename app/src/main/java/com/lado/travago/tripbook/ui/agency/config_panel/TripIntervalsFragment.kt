@@ -19,7 +19,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.lado.travago.tripbook.R
-import com.lado.travago.tripbook.databinding.FragmentTripDepartureTimeConfigBinding
+import com.lado.travago.tripbook.databinding.FragmentTripIntervalsBinding
 import com.lado.travago.tripbook.databinding.LayoutAddTripIntervalBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
@@ -34,8 +34,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class TripDepartureTimeConfigFragment : Fragment() {
-    private lateinit var binding: FragmentTripDepartureTimeConfigBinding
+class TripIntervalsFragment : Fragment() {
+    private lateinit var binding: FragmentTripIntervalsBinding
     private lateinit var adapter: TimeIntervalAdapter
     private lateinit var parentViewModel: AgencyConfigViewModel
     private lateinit var viewModel: TripsDepartureTimeConfigViewModel
@@ -56,7 +56,7 @@ class TripDepartureTimeConfigFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.fragment_trip_departure_time_config,
+            R.layout.fragment_trip_intervals,
             container,
             false
         )

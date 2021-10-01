@@ -268,6 +268,7 @@ class ScannerConfigViewModel : ViewModel() {
      */
     suspend fun recruitScanner(bookerDoc: DocumentSnapshot, agencyID: String) {
         val scannerMap = hashMapOf<String, Any?>(
+            "scannerID" to bookerDoc.id,
             "name" to bookerDoc.getString("name"),
             "phone" to bookerDoc.getString("phone"),
             "photoUrl" to bookerDoc.getString("photoUrl"),
@@ -289,7 +290,7 @@ class ScannerConfigViewModel : ViewModel() {
         }. They wish to get you as their personalScanner.\n NB: You can be a scanner for only one agency! \n If you don't want, donot accept"
 
         val messageMap = hashMapOf<String, Any?>(
-            "agencyID" to "Bh7XGjKv5AlUMoDQFpv0",
+            "agencyName" to "Agency",//TODO: Get another name
             "message" to message
         )
 

@@ -29,7 +29,7 @@
     <string name="text_e_hint_trip_search_date">Date du Voyage</string>
     <string name="text_e_hint_trip_search_time">Heure du Voyage</string>
     <string name="text_e_helper_trip_search_destination">Où allez vous?</string>
-    <string name="">A Quelle heure voulez-vous voyager?</string>
+<!--    <string name="text_e_helper_trip_search_time">A Quelle heure voulez-vous voyager?</string>-->
     <string name="text_e_helper_trip_search_day">Quand voulez vous voyager?</string>
     <string name="text_e_agency_creation_label_name">Nom d\'Agence</string>
     <string name="text_e_agency_creation_label_decree">Décrét Ministériel</string>
@@ -71,8 +71,8 @@
     <string name="text_chip_scanner_config_admin">Administrateur</string>
     <string name="text_btn_scanner_config_fire">Licencier le Scanneur!</string>
     <string name="text_label_agency_config_parks">Garre Routières</string>
-    <string name="text_label_agency_config_info">Profil de l\'Agence</string>
-    <string name="text_label_agency_config_departures">Horraires de Départ</string>
+    <string name="text_label_agency_config_profile">Profil de l\'Agence</string>
+    <string name="text_label_agency_config_intervals">Horraires de Départ</string>
     <string name="text_label_agency_config_events_planner">Planificateur D\'événement</string>
     <string name="text_label_agency_config_trips">Voyages</string>
     <string name="text_label_agency_config_money">Argent</string>
@@ -100,4 +100,11 @@
     <string name="text_dialog_title_from">De</string>
     <string name="text_e_helper_trip_search_time">Vers quelle heure voulez-vous voyagez?</string>
     <string name="text_btn_cancel">Annuler</string>
+    <string name="text_message_error_auth_fail">Nous avons pas pus verifiez votre identité. Veulliez reéssayer!</string>
+    <string name="text_sort_book_by_price">Prix</string>
+    <string name="text_sort_book_by_distance">Distance</string>
+    <string name="text_sort_book_by_vips">VIPs</string>
+    <string name="text_sort_book_by_taken_already">Deja pris</string>
+    <string name="text_sort_book_by_expired">Expiré</string>
+    <string name="text_sort_book_by_departure_time">En approche</string>
 </resources>

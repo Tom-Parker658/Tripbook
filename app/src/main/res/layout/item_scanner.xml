@@ -11,7 +11,7 @@
 
         <variable
             name="buttonTag"
-            type="com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.ScannerConfigViewModel.ScannerButtonTags" />
+            type="com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.ScannerConfigViewModel.ScannerButtonTags" />
 
         <variable
             name="clickListener"

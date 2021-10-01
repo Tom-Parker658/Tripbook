@@ -6,8 +6,8 @@
 
 <!--    Agency Config Fragment-->
     <string name="text_label_agency_config_parks">Parks</string>
-    <string name="text_label_agency_config_info">Agency Profile</string>
-    <string name="text_label_agency_config_departures">Take Off Periods</string>
+    <string name="text_label_agency_config_profile">Agency Profile</string>
+    <string name="text_label_agency_config_intervals">Take Off Periods</string>
     <string name="text_label_agency_config_events_planner">Event Planner</string>
     <string name="text_label_agency_config_trips">Trips</string>
     <string name="text_label_agency_config_money">Money</string>

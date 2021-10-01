@@ -24,10 +24,10 @@
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/font/aclonica.xml" value="0.24583333333333332" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/font/my_font.xml" value="0.24583333333333332" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout-land/activity_agency_config.xml" value="0.17916666666666667" />
-        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout-land/fragment_trip_detail.xml" value="0.25" />
+        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout-land/fragment_trip_detail.xml" value="0.2388888888888889" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout-v24/activity_trip_search.xml" value="0.215625" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/activity_admin_function.xml" value="0.33" />
-        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/activity_admin_panel.xml" value="0.1361842105263158" />
+        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/activity_admin_panel.xml" value="0.21" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/activity_agency_config.xml" value="0.1361842105263158" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/activity_agency_config2.xml" value="0.12407407407407407" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/activity_agency_creation.xml" value="0.10486322188449848" />
@@ -49,7 +49,7 @@
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/fragment_bus_content.xml" value="0.1361842105263158" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/fragment_info_screen.xml" value="0.17" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/fragment_journey_search_result.xml" value="0.22" />
-        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/fragment_my_books.xml" value="0.22" />
+        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/fragment_my_books.xml" value="0.25" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/fragment_my_scanner.xml" value="0.215625" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/fragment_scanner_config.xml" value="0.2" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/fragment_scanner_stats.xml" value="0.1361842105263158" />
@@ -70,15 +70,18 @@
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_bus_seat.xml" value="0.67" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_buses_list.xml" value="0.1361842105263158" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_code_confirmation.xml" value="0.25" />
+        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_config_list.xml" value="0.33" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_dropdown_textview.xml" value="0.1361842105263158" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_info.xml" value="0.25" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_journey_search_result.xml" value="0.33" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_place_autocomplete.xml" value="0.1361842105263158" />
-        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_scanner.xml" value="0.22" />
+        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_scanner.xml" value="0.25" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_seach_form.xml" value="0.12465846994535519" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_search_form.xml" value="0.25" />
+        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_setting.xml" value="0.5" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_simple.xml" value="0.2" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_simple_recycler_layout.xml" value="0.33" />
+        <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_summary_list.xml" value="0.33" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_ticket.xml" value="0.2515625" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_ticket_template.xml" value="0.18" />
         <entry key="..\:/Users/NGWAN/AndroidStudioProjects/Tripbook/app/src/main/res/layout/item_time_interval.xml" value="0.33" />

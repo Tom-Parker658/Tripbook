@@ -18,7 +18,7 @@
 
         <variable
             name="tripButtonTag"
-            type="com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel.TripButtonTags" />
+            type="com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel.TripButtonTags" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

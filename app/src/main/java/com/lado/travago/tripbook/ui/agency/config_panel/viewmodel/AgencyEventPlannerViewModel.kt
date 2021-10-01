@@ -213,7 +213,7 @@ class AgencyEventPlannerViewModel : ViewModel() {
                                     }
                                     is State.Loading -> _onLoading.value = true
                                     is State.Success -> {
-                                        //We ad the date of the new event o the list of old events and store
+                                        //We add the date of the new event to the list of old events and store
                                         val eventList =
                                             agencyDoc.data.get("eventDateList") as List<Long>?
                                         val newEventList = mutableListOf(

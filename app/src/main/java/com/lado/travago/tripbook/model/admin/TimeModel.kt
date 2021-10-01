@@ -1,5 +1,7 @@
 package com.lado.travago.tripbook.model.admin
 
+import java.util.*
+
 
 /**
  * @author Tom parkert
@@ -62,5 +64,6 @@ class TimeModel private constructor(
                 (hourDiff * 60) + minutesDiff
             }
         }
+
     }
 }

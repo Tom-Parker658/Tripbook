@@ -10,14 +10,33 @@ import com.lado.travago.tripbook.model.booking.Ticket
 import com.lado.travago.tripbook.model.users.Booker
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.lang.Math.pow
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.roundToInt
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 /**
  * Contains a set of utilities for our app_user .
  */
 object Utils {
+    val oneDayInMillis: Long
+        get() {
+            val today = Calendar.getInstance().timeInMillis
+            val tomorrow =
+                Calendar.getInstance().apply { this.roll(Calendar.DAY_OF_YEAR, 1) }.timeInMillis
+            return tomorrow - today
+        }
+
+    /**
+     * Gets the number of days between two dates in any order then returns the time difference in days
+     * as a decimal number e.g 9.5 Days
+     */
+    fun getNumberOfDaysBetween(dateInMillis1: Long, dateInMillis2: Long) =
+        sqrt(
+            ((dateInMillis1 - dateInMillis2).toDouble() / oneDayInMillis.toDouble()).pow(2)
+        )
+
     //We add spaces after every 3 characters except the last character
     fun formatFCFAPrice(price: Long): String {
         var formattedPrice = ""

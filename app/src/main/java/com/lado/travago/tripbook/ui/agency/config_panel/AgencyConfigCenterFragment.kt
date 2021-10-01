@@ -1,6 +1,5 @@
 package com.lado.travago.tripbook.ui.agency.config_panel
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,16 +8,20 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyConfigCenterBinding
-import com.lado.travago.tripbook.ui.booker.creation.BookerCreationActivity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
+import com.lado.travago.tripbook.model.admin.SummaryItem
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
+import com.lado.travago.tripbook.ui.recycler_adapters.SummaryItemAdapter
+import com.lado.travago.tripbook.ui.recycler_adapters.SummaryItemClickListener
+import kotlinx.coroutines.*
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class AgencyConfigCenterFragment : Fragment() {
     private lateinit var binding: FragmentAgencyConfigCenterBinding
+    private lateinit var parentViewModel: AgencyConfigViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,10 +33,11 @@ class AgencyConfigCenterFragment : Fragment() {
             container,
             false
         )
-        onClickListeners()
+        initSettingsRecycler()
 
         return binding.root
     }
+
     /**
      * Inorder to stop any loading blocking the ui
      */
@@ -43,38 +47,51 @@ class AgencyConfigCenterFragment : Fragment() {
         super.onDetach()
     }
 
-    private fun onClickListeners() {
-        /**
-         * Launches for configuration of trips or journeys
-         */
-        binding.btnTrips.setOnClickListener {
-            findNavController().navigate(
+    private fun initSettingsRecycler() {
+        SummaryItemAdapter(
+            SummaryItemClickListener {
+                handleNavClicks(it)
+            }
+        ).apply {
+            this.submitList(
+                if (parentViewModel.scannerDoc.value!!.getBoolean("isAdmin")!!)
+                    SummaryItem.adminScannerItems
+                else SummaryItem.adminScannerItems //TODO: Urgent: Change it with Scanner related panels
+            )
+            val linearLayoutManager = LinearLayoutManager(requireContext())
+            binding.recyclerConfigAdmin.layoutManager = linearLayoutManager
+            binding.recyclerConfigAdmin.adapter = this
+        }
+
+
+    }
+
+    private fun handleNavClicks(it: SummaryItem) {
+        when (it.mainTitle) {
+            // Trips
+            getString(R.string.text_label_agency_config_trips) -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTownsConfigFragment()
             )
-        }
-        binding.btnScanners.setOnClickListener {
-            findNavController().navigate(
-                AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToScannerConfigFragment()
-            )
-        }
-        binding.btnInfo.setOnClickListener {
-            findNavController().navigate(
+            // Agency Profile
+            getString(R.string.text_label_agency_config_profile) -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyCreationFragment()
             )
-        }
-        binding.btnTripDepartureTimePeriods.setOnClickListener {
-            findNavController().navigate(
-                AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTripDepartureTimeConfigFragment()
+            // Money
+            getString(R.string.text_label_agency_config_money) -> {
+                //TODO: Payment Modules
+            }
+            // Scanners
+            getString(R.string.text_label_agency_config_scanners) -> findNavController().navigate(
+                AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToScannerConfigFragment()
             )
-        }
-        binding.btnAgencyEvents.setOnClickListener {
-            findNavController().navigate(
+            //Events
+            getString(R.string.text_label_agency_config_events_planner) -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyEventPlannerFragment()
             )
-        }
-        //TODO: For now, we navigate to the creation for bookers
-        binding.btnDeleteAgency.setOnClickListener {
-            startActivity(Intent(requireContext(), BookerCreationActivity::class.java))
+            //Intervals
+            getString(R.string.text_label_agency_config_intervals) -> findNavController().navigate(
+                AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTripDepartureTimeConfigFragment()
+            )
         }
     }
 }

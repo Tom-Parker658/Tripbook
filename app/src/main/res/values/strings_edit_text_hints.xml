@@ -26,7 +26,7 @@
     <string name="text_e_hint_trip_search_date">Travel Date</string>
     <string name="text_e_hint_trip_search_time">Travel Time</string>
     <string name="text_e_helper_trip_search_destination">Where are you going to?</string>
-    <string name="">What time?</string>
+    <string name="text_e_helper_trip_search_time">What time?</string>
     <string name="text_e_helper_trip_search_day">Which day?</string>
 
     <!--    Agency Creation Info-->

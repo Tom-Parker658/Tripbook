@@ -22,6 +22,9 @@ class AgencyConfigViewModel : ViewModel() {
     private val _bookerDoc = MutableLiveData<DocumentSnapshot>()
     val bookerDoc: LiveData<DocumentSnapshot> get() = _bookerDoc
 
+    private val _scannerDoc = MutableLiveData<DocumentSnapshot>()
+    val scannerDoc: LiveData<DocumentSnapshot> get() = _scannerDoc
+
     private val _retry = MutableLiveData(true)
     val retry: LiveData<Boolean> get() = _retry
 
@@ -35,24 +38,32 @@ class AgencyConfigViewModel : ViewModel() {
         firestoreRepo.getDocument(
             "Bookers/ptUDtYNmuTZNjdXBAfDcLFQ7Z6aq",
             Source.SERVER
-        ).collect {
-            when (it) {
+        ).collect { bookerDoc ->
+            when (bookerDoc) {
                 is State.Success -> {
-                    _bookerDoc.value = it.data!!
+                    // Gets the scanner doc
+                    firestoreRepo.queryCollection(
+                        "OnlineTransportAgency/${
+                            this.bookerDoc.value!!.getString(
+                                "agencyID"
+                            )!!
+                        }/Scanners", Source.DEFAULT
+                    ) {
+                        it.whereEqualTo("scannerID", this.bookerDoc.value!!.id)
+
+                    }.collect { scannerDoc ->
+                        when (scannerDoc) {
+                            is State.Success -> {
+                                _bookerDoc.value = bookerDoc.data!!
+                                _scannerDoc.value = scannerDoc.data.documents.first()
+                            }
+                        }
+                    }
                 }
             }
         }
-        /*
-        firestoreRepo.getDocument(
-            "Bookers/${authRepo.currentUser?.uid}",
-            Source.SERVER
-        ).collect {
-            when (it) {
-                is State.Success -> {
-                    _bookerDoc.value = it.data!!
-                }
-            }
-        }*/
+
     }
+
 
 }
