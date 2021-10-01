@@ -1,7 +1,7 @@
-package com.lado.travago.tripbook.ui.agency.creation.config_panel
+package com.lado.travago.tripbook.ui.agency.config_panel
 
-import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,9 +27,9 @@ import com.lado.travago.tripbook.databinding.ItemSearchFormBinding
 import com.lado.travago.tripbook.databinding.ItemSimpleRecyclerLayoutBinding
 import com.lado.travago.tripbook.databinding.ItemTripPriceFormBinding
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel.*
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel.*
 import com.lado.travago.tripbook.ui.recycler_adapters.SimpleAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.SimpleClickListener
 import com.lado.travago.tripbook.ui.recycler_adapters.TripsClickListener
@@ -84,7 +84,7 @@ class TripsConfigFragment : Fragment() {
     private fun initRecycler(spanCount: Int) {
         val recyclerManager = GridLayoutManager(context, spanCount)
         binding.recyclerTrips.layoutManager = recyclerManager
-        binding.recyclerTrips.adapter = adapter
+        if (this::adapter.isInitialized) binding.recyclerTrips.adapter = adapter
     }
 
     private fun observeLiveData() {
@@ -111,11 +111,6 @@ class TripsConfigFragment : Fragment() {
             viewModel.tripNamesList.clear()
             if (it.isNotEmpty()) {
                 it.forEach { currentDoc ->
-                    /**Donot touch*/
-                    /*   viewModel.doBackGroundJob(
-                           it,
-                           parentViewModel.bookerDoc.value!!.getString("agencyID")!!
-                       )*/
                     /**
                      * We get the town names which are not the current town name
                      */
@@ -141,25 +136,9 @@ class TripsConfigFragment : Fragment() {
             }
         }
         viewModel.toDeleteIDList.observe(viewLifecycleOwner) {
-            try {
-                if (it.isEmpty()) {
-                    adapter.notifyDataSetChanged()
-                }
-            } catch (e: Exception) {
-                //TODO: Try to check for initialization
-            }
+            if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
         }
 
-        /*viewModel.toDeleteIDList.observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                try {
-                    adapter.notifyDataSetChanged()
-
-                } catch (e: Exception) {
-                    //NOTHING
-                }
-            }
-        }*/
 
         /**
          * Looks for the position of the changed item and rebinds it
@@ -214,8 +193,7 @@ class TripsConfigFragment : Fragment() {
                         null,
                         false
                     )
-                searchBinding.searchBar.hint = " Destination Town: "
-                searchBinding.searchBar.helperText = "Enter destination town name."
+                searchBinding.searchBar.hint = getString(R.string.text_label_town)
 
                 //Sets adapter for the autocomplete text view
                 val searchAdapter = ArrayAdapter(
@@ -230,22 +208,24 @@ class TripsConfigFragment : Fragment() {
 
                 MaterialAlertDialogBuilder(requireContext()).apply {
                     setIcon(R.drawable.baseline_search_24)
-                    setTitle("Search")
+                    setTitle(R.string.text_dialog_search)
                     setView(searchBinding.root)
-                    setPositiveButton("SEARCH") { dialog, _ ->
+                    setPositiveButton(R.string.text_dialog_search) { dialog, _ ->
                         viewModel.searchTrip(searchBinding.searchBar.editText!!.text.toString())
                             ?.let { index ->
                                 if (index != -1) {
                                     binding.recyclerTrips.smoothScrollToPosition(index)
+                                    if (this@TripsConfigFragment::adapter.isInitialized) adapter.notifyItemChanged(
+                                        index
+                                    )
                                 } else {//If not found
                                     viewModel.setField(
                                         FieldTags.TOAST_MESSAGE,
-                                        "Not found. Select from dropdown"
+                                        getString(R.string.text_message_not_found_drop_down)
                                     )
                                 }
                             }
                         viewModel.setField(FieldTags.START_TRIP_SEARCH, false)
-                        dialog.dismiss()
                         dialog.cancel()
                     }
                     setOnCancelListener {
@@ -260,11 +240,7 @@ class TripsConfigFragment : Fragment() {
             }
         }
         viewModel.spanSize.observe(viewLifecycleOwner) {
-            try {
-                initRecycler(it)
-            }catch(e:Exception){
-
-            }
+            if (this::adapter.isInitialized) initRecycler(it)
         }
     }
 
@@ -287,6 +263,9 @@ class TripsConfigFragment : Fragment() {
                 if (it.isShown) it.hide() else it.show()
             }
             binding.fabSearchTrip.let {
+                if (it.isShown) it.hide() else it.show()
+            }
+            binding.fabTripSpanSize.let {
                 if (it.isShown) it.hide() else it.show()
             }
             binding.fabSortTrips.let {
@@ -326,7 +305,13 @@ class TripsConfigFragment : Fragment() {
                 setIcon(R.drawable.baseline_sort_24)
                 setTitle("Sort By?")
                 setSingleChoiceItems(
-                    arrayOf("None", "Name", "Price", "VIP Price", "distance"),
+                    arrayOf(
+                        getString(R.string.text_sort_by_none),
+                        getString(R.string.text_sort_town_by_name),
+                        getString(R.string.text_sort_trip_by_price),
+                        getString(R.string.text_sort_trip_by_vip_price),
+                        getString(R.string.text_sort_trip_by_distance)
+                    ),
                     viewModel.sortCheckedItem
                 ) { dialog, which ->
                     when (which) {
@@ -351,7 +336,6 @@ class TripsConfigFragment : Fragment() {
                     adapter.notifyDataSetChanged()
                     dialog.dismiss()
                 }
-
             }.create().show()
         }
         binding.fabRemoveTripSelection.setOnClickListener {
@@ -371,7 +355,7 @@ class TripsConfigFragment : Fragment() {
         }
         binding.fabTripSpanSize.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("How many items do you want on a row")
+                .setTitle(R.string.text_dialog_title_span_size)
                 .setSingleChoiceItems(
                     arrayOf("1", "2", "3", "4", "5", "6"),
                     viewModel.spanSize.value!!
@@ -382,10 +366,9 @@ class TripsConfigFragment : Fragment() {
         }
     }
 /*
-    */
-    /**
-     * Special function to configure the types of buses
-     *//*
+
+     // Special function to configure the types of buses
+
     private fun showBusTypesDialog(tripID: String) {
         val tripDoc = viewModel.currentTripsList.value!!.find {
             it.id == tripID
@@ -492,17 +475,10 @@ class TripsConfigFragment : Fragment() {
                                 FieldTags.CURRENT_TRIPS,
                                 snapshot.documents
                             )
-                            //We transform all documents to change Map
-//                    viewModel.convertToNewChangeMap(snapshot)
-
                             adapter.submitList(snapshot.documents)
                             initRecycler(viewModel.spanSize.value!!)
-                        } else {
-                            try {
-                                adapter.notifyDataSetChanged()
-                            } catch (e: Exception) {/*Just incase we cleared all the list of items*/
-                            }
-                        }
+                        } else
+                            if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
                     }
                     error?.handleError { }
                 }
@@ -511,7 +487,6 @@ class TripsConfigFragment : Fragment() {
         private val viewModel: TripsConfigViewModel,
         private val parentViewModel: AgencyConfigViewModel
     ) : DialogFragment() {
-        @SuppressLint("DialogFragmentCallbacksDetector")
         override fun onCreateDialog(
             savedInstanceState: Bundle?
         ): Dialog {
@@ -546,10 +521,10 @@ class TripsConfigFragment : Fragment() {
             )
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
-                .setTitle("Trips From ${viewModel.currentTownName} To: ")
+                .setTitle("${getString(R.string.text_dialog_title_from)}: Trips From ${viewModel.currentTownName}")
                 .setIcon(R.drawable.baseline_add_24)
                 .setView(recyclerBinding.root)
-                .setPositiveButton("Add Selected Trips") { dialog, _ ->
+                .setPositiveButton(R.string.text_dialog_btn_add) { dialog, _ ->
                     CoroutineScope(Dispatchers.Main).launch {
                         viewModel.commitToAddList(
                             parentViewModel.bookerDoc.value!!.getString(
@@ -557,23 +532,24 @@ class TripsConfigFragment : Fragment() {
                             )!!
                         )
                     }
-                    dialog.dismiss()
                     dialog.cancel()
-                }
-                .setOnCancelListener {
-                    viewModel.setField(FieldTags.SHOW_ADD_TRIP, false)
-                }
-                .setOnDismissListener {
-                    viewModel.setField(FieldTags.SHOW_ADD_TRIP, false)
-                }
-                .create()
+                }.create()
+        }
+
+        override fun onDismiss(dialog: DialogInterface) {
+            viewModel.setField(FieldTags.SHOW_ADD_TRIP, false)
+            super.onDismiss(dialog)
+        }
+
+        override fun onCancel(dialog: DialogInterface) {
+            viewModel.setField(FieldTags.SHOW_ADD_TRIP, false)
+            super.onCancel(dialog)
         }
 
     }
 
     class NormalPriceDialogFragment(val viewModel: TripsConfigViewModel) :
         DialogFragment() {
-        @SuppressLint("DialogFragmentCallbacksDetector")
         override fun onCreateDialog(
             savedInstanceState: Bundle?
         ): Dialog {
@@ -583,12 +559,12 @@ class TripsConfigFragment : Fragment() {
                 null,
                 true
             )
+            priceBinding.price.setHint(R.string.text_e_hint_trips_config_standard_price)
 
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
-                .setTitle("Normal Price")
                 .setView(priceBinding.root)
-                .setNegativeButton("CANCEL") { dialog, _ ->
+                .setNegativeButton(R.string.text_btn_cancel) { dialog, _ ->
                     dialog.cancel()
                     dialog.dismiss()
                     viewModel.setField(
@@ -596,19 +572,7 @@ class TripsConfigFragment : Fragment() {
                         false
                     )
                 }
-                .setOnCancelListener {
-                    viewModel.setField(
-                        FieldTags.ON_NORMAL_PRICE_FORM,
-                        false
-                    )
-                }
-                .setOnDismissListener {
-                    viewModel.setField(
-                        FieldTags.ON_NORMAL_PRICE_FORM,
-                        false
-                    )
-                }
-                .setPositiveButton("CONFIRM") { dialog, _ ->
+                .setPositiveButton(R.string.text_btn_save) { dialog, _ ->
                     val price =
                         if (priceBinding.price.editText!!.text.toString().isBlank()) 0L
                         else priceBinding.price.editText!!.text.toString().toLong()
@@ -623,19 +587,31 @@ class TripsConfigFragment : Fragment() {
                 }
                 .create()
         }
+
+
     }
+
 
     /**
      * Inorder to stop any loading blocking the ui
      */
     override fun onDetach() {
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
         super.onDetach()
     }
+
     class VipPriceDialogFragment(val viewModel: TripsConfigViewModel) :
         DialogFragment() {
-        @SuppressLint("DialogFragmentCallbacksDetector")
+        override fun onDismiss(dialog: DialogInterface) {
+            viewModel.setField(FieldTags.ON_VIP_PRICE_FORM, false)
+            super.onDismiss(dialog)
+        }
+
+        override fun onCancel(dialog: DialogInterface) {
+            viewModel.setField(FieldTags.ON_VIP_PRICE_FORM, false)
+            super.onCancel(dialog)
+        }
+
         override fun onCreateDialog(
             savedInstanceState: Bundle?
         ): Dialog {
@@ -645,23 +621,16 @@ class TripsConfigFragment : Fragment() {
                 null,
                 true
             )
-
+            priceBinding.price.setHint(R.string.text_e_hint_trips_config_vip_price)
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
-                .setTitle("VIP Price")
                 .setView(priceBinding.root)
-                .setNegativeButton("CANCEL") { dialog, _ ->
+                .setNegativeButton(R.string.text_btn_cancel) { dialog, _ ->
                     dialog.cancel()
                     dialog.dismiss()
                     viewModel.setField(FieldTags.ON_VIP_PRICE_FORM, false)
                 }
-                .setOnCancelListener {
-                    viewModel.setField(FieldTags.ON_VIP_PRICE_FORM, false)
-                }
-                .setOnDismissListener {
-                    viewModel.setField(FieldTags.ON_VIP_PRICE_FORM, false)
-                }
-                .setPositiveButton("CONFIRM") { dialog, _ ->
+                .setPositiveButton(R.string.text_btn_save) { dialog, _ ->
                     val price =
                         if (priceBinding.price.editText!!.text.toString().isBlank()) 0L
                         else priceBinding.price.editText!!.text.toString().toLong()

@@ -1,9 +1,6 @@
 package com.lado.travago.tripbook.repo.firebase
 
-import android.content.Context
-import com.google.firebase.FirebaseApp
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.StorageTags

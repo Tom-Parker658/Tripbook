@@ -19,4 +19,5 @@
     <string name="text_btn_town_config_parks">Parks</string>
     <string name="text_chip_scanner_config_admin">Administrator</string>
     <string name="text_btn_scanner_config_fire">Fire the Scanner!</string>
+    <string name="text_btn_cancel">Cancel</string>
 </resources>

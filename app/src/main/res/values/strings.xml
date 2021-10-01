@@ -23,6 +23,8 @@
     <string name="text_e_helper_trip_search_location">Select your current location from the list</string>
     <string name="text_btn_save">Save</string>
     <string name="text_e_helper_trip_search_time">At what time do you wish to go?</string>
+    <string name="text_message_error_invalid_phone">"Enter valid number "</string>
+    <string name="text_message_error_photo_large">Photo is too large</string>
 </resources>
 
 

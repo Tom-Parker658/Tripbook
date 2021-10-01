@@ -6,7 +6,7 @@
     app:startDestination="@id/agencyConfigCenterFragment">
     <fragment
         android:id="@+id/scannerConfigFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.ScannerConfigFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.config_panel.ScannerConfigFragment"
         android:label="fragment_scanner_config" >
         <action
             android:id="@+id/action_scannerConfigFragment_to_agencyConfigCenterFragment"
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/townsConfigFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.TownsConfigFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.config_panel.TownsConfigFragment"
         android:label="TownsConfigFragment" >
         <action
             android:id="@+id/action_townsConfigFragment_to_tripsConfigFragment"
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/tripsConfigFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.TripsConfigFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.config_panel.TripsConfigFragment"
         android:label="TripsConfigFragment" >
         <argument
             android:name="townID"
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/agencyCreationFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyCreationFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.config_panel.creation.AgencyCreationFragment"
         android:label="AgencyCreationFragment" >
         <action
             android:id="@+id/action_agencyCreationFragment_to_agencyConfigCenterFragment"
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/agencyConfigCenterFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.AgencyConfigCenterFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.config_panel.AgencyConfigCenterFragment"
         android:label="AgencyConfigCenterFragment" >
         <action
             android:id="@+id/action_agencyConfigCenterFragment_to_scannerConfigFragment"
@@ -71,7 +71,7 @@
     </fragment>
     <fragment
         android:id="@+id/tripDepartureTimeConfigFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.TripDepartureTimeConfigFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.config_panel.TripDepartureTimeConfigFragment"
         android:label="fragment_trip_departure_time_config"
         tools:layout="@layout/fragment_trip_departure_time_config" >
         <action
@@ -80,7 +80,7 @@
     </fragment>
     <fragment
         android:id="@+id/agencyEventPlannerFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.creation.config_panel.AgencyEventPlannerFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.config_panel.AgencyEventPlannerFragment"
         android:label="AgencyEventPlannerFragment" >
         <action
             android:id="@+id/action_agencyEventPlannerFragment_to_agencyConfigCenterFragment"

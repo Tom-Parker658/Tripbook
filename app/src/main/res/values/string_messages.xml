@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_message_not_found_drop_down">Not found. Select from dropdown</string>
+    <string name="text_message_error_auth_fail">Could not verify your authenticity. Check Connection</string>
+</resources>

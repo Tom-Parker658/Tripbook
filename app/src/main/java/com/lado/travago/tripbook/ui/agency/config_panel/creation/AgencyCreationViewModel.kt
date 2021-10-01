@@ -1,13 +1,11 @@
-package com.lado.travago.tripbook.ui.agency.creation
+package com.lado.travago.tripbook.ui.agency.config_panel.creation
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.Transaction
 import com.lado.travago.tripbook.model.admin.OnlineTravelAgency
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.FirestoreTags
@@ -18,9 +16,14 @@ import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import com.lado.travago.tripbook.repo.firebase.StorageRepo
 import com.lado.travago.tripbook.utils.Utils
 import com.lado.travago.tripbook.utils.Utils.removeSpaces
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.tasks.await
 import java.util.regex.Pattern
 
 @InternalCoroutinesApi
@@ -71,12 +74,6 @@ class AgencyCreationViewModel : ViewModel() {
         private set
     var mottoField = ""
         private set
-    var bankField = ""
-        private set
-    var momoField = ""
-        private set
-    var orangeMoneyField = ""
-        private set
     var nameCEOField = ""
         private set
     var creationYearField = ""
@@ -104,9 +101,6 @@ class AgencyCreationViewModel : ViewModel() {
         NAME,
         MOTTO,
         SUPPORT_EMAIL,
-        BANK_NUMBER,
-        MOMO_NUMBER,
-        ORANGE_NUMBER,
         LOGO_BITMAP,
         CEO_NAME,
         DECREE_NUMBER,
@@ -153,9 +147,6 @@ class AgencyCreationViewModel : ViewModel() {
             creationYearField = agencyDbData.getLong("creationYear")!!.toString()
             mottoField = agencyDbData.getString("motto")!!
             supportEmailField = agencyDbData.getString("supportEmail")!!
-            bankField = agencyDbData.getString("bankNumber")!!.toString()
-            momoField = agencyDbData.getString("mtnMoneyNumber")!!
-            orangeMoneyField = agencyDbData.getString("orangeMoneyNumber")!!
             logoUrl = agencyDbData.getString("logoUrl")!!
             phoneCode1 = agencyDbData.getLong("phoneCode1")!!.toInt()
             phoneCode2 = agencyDbData.getLong("phoneCode2")!!.toInt()
@@ -177,9 +168,6 @@ class AgencyCreationViewModel : ViewModel() {
             FieldTags.SUPPORT_PHONE_1 -> supportPhone1Field = value.toString()
             FieldTags.SUPPORT_PHONE_2 -> supportPhone2Field = value.toString()
             FieldTags.SUPPORT_EMAIL -> supportEmailField = value.toString()
-            FieldTags.BANK_NUMBER -> bankField = value.toString()
-            FieldTags.MOMO_NUMBER -> momoField = value.toString()
-            FieldTags.ORANGE_NUMBER -> orangeMoneyField = value.toString()
             FieldTags.DECREE_NUMBER -> decreeNumberField = value.toString()
             FieldTags.CREATION_YEAR -> creationYearField = value.toString()
             FieldTags.LOGO_BITMAP -> logoBitmap = value as Bitmap
@@ -227,16 +215,14 @@ class AgencyCreationViewModel : ViewModel() {
     /**
      * Saves a fresh copy of the agency info for a new agency
      */
-    fun createAgency(bookerDoc: DocumentSnapshot): Task<Void> {
+    suspend fun createAgency(bookerDoc: DocumentSnapshot) = flow {
+        emit(State.loading())
         val newAgencyMap = OnlineTravelAgency(
             agencyName = nameField,
             logoUrl = logoUrl,
             motto = mottoField,
             nameCEO = nameCEOField,
             creationDecree = decreeNumberField,
-            bankNumber = bankField,
-            mtnMoneyNumber = momoField,
-            orangeMoneyNumber = orangeMoneyField,
             supportEmail = supportEmailField,
             supportPhone1 = supportPhone1Field.removeSpaces(),
             supportPhone2 = supportPhone2Field.removeSpaces(),
@@ -253,7 +239,7 @@ class AgencyCreationViewModel : ViewModel() {
         val creatorScannerMap = hashMapOf<String, Any?>(
             "name" to bookerDoc.getString("name"),
             "phone" to bookerDoc.getString("phone"),
-            "photoUrl" to (bookerDoc.getString("photoUrl")?:""),
+            "photoUrl" to (bookerDoc.getString("photoUrl") ?: ""),
             "isAdmin" to true,
             "isOwner" to true,
             "active" to true,
@@ -267,7 +253,7 @@ class AgencyCreationViewModel : ViewModel() {
             "doneAt" to Timestamp.now()
         )
 
-        return firestoreRepo.db.runBatch { batch ->
+        firestoreRepo.db.runBatch { batch ->
             /**1- We Upload the new agency info into firestore*/
             batch.set(agencyDocRef, newAgencyMap)
 
@@ -282,29 +268,40 @@ class AgencyCreationViewModel : ViewModel() {
             )
             /**4-We create a record doc*/
             batch.set(recordDocRef, changeMap)
-        }.addOnSuccessListener {
-            _onLoading.value = false
-            _onInfoSaved.value = true
-            _onInfoSaved.value = false
-        }.addOnFailureListener {
-            _onLoading.value = false
-            _toastMessage.value = it.handleError { }
+        }.await()
+        emit(State.success(Unit))
+    }.apply {
+        catch { emit(State.failed(it as Exception)) }
+        flowOn(Dispatchers.IO)
+        collect {
+            when (it) {
+                is State.Failed -> {
+                    _onLoading.value = false
+                    _toastMessage.value = it.exception.handleError { }
+                }
+                is State.Loading -> _onLoading.value = true
+                is State.Success -> {
+                    _onLoading.value = false
+                    _onInfoSaved.value = true
+                    _onInfoSaved.value = false
+                }
+
+            }
         }
     }
+
 
     /**
      * Updates the agency to db
      */
-    fun updateAgencyInfo(bookerDoc: DocumentSnapshot): Task<Void> {
+    suspend fun updateAgencyInfo(bookerDoc: DocumentSnapshot) = flow {
+        emit(State.loading())
         val agencyMapData = OnlineTravelAgency(
             agencyName = nameField,
             logoUrl = logoUrl,
             motto = mottoField,
             nameCEO = nameCEOField,
             creationDecree = decreeNumberField,
-            bankNumber = bankField,
-            mtnMoneyNumber = momoField,
-            orangeMoneyNumber = orangeMoneyField,
             supportEmail = supportEmailField,
             supportPhone1 = supportPhone1Field.removeSpaces(),
             supportPhone2 = supportPhone2Field.removeSpaces(),
@@ -323,19 +320,31 @@ class AgencyCreationViewModel : ViewModel() {
             "doneAt" to Timestamp.now()
         )
 
-        return firestoreRepo.db.runBatch { batch ->
+        firestoreRepo.db.runBatch { batch ->
             /**1- We Update agency info into firestore*/
             batch.update(agencyDocRef, agencyMapData)
 
             /**2- We add to records that this current admin scanner changed some details*/
             batch.set(recordDocRef, changeMap)
-        }.addOnSuccessListener {
-            _onLoading.value = false
-            _onInfoSaved.value = true
-            _onInfoSaved.value = false
-        }.addOnFailureListener {
-            _onLoading.value = false
-            _toastMessage.value = it.handleError { }
+        }.await()
+        emit(State.success(Unit))
+    }.apply {
+        catch { emit(State.failed(it as Exception)) }
+        flowOn(Dispatchers.IO)
+        collect {
+            when (it) {
+                is State.Failed -> {
+                    _onLoading.value = false
+                    _toastMessage.value = it.exception.handleError { }
+                }
+                is State.Loading -> _onLoading.value = true
+                is State.Success -> {
+                    _onLoading.value = false
+                    _onInfoSaved.value = true
+                    _onInfoSaved.value = false
+                }
+
+            }
         }
     }
 
@@ -352,7 +361,7 @@ class AgencyCreationViewModel : ViewModel() {
     }
 
     fun checkFields() =
-        if (nameField.isBlank() || nameCEOField.isBlank() || creationYearField.isBlank() || bankField.isBlank() || supportEmailField.isBlank() || momoField.isBlank() || mottoField.isBlank() || orangeMoneyField.isBlank() || decreeNumberField.isBlank()) {
+        if (nameField.isBlank() || nameCEOField.isBlank() || creationYearField.isBlank() || mottoField.isBlank() || decreeNumberField.isBlank()) {
             _toastMessage.value = "Do not leave some fields empty"
         } else if (!isBasicallyValidEmailAddress(supportEmailField)) {
             _toastMessage.value = "Invalid Email Address"

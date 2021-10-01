@@ -1,5 +1,6 @@
 package com.lado.travago.tripbook.ui.recycler_adapters
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -7,8 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
+import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ItemTownConfigBinding
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TownsConfigViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
@@ -19,7 +21,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
  *  exceptions doc KEY = "exceptionDoc"
  */
 @ExperimentalCoroutinesApi
-class TownConfigAdapter (val clickListener: TownClickListener, private val toDeleteIDList: MutableList<String>) : ListAdapter< DocumentSnapshot, TownConfigViewHolder>(
+class TownConfigAdapter(
+    val clickListener: TownClickListener,
+    private val toDeleteIDList: MutableList<String>
+) : ListAdapter<DocumentSnapshot, TownConfigViewHolder>(
     TownConfigDiffCallbacks()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TownConfigViewHolder =
@@ -31,18 +36,32 @@ class TownConfigAdapter (val clickListener: TownClickListener, private val toDel
 }
 
 @ExperimentalCoroutinesApi
-class TownConfigViewHolder private constructor(val binding: ItemTownConfigBinding, private val deleteIDList: List<String>) :
+class TownConfigViewHolder private constructor(
+    val binding: ItemTownConfigBinding,
+    private val deleteIDList: List<String>
+) :
     RecyclerView.ViewHolder(binding.root) {
     /**
      * @param townDoc is a document containing each of the town in firestore
      */
     fun bind(clickListener: TownClickListener, townDoc: DocumentSnapshot) {
+
+        if(deleteIDList.contains(townDoc.id)){
+            binding.cardTown.strokeColor = Resources.getSystem().getColor(R.color.colorNegativeButton)
+            binding.checkSelect.isChecked = true
+            binding.cardTown.strokeWidth = 1
+        }else{
+            binding.cardTown.strokeColor = Resources.getSystem().getColor(R.color.colorPositiveButton)
+            binding.cardTown.strokeWidth = 1
+            binding.checkSelect.isChecked = false
+        }
+
         binding.townDoc = townDoc
         binding.clickListener = clickListener
         binding.textTown.text = townDoc["name"].toString()
         binding.textRegion.text = townDoc["region"].toString()
-        binding.checkSelect.isChecked = deleteIDList.contains(townDoc.id)
-        //If the current town is selected, we check it
+
+        binding.cardTown.strokeWidth = 0
     }
 
 
@@ -58,7 +77,7 @@ class TownConfigViewHolder private constructor(val binding: ItemTownConfigBindin
                 parent,
                 false
             )
-            return TownConfigViewHolder(binding,toDeleteIDList)
+            return TownConfigViewHolder(binding, toDeleteIDList)
         }
     }
 }
@@ -68,11 +87,12 @@ class TownConfigViewHolder private constructor(val binding: ItemTownConfigBindin
  * When ever a button, or check is tapped on the town recyler, we get the id of the town clicked
  */
 @ExperimentalCoroutinesApi
-class TownClickListener(val clickListener: (townID: String, townButtonTag: TownsConfigViewModel.TownButtonTags) -> Unit){
+class TownClickListener(val clickListener: (townID: String, townButtonTag: TownsConfigViewModel.TownButtonTags) -> Unit) {
     /**
      * @param townButtonTag is the layout id of the button which has been clicked
      */
-    fun onClick(townButtonTag: TownsConfigViewModel.TownButtonTags, townDoc: DocumentSnapshot) = clickListener("${townDoc.id}+${townDoc["name"]}", townButtonTag)
+    fun onClick(townButtonTag: TownsConfigViewModel.TownButtonTags, townDoc: DocumentSnapshot) =
+        clickListener("${townDoc.id}+${townDoc["name"]}", townButtonTag)
 }
 
 class TownConfigDiffCallbacks : DiffUtil.ItemCallback<DocumentSnapshot>() {

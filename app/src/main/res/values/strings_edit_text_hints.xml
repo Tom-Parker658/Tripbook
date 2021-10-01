@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- All hints for text views-->
-    <string name="text_label_trips_config_price">Standard Price</string>
-    <string name="text_label_trips_config_vip_price">VIP Price</string>
+    <string name="text_e_hint_trips_config_standard_price">Standard Price</string>
+    <string name="text_e_hint_trips_config_vip_price">VIP Price</string>
 
     <!--    Booker Creation-->
     <string name="text_e_hint_booker_creation_phone">Phone Number</string>

@@ -28,7 +28,7 @@
             <!--                        </intent-filter>-->
         </activity>
         <activity
-            android:name=".ui.agency.creation.config_panel.AgencyConfigActivity"
+            android:name="com.lado.travago.tripbook.ui.agency.config_panel.AgencyConfigActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

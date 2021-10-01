@@ -29,11 +29,8 @@ class FirebaseAuthRepo {
             "192.168.186.47",
             9099
         )
-
     }
-
     //Initialising and getting instances of the firebase services
-
     /**
      * Get current user
      */

@@ -1,4 +1,4 @@
-package com.lado.travago.tripbook.ui.agency.creation.config_panel
+package com.lado.travago.tripbook.ui.agency.config_panel
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -23,9 +23,9 @@ import com.lado.travago.tripbook.databinding.FragmentTripDepartureTimeConfigBind
 import com.lado.travago.tripbook.databinding.LayoutAddTripIntervalBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsDepartureTimeConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsDepartureTimeConfigViewModel.*
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsDepartureTimeConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsDepartureTimeConfigViewModel.*
 import com.lado.travago.tripbook.ui.recycler_adapters.TimeIntervalAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.TimeIntervalClickListener
 import kotlinx.coroutines.CoroutineScope

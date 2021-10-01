@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.databinding.ItemScannerBinding
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.ScannerConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.ScannerConfigViewModel
 import com.lado.travago.tripbook.utils.Utils
 import com.lado.travago.tripbook.utils.loadImageFromUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi

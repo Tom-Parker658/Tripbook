@@ -1,18 +1,20 @@
-package com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel
+package com.lado.travago.tripbook.ui.agency.config_panel.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.protobuf.TimestampOrBuilder
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import com.lado.travago.tripbook.utils.Utils.toMapWithIDField
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
-import java.security.Timestamp
 
 @ExperimentalCoroutinesApi
 class TripsConfigViewModel : ViewModel() {
@@ -137,24 +139,6 @@ class TripsConfigViewModel : ViewModel() {
         }
     }
 
-    /**
-     * Do background job
-     * This works in the background to make sure this current town can be a locality to anther destination
-     */
-    /*fun doBackGroundJob(currentList: List<DocumentSnapshot>, agencyID: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            currentList.forEach { doc ->
-                (doc["from"] as Map<String, Any>).let {
-                    if (it[townID] == null && it[townName] == null) {
-                        val updatedMap = mutableMapOf<String, Any>(townID to true, townName to true)
-                        updatedMap.putAll(it)
-                        firestoreRepo.db.document("OnlineTransportAgency/${agencyID}/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/${doc.id}")
-                            .update("to", updatedMap.toMap()).await()
-                    }
-                }
-            }
-        }
-    }*/
 
     //Adds a trip into the toDeleteList
     fun removeTrip(townId: String) =
@@ -167,37 +151,43 @@ class TripsConfigViewModel : ViewModel() {
         else _toAddIDList.value!!.add(townId)
 
     //Does the deletion of the list from the database
-    suspend fun commitToDeleteList(agencyID: String) {
-        _onLoading.value = true
+    suspend fun commitToDeleteList(agencyID: String) = flow {
+        emit(State.loading())
         firestoreRepo.db.runBatch { batch ->
             _toDeleteIDList.value!!.forEach { id ->
                 batch.delete(
                     firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/$id")
                 )
             }
-        }.apply {
-            _onLoading.value = true
-        }.addOnCompleteListener { task ->
-            _onLoading.value = false
-            if (task.isSuccessful) {
-                //We make sure we clear the modification list of deleted content
-                _toDeleteIDList.value!!.forEach { id ->
-                    val index =
-                        _localChangesMapList.value!!.withIndex().find { it.value["id"] == id }
-                    index?.index?.let { _localChangesMapList.value!!.removeAt(it) }
-                }
-                _toDeleteIDList.value!!.clear()
-                _onLoading.value = false
-            } else {
-                _onLoading.value = false
-                _toastMessage.value = task.exception!!.handleError { }
-            }
         }.await()
+        emit(State.success(Unit))
+    }.apply {
+        catch { emit(State.failed(it as Exception)) }
+        flowOn(Dispatchers.IO)
+        collect {
+            when (it) {
+                is State.Failed -> {
+                    _onLoading.value = false
+                    _toastMessage.value = it.exception.handleError { }
+                }
+                is State.Loading -> _onLoading.value = true
+                is State.Success -> {
+                    //We make sure we clear the modification list of deleted content
+                    _toDeleteIDList.value!!.forEach { id ->
+                        val index =
+                            _localChangesMapList.value!!.withIndex().find { it.value["id"] == id }
+                        index?.index?.let { _localChangesMapList.value!!.removeAt(it) }
+                    }
+                    _toDeleteIDList.value!!.clear()
+                    _onLoading.value = false
+                }
+            }
+        }
     }
 
     //Does the addition of the list to database
-    suspend fun commitToAddList(agencyID: String) {
-        _onLoading.value = true
+    suspend fun commitToAddList(agencyID: String) = flow {
+        emit(State.loading())
         firestoreRepo.db.runBatch { batch ->
             _toAddIDList.value!!.forEach { id ->
                 val document = _originalTripsList.value!!.find {
@@ -236,25 +226,31 @@ class TripsConfigViewModel : ViewModel() {
                     )
                 )
             }
-        }.apply {
-            if (!isComplete) _onLoading.value = true
-        }.addOnCompleteListener {
-            _onLoading.value = false
-            if (it.isSuccessful) {
-                _toAddIDList.value!!.clear()
-                _onLoading.value = false
-            } else {
-                _onLoading.value = false
-                _toastMessage.value = it.exception!!.handleError { }
-            }
         }.await()
+        emit(State.success(Unit))
+    }.apply {
+        catch { emit(State.failed(it as Exception)) }
+        flowOn(Dispatchers.IO)
+        collect {
+            when (it) {
+                is State.Failed -> {
+                    _onLoading.value = false
+                    _toastMessage.value = it.exception.handleError { }
+                }
+                is State.Loading -> _onLoading.value = true
+                is State.Success -> {
+                    _toAddIDList.value!!.clear()
+                    _onLoading.value = false
+                }
+            }
+        }
     }
 
     /**
      * When the save button saved
      */
-    suspend fun commitAllChangesToDataBase(agencyID: String) {
-        _onLoading.value = true
+    suspend fun commitAllChangesToDataBase(agencyID: String) = flow {
+        emit(State.loading())
         firestoreRepo.db.runBatch { batch ->
             _localChangesMapList.value!!.forEachIndexed { index, tripMap ->
                 //We remove the id field from the document
@@ -266,21 +262,24 @@ class TripsConfigViewModel : ViewModel() {
                     tripMap
                 )
             }
-        }.apply {
-            if (!isComplete) _onLoading.value = true
-        }.addOnCompleteListener {
-            _onLoading.value = false
-            if (it.isSuccessful) {
-                _onClose.value = true
-            } else {
-                _onLoading.value = false
-                _toastMessage.value = it.exception!!.handleError { }
-            }
         }.await()
-    }
-
-    fun createEvent(){
-
+        emit(State.success(Unit))
+    }.apply {
+        catch { emit(State.failed(it as Exception)) }
+        flowOn(Dispatchers.IO)
+        collect {
+            when (it) {
+                is State.Failed -> {
+                    _onLoading.value = false
+                    _toastMessage.value = it.exception.handleError { }
+                }
+                is State.Loading -> _onLoading.value = true
+                is State.Success -> {
+                    _onClose.value = true
+                    _onLoading.value = false
+                }
+            }
+        }
     }
 
     /**
@@ -307,11 +306,11 @@ class TripsConfigViewModel : ViewModel() {
         }
     }
 
-    /**
+   /* *//**
      * Adds the bus types the local cache database
      * if this document has already been modified, it means its surly stored in the cache [_localChangesMapList]
      * but if it is not existing, we add a change map with the values of the busTypes as true or false
-     */
+     *//*
     fun configBusTypes(tripId: String, busType: BusTypes, newValue: Boolean) {
         val tripDoc = _currentTripsList.value!!.withIndex().find {
             it.value.id == tripId
@@ -335,18 +334,21 @@ class TripsConfigViewModel : ViewModel() {
             val changeMap = tripDoc.value.toMapWithIDField()
             when (busType) {
                 BusTypes.SEATER_SEVENTY ->
-                    (changeMap["busTypes"] as MutableMap<String, Any>)["seaterSeventy"] = newValue
+                    (changeMap["busTypes"] as MutableMap<String, Any>)["seaterSeventy"] =
+                        newValue
                 BusTypes.SEATER_COASTER ->
-                    (changeMap["busTypes"] as MutableMap<String, Any>)["seaterCoaster"] = newValue
+                    (changeMap["busTypes"] as MutableMap<String, Any>)["seaterCoaster"] =
+                        newValue
                 BusTypes.SEATER_NORMAL ->
-                    (changeMap["busTypes"] as MutableMap<String, Any>)["seaterNormal"] = newValue
+                    (changeMap["busTypes"] as MutableMap<String, Any>)["seaterNormal"] =
+                        newValue
             }
             _localChangesMapList.value!!.add(changeMap)
         }
 
-    }
+    }*/
 
-    enum class BusTypes { SEATER_SEVENTY, SEATER_COASTER, SEATER_NORMAL }
+//    enum class BusTypes { SEATER_SEVENTY, SEATER_COASTER, SEATER_NORMAL }
 
     /**
      * Changes the normal price for another particular price, if the price is not more calculated, we set the "flagNormalPriceFromDistance" to false else true
@@ -360,7 +362,8 @@ class TripsConfigViewModel : ViewModel() {
         }
         if (existingChangeMap != null) {
             //If it was already true we make it false OR the reverse
-            _localChangesMapList.value!![existingChangeMap.index]["normalPrice"] = newNormalPrice
+            _localChangesMapList.value!![existingChangeMap.index]["normalPrice"] =
+                newNormalPrice
         } else {
             val changeMap = tripDoc.value.toMapWithIDField()
             changeMap["normalPrice"] = newNormalPrice

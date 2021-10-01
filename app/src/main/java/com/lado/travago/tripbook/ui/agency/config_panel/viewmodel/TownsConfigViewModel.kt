@@ -1,9 +1,8 @@
-package com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel
+package com.lado.travago.tripbook.ui.agency.config_panel.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
@@ -12,7 +11,10 @@ import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlin.collections.HashMap
@@ -42,7 +44,7 @@ class TownsConfigViewModel : ViewModel() {
 
     //The list of all towns from the reference Planet/Earth/.. Path
     private val _originalTownsList = MutableLiveData<MutableList<DocumentSnapshot>>()
-    val originalTownsList: LiveData<MutableList<DocumentSnapshot>> get() = _originalTownsList
+//    val originalTownsList: LiveData<MutableList<DocumentSnapshot>> get() = _originalTownsList
 
     private val _onShowAddTrip = MutableLiveData(false)
     val onShowAddTrip: LiveData<Boolean> get() = _onShowAddTrip
@@ -127,10 +129,9 @@ class TownsConfigViewModel : ViewModel() {
 
     //Does the deletion of the list from the database
     suspend fun commitToDeleteList(agencyID: String) {
-        _onLoading.value = true
-
         val idListToBeRemovedLater =
-            mutableListOf<String>() // This is to avoid iterating through a list and modifying it also
+            mutableListOf<String>()
+        // This is to avoid iterating through a list and modifying it also
         _toDeleteIDList.value!!.forEach { id ->
             firestoreRepo.queryCollection(
                 "OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency"
@@ -138,33 +139,43 @@ class TownsConfigViewModel : ViewModel() {
                 it.whereArrayContains("townIDs", id)
             }.collect { queryState ->
                 when (queryState) {
-                    is State.Loading -> {
-                    }
+                    is State.Loading -> _onLoading.value = true
                     is State.Failed -> {
                         _onLoading.value = false
                         _toastMessage.value = queryState.exception.handleError { }
                     }
                     is State.Success -> {
-                        firestoreRepo.db.runBatch { batch ->
-                            //We get all trips associated to the town
-                            for (tripDoc in queryState.data.documents) {
-                                batch.delete(firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/${tripDoc.id}"))
-                            }
-                            //We delete the townDocument
-                            batch.delete(firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/$id"))
-                            //This delete all towns associated with the trips
-                        }.apply {
-                            addOnCompleteListener {
-                                _onLoading.value = false
-                                if (it.isSuccessful) idListToBeRemovedLater += id
-                                else _toastMessage.value = it.exception!!.handleError { }
+                        flow {
+                            emit(State.loading())
+                            firestoreRepo.db.runBatch { batch ->
+                                //We get all trips associated to the town
+                                for (tripDoc in queryState.data.documents) {
+                                    batch.delete(firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/${tripDoc.id}"))
+                                }
+                                //We delete the townDocument
+                                batch.delete(firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/$id"))
+                                //This delete all towns associated with the trips
                             }.await()
+                            emit(State.success(Unit))
+                        }.apply {
+                            catch {
+                                emit(State.failed(it as Exception))
+                            }
+                            flowOn(Dispatchers.IO)
+                            collect {
+                                when (it) {
+                                    is State.Failed -> {
+                                        _toastMessage.value = it.exception!!.handleError { }
+                                    }
+                                    is State.Loading -> _onLoading.value = false
+                                    is State.Success -> idListToBeRemovedLater += id
+                                }
+                            }
                         }
 
                     }
                 }
             }
-
         }
         //We then delete all ids which succeeded to be delete
         _toDeleteIDList.value!!.removeAll(idListToBeRemovedLater)
@@ -174,10 +185,8 @@ class TownsConfigViewModel : ViewModel() {
      * Fn1: Adds the selected towns to the database
      * Fn2: Intertwine towns by connecting them inorder to create trips
      */
-    suspend fun commitToAddList(agencyID: String) {
-        _onLoading.value = true
-        /*READS*/
-
+    suspend fun commitToAddList(agencyID: String) = flow {
+        emit(State.loading())
         val toAddTripDocList = mutableListOf<DocumentSnapshot>()
         // We get that agency's document inorder to extract price per km
 
@@ -220,7 +229,6 @@ class TownsConfigViewModel : ViewModel() {
             val agencyDoc = transaction.get(
                 firestoreRepo.db.document("OnlineTransportAgency/$agencyID")
             )
-
             //3- Writes the trips doc to database
             for (originalTripDoc in toAddTripDocList) {
                 transaction.set(
@@ -262,22 +270,31 @@ class TownsConfigViewModel : ViewModel() {
                 )
             }
 
-        }.apply {
-            if (!isComplete) _onLoading.value = true
-        }.addOnCompleteListener {
-            _onLoading.value = false
-            if (it.isSuccessful) {
-                _toAddIDList.value!!.clear()
-                _onLoading.value = false
-            } else {
-                _onLoading.value = false
-                _toastMessage.value = it.exception!!.handleError { }
-            }
         }.await()
+        emit(State.success(Unit))
+    }.apply {
+        catch {
+            emit(State.failed(it as Exception))
+        }
+        flowOn(Dispatchers.IO)
+        collect {
+            when (it) {
+                is State.Failed -> {
+                    _onLoading.value = false
+                    _toastMessage.value = it.exception.handleError { }
+                }
+                is State.Loading -> _onLoading.value = true
+                is State.Success -> {
+                    _toAddIDList.value!!.clear()
+                    _onLoading.value = false
+                }
+            }
+        }
     }
 
+
     enum class FieldTags {
-        TOAST_MESSAGE, START_TOWN_SEARCH, TOWN_ID, TOWN_NAME, ON_CLOSE, CHECKED_ITEM, RETRY_TOWNS, CURRENT_TOWNS, REMOVE_MAP, TOWN_NAME_LIST, ON_SHOW_ADD, SPAN_SIZE
+        TOAST_MESSAGE, START_TOWN_SEARCH, TOWN_ID, TOWN_NAME, ON_CLOSE, CHECKED_ITEM, CURRENT_TOWNS, REMOVE_MAP, TOWN_NAME_LIST, ON_SHOW_ADD, SPAN_SIZE
     }
 
     enum class SortTags { TOWN_NAMES, REGIONS }
@@ -318,5 +335,6 @@ class TownsConfigViewModel : ViewModel() {
             it.getString("region")
         }
     }
-
 }
+
+

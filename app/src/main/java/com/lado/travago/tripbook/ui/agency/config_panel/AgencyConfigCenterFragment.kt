@@ -1,4 +1,4 @@
-package com.lado.travago.tripbook.ui.agency.creation
+package com.lado.travago.tripbook.ui.agency.config_panel
 
 import android.content.Intent
 import android.os.Bundle
@@ -62,7 +62,7 @@ class AgencyConfigCenterFragment : Fragment() {
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyCreationFragment()
             )
         }
-        binding.btnTripdepartureTimePeriods.setOnClickListener {
+        binding.btnTripDepartureTimePeriods.setOnClickListener {
             findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTripDepartureTimeConfigFragment()
             )

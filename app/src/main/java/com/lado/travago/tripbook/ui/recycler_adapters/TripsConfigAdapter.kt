@@ -1,5 +1,6 @@
 package com.lado.travago.tripbook.ui.recycler_adapters
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,8 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
+import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ItemTripsConfigBinding
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TripsConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel
 import com.lado.travago.tripbook.utils.Utils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -43,12 +45,21 @@ class TripsConfigViewHolder private constructor(
      * @param tripDoc is sort of a document but is a simple hashMap
      */
     fun bind(clickListener: TripsClickListener, tripDoc: DocumentSnapshot) {
-        binding.checkSelectTrip.isChecked = toDeleteIDList.contains(tripDoc.id)
+        if (toDeleteIDList.contains(tripDoc.id)) {
+            binding.checkSelectTrip.isChecked = true
+            binding.card.strokeColor = Resources.getSystem().getColor(R.color.colorNegativeButton)
+            binding.card.strokeWidth = 1
+        } else {
+            binding.checkSelectTrip.isChecked = false
+            binding.card.strokeColor = Resources.getSystem().getColor(R.color.colorPositiveButton)
+            binding.card.strokeWidth = 1
+        }
+
         binding.changesMap = tripDoc
         binding.clickListener = clickListener
 
-        // We first check if this document has been modified by the scanner locally so that we load the
-        //locally modified! else the server document
+//         We first check if this document has been modified by the scanner locally so that we load the
+//        locally modified! else the server document
         val find = changesMapList.withIndex().find { tripDoc.id == it.value["id"] }
         if (find != null) {
             find.let { map ->
@@ -68,7 +79,8 @@ class TripsConfigViewHolder private constructor(
                 binding.textTripDistance.text = Utils.formatDistance(map.value["distance"] as Long)
                 binding.chipVip.isChecked = map.value["isVip"] as Boolean
                 binding.btnPriceVip.text = Utils.formatFCFAPrice(map.value["vipPrice"] as Long)
-                binding.btnNormalPrice.text = Utils.formatFCFAPrice(map.value["normalPrice"] as Long)
+                binding.btnNormalPrice.text =
+                    Utils.formatFCFAPrice(map.value["normalPrice"] as Long)
             }
         } else {
             (tripDoc["townNames"] as Map<String, String>).also {
@@ -95,6 +107,7 @@ class TripsConfigViewHolder private constructor(
                 if (it) binding.btnPriceVip.visibility = View.VISIBLE
                 else binding.btnPriceVip.visibility = View.GONE
             }
+            binding.card.strokeWidth = 1
         }
     }
 

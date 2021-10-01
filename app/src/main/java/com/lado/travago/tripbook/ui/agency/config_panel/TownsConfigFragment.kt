@@ -1,7 +1,8 @@
-package com.lado.travago.tripbook.ui.agency.creation.config_panel
+package com.lado.travago.tripbook.ui.agency.config_panel
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,14 +22,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.ListenerRegistration
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTownsConfigBinding
 import com.lado.travago.tripbook.databinding.ItemSearchFormBinding
 import com.lado.travago.tripbook.databinding.ItemSimpleRecyclerLayoutBinding
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.TownsConfigViewModel.FieldTags
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TownsConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TownsConfigViewModel.FieldTags
 import com.lado.travago.tripbook.ui.recycler_adapters.SimpleAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.SimpleClickListener
 import com.lado.travago.tripbook.ui.recycler_adapters.TownClickListener
@@ -85,24 +87,23 @@ class TownsConfigFragment : Fragment() {
     private fun spanSize(spanSize: Int) {
         val recyclerManager = GridLayoutManager(context, spanSize)
         binding.recyclerTowns.layoutManager = recyclerManager
-        binding.recyclerTowns.adapter = adapter
-        adapter.notifyDataSetChanged()
+
+        if (this::adapter.isInitialized) {
+            binding.recyclerTowns.adapter = adapter
+            adapter.notifyDataSetChanged()
+        }
     }
 
     private fun observeLiveData() {
         viewModel.spanSize.observe(viewLifecycleOwner) {
-            try {
-                spanSize(it)
-            } catch (e: Exception) {
-                //
-            }
+            if (this::adapter.isInitialized) spanSize(it)
         }
         viewModel.retryTowns.observe(viewLifecycleOwner) {
             if (it) CoroutineScope(Dispatchers.Main).launch {
                 viewModel.getOriginalTowns()
             }
         }
-        //We remove all towns in the current snap-shoted list from the list to be displayed during the addition process
+        //We remove all towns in the current snap-shotted list from the list to be displayed during the addition process
         viewModel.currentTownsList.observe(viewLifecycleOwner) {
             //TODO: SHOULD NOT MODIFY VIEW_MODEL FROM FRAGMENT, change it as fast as possible
             viewModel.townNamesList.clear()
@@ -134,14 +135,9 @@ class TownsConfigFragment : Fragment() {
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 )
-                requireActivity().window.setFlags(
-                    WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-                    WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-                )
             } else {
                 binding.townProgressBar.visibility = View.GONE
                 requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
             }
         }
         viewModel.toastMessage.observe(viewLifecycleOwner) {
@@ -155,8 +151,7 @@ class TownsConfigFragment : Fragment() {
             if (it) {
                 val searchBinding: ItemSearchFormBinding =
                     DataBindingUtil.inflate(layoutInflater, R.layout.item_search_form, null, false)
-                searchBinding.searchBar.hint = "Town: "
-                searchBinding.searchBar.helperText = "Enter the town name."
+                searchBinding.searchBar.hint = getString(R.string.text_label_town)
 
                 //Sets adapter for the autocomplete text view
                 val searchAdapter = ArrayAdapter(
@@ -166,17 +161,18 @@ class TownsConfigFragment : Fragment() {
                 )
                 val textView = searchBinding.searchBar.editText as AutoCompleteTextView
                 textView.setAdapter(searchAdapter)
-
                 MaterialAlertDialogBuilder(requireContext()).apply {
                     setIcon(R.drawable.baseline_search_24)
-                    setTitle("Search")
+                    setTitle(getString(R.string.text_dialog_search))
                     setView(searchBinding.root)
-                    setPositiveButton("SEARCH") { dialog, _ ->
+                    setPositiveButton(getString(R.string.text_dialog_search)) { dialog, _ ->
                         if (viewModel.currentTownsList.value!!.isNotEmpty()) {
                             viewModel.searchTown(searchBinding.searchBar.editText!!.text.toString())
                                 ?.let { index ->
                                     if (index != -1) {
+                                        //We rebind the searched item and make it glow
                                         binding.recyclerTowns.smoothScrollToPosition(index)
+                                        adapter.notifyItemChanged(index)
                                     } else {//If not found
                                         viewModel.setField(
                                             FieldTags.TOAST_MESSAGE,
@@ -206,13 +202,7 @@ class TownsConfigFragment : Fragment() {
             }
         }
         viewModel.toDeleteIDList.observe(viewLifecycleOwner) {
-            try {
-                if (it.isEmpty()) {
-                    adapter.notifyDataSetChanged()
-                }
-            } catch (e: Exception) {
-                /*TODO: Try to check for initialization*/
-            }
+            if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
         }
         viewModel.onShowAddTrip.observe(viewLifecycleOwner) {
             if (it) {
@@ -232,6 +222,9 @@ class TownsConfigFragment : Fragment() {
                 if (it.isShown) it.hide() else it.show()
             }
             binding.fabSearchTown.let {
+                if (it.isShown) it.hide() else it.show()
+            }
+            binding.fabTownsSpanSize.let {
                 if (it.isShown) it.hide() else it.show()
             }
             binding.fabSortTowns.let {
@@ -265,10 +258,14 @@ class TownsConfigFragment : Fragment() {
         binding.fabSortTowns.setOnClickListener {
             //1-We create a spinner with options
             MaterialAlertDialogBuilder(requireContext()).apply {
-                setIcon(R.drawable.baseline_sort_24)
-                setTitle("Sort By?")
+                setIcon(R.drawable.baseline_filter_alt_24)
+                setTitle(R.string.text_dialog_title_sort_by)
                 setSingleChoiceItems(
-                    arrayOf("None", "Name", "Region"),
+                    arrayOf(
+                        getString(R.string.text_sort_by_none),
+                        getString(R.string.text_sort_town_by_name),
+                        getString(R.string.text_sort_town_by_region)
+                    ),
                     viewModel.sortCheckedItem
                 ) { dialog, which ->
                     when (which) {
@@ -281,8 +278,10 @@ class TownsConfigFragment : Fragment() {
                             viewModel.setField(FieldTags.CHECKED_ITEM, 2)
                         }
                     }
-                    adapter.submitList(viewModel.currentTownsList.value)
-                    adapter.notifyDataSetChanged()
+                    if (this@TownsConfigFragment::adapter.isInitialized) {
+                        adapter.submitList(viewModel.currentTownsList.value)
+                        adapter.notifyDataSetChanged()
+                    }
                     dialog.dismiss()
                 }
 
@@ -299,7 +298,7 @@ class TownsConfigFragment : Fragment() {
         }
         binding.fabTownsSpanSize.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("How many items per row")
+                .setTitle(getString(R.string.text_dialog_title_span_size))
                 .setSingleChoiceItems(
                     arrayOf("1", "2", "3", "4", "5", "6"),
                     viewModel.spanSize.value!!
@@ -315,12 +314,11 @@ class TownsConfigFragment : Fragment() {
      */
     override fun onDetach() {
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
         super.onDetach()
     }
 
     /* Add a snapshot listener to the towns collection */
-    private val snapshotListener
+    private val snapshotListener: ListenerRegistration
         get() =
             viewModel.firestoreRepo.db.collection(
                 "OnlineTransportAgency/${
@@ -343,7 +341,6 @@ class TownsConfigFragment : Fragment() {
                                         //To show or hide the delete town fab
                                         if (viewModel.toDeleteIDList.value!!.isNotEmpty()) binding.fabRemoveSelection.show()
                                         else binding.fabRemoveSelection.hide()
-
                                     }
                                     TownsConfigViewModel.TownButtonTags.TOWN_BUTTON_TRIPS -> {
                                         //We navigate to the trip config fragment of that current town
@@ -354,6 +351,7 @@ class TownsConfigFragment : Fragment() {
                                                     townID.split("+").last()//Being the town name
                                                 )
                                             )
+                                            snapshotListener.remove()
                                         }
                                     }
                                 }
@@ -364,32 +362,22 @@ class TownsConfigFragment : Fragment() {
                             FieldTags.CURRENT_TOWNS,
                             snapshot.documents
                         )
-                        adapter.submitList(snapshot.documents)
-                        try {
+                        if (this::adapter.isInitialized) {
+                            adapter.submitList(snapshot.documents)
                             spanSize(viewModel.spanSize.value!!)
-                        } catch (e: Exception) {
-                            //
                         }
-                    } else {
-                        try {
-                            adapter.notifyDataSetChanged()
-                        } catch (e: Exception) {/*Just in-case we cleared all the list of items*/
-                        }
-                    }
+                    } else if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
                 }
                 error?.handleError { }
             }
-
 
     class AddTownsDialogFragment(
         private val viewModel: TownsConfigViewModel,
         private val parentViewModel: AgencyConfigViewModel
     ) : DialogFragment() {
-        @SuppressLint("DialogFragmentCallbacksDetector")
         override fun onCreateDialog(
             savedInstanceState: Bundle?
         ): Dialog {
-            super.onCreateDialog(savedInstanceState)
             val recyclerBinding: ItemSimpleRecyclerLayoutBinding = DataBindingUtil.inflate(
                 layoutInflater,
                 R.layout.item_simple_recycler_layout,
@@ -416,23 +404,25 @@ class TownsConfigFragment : Fragment() {
             )
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
-                .setTitle("Towns")
+                .setTitle(R.string.text_label_town)
                 .setIcon(R.drawable.baseline_add_24)
                 .setView(recyclerBinding.root)
-                .setPositiveButton("Add Selected Towns") { dialog, _ ->
+                .setPositiveButton(R.string.text_dialog_btn_add) { dialog, _ ->
                     CoroutineScope(Dispatchers.Main).launch {
                         viewModel.commitToAddList(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
                     }
-                    dialog.dismiss()
                     dialog.cancel()
-                }
-                .setOnCancelListener {
-                    viewModel.setField(FieldTags.ON_SHOW_ADD, false)
-                }
-                .setOnDismissListener {
-                    viewModel.setField(FieldTags.ON_SHOW_ADD, false)
-                }
-                .create()
+                }.create()
+        }
+
+        override fun onCancel(dialog: DialogInterface) {
+            viewModel.setField(FieldTags.ON_SHOW_ADD, false)
+            super.onCancel(dialog)
+        }
+
+        override fun onDismiss(dialog: DialogInterface) {
+            viewModel.setField(FieldTags.ON_SHOW_ADD, false)
+            super.onDismiss(dialog)
         }
 
     }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_dialog_search">Search</string>
+    <!--    General -->
+    <string name="text_dialog_title_sort_by">Sort by</string>
+    <string name="text_sort_by_none">None</string>
+    <string name="text_dialog_btn_add">Add</string>
+    <!--    Town Sorting-->
+    <string name="text_sort_town_by_name">Town name</string>
+    <string name="text_sort_town_by_region">Regions</string>
+    <!--    Trips Sorting-->
+    <string name="text_sort_trip_by_price">Standard price</string>
+    <string name="text_sort_trip_by_vip_price">VIP price</string>
+    <string name="text_sort_trip_by_distance">Distance</string>
+</resources>

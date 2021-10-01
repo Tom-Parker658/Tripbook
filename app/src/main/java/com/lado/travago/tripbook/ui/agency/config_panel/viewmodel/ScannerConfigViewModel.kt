@@ -1,13 +1,11 @@
-package com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel
+package com.lado.travago.tripbook.ui.agency.config_panel.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.model.Document
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
-import com.lado.travago.tripbook.model.users.Booker
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import com.lado.travago.tripbook.utils.Utils
@@ -16,7 +14,6 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.tasks.await
 import java.util.*
-import kotlin.collections.HashMap
 
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi

@@ -1,4 +1,4 @@
-package com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel
+package com.lado.travago.tripbook.ui.agency.config_panel.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

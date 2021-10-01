@@ -17,9 +17,9 @@ import java.util.*
  *  @pricePerKm is the price per km covered which will determine the prices of journeys
  *  @property logoUrl is the logo that represents that agency and will be shared by all OTAPs created
  *  @property motto is the motto of this OnlineTransportAgency
- *  @property bankNumber is a bank account number which the travellers can send money to during payment
- *  @property mtnMoneyNumber is the MTN Mobile Money numbers which travellers can send money to during payment
- *  @property orangeMoneyNumber is the Orange Mobile Money numbers which travellers can send money to during payment
+// *  @property bankNumber is a bank account number which the travellers can send money to during payment
+// *  @property mtnMoneyNumber is the MTN Mobile Money numbers which travellers can send money to during payment
+// *  @property orangeMoneyNumber is the Orange Mobile Money numbers which travellers can send money to during payment
  *  @property reputation is the average ratio of likes to dislike received by the OnlineTransportAgency by travellers reviews. It is
  *  a double /10 e.g 5.6/10
  *  @property likes represent the number of likes(good reviews by travellers)
@@ -35,9 +35,6 @@ data class OnlineTravelAgency(
     val nameCEO: String,
     val creationYear: Int,
     val creationDecree: String,
-    val bankNumber: String,
-    val mtnMoneyNumber: String,
-    val orangeMoneyNumber: String,
     val supportEmail: String,
     val supportPhone1: String,
     val supportPhone2: String,
@@ -65,16 +62,12 @@ data class OnlineTravelAgency(
                 "creationYear" to creationYear,
                 "pricePerKm" to costPerKm,
                 "motto" to motto,
-                "bankNumber" to bankNumber,
-                "mtnMoneyNumber" to mtnMoneyNumber,
-                "orangeMoneyNumber" to orangeMoneyNumber,
                 "supportEmail" to supportEmail,
                 "supportPhone1" to supportPhone1,
                 "supportPhone2" to supportPhone2,
                 "phoneCode1" to supportCountryCode1,
                 "phoneCode2" to supportCountryCode2,
                 "creationDecree" to creationDecree,
-
                 "isVerified" to false,
                 "likes" to likes,
                 "dislikes" to dislikes,
@@ -89,9 +82,6 @@ data class OnlineTravelAgency(
                 "logoUrl" to logoUrl,
                 "pricePerKm" to costPerKm,
                 "motto" to motto,
-                "bankNumber" to bankNumber,
-                "mtnMoneyNumber" to mtnMoneyNumber,
-                "orangeMoneyNumber" to orangeMoneyNumber,
                 "supportEmail" to supportEmail,
                 "supportPhone1" to supportPhone1,
                 "supportPhone2" to supportPhone2,

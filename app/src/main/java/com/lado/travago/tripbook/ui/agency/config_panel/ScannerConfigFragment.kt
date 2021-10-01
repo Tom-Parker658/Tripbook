@@ -1,4 +1,4 @@
-package com.lado.travago.tripbook.ui.agency.creation.config_panel
+package com.lado.travago.tripbook.ui.agency.config_panel
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -22,8 +22,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentScannerConfigBinding
 import com.lado.travago.tripbook.databinding.LayoutScannerSearchBinding
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.ScannerConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.ScannerConfigViewModel
 import com.lado.travago.tripbook.ui.recycler_adapters.ScannerConfigAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.ScannerConfigClickListener
 import com.lado.travago.tripbook.utils.loadImageFromUrl

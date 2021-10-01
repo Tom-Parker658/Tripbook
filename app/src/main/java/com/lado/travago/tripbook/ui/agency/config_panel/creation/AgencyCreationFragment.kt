@@ -1,4 +1,4 @@
-package com.lado.travago.tripbook.ui.agency.creation
+package com.lado.travago.tripbook.ui.agency.config_panel.creation
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -18,12 +18,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyCreationBinding
-import com.lado.travago.tripbook.ui.agency.creation.AgencyCreationViewModel.*
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.creation.AgencyCreationViewModel.*
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
 import com.lado.travago.tripbook.utils.Utils.removeSpaces
 import com.lado.travago.tripbook.utils.loadImageFromUrl
 import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
@@ -37,7 +36,6 @@ class AgencyCreationFragment : Fragment() {
      */
     override fun onDetach() {
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
         super.onDetach()
     }
 
@@ -146,7 +144,7 @@ class AgencyCreationFragment : Fragment() {
             if (it) {
                 viewModel.setField(
                     FieldTags.TOAST_MESSAGE,
-                    "Could not verify your authenticity. Check Connection"
+                    getString(R.string.text_message_error_auth_fail)
                 )
                 findNavController().navigate(
                     AgencyCreationFragmentDirections.actionAgencyCreationFragmentToAgencyConfigCenterFragment()
@@ -175,18 +173,11 @@ class AgencyCreationFragment : Fragment() {
         binding.creationYear.editText!!.addTextChangedListener {
             viewModel.setField(FieldTags.CREATION_YEAR, it.toString())
         }
-        binding.momo.editText!!.addTextChangedListener {
-            viewModel.setField(FieldTags.MOMO_NUMBER, it.toString())
-        }
+
         binding.motto.editText!!.addTextChangedListener {
             viewModel.setField(FieldTags.MOTTO, it.toString())
         }
-        binding.orangeMoney.editText!!.addTextChangedListener {
-            viewModel.setField(FieldTags.ORANGE_NUMBER, it.toString())
-        }
-        binding.bank.editText!!.addTextChangedListener {
-            viewModel.setField(FieldTags.BANK_NUMBER, it.toString())
-        }
+
         binding.supportEmail.editText!!.addTextChangedListener {
             viewModel.setField(FieldTags.SUPPORT_EMAIL, it.toString())
         }
@@ -227,15 +218,12 @@ class AgencyCreationFragment : Fragment() {
         binding.supportPhone2.editText!!.setText(viewModel.supportPhone2Field.removeSpaces())
         binding.countryCodePicker1.setCountryForPhoneCode(viewModel.phoneCode1)
         binding.countryCodePicker2.setCountryForPhoneCode(viewModel.phoneCode2)
-        binding.momo.editText!!.setText(viewModel.momoField)
         viewModel.logoBitmap?.let {
             binding.logoField.setImageBitmap(it)
         }
         binding.nameOfCEO.editText!!.setText(viewModel.nameCEOField)
         binding.supportEmail.editText!!.setText(viewModel.supportEmailField)
         binding.motto.editText!!.setText(viewModel.mottoField)
-        binding.orangeMoney.editText!!.setText(viewModel.orangeMoneyField)
-        binding.bank.editText!!.setText(viewModel.bankField)
     }
 
     private fun initViewModels() {
@@ -259,11 +247,11 @@ class AgencyCreationFragment : Fragment() {
                 //In case we are ok with the phone fields, we can start field checking
                 viewModel.checkFields()
             } else {
-                viewModel.setField(FieldTags.TOAST_MESSAGE, "Enter valid number or leave it empty")
+                viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.text_message_error_invalid_phone))
                 binding.supportPhone2.requestFocus()
             }
         } else {
-            viewModel.setField(FieldTags.TOAST_MESSAGE, "Invalid support phone number")
+            viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.text_message_error_invalid_phone))
             binding.supportPhone1.requestFocus()
         }
     }
@@ -283,7 +271,7 @@ class AgencyCreationFragment : Fragment() {
                 BitmapFactory.decodeStream(logoStream)
             )
             if (viewModel.logoBitmap?.byteCount!! < 0) { //In case image larger than 10-MegaByte
-                viewModel.setField(FieldTags.TOAST_MESSAGE, "Photo is too large!!")
+                viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.text_message_error_photo_large))
                 initLogoSelection()
             } else // Sets the logo field to the name of the selected photo
                 binding.logoField.setImageBitmap(viewModel.logoBitmap)

@@ -1,23 +1,19 @@
-package com.lado.travago.tripbook.ui.agency.creation.config_panel
+package com.lado.travago.tripbook.ui.agency.config_panel
 
-import android.app.Dialog
-import android.content.DialogInterface
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.InputType
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.Timestamp
@@ -26,14 +22,13 @@ import com.lado.travago.tripbook.databinding.FragmentAgencyEventPlannerBinding
 import com.lado.travago.tripbook.databinding.LayoutCreateEventBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyConfigViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyEventPlannerViewModel
-import com.lado.travago.tripbook.ui.agency.creation.config_panel.viewmodel.AgencyEventPlannerViewModel.*
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyEventPlannerViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyEventPlannerViewModel.FieldTags
 import com.lado.travago.tripbook.ui.recycler_adapters.AgencyEventPlannerAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.AgencyEventPlannerClickListener
 import com.lado.travago.tripbook.utils.Utils
 import kotlinx.coroutines.*
-import java.lang.Exception
 import java.util.*
 
 /**

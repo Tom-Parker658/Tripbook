@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.agency.creation.config_panel.AgencyEventPlannerFragment">
+        tools:context=".ui.agency.config_panel.AgencyEventPlannerFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_events"

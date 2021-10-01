@@ -8,8 +8,8 @@
     <string name="text_btn_booker_creation_resend">Renvoyer le Code</string>
     <string name="text_btn_continue">Poursuivre</string>
     <string name="text_btn_save_info">Enregistrer</string>
-    <string name="text_label_trips_config_price">Prix Standard</string>
-    <string name="text_label_trips_config_vip_price">Prix VIP</string>
+    <string name="text_e_hint_trips_config_standard_price">Prix Standard</string>
+    <string name="text_e_hint_trips_config_vip_price">Prix VIP</string>
     <string name="text_e_hint_booker_creation_phone">Téléphone</string>
     <string name="text_e_hint_booker_creation_occupation">Profession</string>
     <string name="text_e_hint_booker_creation_birthday">Né(e) le</string>
@@ -86,4 +86,18 @@
     <string name="text_label_to">à</string>
     <string name="text_e_helper_trip_search_location">Choissisez votre localité dans la liste</string>
     <string name="text_btn_save">Enregistrer</string>
+    <string name="text_message_not_found_drop_down">Aucun resultat. Choissisez dans la liste deroulante</string>
+    <string name="text_dialog_search">Rechercher</string>
+    <string name="text_dialog_title_sort_by">Trier par</string>
+    <string name="text_sort_by_none">Aucun</string>
+    <string name="text_dialog_btn_add">Ajouter</string>
+    <string name="text_sort_town_by_name">Nom de Ville</string>
+    <string name="text_sort_town_by_region">Region</string>
+    <string name="text_sort_trip_by_price">Prix standard</string>
+    <string name="text_sort_trip_by_vip_price">Prix VIP</string>
+    <string name="text_sort_trip_by_distance">Distance</string>
+    <string name="text_dialog_title_span_size">Combien d\'element par rangée</string>
+    <string name="text_dialog_title_from">De</string>
+    <string name="text_e_helper_trip_search_time">Vers quelle heure voulez-vous voyagez?</string>
+    <string name="text_btn_cancel">Annuler</string>
 </resources>
