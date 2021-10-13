@@ -64,13 +64,11 @@ fun TextView.setAgeFromMillis(birthdayInMillis: Long) {
  */
 @BindingAdapter("formatDateFromMillis")
 fun TextView.formatDate(dateInMillis: Long) {
-    //TODO:YYYY
     text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).toString()
 }
 
 @BindingAdapter("addedOn")
 fun TextView.addedOn(date: Timestamp) {
-    //TODO:YYYY
     text = "Added on: ${date.toDate()}"
 }
 

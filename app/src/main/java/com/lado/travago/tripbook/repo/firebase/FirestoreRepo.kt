@@ -4,6 +4,7 @@ import com.google.firebase.firestore.*
 import com.lado.travago.tripbook.model.enums.DbOperations
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
+import com.lado.travago.tripbook.utils.AdminUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
@@ -20,7 +21,7 @@ class FirestoreRepo {
     //TODO: Emulator
     init {
         val settings = FirebaseFirestoreSettings.Builder()
-            .setHost("192.168.186.47:8081")
+            .setHost("${AdminUtils.LOCAL_SERVER_FIREBASE_IP}:8081")
             .setSslEnabled(false)
             .build()
         db.firestoreSettings = settings
@@ -34,6 +35,10 @@ class FirestoreRepo {
         val data: HashMap<String, Any?>,
         val dbOperation: DbOperations
     )
+
+    fun sortCollection(){
+
+    }
 
 
     /**
@@ -197,7 +202,7 @@ class FirestoreRepo {
     /**
      * Gets a collection reference
      */
-    fun getCollection(path: String) = flow {
+    fun getCollection(path: String, source: Source = Source.DEFAULT) = flow {
         emit(State.loading())
         val collection = db.collection(path).get().await()
         emit(State.success(collection))

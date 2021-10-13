@@ -38,12 +38,12 @@ class AgencyEventPlannerViewHolder(val binding: ItemAgencyEventBinding) :
             binding.textEventDate.text = "${eventDoc.getTimestamp("eventDate")!!.toDate()}"
             //Event is on going and it has not yet expired or being cancelled
             if (eventDoc.getTimestamp("eventDate")!! > Timestamp.now()) {
-                binding.btnAction.text = "Stop Event"
-                binding.imageView7.setImageDrawable(
-                    Resources.getSystem().getDrawable(R.drawable.outline_schedule_24)
-                )
+                binding.btnAction.contentDescription = "Stop Event"
+//                binding.imageView7.setImageDrawable(
+//                    Resources.getSystem().getDrawable(R.drawable.outline_schedule_24)
+//                )
             }else{//Event can still be canceled
-                binding.btnAction.text = "Cancel Event"
+//                binding.btnAction.text = "Cancel Event"
             }
         }
     }

@@ -306,7 +306,8 @@ class TripsConfigViewModel : ViewModel() {
         }
     }
 
-   /* *//**
+    /* */
+    /**
      * Adds the bus types the local cache database
      * if this document has already been modified, it means its surly stored in the cache [_localChangesMapList]
      * but if it is not existing, we add a change map with the values of the busTypes as true or false
@@ -483,4 +484,6 @@ class TripsConfigViewModel : ViewModel() {
             }
         }
     }
+
+    fun tripNamesListClear() = tripNamesList.clear()
 }

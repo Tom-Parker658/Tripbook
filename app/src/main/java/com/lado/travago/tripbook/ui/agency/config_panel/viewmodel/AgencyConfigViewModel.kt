@@ -36,7 +36,7 @@ class AgencyConfigViewModel : ViewModel() {
         //TODO: CHANGE ${authRepo.currentUser?.uid}, TO ${authRepo.currentUser!!.uid}", it must throw an exception
         //TODO: For testing
         firestoreRepo.getDocument(
-            "Bookers/ptUDtYNmuTZNjdXBAfDcLFQ7Z6aq",
+            authRepo.currentUser?.uid.toString(),
             Source.SERVER
         ).collect { bookerDoc ->
             when (bookerDoc) {
@@ -64,6 +64,5 @@ class AgencyConfigViewModel : ViewModel() {
         }
 
     }
-
 
 }

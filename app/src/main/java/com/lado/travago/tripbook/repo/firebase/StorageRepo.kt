@@ -4,6 +4,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.StorageTags
+import com.lado.travago.tripbook.utils.AdminUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
@@ -14,15 +15,13 @@ import java.io.InputStream
 
 @ExperimentalCoroutinesApi
 class StorageRepo() {
-    var storage = FirebaseStorage.getInstance()
-    //TODO: Emulator
-    init{
-        storage.useEmulator(
-            "192.168.186.47",
+    var storage = FirebaseStorage.getInstance().apply{
+        //TODO: Emulator
+        useEmulator(
+            AdminUtils.LOCAL_SERVER_FIREBASE_IP,
             9199
         )
     }
-
 
     /**
      * Adds a photo to FireStorage asynchronously as a .jpg file and return url

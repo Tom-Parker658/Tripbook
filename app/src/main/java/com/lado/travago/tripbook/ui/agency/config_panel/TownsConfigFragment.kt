@@ -103,10 +103,9 @@ class TownsConfigFragment : Fragment() {
                 viewModel.getOriginalTowns()
             }
         }
-        //We remove all towns in the current snap-shotted list from the list to be displayed during the addition process
+        //We remove all towns in the current snap-shoted list from the list to be displayed during the addition process
         viewModel.currentTownsList.observe(viewLifecycleOwner) {
-            //TODO: SHOULD NOT MODIFY VIEW_MODEL FROM FRAGMENT, change it as fast as possible
-            viewModel.townNamesList.clear()
+            viewModel.townNamesListClear()
             if (it.isNotEmpty()) {
                 it.forEach { currentDoc ->
                     //We also set the names to be use in auto complete

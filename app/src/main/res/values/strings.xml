@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name" translatable="false">Tripbook</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+<!--    FIREBASE LOCAL IP-->
+    <string name="string_local_IP" translatable="false">192.168.96.108</string>
 
 
 <!--    Agency Config Fragment-->

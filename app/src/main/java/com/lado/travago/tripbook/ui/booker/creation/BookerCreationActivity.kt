@@ -20,6 +20,7 @@ import com.lado.travago.tripbook.databinding.ActivityBookerCreationBinding
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 //import com.lado.travago.tripbook.databinding.ActivityUserCreationBinding
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationViewModel.FieldTags
+import com.lado.travago.tripbook.utils.Utils.removeSpaces
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
@@ -156,7 +157,7 @@ class BookerCreationActivity : AppCompatActivity() {
      */
     private fun sendVerificationCode() = PhoneAuthProvider.verifyPhoneNumber(
         PhoneAuthOptions.newBuilder()
-            .setPhoneNumber("+${viewModel.bookerCountryCode}${viewModel.bookerPhoneField}")
+            .setPhoneNumber("+${viewModel.bookerCountryCode}${viewModel.bookerPhoneField.removeSpaces()}")
             .setTimeout(60L, TimeUnit.SECONDS)
             .setActivity(this)
             .setCallbacks(phoneCallback)
@@ -168,11 +169,11 @@ class BookerCreationActivity : AppCompatActivity() {
      */
     private fun resendVerificationCode() {
         val phoneAuthOptions = PhoneAuthOptions.newBuilder()
-            .setPhoneNumber("+${viewModel.bookerCountryCode}${viewModel.bookerPhoneField}")
+            .setPhoneNumber("+${viewModel.bookerCountryCode}${viewModel.bookerPhoneField.removeSpaces()}")
             .setTimeout(60L, TimeUnit.SECONDS)
             .setActivity(this)
             .setCallbacks(phoneCallback)
-//            .setForceResendingToken(viewModel.resendToken)
+            .setForceResendingToken(viewModel.resendToken)
             .build()
         PhoneAuthProvider.verifyPhoneNumber(
             phoneAuthOptions

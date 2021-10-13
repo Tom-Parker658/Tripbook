@@ -63,7 +63,7 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
             FieldTags.SPAN_SIZE -> _spanSize.value = value as Int
         }
 
-    fun addIntervalDoc(agencyID: String) {
+    suspend fun addIntervalDoc(agencyID: String) {
         val intervalMap = hashMapOf<String, Any?>(
             "intervalName" to intervalName,
             "agencyID" to agencyID,

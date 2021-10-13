@@ -107,8 +107,7 @@ class TripsConfigFragment : Fragment() {
             }
         }
         viewModel.currentTripsList.observe(viewLifecycleOwner) {
-            //TODO: SHOULD NOT MODIFY VIEW_MODEL FROM FRAGMENT, change it as fast as possible
-            viewModel.tripNamesList.clear()
+            viewModel.tripNamesListClear()
             if (it.isNotEmpty()) {
                 it.forEach { currentDoc ->
                     /**

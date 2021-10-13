@@ -74,10 +74,10 @@ data class SummaryItem(
 
 
         fun createSummaryItemsFromBooks(
-            querySnapshot: QuerySnapshot
+            snapshots: List<DocumentSnapshot>
         ): List<SummaryItem> {
             val books = mutableListOf<SummaryItem>()
-            querySnapshot.documents.forEach {
+            snapshots.forEach {
                 val tripTime = TimeModel.from24Format(
                     it.getLong("tripHour")!!.toInt(),
                     it.getLong("tripMinutes")!!.toInt(),

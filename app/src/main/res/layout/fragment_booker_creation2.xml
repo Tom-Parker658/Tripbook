@@ -19,14 +19,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:text="@string/text_helper_booker_creation_check_sms_at"
-            app:layout_constraintBottom_toTopOf="@+id/verificationCode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -74,10 +71,12 @@
             android:text="@string/text_btn_continue"
             app:icon="@drawable/baseline_arrow_forward_24"
             app:iconGravity="end"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btn_resend_code"
-            app:layout_constraintTop_toBottomOf="@+id/verificationCode" />
+            app:layout_constraintTop_toBottomOf="@+id/verificationCode"
+            app:layout_constraintVertical_bias="0.17000002" />
 
         <ImageView
             android:id="@+id/imageView14"

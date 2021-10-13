@@ -9,6 +9,7 @@
         android:id="@+id/nestedScrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -127,7 +128,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/textInputStyle"
-                    android:inputType="phone" >
+                    android:inputType="phone">
 
                 </com.google.android.material.textfield.TextInputEditText>
 
@@ -137,10 +138,9 @@
                 android:id="@+id/chip_group_sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 app:checkedChip="@id/sex_male"
-                app:layout_constraintBottom_toTopOf="@+id/btn_save_info"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -151,9 +151,10 @@
                     android:id="@+id/sex_male"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checkable="true"
                     android:text="@string/text_chip_booker_creation_sex_male"
                     app:chipIcon="@drawable/baseline_male_24"
-                    app:chipIconTint="#64B5F6" />
+                    app:chipIconTint="@color/color_male" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/sex_female"
@@ -162,7 +163,7 @@
                     android:checkable="true"
                     android:text="@string/text_chip_booker_creation_sex_female"
                     app:chipIcon="@drawable/baseline_female_24"
-                    app:chipIconTint="#F06292" />
+                    app:chipIconTint="@color/color_female" />
             </com.google.android.material.chip.ChipGroup>
 
             <Button

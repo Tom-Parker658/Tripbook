@@ -244,7 +244,7 @@ class AgencyEventPlannerFragment : Fragment() {
             "OnlineTransportAgency/${
                 parentViewModel.bookerDoc.value?.getString(
                     "agencyID"
-                ) ?: "dsfsd" //TODO: Remove this 
+                )!!
             }/Events"
         ).addSnapshotListener(requireActivity()) { snapShot, error ->
             if (snapShot != null) {

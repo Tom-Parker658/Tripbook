@@ -1,7 +1,6 @@
 package com.lado.travago.tripbook.utils
 
 import android.graphics.Bitmap
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
@@ -10,7 +9,6 @@ import com.lado.travago.tripbook.model.booking.Ticket
 import com.lado.travago.tripbook.model.users.Booker
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.lang.Math.pow
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
@@ -20,7 +18,7 @@ import kotlin.math.sqrt
  * Contains a set of utilities for our app_user .
  */
 object Utils {
-    val oneDayInMillis: Long
+    private val oneDayInMillis: Long
         get() {
             val today = Calendar.getInstance().timeInMillis
             val tomorrow =
@@ -65,14 +63,7 @@ object Utils {
         else "${hours}H ${minutes}M"
     }
 
-    /**
-     * This function applies on [Boolean] [LiveData] to switch it on/off once
-     */
-    fun MutableLiveData<Boolean>.switchOnOff(): MutableLiveData<Boolean> {
-        value = true
-        value = false
-        return this
-    }
+
 
     /**
      * @author Tom Parkert
@@ -101,6 +92,7 @@ object Utils {
      * @param query is the label for which we want to get the value
      * @return the value of the query else null
      */
+    @Deprecated("Old Time boy!!!")
     fun queryDescription(description: String, query: String): String? {
         var cleanedDescString = ""
         //We remove all curly braces from the description and add it to cleanedDescString

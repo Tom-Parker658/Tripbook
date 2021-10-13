@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-seurity-config>
+    <!--    TODO: Emulator-->
+    <base-config cleartextTrafficPermitted="true" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">
+            192.168.96.108
+        </domain>
+    </domain-config>
+</network-seurity-config>

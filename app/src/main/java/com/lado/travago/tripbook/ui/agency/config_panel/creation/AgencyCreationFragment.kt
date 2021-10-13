@@ -92,12 +92,7 @@ class AgencyCreationFragment : Fragment() {
                 } else {
                     CoroutineScope(Dispatchers.Main).launch {
                         //TODO: Emulator commenting
-//                        viewModel.saveLogo()
-                        if (viewModel.agencyDbData.exists()) /*We update*/ viewModel.updateAgencyInfo(
-                            parentViewModel.bookerDoc.value!!
-                        )
-                        else /*We create*/ viewModel.createAgency(parentViewModel.bookerDoc.value!!)
-
+                        viewModel.saveLogo()
                     }
                 }
                 viewModel.setField(FieldTags.START_SAVING, false)
@@ -105,16 +100,16 @@ class AgencyCreationFragment : Fragment() {
         }
         //We check to see to create or modify agency
         //TODO: Emulator commenting
-//        viewModel.onLogoSaved.observe(viewLifecycleOwner) {
-//            if (it) {
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    if (viewModel.agencyDbData.exists()) /*We update*/ viewModel.updateAgencyInfo(
-//                        parentViewModel.bookerDoc.value!!
-//                    )
-//                    else /*We create*/ viewModel.createAgency(parentViewModel.bookerDoc.value!!)
-//                }
-//            }
-//        }
+        viewModel.onLogoSaved.observe(viewLifecycleOwner) {
+            if (it) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (viewModel.agencyDbData.exists()) /*We update*/ viewModel.updateAgencyInfo(
+                        parentViewModel.bookerDoc.value!!
+                    )
+                    else /*We create*/ viewModel.createAgency(parentViewModel.bookerDoc.value!!)
+                }
+            }
+        }
         viewModel.startFilling.observe(viewLifecycleOwner) {
             if (it) {
                 viewModel.fillExistingData()
@@ -247,11 +242,17 @@ class AgencyCreationFragment : Fragment() {
                 //In case we are ok with the phone fields, we can start field checking
                 viewModel.checkFields()
             } else {
-                viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.text_message_error_invalid_phone))
+                viewModel.setField(
+                    FieldTags.TOAST_MESSAGE,
+                    getString(R.string.text_message_error_invalid_phone)
+                )
                 binding.supportPhone2.requestFocus()
             }
         } else {
-            viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.text_message_error_invalid_phone))
+            viewModel.setField(
+                FieldTags.TOAST_MESSAGE,
+                getString(R.string.text_message_error_invalid_phone)
+            )
             binding.supportPhone1.requestFocus()
         }
     }
@@ -271,7 +272,10 @@ class AgencyCreationFragment : Fragment() {
                 BitmapFactory.decodeStream(logoStream)
             )
             if (viewModel.logoBitmap?.byteCount!! < 0) { //In case image larger than 10-MegaByte
-                viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.text_message_error_photo_large))
+                viewModel.setField(
+                    FieldTags.TOAST_MESSAGE,
+                    getString(R.string.text_message_error_photo_large)
+                )
                 initLogoSelection()
             } else // Sets the logo field to the name of the selected photo
                 binding.logoField.setImageBitmap(viewModel.logoBitmap)

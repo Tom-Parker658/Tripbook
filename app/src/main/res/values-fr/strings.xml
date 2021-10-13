@@ -107,4 +107,6 @@
     <string name="text_sort_book_by_taken_already">Deja pris</string>
     <string name="text_sort_book_by_expired">Expiré</string>
     <string name="text_sort_book_by_departure_time">En approche</string>
+    <string name="text_message_error_invalid_phone">Entrez un numero valide</string>
+    <string name="text_message_error_photo_large">La photo est trop large</string>
 </resources>

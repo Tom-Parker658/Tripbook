@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.emulators.EmulatedServiceSettings
 import com.lado.travago.tripbook.repo.State
+import com.lado.travago.tripbook.utils.AdminUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
@@ -22,14 +23,15 @@ import kotlinx.coroutines.tasks.await
  */
 @ExperimentalCoroutinesApi
 class FirebaseAuthRepo {
-    var firebaseAuth = FirebaseAuth.getInstance()
-    //TODO: Emulator
-    init{
-        firebaseAuth.useEmulator(
-            "192.168.186.47",
+    var firebaseAuth = FirebaseAuth.getInstance().apply{
+        //TODO: Emulator
+        useEmulator(
+            AdminUtils.LOCAL_SERVER_FIREBASE_IP,
             9099
         )
     }
+
+
     //Initialising and getting instances of the firebase services
     /**
      * Get current user

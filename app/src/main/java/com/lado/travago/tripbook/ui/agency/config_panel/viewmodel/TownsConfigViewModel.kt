@@ -335,6 +335,10 @@ class TownsConfigViewModel : ViewModel() {
             it.getString("region")
         }
     }
+
+    //Clear town names list
+    fun townNamesListClear() = townNamesList.clear()
+
 }
 
 
