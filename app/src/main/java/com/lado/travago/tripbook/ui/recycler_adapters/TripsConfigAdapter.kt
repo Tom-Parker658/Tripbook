@@ -22,12 +22,19 @@ class TripsConfigAdapter(
     val clickListener: TripsClickListener,
     private val toDeleteIDList: List<String>,
     private val changesMapList: MutableList<MutableMap<String, Any>>,
-    private val currentTownName: String
+    private val currentTownName: String,
+    private val resources: Resources
 ) : ListAdapter<DocumentSnapshot, TripsConfigViewHolder>(
     TripsConfigDiffCallbacks()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        TripsConfigViewHolder.from(parent, toDeleteIDList, changesMapList, currentTownName)
+        TripsConfigViewHolder.from(
+            parent,
+            toDeleteIDList,
+            changesMapList,
+            currentTownName,
+            resources
+        )
 
     override fun onBindViewHolder(holder: TripsConfigViewHolder, position: Int) =
         holder.bind(clickListener, getItem(position))
@@ -38,22 +45,15 @@ class TripsConfigViewHolder private constructor(
     val binding: ItemTripsConfigBinding,
     private val toDeleteIDList: List<String>,
     private val changesMapList: MutableList<MutableMap<String, Any>>,
-    private val currentTownName: String
+    private val currentTownName: String,
+    val resources: Resources
 ) :
     RecyclerView.ViewHolder(binding.root) {
     /**
      * @param tripDoc is sort of a document but is a simple hashMap
      */
     fun bind(clickListener: TripsClickListener, tripDoc: DocumentSnapshot) {
-        if (toDeleteIDList.contains(tripDoc.id)) {
-            binding.checkSelectTrip.isChecked = true
-            binding.card.strokeColor = Resources.getSystem().getColor(R.color.colorNegativeButton)
-            binding.card.strokeWidth = 1
-        } else {
-            binding.checkSelectTrip.isChecked = false
-            binding.card.strokeColor = Resources.getSystem().getColor(R.color.colorPositiveButton)
-            binding.card.strokeWidth = 1
-        }
+        binding.checkSelectTrip.isChecked = toDeleteIDList.contains(tripDoc.id)
 
         binding.changesMap = tripDoc
         binding.clickListener = clickListener
@@ -78,9 +78,10 @@ class TripsConfigViewHolder private constructor(
                 }*/
                 binding.textTripDistance.text = Utils.formatDistance(map.value["distance"] as Long)
                 binding.chipVip.isChecked = map.value["isVip"] as Boolean
-                binding.btnPriceVip.text = Utils.formatFCFAPrice(map.value["vipPrice"] as Long)
+                binding.btnPriceVip.text =
+                    Utils.formatFCFAPrice(map.value["vipPrice"]!!.toString().toDouble().toLong())
                 binding.btnNormalPrice.text =
-                    Utils.formatFCFAPrice(map.value["normalPrice"] as Long)
+                    Utils.formatFCFAPrice(map.value["normalPrice"]!!.toString().toDouble().toLong())
             }
         } else {
             (tripDoc["townNames"] as Map<String, String>).also {
@@ -97,17 +98,15 @@ class TripsConfigViewHolder private constructor(
                         Resources.getSystem().getColor(R.color.colorNegativeButton)
                     )
             }*/
-            binding.chipVip.isChecked = tripDoc.getBoolean("isVip")!!
             binding.textTripDistance.text = Utils.formatDistance(tripDoc.getLong("distance")!!)
             binding.chipVip.isChecked = tripDoc.getBoolean("isVip")!!
             binding.btnPriceVip.text = Utils.formatFCFAPrice(tripDoc.getLong("vipPrice")!!)
             binding.btnNormalPrice.text = Utils.formatFCFAPrice(tripDoc.getLong("normalPrice")!!)
+        }
 
-            binding.chipVip.isChecked.let {
-                if (it) binding.btnPriceVip.visibility = View.VISIBLE
-                else binding.btnPriceVip.visibility = View.GONE
-            }
-            binding.card.strokeWidth = 1
+        binding.chipVip.isChecked.let {
+            if (it) binding.btnPriceVip.visibility = View.VISIBLE
+            else binding.btnPriceVip.visibility = View.GONE
         }
     }
 
@@ -121,7 +120,8 @@ class TripsConfigViewHolder private constructor(
             parent: ViewGroup,
             toDeleteIDList: List<String>,
             changesMapList: MutableList<MutableMap<String, Any>>,
-            currentTownName: String
+            currentTownName: String,
+            res: Resources
         ): TripsConfigViewHolder {
             val binding = ItemTripsConfigBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -132,7 +132,8 @@ class TripsConfigViewHolder private constructor(
                 binding,
                 toDeleteIDList,
                 changesMapList,
-                currentTownName
+                currentTownName,
+                res
             )
         }
     }

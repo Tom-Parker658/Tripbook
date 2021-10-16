@@ -1,6 +1,7 @@
 package com.lado.travago.tripbook.ui.booker.creation
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -18,6 +19,7 @@ import com.google.firebase.emulators.EmulatedServiceSettings
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityBookerCreationBinding
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
+import com.lado.travago.tripbook.ui.agency.config_panel.AgencyConfigActivity
 //import com.lado.travago.tripbook.databinding.ActivityUserCreationBinding
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationViewModel.FieldTags
 import com.lado.travago.tripbook.utils.Utils.removeSpaces
@@ -190,15 +192,20 @@ class BookerCreationActivity : AppCompatActivity() {
      * Navigates back to the UI which originally launched this creation as an intent. It returns with no data as intent,
      * But only with the RESULT status
      */
-    //TODO: For now, we navigate to config center lobby
-    private fun navigateToLauncherUI() =
-        viewModel.onBookerCreated.observe(this) {
-            if (it) {
-                setResult(Activity.RESULT_OK, null)
-                finish()
-                viewModel.stopLoading()
-            }
-        }
+    //TODO: TEST: For now, we navigate to config center lobby
+    private fun navigateToLauncherUI() {
+        startActivity(
+            Intent(this, AgencyConfigActivity::class.java)
+        )
+        finish()
+//        viewModel.onBookerCreated.observe(this) {
+//            if (it) {
+//                setResult(Activity.RESULT_OK, null)
+//                finish()
+//                viewModel.stopLoading()
+//            }
+//        }
+    }
 
     /**
      * Observe the [BookerCreationViewModel.onLoading] live data to know when a process is actually in the loading state

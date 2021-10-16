@@ -1,9 +1,12 @@
 package com.lado.travago.tripbook.ui.agency.config_panel.viewmodel
 
+import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.ListenerRegistration
+import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
@@ -38,6 +41,17 @@ class TripsConfigViewModel : ViewModel() {
     private val _startTripSearch = MutableLiveData(false)
     val startTripSearch: LiveData<Boolean> get() = _startTripSearch
 
+    //Tell the adapter to notify all items have changed
+    private val _notifyAdapterChanges = MutableLiveData(false)
+    val notifyAdapterChanges: LiveData<Boolean> get() = _notifyAdapterChanges
+
+    //Visibility of the Fabs
+    private val _fabVisibilityState = MutableLiveData(true)
+    val fabVisibilityState: LiveData<Boolean> get() = _fabVisibilityState
+    fun invertFabVisibility() {
+        _fabVisibilityState.value = !_fabVisibilityState.value!!
+    }
+
     //Controls when to show the add trip view
     private val _onShowAddTrip = MutableLiveData(false)
     val onShowAddTrip: LiveData<Boolean> get() = _onShowAddTrip
@@ -54,9 +68,9 @@ class TripsConfigViewModel : ViewModel() {
     private val _localChangesMapList = MutableLiveData(mutableListOf<MutableMap<String, Any>>())
     val localChangesMapList: LiveData<MutableList<MutableMap<String, Any>>> get() = _localChangesMapList
 
-    //Contains the snapshot result
-    private val _currentTripsList = MutableLiveData<MutableList<DocumentSnapshot>>()
-    val currentTripsList: LiveData<MutableList<DocumentSnapshot>> = _currentTripsList
+    //Contains the snapshot result for the collection of this agency trips
+    private val _agencyTripList = MutableLiveData<MutableList<DocumentSnapshot>>()
+    val agencyTripList: LiveData<MutableList<DocumentSnapshot>> = _agencyTripList
 
     //Holds the list of the ids to be added and that's agency's exception list
     private val _toAddIDList = MutableLiveData(mutableListOf<String>())
@@ -112,12 +126,13 @@ class TripsConfigViewModel : ViewModel() {
                     _onLoading.value = false
                 }
                 is State.Success -> {
+                    _originalTripsList.value = tripsListState.data.documents
 //                        pricePerKM = 11.0
-//                        // agencyState.data.getDouble("pricePerKM")!!
+                        // agencyState.data.getDouble("pricePerKM")!!
 //                        vipPricePerKM = 12.0
 //                       //agencyState.data.getDouble("vipPricePerKM")!!
 
-                    tripsListState.data.documents.forEach {
+                    /*tripsListState.data.documents.forEach {
                         //We get the name of the town that is not same as
                         val otherTownName =
                             if ((it.get("townNames")!! as HashMap<String, String>)["town1"] == currentTownName)
@@ -131,11 +146,67 @@ class TripsConfigViewModel : ViewModel() {
                                 "distance" to it.getLong("distance").toString()
                             )
                         )
-                    }
-                    _originalTripsList.value = tripsListState.data.documents
+                    }*/
+                    addDestinationTownNames()
                     _onLoading.value = false
                 }
             }
+        }
+    }
+
+    //Listener for the agency trips' collection
+    fun tripsListener(
+        hostActivity: Activity,
+        agencyID: String
+    ): ListenerRegistration = firestoreRepo.db.collection(
+        "/OnlineTransportAgency/${
+            agencyID
+        }/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency"
+    ).whereArrayContains("townIDs", townID)
+        //We get all trips to and from the selected location
+        .addSnapshotListener(hostActivity) { snapshot, error ->
+            _toastMessage.value = error?.handleError { }
+            if (snapshot != null) {
+                if (!snapshot.isEmpty) {
+                    _agencyTripList.value = snapshot.documents
+                    addDestinationTownNames()
+                } else {
+                    _toastMessage.value = hostActivity.getString(R.string.text_dialog_empty_content)
+                    _notifyAdapterChanges.value = true
+                    _agencyTripList.value?.clear()
+                }
+            }
+
+        }
+
+    /**
+     * This will be use to set the list of other towns which are not currently in the agency collection
+     * and can be a destination to the "current town" so that the scanner admin can add it
+     * This modifies the [tripsSimpleInfoMap] list
+     */
+    private fun addDestinationTownNames() {
+        tripsSimpleInfoMap.clear()
+        originalTripsList.value?.forEach { originalList ->
+            val otherTownName =
+                if ((originalList.get("townNames")!! as HashMap<String, String>)["town1"] == currentTownName)
+                    (originalList.get("townNames")!! as HashMap<String, String>)["town2"]!!
+                else (originalList.get("townNames")!! as HashMap<String, String>)["town1"]!!
+
+            //If we find that the other town is already part of the agency collection, we don't put it in the
+            //list of towns which can potentially be added
+            val found = _agencyTripList.value?.find {
+                (it["townNames"]!! as HashMap<String, String>)["town1"] == otherTownName
+                        || (it["townNames"]!! as HashMap<String, String>)["town2"] == otherTownName
+            }
+
+            if (found == null) //We add to "TO-ADD-LIST" iff it is not already part of the agency collection of towns
+                tripsSimpleInfoMap.add(
+                    hashMapOf(
+                        "id" to originalList.id,
+                        "name" to otherTownName,
+                        "distance" to originalList.getLong("distance").toString()
+                    )
+                )
         }
     }
 
@@ -164,11 +235,11 @@ class TripsConfigViewModel : ViewModel() {
     }.apply {
         catch { emit(State.failed(it as Exception)) }
         flowOn(Dispatchers.IO)
-        collect {
-            when (it) {
+        collect { state ->
+            when (state) {
                 is State.Failed -> {
                     _onLoading.value = false
-                    _toastMessage.value = it.exception.handleError { }
+                    _toastMessage.value = state.exception.handleError { }
                 }
                 is State.Loading -> _onLoading.value = true
                 is State.Success -> {
@@ -288,7 +359,7 @@ class TripsConfigViewModel : ViewModel() {
      * In the case the trip has never been config before, we create a new map with its details and add it [tripChangesMapList]
      */
     fun exemptVIP(tripId: String) {
-        val tripDoc = _currentTripsList.value!!.withIndex().find {
+        val tripDoc = _agencyTripList.value!!.withIndex().find {
             it.value.id == tripId
         }!!
         val existingChangeMap = _localChangesMapList.value!!.withIndex().find {
@@ -297,11 +368,11 @@ class TripsConfigViewModel : ViewModel() {
         if (existingChangeMap != null) {
             //If it was already true we make it false OR the reverse
             _localChangesMapList.value!![existingChangeMap.index]["isVip"] =
-                !(_currentTripsList.value!![tripDoc.index]["isVip"]!! as Boolean)
+                !(_localChangesMapList.value!![existingChangeMap.index]["isVip"] as Boolean)
         } else {
             //In case the user hasn't made any change to this document, we create a new map with the different vip option
             val changeMap = tripDoc.value.toMapWithIDField()
-            changeMap["isVip"] = !_currentTripsList.value!![tripDoc.index].getBoolean("isVip")!!
+            changeMap["isVip"] = !_agencyTripList.value!![tripDoc.index].getBoolean("isVip")!!
             _localChangesMapList.value!! += changeMap
         }
     }
@@ -355,7 +426,7 @@ class TripsConfigViewModel : ViewModel() {
      * Changes the normal price for another particular price, if the price is not more calculated, we set the "flagNormalPriceFromDistance" to false else true
      */
     fun changeNormalPrice(tripId: String, newNormalPrice: Long) {
-        val tripDoc = _currentTripsList.value!!.withIndex().find {
+        val tripDoc = _agencyTripList.value!!.withIndex().find {
             it.value.id == tripId
         }!!
         val existingChangeMap = _localChangesMapList.value!!.withIndex().find {
@@ -373,7 +444,7 @@ class TripsConfigViewModel : ViewModel() {
               We check if the new price is equal to calculated price from the pricePerKm to set the flag
             */
             changeMap["flagNormalPriceFromDistance"] =
-                (_currentTripsList.value!![tripDoc.index].getLong("distance")!! * pricePerKM).toLong() == newNormalPrice
+                (_agencyTripList.value!![tripDoc.index].getLong("distance")!! * pricePerKM).toLong() == newNormalPrice
             _localChangesMapList.value!! += changeMap
         }
     }
@@ -382,7 +453,7 @@ class TripsConfigViewModel : ViewModel() {
      * Same concept as [changeNormalPrice], but here we change instead "flagVipPriceFromDistance"
      */
     fun changeVIPPrice(tripId: String, newVIPPrice: Long) {
-        val tripDoc = _currentTripsList.value!!.withIndex().find {
+        val tripDoc = _agencyTripList.value!!.withIndex().find {
             it.value.id == tripId
         }!!
         val existingChangeMap = _localChangesMapList.value!!.withIndex().find {
@@ -399,7 +470,7 @@ class TripsConfigViewModel : ViewModel() {
               We check if the new price is equal to calculated price from the pricePerKm to set the flag
             */
             changeMap["flagVipPriceFromDistance"] =
-                (_currentTripsList.value!![tripDoc.index].getLong("distance")!! * pricePerKM).toLong() == newVIPPrice
+                (_agencyTripList.value!![tripDoc.index].getLong("distance")!! * pricePerKM).toLong() == newVIPPrice
             _localChangesMapList.value!! += changeMap
         }
     }
@@ -419,6 +490,8 @@ class TripsConfigViewModel : ViewModel() {
         TRIP_NAME_LIST,
         CURRENT_TRIPS,
         SPAN_SIZE,
+        NOTIFY_DATA_CHANGED
+
     }
 
     /**
@@ -445,10 +518,12 @@ class TripsConfigViewModel : ViewModel() {
             FieldTags.CHECKED_ITEM -> sortCheckedItem = value as Int
             FieldTags.SPAN_SIZE -> _spanSize.value = value as Int
 
+            FieldTags.NOTIFY_DATA_CHANGED -> _notifyAdapterChanges.value = value as Boolean
+
             FieldTags.REMOVE_MAP -> tripsSimpleInfoMap.remove(value)
             FieldTags.SHOW_ADD_TRIP -> _onShowAddTrip.value = value as Boolean
             FieldTags.TRIP_NAME_LIST -> tripNamesList.add(value.toString())
-            FieldTags.CURRENT_TRIPS -> _currentTripsList.value =
+            FieldTags.CURRENT_TRIPS -> _agencyTripList.value =
                 value as MutableList<DocumentSnapshot>
         }
     }
@@ -457,8 +532,8 @@ class TripsConfigViewModel : ViewModel() {
      * A function to search for a specific trip destination from the doc and return its index in the list
      */
     fun searchTrip(destination: String): Int? {
-        return _currentTripsList.value?.indexOf(
-            _currentTripsList.value!!.find { tripMap ->
+        return _agencyTripList.value?.indexOf(
+            _agencyTripList.value!!.find { tripMap ->
                 (tripMap["townNames"] as Map<String, String>).containsValue(destination)
             }
         )
@@ -466,20 +541,20 @@ class TripsConfigViewModel : ViewModel() {
 
     fun sortTripsResult(sortTags: SortTags) {
         when (sortTags) {
-            SortTags.TRIP_NAMES -> _currentTripsList.value!!.sortBy {
+            SortTags.TRIP_NAMES -> _agencyTripList.value!!.sortBy {
                 //Here we are simply sorting by the names but we must get the name of other towns
                 if ((it["townNames"] as Map<String, String>)["town1"] == currentTownName)
                     (it["townNames"] as Map<String, String>)["town2"].toString()
                 else
                     (it["townNames"] as Map<String, String>)["town1"].toString()
             }
-            SortTags.TRIP_PRICES -> _currentTripsList.value!!.sortBy {
+            SortTags.TRIP_PRICES -> _agencyTripList.value!!.sortBy {
                 (it["normalPrice"]!! as Double).toLong()
             }
-            SortTags.TRIP_VIP_PRICES -> _currentTripsList.value!!.sortBy {
+            SortTags.TRIP_VIP_PRICES -> _agencyTripList.value!!.sortBy {
                 (it["vipPrice"]!! as Double).toLong()
             }
-            SortTags.DISTANCE -> _currentTripsList.value!!.sortBy {
+            SortTags.DISTANCE -> _agencyTripList.value!!.sortBy {
                 (it["distance"] as Double).toLong()
             }
         }

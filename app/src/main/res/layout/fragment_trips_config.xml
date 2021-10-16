@@ -47,90 +47,112 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_search_trip"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollViewTownTools"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/fab_add_trips"
-            app:layout_constraintEnd_toEndOf="@+id/fab_add_trips"
-            app:layout_constraintStart_toStartOf="@+id/fab_add_trips"
-            app:srcCompat="@drawable/baseline_search_24"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_sort_trips"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:layout_constraintBottom_toTopOf="@+id/fab_search_trip"
-            app:layout_constraintEnd_toEndOf="@+id/fab_search_trip"
-            app:layout_constraintStart_toStartOf="@+id/fab_search_trip"
-            app:srcCompat="@drawable/baseline_sort_24"
-            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_trips"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:backgroundTint="@color/colorPositiveButton"
-            app:layout_constraintBottom_toTopOf="@+id/fab_toggle_trips_toolbox"
-            app:layout_constraintEnd_toEndOf="@+id/fab_toggle_trips_toolbox"
-            app:layout_constraintStart_toStartOf="@+id/fab_toggle_trips_toolbox"
-            app:srcCompat="@drawable/baseline_add_24"
-            tools:ignore="SpeakableTextPresentCheck"
-            android:focusable="true" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_remove_trip_selection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:backgroundTint="@color/colorNegativeButton"
-            app:layout_constraintBottom_toTopOf="@+id/fab_trip_span_size"
-            app:layout_constraintEnd_toEndOf="@+id/fab_trip_span_size"
-            app:layout_constraintStart_toStartOf="@+id/fab_trip_span_size"
-            app:srcCompat="@drawable/ic_clear_black_24dp"
-            tools:ignore="SpeakableTextPresentCheck"
-            android:focusable="true" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_toggle_trips_toolbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            app:backgroundTint="@color/colorNeutralButton"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/baseline_visibility_off_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_search_trip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/fab_add_trips"
+                    app:layout_constraintEnd_toEndOf="@+id/fab_add_trips"
+                    app:layout_constraintStart_toStartOf="@+id/fab_add_trips"
+                    app:srcCompat="@drawable/baseline_search_24"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_sort_trips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toTopOf="@+id/fab_search_trip"
+                    app:layout_constraintEnd_toEndOf="@+id/fab_search_trip"
+                    app:layout_constraintStart_toStartOf="@+id/fab_search_trip"
+                    app:srcCompat="@drawable/baseline_sort_24"
+                    tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_add_trips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:backgroundTint="@color/colorPositiveButton"
+                    app:layout_constraintBottom_toTopOf="@+id/fab_toggle_trips_toolbox"
+                    app:layout_constraintEnd_toEndOf="@+id/fab_toggle_trips_toolbox"
+                    app:layout_constraintStart_toStartOf="@+id/fab_toggle_trips_toolbox"
+                    app:srcCompat="@drawable/baseline_add_24"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_remove_trip_selection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/colorNegativeButton"
+                    app:layout_constraintBottom_toTopOf="@+id/fab_trip_span_size"
+                    app:layout_constraintEnd_toEndOf="@+id/fab_trip_span_size"
+                    app:layout_constraintStart_toStartOf="@+id/fab_trip_span_size"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:srcCompat="@drawable/ic_clear_black_24dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_toggle_trips_toolbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    app:backgroundTint="@color/colorNeutralButton"
+                    app:fabSize="mini"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/baseline_visibility_off_24"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_trip_span_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toTopOf="@+id/fab_sort_trips"
+                    app:layout_constraintEnd_toEndOf="@+id/fab_sort_trips"
+                    app:layout_constraintStart_toStartOf="@+id/fab_sort_trips"
+                    app:srcCompat="@drawable/baseline_settings_24"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <Button
             android:id="@+id/btn_trip_save"
             style="@style/positiveButton"
+            android:layout_marginBottom="16dp"
             android:text="@string/text_btn_save"
-            app:layout_constraintBottom_toBottomOf="@+id/fab_toggle_trips_toolbox"
+            app:layout_constraintBottom_toBottomOf="@+id/recycler_trips"
             app:layout_constraintEnd_toEndOf="@+id/recycler_trips"
             app:layout_constraintStart_toStartOf="@+id/recycler_trips"
-            app:layout_constraintTop_toTopOf="@+id/fab_toggle_trips_toolbox" />
+            app:layout_constraintTop_toTopOf="@+id/nestedScrollViewTownTools"
+            app:layout_constraintVertical_bias="0.97" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_trip_span_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:layout_constraintBottom_toTopOf="@+id/fab_sort_trips"
-            app:layout_constraintEnd_toEndOf="@+id/fab_sort_trips"
-            app:layout_constraintStart_toStartOf="@+id/fab_sort_trips"
-            app:srcCompat="@drawable/baseline_settings_24"
-            tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

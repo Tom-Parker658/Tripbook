@@ -35,6 +35,8 @@ class SummaryItemViewHolder private constructor(
             binding.mainTitle.textSize = 15F
             binding.imageLogo.minimumWidth = 32
             binding.imageLogo.minimumHeight = 32
+            binding.divider.visibility = View.VISIBLE
+
         }
         when (item.state) {
             SummaryItem.SettingsItemState.OK -> {

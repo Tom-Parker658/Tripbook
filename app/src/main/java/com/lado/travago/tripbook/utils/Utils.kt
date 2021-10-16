@@ -40,7 +40,7 @@ object Utils {
         var formattedPrice = ""
         price.toString().reversed().forEachIndexed { index, char ->
             formattedPrice += char
-            if (index != price.toString().length && (index + 1) % 3 == 0) formattedPrice += " ,"
+            if (index != price.toString().length && (index + 1) % 3 == 0) formattedPrice += " "
         }
         return "${formattedPrice.reversed()} FCFA"
     }

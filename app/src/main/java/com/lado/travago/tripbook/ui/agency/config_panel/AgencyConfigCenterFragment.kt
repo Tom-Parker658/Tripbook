@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyConfigCenterBinding
 import com.lado.travago.tripbook.model.admin.SummaryItem
@@ -21,6 +22,7 @@ import kotlinx.coroutines.*
 @InternalCoroutinesApi
 class AgencyConfigCenterFragment : Fragment() {
     private lateinit var binding: FragmentAgencyConfigCenterBinding
+//    TODO: TEST COMMENTING
     private lateinit var parentViewModel: AgencyConfigViewModel
 
     override fun onCreateView(
@@ -48,16 +50,22 @@ class AgencyConfigCenterFragment : Fragment() {
     }
 
     private fun initSettingsRecycler() {
+        val adminList = SummaryItem.getAdminScannerItems(resources)
+
         SummaryItemAdapter(
             SummaryItemClickListener {
                 handleNavClicks(it)
             }
         ).apply {
             this.submitList(
-                if (parentViewModel.scannerDoc.value!!.getBoolean("isAdmin")!!)
-                    SummaryItem.adminScannerItems
-                else SummaryItem.adminScannerItems //TODO: Urgent: Change it with Scanner related panels
+                adminList
             )
+            //TODO: TEST:COMMENTING
+//            this.submitList(
+//                if (parentViewModel.scannerDoc.value!!.getBoolean("isAdmin")!!)
+//                    SummaryItem.adminScannerItems
+//                else SummaryItem.adminScannerItems //TODO: Urgent: Change it with Scanner related panels
+//            )
             val linearLayoutManager = LinearLayoutManager(requireContext())
             binding.recyclerConfigAdmin.layoutManager = linearLayoutManager
             binding.recyclerConfigAdmin.adapter = this

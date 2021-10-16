@@ -17,14 +17,21 @@ class TimeModel private constructor(
     val millisecond: Int?,
 ) {
 
-    fun formattedTime(format: TimeFormat) =
-        when (format) {
-            TimeFormat.FORMAT_12H -> {
-                if (hour > 12) "${hour % 12}:$minutes:${millisecond ?: ""} ${Meridian.PM}"
-                else "$hour : $minutes ${millisecond ?: ""} ${Meridian.AM}"
-            }
-            TimeFormat.FORMAT_24H -> "$hour : $minutes ${millisecond ?: ""} "
+    fun formattedTime(format: TimeFormat): String {
+        val fMinutes = if (minutes == 0) "00" else minutes.toString()
+        val fMilli = when {
+            millisecond == 0 && millisecond != null -> "00"
+            millisecond != 0 && millisecond != null -> millisecond.toString()
+            else -> null
         }
+        return when (format) {
+            TimeFormat.FORMAT_12H -> {
+                if (hour > 12) "${hour % 12}:$fMinutes:${millisecond ?: ""} ${Meridian.PM}"
+                else "$hour : $fMinutes ${millisecond ?: ""} ${Meridian.AM}"
+            }
+            TimeFormat.FORMAT_24H -> "$hour : $fMinutes ${millisecond ?: ""} "
+        }
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

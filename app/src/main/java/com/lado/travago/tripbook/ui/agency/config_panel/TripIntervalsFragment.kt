@@ -204,12 +204,7 @@ class TripIntervalsFragment : Fragment() {
         private val parentViewModel: AgencyConfigViewModel,
         private val viewModel: TripsDepartureTimeConfigViewModel
     ) : DialogFragment() {
-        private val creationBinding = DataBindingUtil.inflate<LayoutAddTripIntervalBinding>(
-            layoutInflater,
-            R.layout.layout_add_trip_interval,
-            null,
-            false
-        )
+        private lateinit var creationBinding: LayoutAddTripIntervalBinding
 
         private fun validateFields() {
             if (viewModel.fromHour == null || viewModel.fromMinutes == null) {
@@ -277,48 +272,64 @@ class TripIntervalsFragment : Fragment() {
 
         private fun handleClicks() {
             creationBinding.editTextFrom.setEndIconOnClickListener {
-                val timePicker = MaterialTimePicker.Builder()
+                MaterialTimePicker.Builder()
                     .setTitleText("Pick the Starting time")
                     .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
                     .build()
-                timePicker.addOnPositiveButtonClickListener {
-                    viewModel.setField(FieldTags.FROM_HOUR, timePicker.hour)
-                    viewModel.setField(FieldTags.FROM_MINUTES, timePicker.minute)
-                    timePicker.dismiss()
-                }
+                    .apply {
+                        addOnPositiveButtonClickListener {
+                            viewModel.setField(FieldTags.FROM_HOUR, this.hour)
+                            viewModel.setField(FieldTags.FROM_MINUTES, this.minute)
+                            this.dismiss()
+                        }
+                        showNow(childFragmentManager, "")
+                    }
+
             }
 
             creationBinding.editTextTo.setEndIconOnClickListener {
-                val timePicker = MaterialTimePicker.Builder()
+                MaterialTimePicker.Builder()
                     .setTitleText("Pick the Ending time")
                     .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
                     .build()
-                timePicker.addOnPositiveButtonClickListener {
-                    viewModel.setField(FieldTags.TO_HOUR, timePicker.hour)
-                    viewModel.setField(FieldTags.TO_MINUTES, timePicker.minute)
-                    timePicker.dismiss()
-                }
+                    .apply {
+                        addOnPositiveButtonClickListener {
+                            viewModel.setField(FieldTags.TO_HOUR, this.hour)
+                            viewModel.setField(FieldTags.TO_MINUTES, this.minute)
+                            this.dismiss()
+                        }
+                        showNow(childFragmentManager, "")
+                    }
             }
+            //TODO: Arrange MAterial dialogs
 
             creationBinding.editTextDepartureTime.setEndIconOnClickListener {
-                val timePicker = MaterialTimePicker.Builder()
+                MaterialTimePicker.Builder()
                     .setTitleText("What is the departure time for this interval")
                     .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
                     .build()
-                timePicker.addOnPositiveButtonClickListener {
-                    viewModel.setField(FieldTags.DEPARTURE_HOUR, timePicker.hour)
-                    viewModel.setField(FieldTags.DEPARTURE_MINUTES, timePicker.minute)
-                    timePicker.dismiss()
-                }
+                    .apply {
+                        addOnPositiveButtonClickListener {
+                            viewModel.setField(FieldTags.DEPARTURE_HOUR, this.hour)
+                            viewModel.setField(FieldTags.DEPARTURE_MINUTES, this.minute)
+                            this.dismiss()
+                        }
+                        showNow(childFragmentManager, "")
+                    }
             }
         }
 
         override fun onCreateDialog(savedInstanceState: Bundle?): AlertDialog {
+            creationBinding = DataBindingUtil.inflate<LayoutAddTripIntervalBinding>(
+                layoutInflater,
+                R.layout.layout_add_trip_interval,
+                null,
+                false
+            )
             handleClicks()
             return MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Create a Time Interval")
                 .setIcon(R.drawable.baseline_add_24)
-                .setMessage("Fill in the following Information")
                 .setView(creationBinding.root)
                 .setPositiveButton("Create") { dialog, _ ->
                     validateFields()

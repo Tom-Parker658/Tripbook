@@ -1,5 +1,6 @@
 package com.lado.travago.tripbook.ui.agency.config_panel
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -20,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripsConfigBinding
 import com.lado.travago.tripbook.databinding.ItemSearchFormBinding
@@ -28,6 +28,7 @@ import com.lado.travago.tripbook.databinding.ItemSimpleRecyclerLayoutBinding
 import com.lado.travago.tripbook.databinding.ItemTripPriceFormBinding
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
+import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TownsConfigViewModel
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel.*
 import com.lado.travago.tripbook.ui.recycler_adapters.SimpleAdapter
@@ -63,7 +64,10 @@ class TripsConfigFragment : Fragment() {
         )
         viewModel = ViewModelProvider(this)[TripsConfigViewModel::class.java]
         setup()
-        snapshotListener
+        viewModel.tripsListener(
+            requireActivity(),
+            parentViewModel.bookerDoc.value!!.getString("agencyID")!!
+        )
         handleFabVisibilities()
 
         observeLiveData()
@@ -75,23 +79,42 @@ class TripsConfigFragment : Fragment() {
         val tripArgs = TripsConfigFragmentArgs.fromBundle(requireArguments())
         viewModel.setField(FieldTags.TOWN_ID, tripArgs.townID)
         viewModel.setField(FieldTags.TOWN_NAME, tripArgs.townName)
-        binding.textMasterLabel.text = "From ${viewModel.currentTownName} to: "
+        val masterTxt = "${getString(R.string.text_dialog_title_from)} ${viewModel.currentTownName} ${getString(R.string.text_label_to)}: "
+        binding.textMasterLabel.text = masterTxt
     }
 
+
     /**
-     * Configures the towns recycler
+     * Configures the trips recycler and (re)-init recycler
      */
-    private fun initRecycler(spanCount: Int) {
-        val recyclerManager = GridLayoutManager(context, spanCount)
+    private fun setSpanSize(spanSize: Int) {
+        val recyclerManager = GridLayoutManager(context, spanSize)
         binding.recyclerTrips.layoutManager = recyclerManager
-        if (this::adapter.isInitialized) binding.recyclerTrips.adapter = adapter
+        viewModel.setField(FieldTags.NOTIFY_DATA_CHANGED, true)
+
+        if (this::adapter.isInitialized)
+            binding.recyclerTrips.adapter = adapter
+
+        viewModel.setField(FieldTags.NOTIFY_DATA_CHANGED, true)
     }
 
     private fun observeLiveData() {
+        viewModel.notifyAdapterChanges.observe(viewLifecycleOwner) {
+            if (it)
+                if (this::adapter.isInitialized) {
+                    adapter.notifyDataSetChanged()
+                    viewModel.setField(FieldTags.NOTIFY_DATA_CHANGED, false)
+                }
+        }
         viewModel.retryTrips.observe(viewLifecycleOwner) {
             if (it) CoroutineScope(Dispatchers.Main).launch {
                 viewModel.getOriginalTrips()
             }
+        }
+        //Show thw save button only if something has been locally modified
+        viewModel.localChangesMapList.observe(viewLifecycleOwner){
+            if(it.isEmpty()) binding.btnTripSave.visibility = View.GONE
+            else binding.btnTripSave.visibility = View.VISIBLE
         }
         viewModel.onLoading.observe(viewLifecycleOwner) {
             if (it) {
@@ -106,10 +129,53 @@ class TripsConfigFragment : Fragment() {
                 requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         }
-        viewModel.currentTripsList.observe(viewLifecycleOwner) {
+        viewModel.agencyTripList.observe(viewLifecycleOwner) { tripList ->
             viewModel.tripNamesListClear()
-            if (it.isNotEmpty()) {
-                it.forEach { currentDoc ->
+            if (tripList.isNotEmpty()) {
+                adapter = TripsConfigAdapter(
+                    clickListener = TripsClickListener { tripID, buttonTag ->
+                        viewModel.setField(FieldTags.TRIP_ID, tripID)
+                        when (buttonTag) {//Remove
+                            TripButtonTags.TRIP_CHECK_TO_DELETE -> {
+                                viewModel.removeTrip(tripID)
+                                //This to rightly inflate the close button
+                                viewModel.setField(FieldTags.REBIND_ITEM, true)
+                                viewModel.setField(FieldTags.REBIND_ITEM, false)
+
+                                //To show or hide the delete town fab but in other not to annoy, we do it only when we have 1 selection
+                                if (viewModel.toDeleteIDList.value!!.size == 1)
+                                    binding.fabRemoveTripSelection.show()
+                                else if (viewModel.toDeleteIDList.value!!.isEmpty())
+                                    binding.fabRemoveTripSelection.hide()
+                            }
+                            TripButtonTags.TRIPS_BUTTON_NORMAL_PRICE -> {
+                                viewModel.setField(
+                                    FieldTags.ON_NORMAL_PRICE_FORM,
+                                    true
+                                )
+                            }
+                            TripButtonTags.TRIPS_BUTTON_VIP_PRICE -> {
+                                viewModel.setField(
+                                    FieldTags.ON_VIP_PRICE_FORM,
+                                    true
+                                )
+                            }
+                            TripButtonTags.TRIPS_CHECK_VIP -> {
+                                viewModel.exemptVIP(tripID)
+                                viewModel.setField(FieldTags.REBIND_ITEM, true)
+                            }
+//                                        TripButtonTags.TRIPS_BUTTON_BUS_TYPES -> {
+//                                            showBusTypesDialog(tripID)
+//                                        }
+                        }
+                    },
+                    toDeleteIDList = viewModel.toDeleteIDList.value!!,
+                    changesMapList = viewModel.localChangesMapList.value!!,
+                    currentTownName = viewModel.currentTownName,
+                    resources
+                )
+
+                tripList.forEach { currentDoc ->
                     /**
                      * We get the town names which are not the current town name
                      */
@@ -132,19 +198,25 @@ class TripsConfigFragment : Fragment() {
                         )
                     }
                 }
+
+                if (this::adapter.isInitialized) {
+                    adapter.submitList(tripList)
+                    setSpanSize(viewModel.spanSize.value!!)
+                }
             }
         }
         viewModel.toDeleteIDList.observe(viewLifecycleOwner) {
-            if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
-        }
+            if (it.isEmpty())
+                viewModel.setField(FieldTags.NOTIFY_DATA_CHANGED, true)
 
+        }
 
         /**
          * Looks for the position of the changed item and rebinds it
          */
         viewModel.onRebindItem.observe(viewLifecycleOwner) {
             if (it) {
-                val tripMap = viewModel.currentTripsList.value!!.withIndex().find { map ->
+                val tripMap = viewModel.agencyTripList.value!!.withIndex().find { map ->
                     map.value.id == viewModel.tripID
                 }!!
                 adapter.notifyItemChanged(tripMap.index)
@@ -152,7 +224,7 @@ class TripsConfigFragment : Fragment() {
             }
         }
         viewModel.toastMessage.observe(viewLifecycleOwner) {
-            if (it.isNotBlank()) {
+            if (it?.isNotBlank() == true) {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
                 Log.d("TripsConfig", it)
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "")
@@ -239,7 +311,7 @@ class TripsConfigFragment : Fragment() {
             }
         }
         viewModel.spanSize.observe(viewLifecycleOwner) {
-            if (this::adapter.isInitialized) initRecycler(it)
+            setSpanSize(it)
         }
     }
 
@@ -252,49 +324,49 @@ class TripsConfigFragment : Fragment() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun handleFabVisibilities() {
-        // Toggle visibilities fab
-        binding.fabToggleTripsToolbox.setOnClickListener { toggleFab ->
-            binding.fabAddTrips.let {
-                if (it.isShown) it.hide() else it.show()
-            }
-            binding.fabTripSpanSize.let {
-                if (it.isShown) it.hide() else it.show()
-            }
-            binding.fabSearchTrip.let {
-                if (it.isShown) it.hide() else it.show()
-            }
-            binding.fabTripSpanSize.let {
-                if (it.isShown) it.hide() else it.show()
-            }
-            binding.fabSortTrips.let {
-                if (it.isShown) {
-                    it.hide()
-                    (toggleFab as FloatingActionButton).setImageDrawable(
-                        ResourcesCompat.getDrawable(
-                            requireActivity().resources,
-                            R.drawable.baseline_visibility_24,
-                            requireActivity().theme
-                        )
+        viewModel.fabVisibilityState.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.fabAddTrips.show()
+                binding.fabSearchTrip.show()
+                binding.fabTripSpanSize.show()
+                binding.fabSortTrips.show()
+                binding.fabToggleTripsToolbox.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        requireActivity().resources,
+                        R.drawable.baseline_visibility_off_24,
+                        requireActivity().theme
                     )
-                } else {
-                    (toggleFab as FloatingActionButton).setImageDrawable(
-                        ResourcesCompat.getDrawable(
-                            requireActivity().resources,
-                            R.drawable.baseline_visibility_off_24,
-                            requireActivity().theme
-                        )
+                )
+                if(viewModel.localChangesMapList.value?.isNotEmpty() == true)
+                    binding.btnTripSave.visibility = View.VISIBLE
+
+                if (viewModel.toDeleteIDList.value!!.isNotEmpty())
+                    binding.fabRemoveTripSelection.show()
+            } else {
+                if(viewModel.localChangesMapList.value?.isNotEmpty() == true)
+                    binding.btnTripSave.visibility = View.GONE
+
+                binding.fabAddTrips.hide()
+                binding.fabSearchTrip.hide()
+                binding.fabTripSpanSize.hide()
+                binding.fabSortTrips.hide()
+                binding.fabToggleTripsToolbox.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        requireActivity().resources,
+                        R.drawable.baseline_visibility_24,
+                        requireActivity().theme
                     )
-                    it.show()
-                }
-            }
-            binding.btnTripSave.let {
-                if (it.isShown) it.visibility = View.GONE else it.visibility = View.VISIBLE
+                )
+                if (viewModel.toDeleteIDList.value!!.isNotEmpty())
+                    binding.fabRemoveTripSelection.hide()
             }
         }
     }
 
     private fun handleClicks() {
+        binding.fabToggleTripsToolbox.setOnClickListener { viewModel.invertFabVisibility() }
         binding.fabSearchTrip.setOnClickListener {
             viewModel.setField(FieldTags.START_TRIP_SEARCH, true)
         }
@@ -331,7 +403,7 @@ class TripsConfigFragment : Fragment() {
                             viewModel.setField(FieldTags.CHECKED_ITEM, 4)
                         }
                     }
-                    adapter.submitList(viewModel.currentTripsList.value)
+                    adapter.submitList(viewModel.agencyTripList.value)
                     adapter.notifyDataSetChanged()
                     dialog.dismiss()
                 }
@@ -357,12 +429,15 @@ class TripsConfigFragment : Fragment() {
                 .setTitle(R.string.text_dialog_title_span_size)
                 .setSingleChoiceItems(
                     arrayOf("1", "2", "3", "4", "5", "6"),
-                    viewModel.spanSize.value!!
+                    viewModel.spanSize.value!! - 1
                 ) { dialogInterface, index ->
                     viewModel.setField(FieldTags.SPAN_SIZE, index + 1)
                     dialogInterface.cancel()
                 }
+                .create()
+                .show()
         }
+
     }
 /*
 
@@ -427,57 +502,10 @@ class TripsConfigFragment : Fragment() {
                     parentViewModel.bookerDoc.value!!.getString("agencyID")
                 }/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency"
             ).whereArrayContains("townIDs", viewModel.townID)
-                //We get all trips to and from the selected location
+
                 .addSnapshotListener(requireActivity()) { snapshot, error ->
                     if (snapshot != null) {
-                        if (!snapshot.isEmpty) {
-                            adapter = TripsConfigAdapter(
-                                clickListener = TripsClickListener { tripID, buttonTag ->
-                                    viewModel.setField(FieldTags.TRIP_ID, tripID)
-                                    when (buttonTag) {//Remove
-                                        TripButtonTags.TRIP_CHECK_TO_DELETE -> {
-                                            viewModel.removeTrip(tripID)
-                                            //This to rightly inflate the close button
-                                            viewModel.setField(FieldTags.REBIND_ITEM, true)
-                                            viewModel.setField(FieldTags.REBIND_ITEM, false)
-                                            //To show or hide the delete town fab
 
-                                            if (viewModel.toDeleteIDList.value!!.isNotEmpty()) binding.fabRemoveTripSelection.show()
-                                            else binding.fabRemoveTripSelection.hide()
-                                        }
-                                        TripButtonTags.TRIPS_BUTTON_NORMAL_PRICE -> {
-                                            viewModel.setField(
-                                                FieldTags.ON_NORMAL_PRICE_FORM,
-                                                true
-                                            )
-                                        }
-                                        TripButtonTags.TRIPS_BUTTON_VIP_PRICE -> {
-                                            viewModel.setField(
-                                                FieldTags.ON_VIP_PRICE_FORM,
-                                                true
-                                            )
-                                        }
-                                        TripButtonTags.TRIPS_CHECK_VIP -> {
-                                            viewModel.exemptVIP(tripID)
-                                            viewModel.setField(FieldTags.REBIND_ITEM, true)
-                                        }
-//                                        TripButtonTags.TRIPS_BUTTON_BUS_TYPES -> {
-//                                            showBusTypesDialog(tripID)
-//                                        }
-                                    }
-                                },
-                                toDeleteIDList = viewModel.toDeleteIDList.value!!,
-                                changesMapList = viewModel.localChangesMapList.value!!,
-                                currentTownName = viewModel.currentTownName
-                            )
-                            viewModel.setField(
-                                FieldTags.CURRENT_TRIPS,
-                                snapshot.documents
-                            )
-                            adapter.submitList(snapshot.documents)
-                            initRecycler(viewModel.spanSize.value!!)
-                        } else
-                            if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
                     }
                     error?.handleError { }
                 }

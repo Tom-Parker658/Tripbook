@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.databinding.ItemSimpleBinding
 
 /**
@@ -12,7 +13,8 @@ import com.lado.travago.tripbook.databinding.ItemSimpleBinding
  */
 class SimpleAdapter(
     val clickListener: SimpleClickListener,
-    private val selectedItemList: List<String>
+    private val selectedItemList: List<String>,
+
 ) : ListAdapter<HashMap<String, String>, SimpleViewHolder>(
     SimpleDiffCallbacks()
 ) {
@@ -26,10 +28,12 @@ class SimpleAdapter(
 
 class SimpleViewHolder private constructor(
     val binding: ItemSimpleBinding,
-    private val selectedItemList: List<String>
+    private val selectedItemList: List<String>,
+
 ) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(clickListener: SimpleClickListener, itemMap: HashMap<String, String>, index: Int) {
+        val bindItem = true
         binding.textIndex.text = (index + 1).toString()
         binding.textName.text = itemMap["name"]
         //In case it is a trip, this will work else null

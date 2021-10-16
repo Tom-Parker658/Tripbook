@@ -17,13 +17,15 @@ data class SummaryItem(
     val logoUrl: String?,
     val extraDetails: String? = null
 ) {
+
     enum class SettingsItemState { OK, NOT_OK, PENDING }
 
     companion object {
-        val adminScannerItems = listOf(
+        @JvmStatic
+        fun getAdminScannerItems(resources: Resources) = listOf(
             SummaryItem(
                 "1",
-                Resources.getSystem().getString(R.string.text_label_agency_config_profile),
+                resources.getString(R.string.text_label_agency_config_profile),
                 subTitle = "OK!",
                 logoResourceID = R.drawable.baseline_password_24,
                 isMainItem = true,
@@ -32,7 +34,7 @@ data class SummaryItem(
             ),
             SummaryItem(
                 "2",
-                Resources.getSystem().getString(R.string.text_label_agency_config_intervals),
+                resources.getString(R.string.text_label_agency_config_intervals),
                 "OK!",
                 R.drawable.baseline_departure_board_24,
                 state = null,
@@ -40,7 +42,7 @@ data class SummaryItem(
             ),
             SummaryItem(
                 "3",
-                Resources.getSystem().getString(R.string.text_label_agency_config_trips),
+                resources.getString(R.string.text_label_agency_config_trips),
                 "OK!",
                 R.drawable.baseline_directions_bus_24,
                 state = null,
@@ -48,7 +50,7 @@ data class SummaryItem(
             ),
             SummaryItem(
                 "4",
-                Resources.getSystem().getString(R.string.text_label_agency_config_scanners),
+                resources.getString(R.string.text_label_agency_config_scanners),
                 "OK!",
                 R.drawable.baseline_groups_24,
                 state = null,
@@ -56,15 +58,23 @@ data class SummaryItem(
             ),
             SummaryItem(
                 "5",
-                Resources.getSystem().getString(R.string.text_label_agency_config_money),
+                resources.getString(R.string.text_label_agency_config_events_planner),
+                "OK!",
+                R.drawable.baseline_calendar_today_24,
+                state = null,
+                logoUrl = null
+            ),
+            SummaryItem(
+                "6",
+                resources.getString(R.string.text_label_agency_config_money),
                 "OK!",
                 R.drawable.baseline_payments_24,
                 state = null,
                 logoUrl = null
             ),
             SummaryItem(
-                "6",
-                Resources.getSystem().getString(R.string.text_label_agency_config_delete_agency),
+                "7",
+                resources.getString(R.string.text_label_agency_config_delete_agency),
                 "OK!",
                 R.drawable.round_cancel_24,
                 state = null,

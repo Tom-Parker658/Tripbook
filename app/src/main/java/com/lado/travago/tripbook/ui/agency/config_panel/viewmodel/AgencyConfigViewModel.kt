@@ -1,5 +1,6 @@
 package com.lado.travago.tripbook.ui.agency.config_panel.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,30 +37,37 @@ class AgencyConfigViewModel : ViewModel() {
         //TODO: CHANGE ${authRepo.currentUser?.uid}, TO ${authRepo.currentUser!!.uid}", it must throw an exception
         //TODO: For testing
         firestoreRepo.getDocument(
-            authRepo.currentUser?.uid.toString(),
+            "Bookers/${ authRepo.currentUser!!.uid }",
             Source.SERVER
-        ).collect { bookerDoc ->
-            when (bookerDoc) {
+        ).collect { bookerDocState ->
+            when (bookerDocState) {
                 is State.Success -> {
-                    // Gets the scanner doc
-                    firestoreRepo.queryCollection(
+                    _bookerDoc.value = bookerDocState.data!!
+                    // TODO: Gets the scanner doc
+                    /*firestoreRepo.queryCollection(
                         "OnlineTransportAgency/${
-                            this.bookerDoc.value!!.getString(
+                            bookerDocState.data.getString(
                                 "agencyID"
                             )!!
                         }/Scanners", Source.DEFAULT
                     ) {
-                        it.whereEqualTo("scannerID", this.bookerDoc.value!!.id)
+                        it.whereEqualTo("scannerID", bookerDocState.data.id)
 
-                    }.collect { scannerDoc ->
-                        when (scannerDoc) {
+                    }.collect { scannerDocState ->
+                        when (scannerDocState) {
                             is State.Success -> {
-                                _bookerDoc.value = bookerDoc.data!!
-                                _scannerDoc.value = scannerDoc.data.documents.first()
+                                _scannerDoc.value = scannerDocState.data.documents.first()
+                            }
+                            is State.Failed -> {
+                                Log.e("AGENCY CONFIG Scanner", "${scannerDocState.exception}")
                             }
                         }
-                    }
+                    }*/
                 }
+                is State.Failed -> {
+                    Log.e("AGENCY CONFIG", "${bookerDocState.exception}")
+                }
+
             }
         }
 

@@ -1,9 +1,12 @@
 package com.lado.travago.tripbook.ui.agency.config_panel.viewmodel
 
+import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.ListenerRegistration
+import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 //import com.lado.travago.tripbook.repo.firebase.FirebaseAuthRepo
@@ -33,9 +36,20 @@ class TownsConfigViewModel : ViewModel() {
     private val _startTownSearch = MutableLiveData(false)
     val startTownSearch: LiveData<Boolean> get() = _startTownSearch
 
+    //Tell the adapter to notify all items have changed
+    private val _notifyAdapterChanges = MutableLiveData(false)
+    val notifyAdapterChanges: LiveData<Boolean> get() = _notifyAdapterChanges
+
     //Span size
     private val _spanSize = MutableLiveData(2)
     val spanSize: LiveData<Int> get() = _spanSize
+
+    //Visibility of the Fabs
+    private val _fabVisibilityState = MutableLiveData(true)
+    val fabVisibilityState: LiveData<Boolean> get() = _fabVisibilityState
+    fun invertFabVisibility() {
+        _fabVisibilityState.value = !_fabVisibilityState.value!!
+    }
 
     /**
      * Tags used to know what the user has clicked on a recycler view item
@@ -44,7 +58,8 @@ class TownsConfigViewModel : ViewModel() {
 
     //The list of all towns from the reference Planet/Earth/.. Path
     private val _originalTownsList = MutableLiveData<MutableList<DocumentSnapshot>>()
-//    val originalTownsList: LiveData<MutableList<DocumentSnapshot>> get() = _originalTownsList
+    val originalTownsList: LiveData<MutableList<DocumentSnapshot>> get() = _originalTownsList
+
 
     private val _onShowAddTrip = MutableLiveData(false)
     val onShowAddTrip: LiveData<Boolean> get() = _onShowAddTrip
@@ -55,8 +70,8 @@ class TownsConfigViewModel : ViewModel() {
     val toDeleteIDList: LiveData<MutableList<String>> = _toDeleteIDList
 
     //Contains the snapshot result
-    private val _currentTownsList = MutableLiveData<MutableList<DocumentSnapshot>>()
-    val currentTownsList: LiveData<MutableList<DocumentSnapshot>> get() = _currentTownsList
+    private val _agencyTownsList = MutableLiveData<MutableList<DocumentSnapshot>>()
+    val agencyTownsList: LiveData<MutableList<DocumentSnapshot>> get() = _agencyTownsList
 
     //Holds the list of the ids to be added
     private val _toAddIDList =
@@ -101,21 +116,61 @@ class TownsConfigViewModel : ViewModel() {
                         _onLoading.value = false
                     }
                     is State.Success -> {
-                        townsListState.data.documents.forEach { townDoc ->
-                            townSimpleInfoMap.add(
-                                hashMapOf(
-                                    "id" to townDoc.id,
-                                    "name" to townDoc.getString("name")!!
-                                )
-                            )
-                        }
                         _originalTownsList.value = townsListState.data.documents
+                        addTownsNames()
                         _onLoading.value = false
                     }
 
                 }
             }
     }
+
+    fun agencyTownsListener(
+        hostActivity: Activity,
+        agencyID: String
+    ): ListenerRegistration =
+        firestoreRepo.db.collection(
+            "OnlineTransportAgency/${
+                agencyID
+            }/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/"
+        ).addSnapshotListener(hostActivity) { snapshot, error ->
+            _toastMessage.value = error?.handleError { }
+            if (snapshot != null) {
+                if (!snapshot.isEmpty) {
+                    _agencyTownsList.value = snapshot.documents
+                    addTownsNames()
+                } else {
+                    _toastMessage.value = hostActivity.getString(R.string.text_dialog_empty_content)
+                    //We clear the list completely if it is empty inorder to clear off recycler
+                    _agencyTownsList.value?.clear()
+                    //It may be because the admin scanner has removed all towns so we notify adapter
+                    //to clear all data
+                    _notifyAdapterChanges.value = true
+                }
+            }
+
+        }
+
+    /**
+     * This will be use to set the list of towns so that the scanner can add them to his agency collection
+     * This modifies the [townSimpleInfoMap] list
+     */
+    private fun addTownsNames() {
+        townSimpleInfoMap.clear()
+        originalTownsList.value?.forEach { originalTownDoc ->
+            val found = _agencyTownsList.value?.find {
+                it["name"] == originalTownDoc.getString("name")
+            }
+            if (found == null) //We add to "TO-ADD-LIST" iff it is not already part of the agency collection of towns
+                townSimpleInfoMap.add(
+                    hashMapOf(
+                        "id" to originalTownDoc.id,
+                        "name" to originalTownDoc.getString("name")!!
+                    )
+                )
+        }
+    }
+
 
     //Adds a town into the toDeleteList
     fun removeTown(townId: String) =
@@ -165,7 +220,7 @@ class TownsConfigViewModel : ViewModel() {
                             collect {
                                 when (it) {
                                     is State.Failed -> {
-                                        _toastMessage.value = it.exception!!.handleError { }
+                                        _toastMessage.value = it.exception.handleError { }
                                     }
                                     is State.Loading -> _onLoading.value = false
                                     is State.Success -> idListToBeRemovedLater += id
@@ -188,7 +243,6 @@ class TownsConfigViewModel : ViewModel() {
     suspend fun commitToAddList(agencyID: String) = flow {
         emit(State.loading())
         val toAddTripDocList = mutableListOf<DocumentSnapshot>()
-        // We get that agency's document inorder to extract price per km
 
         // 1- Get a list of all trips with involves any 2 of the selected towns (We add all trips concerned by intertwining)
         _toAddIDList.value!!.forEach { id1 ->
@@ -294,7 +348,7 @@ class TownsConfigViewModel : ViewModel() {
 
 
     enum class FieldTags {
-        TOAST_MESSAGE, START_TOWN_SEARCH, TOWN_ID, TOWN_NAME, ON_CLOSE, CHECKED_ITEM, CURRENT_TOWNS, REMOVE_MAP, TOWN_NAME_LIST, ON_SHOW_ADD, SPAN_SIZE
+        TOAST_MESSAGE, START_TOWN_SEARCH, TOWN_ID, TOWN_NAME, ON_CLOSE, CHECKED_ITEM, REMOVE_MAP, TOWN_NAME_LIST, ON_SHOW_ADD, SPAN_SIZE, NOTIFY_DATA_CHANGED
     }
 
     enum class SortTags { TOWN_NAMES, REGIONS }
@@ -309,9 +363,10 @@ class TownsConfigViewModel : ViewModel() {
             FieldTags.ON_CLOSE -> _onClose.value = value as Boolean
             FieldTags.CHECKED_ITEM -> sortCheckedItem = value as Int
             FieldTags.SPAN_SIZE -> _spanSize.value = value as Int
+
+            FieldTags.NOTIFY_DATA_CHANGED -> _notifyAdapterChanges.value = value as Boolean
 //            FieldTags.RETRY_TOWNS -> _retryTowns.value = value as Boolean
-            FieldTags.CURRENT_TOWNS -> _currentTownsList.value =
-                value as MutableList<DocumentSnapshot>
+
             //Removes a town which is already part of that agencies document so that it can't be added again
             FieldTags.REMOVE_MAP -> townSimpleInfoMap.remove(value as HashMap<String, String>)
             FieldTags.TOWN_NAME_LIST -> townNamesList.add(value.toString())
@@ -321,17 +376,17 @@ class TownsConfigViewModel : ViewModel() {
     /**
      * A function to search for a specific town name from the doc and return its index in the list
      */
-    fun searchTown(townName: String): Int? = _currentTownsList.value?.indexOf(
-        _currentTownsList.value!!.find { townDoc ->
+    fun searchTown(townName: String): Int? = _agencyTownsList.value?.indexOf(
+        _agencyTownsList.value!!.find { townDoc ->
             townDoc["name"] == townName
         }
     )
 
     fun sortResult(sortTag: SortTags) = when (sortTag) {
-        SortTags.TOWN_NAMES -> _currentTownsList.value?.sortBy {
+        SortTags.TOWN_NAMES -> _agencyTownsList.value?.sortBy {
             it.getString("name")
         }
-        SortTags.REGIONS -> _currentTownsList.value?.sortBy {
+        SortTags.REGIONS -> _agencyTownsList.value?.sortBy {
             it.getString("region")
         }
     }

@@ -28,12 +28,15 @@
             android:id="@+id/recycler_towns"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:alwaysDrawnWithCache="false"
+            android:drawingCacheQuality="low"
+            android:persistentDrawingCache="none"
             android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_master_label"
-            tools:listitem="@layout/item_town_config" >
+            tools:listitem="@layout/item_town_config">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -48,79 +51,94 @@
             app:layout_constraintStart_toStartOf="@+id/recycler_towns"
             app:layout_constraintTop_toBottomOf="@+id/text_master_label" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_search_town"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollViewTripTools"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/fab_add_town"
-            app:layout_constraintEnd_toEndOf="@+id/fab_add_town"
-            app:layout_constraintStart_toStartOf="@+id/fab_add_town"
-            app:srcCompat="@drawable/baseline_search_24"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_sort_towns"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:layout_constraintBottom_toTopOf="@+id/fab_search_town"
-            app:layout_constraintEnd_toEndOf="@+id/fab_search_town"
-            app:layout_constraintStart_toStartOf="@+id/fab_search_town"
-            app:srcCompat="@drawable/baseline_sort_24"
-            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_town"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:backgroundTint="@color/colorPositiveButton"
-            app:layout_constraintBottom_toTopOf="@+id/fab_toggle_toolbox"
-            app:layout_constraintEnd_toEndOf="@+id/fab_toggle_toolbox"
-            app:layout_constraintStart_toStartOf="@+id/fab_toggle_toolbox"
-            app:srcCompat="@drawable/baseline_add_24"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_remove_selection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:backgroundTint="@color/colorNegativeButton"
-            app:layout_constraintBottom_toTopOf="@+id/fab_towns_span_size"
-            app:layout_constraintEnd_toEndOf="@+id/fab_sort_towns"
-            app:layout_constraintStart_toStartOf="@+id/fab_sort_towns"
-            app:srcCompat="@drawable/ic_clear_black_24dp"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_toggle_toolbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            app:backgroundTint="@color/colorNeutralButton"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/baseline_visibility_off_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_towns_span_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:layout_constraintBottom_toTopOf="@+id/fab_sort_towns"
-            app:layout_constraintEnd_toEndOf="@+id/fab_sort_towns"
-            app:layout_constraintStart_toStartOf="@+id/fab_sort_towns"
-            app:srcCompat="@drawable/baseline_settings_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_search_town"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/fab_add_town"
+                    app:layout_constraintEnd_toEndOf="@+id/fab_add_town"
+                    app:layout_constraintStart_toStartOf="@+id/fab_add_town"
+                    app:srcCompat="@drawable/baseline_search_24"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_sort_towns"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toTopOf="@+id/fab_search_town"
+                    app:layout_constraintEnd_toEndOf="@+id/fab_search_town"
+                    app:layout_constraintStart_toStartOf="@+id/fab_search_town"
+                    app:srcCompat="@drawable/baseline_sort_24"
+                    tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_add_town"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    app:backgroundTint="@color/colorPositiveButton"
+                    app:layout_constraintBottom_toTopOf="@+id/fab_toggle_toolbox"
+                    app:layout_constraintEnd_toEndOf="@+id/fab_toggle_toolbox"
+                    app:layout_constraintStart_toStartOf="@+id/fab_toggle_toolbox"
+                    app:srcCompat="@drawable/baseline_add_24"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_remove_selection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/colorNegativeButton"
+                    app:layout_constraintBottom_toTopOf="@+id/fab_towns_span_size"
+                    app:layout_constraintEnd_toEndOf="@+id/fab_sort_towns"
+                    app:layout_constraintStart_toStartOf="@+id/fab_sort_towns"
+                    app:srcCompat="@drawable/ic_clear_black_24dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_toggle_toolbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    app:backgroundTint="@color/colorNeutralButton"
+                    app:fabSize="mini"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/baseline_visibility_off_24"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_towns_span_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toTopOf="@+id/fab_sort_towns"
+                    app:layout_constraintEnd_toEndOf="@+id/fab_sort_towns"
+                    app:layout_constraintStart_toStartOf="@+id/fab_sort_towns"
+                    app:srcCompat="@drawable/baseline_settings_24"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

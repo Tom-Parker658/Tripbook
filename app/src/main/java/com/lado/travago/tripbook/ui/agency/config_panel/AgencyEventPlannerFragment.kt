@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -193,6 +194,9 @@ class AgencyEventPlannerFragment : Fragment() {
             eventBinding.editTextTime.setEndIconOnClickListener {
                 timePicker()
             }
+            eventBinding.editTextReason.editText!!.addTextChangedListener {
+                viewModel.setField(FieldTags.EVENT_REASON, it.toString() ?: "")
+            }
             when (eventBinding.chipGroupEventTypes.checkedChipId) {
                 eventBinding.chipDeletion.id -> viewModel.setField(
                     FieldTags.EVENT_TYPE, "DELETION"
@@ -249,7 +253,7 @@ class AgencyEventPlannerFragment : Fragment() {
         ).addSnapshotListener(requireActivity()) { snapShot, error ->
             if (snapShot != null) {
                 if (!snapShot.isEmpty) {
-                    AgencyEventPlannerAdapter(
+                    adapter = AgencyEventPlannerAdapter(
                         clickListener = AgencyEventPlannerClickListener { eventID ->
                             CoroutineScope(Dispatchers.Main).launch {
                                 val currentEventDate =
@@ -277,13 +281,11 @@ class AgencyEventPlannerFragment : Fragment() {
                             }
                         }
                     )
-                    try {
-                        binding.recyclerEvents.layoutManager = LinearLayoutManager(requireContext())
-                        adapter.submitList(snapShot.documents)
-                        binding.recyclerEvents.adapter = adapter
-                    } catch (e: Exception) {
-                        //
-                    }
+
+                    binding.recyclerEvents.layoutManager = LinearLayoutManager(requireContext())
+                    adapter.submitList(snapShot.documents)
+                    binding.recyclerEvents.adapter = adapter
+
                 } else {
                     try {
                         adapter.notifyDataSetChanged()

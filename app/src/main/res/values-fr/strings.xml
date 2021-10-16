@@ -109,4 +109,5 @@
     <string name="text_sort_book_by_departure_time">En approche</string>
     <string name="text_message_error_invalid_phone">Entrez un numero valide</string>
     <string name="text_message_error_photo_large">La photo est trop large</string>
+    <string name="text_dialog_empty_content">Pas de Resultat!</string>
 </resources>

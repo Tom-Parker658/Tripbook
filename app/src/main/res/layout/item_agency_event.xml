@@ -71,11 +71,12 @@
                     android:layout_marginBottom="1dp"
                     android:textAlignment="textEnd"
                     android:textAppearance="@style/headlineStyle"
+                    app:drawableStartCompat="@drawable/outline_schedule_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/text_event_reason"
-                    tools:text="Monday, 15 September 2022, 10:12:30 PM "
-                    app:drawableStartCompat="@drawable/outline_schedule_24" />
+                    tools:text="Monday, 15 September 2022, 10:12:30 PM " />
 
                 <ImageView
                     android:id="@+id/btn_action"

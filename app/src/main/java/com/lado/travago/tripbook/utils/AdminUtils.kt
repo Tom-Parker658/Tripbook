@@ -14,14 +14,16 @@ import java.util.Collections.*
  * contains utilities for the admin panel
  */
 object AdminUtils {
-    const val LOCAL_SERVER_FIREBASE_IP  = "192.168.212.91"
-//    Link-local IPv6 address:	fe80::30ec:eaa3:e943:571c%2
-//    IPv4 address:	192.168.212.91
-//    IPv4 DNS servers:	192.168.212.149
+    const val LOCAL_SERVER_FIREBASE_IP  = "192.168.55.45"
+//    Link-local IPv6 address:	fe80::d493:9683:a422:c59f%2
+//    IPv4 address:	192.168.55.45
+//    IPv4 DNS servers:	192.168.55.79
 //    Manufacturer:	Microsoft
 //    Description:	Remote NDIS based Internet Sharing Device
 //    Driver version:	10.0.18362.1
-//    Physical address (MAC):	C6-1D-D8-63-6B-69
+//    Physical address (MAC):	26-07-FD-BD-6A-DC
+
+
 
 
     /**

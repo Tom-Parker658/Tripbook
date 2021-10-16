@@ -23,12 +23,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 class TownConfigAdapter(
     val clickListener: TownClickListener,
-    private val toDeleteIDList: MutableList<String>
+    private val toDeleteIDList: MutableList<String>,
+    val resources: Resources
 ) : ListAdapter<DocumentSnapshot, TownConfigViewHolder>(
     TownConfigDiffCallbacks()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TownConfigViewHolder =
-        TownConfigViewHolder.from(parent, toDeleteIDList)
+        TownConfigViewHolder.from(parent, toDeleteIDList, resources)
 
     override fun onBindViewHolder(holder: TownConfigViewHolder, position: Int) =
         holder.bind(clickListener, getItem(position))
@@ -38,7 +39,8 @@ class TownConfigAdapter(
 @ExperimentalCoroutinesApi
 class TownConfigViewHolder private constructor(
     val binding: ItemTownConfigBinding,
-    private val deleteIDList: List<String>
+    private val deleteIDList: List<String>,
+    val resources: Resources
 ) :
     RecyclerView.ViewHolder(binding.root) {
     /**
@@ -47,11 +49,11 @@ class TownConfigViewHolder private constructor(
     fun bind(clickListener: TownClickListener, townDoc: DocumentSnapshot) {
 
         if(deleteIDList.contains(townDoc.id)){
-            binding.cardTown.strokeColor = Resources.getSystem().getColor(R.color.colorNegativeButton)
+            binding.cardTown.strokeColor = resources.getColor(R.color.colorNegativeButton)
             binding.checkSelect.isChecked = true
             binding.cardTown.strokeWidth = 1
         }else{
-            binding.cardTown.strokeColor = Resources.getSystem().getColor(R.color.colorPositiveButton)
+            binding.cardTown.strokeColor = resources.getColor(R.color.colorPositiveButton)
             binding.cardTown.strokeWidth = 1
             binding.checkSelect.isChecked = false
         }
@@ -71,13 +73,13 @@ class TownConfigViewHolder private constructor(
          * @param parent is the layout which will host the the view holder
          * @return the town item view holder with this binding.
          */
-        fun from(parent: ViewGroup, toDeleteIDList: List<String>): TownConfigViewHolder {
+        fun from(parent: ViewGroup, toDeleteIDList: List<String>, res: Resources): TownConfigViewHolder {
             val binding = ItemTownConfigBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
-            return TownConfigViewHolder(binding, toDeleteIDList)
+            return TownConfigViewHolder(binding, toDeleteIDList, res)
         }
     }
 }
