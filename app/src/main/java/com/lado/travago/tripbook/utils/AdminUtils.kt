@@ -14,25 +14,31 @@ import java.util.Collections.*
  * contains utilities for the admin panel
  */
 object AdminUtils {
-    const val LOCAL_SERVER_FIREBASE_IP  = "192.168.55.45"
-//    Link-local IPv6 address:	fe80::d493:9683:a422:c59f%2
-//    IPv4 address:	192.168.55.45
-//    IPv4 DNS servers:	192.168.55.79
+    const val LOCAL_SERVER_FIREBASE_IP = "192.168.28.179"
+//    Link-local IPv6 address:	fe80::1c0c:b74e:2833:c83a%2
+//    IPv4 address:	192.168.110.167
+//    IPv4 DNS servers:	192.168.110.35
 //    Manufacturer:	Microsoft
 //    Description:	Remote NDIS based Internet Sharing Device
 //    Driver version:	10.0.18362.1
-//    Physical address (MAC):	26-07-FD-BD-6A-DC
+//    Physical address (MAC):	16-1D-85-B5-76-21
+//    Link-local IPv6 address:	fe80::69c1:6ef9:9921:9584%2
+//    IPv4 address:	192.168.28.179
+//    IPv4 DNS servers:	192.168.28.221
+//    Manufacturer:	Microsoft
+//    Description:	Remote NDIS based Internet Sharing Device
+//    Driver version:	10.0.18362.1
+//    Physical address (MAC):	36-2E-1A-38-17-E6
 
+//
+//    Link-local IPv6 address:	fe80::eda8:f167:7dac:7cd0%2
+//    IPv4 address:	192.168.167.15
+//    IPv4 DNS servers:	192.168.167.23
+//    Manufacturer:	Microsoft
+//    Description:	Remote NDIS based Internet Sharing Device
+//    Driver version:	10.0.18362.1
+//    Physical address (MAC):	2E-06-9C-27-DC-3C
 
-
-
-    /**
-     * Returns a list of places and their respective regions. the format of the list is as follows.
-     * Place1+RegionX, Place2+RegionX ...Place59+RegionX e.g Dschang+West
-     */
-    fun findPlaceRegion() =
-        //Parse the text file and returns a list based on each line
-        DataResources.regionList.trimIndent().reader().buffered().readLines()
 
     /**
      * Removes a particular predicate from all the list

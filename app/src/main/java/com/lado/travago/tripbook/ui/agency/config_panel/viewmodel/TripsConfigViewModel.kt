@@ -111,7 +111,7 @@ class TripsConfigViewModel : ViewModel() {
         private set
 
     suspend fun getOriginalTrips() {
-        _toastMessage.value = "$townID , $currentTownName"
+//        _toastMessage.value = "$townID , $currentTownName"
         _retryTrips.value = false
         //We convert ge all trips associated to that document
         firestoreRepo.queryCollection("/Planets/Earth/Continents/Africa/Cameroon/all/Trips") {

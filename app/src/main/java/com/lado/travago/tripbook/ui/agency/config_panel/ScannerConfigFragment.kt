@@ -102,9 +102,9 @@ class ScannerConfigFragment : Fragment() {
                         }
                         ScannerConfigViewModel.ScannerButtonTags.BUTTON_FIRE_SCANNER -> {
                             MaterialAlertDialogBuilder(requireContext()).apply {
-                                setTitle("Warning!!!")
-                                setMessage("Are you sure you want to fire this scanner from your agency? ")
-                                setPositiveButton("Fire the Scanner") { dialog, _ ->
+                                setTitle(getString(R.string.text_dialog_warning))
+                                setMessage(getString(R.string.text_dialog_fire_scanner_message))
+                                setNegativeButton(R.string.text_btn_scanner_config_fire) { dialog, _ ->
                                     CoroutineScope(Dispatchers.Main).launch {
                                         viewModel.fireScanner(scannerId = scannerID,
                                             agencyID = parentViewModel.bookerDoc.value!!.getString("agencyID")!!
@@ -186,9 +186,13 @@ class ScannerConfigFragment : Fragment() {
             //1-We create a spinner with options
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setIcon(R.drawable.baseline_sort_24)
-                setTitle("Sort By?")
+                setTitle(R.string.text_dialog_title_sort_by)
                 setSingleChoiceItems(
-                    arrayOf("None", "Name", "Number of Scans", "Recruitment date", "Administrator"),
+                    arrayOf(
+                        getString(R.string.text_sort_by_none),
+                        getString(R.string.text_sort_town_by_name),
+                        "Number of Scans", "Recruitment date",
+                    getString(R.string.text_chip_scanner_config_admin)),
                     viewModel.sortCheckedItem
                 ) { dialog, which ->
                     when (which) {
@@ -237,7 +241,7 @@ class ScannerConfigFragment : Fragment() {
 
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
-                .setTitle("Recruit Scanner")
+                .setTitle(R.string.text_btn_scanner_addition_recruit)
                 .setIcon(R.drawable.baseline_person_add_24)
                 .setView(scannerBinding.root)
                 .create()
@@ -272,7 +276,7 @@ class ScannerConfigFragment : Fragment() {
                 }
             }
             scannerBinding.btnRecruitScanner.setOnClickListener {
-                if ((scannerBinding.btnRecruitScanner as MaterialButton).text == "Recruit")
+                if ((scannerBinding.btnRecruitScanner as MaterialButton).text == getString(R.string.text_btn_scanner_addition_recruit))
                     CoroutineScope(Dispatchers.Main).launch {
                         viewModel.recruitScanner(
                             viewModel.newScannerDoc.value!!,
@@ -302,13 +306,13 @@ class ScannerConfigFragment : Fragment() {
                         } != null) {
                         //We instead fire a scanner if he is already employed
                         (scannerBinding.btnRecruitScanner as MaterialButton).apply {
-                            text = "Fire!"
+                            text = getString(R.string.text_btn_scanner_config_fire)
                             setIconResource(R.drawable.round_cancel_24)
                             setBackgroundColor(requireActivity().resources.getColor(R.color.colorNegativeButton))
                         }
                     } else {//Not found in this list, we recruit
                         (scannerBinding.btnRecruitScanner as MaterialButton).apply {
-                            text = "Recruit"
+                            text = getString(R.string.text_btn_scanner_addition_recruit)
                             setIconResource(R.drawable.baseline_add_24)
                             setBackgroundColor(requireActivity().resources.getColor(R.color.colorPositiveButton))
                         }
@@ -318,10 +322,12 @@ class ScannerConfigFragment : Fragment() {
                     scannerBinding.scannerPhoto.loadImageFromUrl(it.getString("photoUrl")!!)
                     scannerBinding.textScannerPhone.text = it.getString("phone")
                     scannerBinding.textScannerName.text = it.getString("name")
+                }else{
+                    scannerBinding.scannerCard.visibility = View.GONE
                 }
             }
             viewModel.onNoResult.observe(this) {
-                //TODO: On No results found
+                viewModel.setField(ScannerConfigViewModel.FieldTags.TOAST_MESSAGE, getString(R.string.no_result_found))
             }
         }
 

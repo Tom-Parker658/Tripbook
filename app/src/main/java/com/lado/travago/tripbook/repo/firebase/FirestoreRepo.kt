@@ -36,7 +36,7 @@ class FirestoreRepo {
         val dbOperation: DbOperations
     )
 
-    fun sortCollection(){
+    fun sortCollection() {
 
     }
 
@@ -84,6 +84,20 @@ class FirestoreRepo {
         emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
+    fun updateDocument(
+        data: HashMap<String, Any?>,
+        documentPath: String,
+    ) = flow {
+        emit(State.loading())
+
+        val document = db.document(documentPath)
+        document.update(data).await()
+        emit(State.success(null))
+
+    }.catch {
+        emit(State.failed(it as Exception))
+    }.flowOn(Dispatchers.IO)
+
     fun batchedWriteDocuments(
         batchedWritesInfoList: List<BatchedWritesInfo>
     ) = flow {
@@ -123,12 +137,18 @@ class FirestoreRepo {
     fun incrementField(
         byValue: Number,
         documentPath: String,
-        fieldName: String
+        fieldName: String,
+        dataType: Number = Double.MAX_VALUE
     ) = flow {
         emit(State.loading())
 
         val document = db.document(documentPath)
-        document.update(fieldName, FieldValue.increment(byValue.toDouble())).await()
+
+        if (dataType is Long)
+            document.update(fieldName, FieldValue.increment(byValue.toLong())).await()
+        else
+            document.update(fieldName, FieldValue.increment(byValue.toDouble())).await()
+
         val newFieldValue = document.get().await()[fieldName] as Number
         emit(State.success(newFieldValue))
 

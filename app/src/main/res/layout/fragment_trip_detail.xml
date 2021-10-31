@@ -21,11 +21,13 @@
             <Button
                 android:id="@+id/btn_proceed_to_pay"
                 style="@style/positiveButton"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="32dp"
                 android:text="Proceed to payment"
                 app:icon="@drawable/baseline_wallet_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/card_modify_details" />
 
@@ -34,12 +36,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                app:cardElevation="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/card_modify_details"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/image_logo_agency"
+                app:layout_constraintVertical_chainStyle="packed">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -119,6 +122,8 @@
                         android:id="@+id/text_time_taken"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toTopOf="@+id/text_region_to_region"
                         app:layout_constraintEnd_toEndOf="@+id/text_destination"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -143,6 +148,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="4dp"
                         android:textSize="16sp"
                         app:drawableStartCompat="@drawable/baseline_event_24"
                         app:layout_constraintBottom_toTopOf="@+id/text_trip_departure_time"
@@ -157,26 +163,27 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/baseline_departure_board_24"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/text_trip_date"
-                        tools:text="01:30 PM"
-                        app:drawableStartCompat="@drawable/baseline_departure_board_24" />
+                        tools:text="01:30 PM" />
 
                     <RatingBar
                         android:id="@+id/rating_reputation_bar"
                         style="@style/Widget.AppCompat.RatingBar.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
                         android:max="10"
                         android:numStars="10"
                         android:rating="7.5"
                         app:layout_constraintBottom_toTopOf="@+id/text_locality"
-                        app:layout_constraintEnd_toEndOf="@+id/text_agency"
-                        app:layout_constraintStart_toStartOf="@+id/text_agency"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/text_agency" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -188,14 +195,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
-                app:cardElevation="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_proceed_to_pay"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_trip_details"
-                app:strokeColor="@color/colorSecondaryDark"
-                app:strokeWidth="1dp">
+                app:layout_constraintTop_toBottomOf="@+id/card_trip_details">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -205,9 +211,7 @@
                         android:id="@+id/text_total_price"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="4dp"
-                        android:layout_marginBottom="8dp"
                         android:drawablePadding="4dp"
                         android:textAlignment="textEnd"
                         android:textColor="@color/colorPositiveButton"
@@ -216,73 +220,93 @@
                         app:drawableTint="@color/colorPositiveButton"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView34"
+                        app:layout_constraintStart_toEndOf="@+id/numberPicker"
                         tools:text="17,500 FCFA" />
 
-                    <CheckBox
-                        android:id="@+id/check_is_vip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:checked="true"
-                        android:drawableEnd="@drawable/outline_diamond_20"
-                        android:drawablePadding="4dp"
-                        android:text="@string/switch_vip_trip"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                    <!--                <com.google.android.material.chip.Chip-->
+                    <!--                    android:id="@+id/check_is_vip"-->
+                    <!--                    android:layout_width="wrap_content"-->
+                    <!--                    android:layout_height="wrap_content"-->
+                    <!--                    android:layout_marginTop="8dp"-->
+                    <!--                    android:checked="true"-->
+                    <!--                    android:checkable="true"-->
+                    <!--                    android:icon="@drawable/outline_diamond_20"-->
+                    <!--                    android:text="@string/switch_vip_trip"-->
+                    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
 
                     <NumberPicker
                         android:id="@+id/numberPicker"
-                        android:layout_width="65dp"
-                        android:layout_height="135dp"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="@+id/text_total_tickets_number"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/text_total_tickets_number"
-                        app:layout_constraintTop_toTopOf="@+id/text_total_tickets_number" />
-
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/text_total_tickets_number"
+                        app:layout_constraintStart_toStartOf="@+id/text_total_tickets_number"
+                        app:layout_constraintTop_toBottomOf="@+id/text_total_tickets_number" />
 
                     <TextView
                         android:id="@+id/text_total_tickets_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="Number of Books: "
-                        android:textSize="16sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/numberPicker"
-                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:drawableStartCompat="@drawable/baseline_books_24"
+                        app:layout_constraintBottom_toTopOf="@+id/numberPicker"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/check_is_vip"
-                        app:drawableStartCompat="@drawable/baseline_books_24" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/textView34"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Total price: "
-                        android:textSize="16sp"
+                        android:text="Total price"
+                        android:textStyle="bold"
                         app:drawableStartCompat="@drawable/baseline_payments_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/numberPicker"
-                        app:layout_constraintStart_toStartOf="@+id/text_total_tickets_number"
+                        app:layout_constraintEnd_toEndOf="@+id/text_seats_times_unit_price"
+                        app:layout_constraintStart_toStartOf="@+id/text_seats_times_unit_price"
                         app:layout_constraintTop_toBottomOf="@+id/text_total_tickets_number" />
 
                     <TextView
                         android:id="@+id/text_seats_times_unit_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="1dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView34"
-                        app:layout_constraintStart_toEndOf="@+id/textView34"
-                        app:layout_constraintTop_toTopOf="@+id/textView34"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="@+id/text_total_price"
+                        app:layout_constraintStart_toStartOf="@+id/text_total_price"
+                        app:layout_constraintTop_toBottomOf="@+id/textView34"
                         tools:text="5 x 4500 FCFA" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <ImageView
+                android:id="@+id/image_logo_agency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/card_trip_details"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_details"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/image_logo_agency"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!--<androidx.cardview.widget.CardView
             android:layout_width="0dp"
@@ -387,5 +411,6 @@
         </androidx.cardview.widget.CardView>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
 </layout>

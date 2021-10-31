@@ -29,6 +29,7 @@ import java.util.*
 
 
 data class OnlineTravelAgency(
+    val id : String,
     val agencyName: String,
     var logoUrl: String = "",
     val motto: String,
@@ -56,6 +57,7 @@ data class OnlineTravelAgency(
     val otaMap =
         if (modifiedOn == null) {//In this case, we are creating the agency and we instead set addedOn tag
             hashMapOf<String, Any?>(
+                "id" to id,
                 "agencyName" to agencyName,
                 "logoUrl" to logoUrl,
                 "nameCEO" to nameCEO,
@@ -78,6 +80,7 @@ data class OnlineTravelAgency(
             )
         } else {//We are updating agency info instead of creating
             hashMapOf<String, Any?>(
+                "id" to id,
                 "agencyName" to agencyName,
                 "logoUrl" to logoUrl,
                 "pricePerKm" to costPerKm,

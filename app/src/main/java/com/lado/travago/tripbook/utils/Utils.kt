@@ -5,7 +5,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
-import com.lado.travago.tripbook.model.booking.Ticket
+import com.lado.travago.tripbook.model.booking.Book
 import com.lado.travago.tripbook.model.users.Booker
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -82,7 +82,7 @@ object Utils {
     /**
      * This utility functions will be used to query all model descriptions e.g [Booker.travellerDescription]
      * @see Booker.travellerDescription
-     * @see Ticket.ticketDescription
+     * @see Book.ticketDescription
      * Descriptions are of format {label:value, label:value} ans so on. e.g {travellerName:Tom Parker}
      * This query utility is used to search for specific values. So you pass your label as query and
      * the description to search for the value of that query.
@@ -113,16 +113,15 @@ object Utils {
 
     /**
      * Generate a QR based on the ticket
-     * @param ticket is a ticket instance which provides a description string for the journey
      * Uses [Utils.qrCodeEncryptor] to encrypt the code
      * @return the qrCode generated is returned as a bitmap image.
      *
      */
-    fun ticketQRCodeGenerator(ticket: Ticket): Bitmap? {
+    fun ticketQRCodeGenerator(qrCodeText: String): Bitmap? {
         val result: BitMatrix
         val requiredHeight = 300
         val requiredWidth = 300
-        val encryptedSeed = qrCodeEncryptor(ticket.qrSeed)
+        val encryptedSeed = qrCodeEncryptor(qrCodeText)
         //Try to encode the qrSeed to QR code or generate an error
         try {
             result = MultiFormatWriter().encode(
@@ -169,10 +168,10 @@ object Utils {
      * Determines if a ticket is still valid by parsing the tickets  and getting the
      * travelDay and travelTime and checking if it has already passed or not. If it has passed,
      * it is marked as invalid and QRCode becomes useless.
-     * @param ticket is a Ticket object from which the travelTime and travelDay will be extracted.
+     * @param book is a Ticket object from which the travelTime and travelDay will be extracted.
      */
-    fun isTicketExpired(ticket: Ticket): Boolean {
-        val travelDay = ticket.travelDay
+    fun isTicketExpired(book: Book): Boolean {
+        val travelDay = book.travelDay
 
         //Checks if the journeys travelTime and TravelDay is still to come(or not yey passed
         // It true if the travel day is still to come else false thus expired)

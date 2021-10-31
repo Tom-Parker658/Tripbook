@@ -16,22 +16,22 @@ class TimeModel private constructor(
     val minutes: Int,
     val millisecond: Int?,
 ) {
+    //A number formatted timeModel
+    val timeInSeconds = (hour * 3600) + (minutes * 60)
 
-    fun formattedTime(format: TimeFormat): String {
-        val fMinutes = if (minutes == 0) "00" else minutes.toString()
-        val fMilli = when {
-            millisecond == 0 && millisecond != null -> "00"
-            millisecond != 0 && millisecond != null -> millisecond.toString()
-            else -> null
-        }
-        return when (format) {
+    //Adds a zero before single numbers
+
+    fun Int.toStringF() = if (this < 10) "0$this" else this
+
+    fun formattedTime(format: TimeFormat) =
+        when (format) {
             TimeFormat.FORMAT_12H -> {
-                if (hour > 12) "${hour % 12}:$fMinutes:${millisecond ?: ""} ${Meridian.PM}"
-                else "$hour : $fMinutes ${millisecond ?: ""} ${Meridian.AM}"
+                if (hour > 12) "${(hour % 12).toStringF()}:${minutes.toStringF()} ${millisecond?.toStringF() ?: ""} ${Meridian.PM}"
+                else "$hour : ${minutes.toStringF()} ${millisecond?.toStringF() ?: ""} ${Meridian.AM}"
             }
-            TimeFormat.FORMAT_24H -> "$hour : $fMinutes ${millisecond ?: ""} "
+            TimeFormat.FORMAT_24H -> "${hour.toStringF()} : ${minutes.toStringF()} ${millisecond?.toStringF() ?: ""}"
         }
-    }
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -63,12 +63,19 @@ class TimeModel private constructor(
         fun from24Format(hour: Int, minutes: Int, millisecond: Int? = null) =
             TimeModel(hour, minutes, millisecond)
 
+        fun fromSeconds(inSeconds: Int): TimeModel {
+            val minutes = (inSeconds / 60)
+            val hours = (inSeconds / 3600)
+            return TimeModel(
+                hours, minutes, null
+            )
+        }
+
         fun timesDifferenceInMinutes(largerTime: TimeModel, lowerTime: TimeModel): Int? {
-            val hourDiff = largerTime.hour - lowerTime.hour
-            val minutesDiff = largerTime.minutes - lowerTime.minutes
-            return if (hourDiff < 0) null
+            val secondsDiff = largerTime.timeInSeconds - lowerTime.timeInSeconds
+            return if (secondsDiff < 0) null
             else {
-                (hourDiff * 60) + minutesDiff
+                secondsDiff / 60
             }
         }
 

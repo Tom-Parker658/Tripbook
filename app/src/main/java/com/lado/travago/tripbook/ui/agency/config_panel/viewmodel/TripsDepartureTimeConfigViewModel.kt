@@ -1,8 +1,11 @@
 package com.lado.travago.tripbook.ui.agency.config_panel.viewmodel
 
+import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.DocumentSnapshot
+import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
@@ -21,11 +24,25 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
     private val _onLoading = MutableLiveData(true)
     val onLoading: LiveData<Boolean> get() = _onLoading
 
+    private val _agencyIntervals = MutableLiveData(mutableListOf<DocumentSnapshot>())
+    val agencyIntervals: LiveData<MutableList<DocumentSnapshot>> get() = _agencyIntervals
+
+    //Controls the state of the addition dialog true -> ON and false -> OFF
+    private val _addDialogState = MutableLiveData(false)
+    val addDialogState: LiveData<Boolean> get() = _addDialogState
+
     //24H or 12H Format: initially at 24H
     private val _timeFormat = MutableLiveData(TimeModel.TimeFormat.FORMAT_24H)
     val timeFormat: LiveData<TimeModel.TimeFormat> get() = _timeFormat
-    private val _spanSize = MutableLiveData(3)
+    private val _spanSize = MutableLiveData(2)
     val spanSize: LiveData<Int> get() = _spanSize
+
+    //Visibility of the Fabs
+    private val _fabVisibilityState = MutableLiveData(true)
+    val fabVisibilityState: LiveData<Boolean> get() = _fabVisibilityState
+    fun invertFabVisibility() {
+        _fabVisibilityState.value = !_fabVisibilityState.value!!
+    }
 
     //Addition Data
     var fromHour: Int? = null
@@ -45,7 +62,26 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
         private set
 
     enum class FieldTags {
-        FROM_HOUR, FROM_MINUTES, TO_HOUR, TO_MINUTES, DEPARTURE_HOUR, DEPARTURE_MINUTES, INTERVAL_NAME, TOAST_MESSAGE, ON_LOADING, TIME_FORMAT, SPAN_SIZE
+        FROM_HOUR, FROM_MINUTES, TO_HOUR, TO_MINUTES, DEPARTURE_HOUR, DEPARTURE_MINUTES, INTERVAL_NAME, TOAST_MESSAGE, ON_LOADING, TIME_FORMAT, SPAN_SIZE, SWITCH_ADD_DIALOG_STATE
+    }
+
+    //Get all the departure times
+    fun intervalListener(
+        hostActivity: Activity,
+        agencyID: String
+    ) = firestoreRepo.db.collection(
+        "OnlineTransportAgency/$agencyID/Departure_Intervals"
+    ).addSnapshotListener(hostActivity) { snapshot, error ->
+        _onLoading.value = false
+        _toastMessage.value = error?.handleError { }
+        if (snapshot != null) {
+            if (!snapshot.isEmpty) {
+                _agencyIntervals.value = snapshot.documents
+            } else {
+                _agencyIntervals.value?.clear()
+                _toastMessage.value = hostActivity.getString(R.string.no_result_found)
+            }
+        }
     }
 
     fun setField(fieldTags: FieldTags, value: Any) =
@@ -61,6 +97,7 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
             FieldTags.ON_LOADING -> _onLoading.value = value as Boolean
             FieldTags.TIME_FORMAT -> _timeFormat.value = value as TimeModel.TimeFormat
             FieldTags.SPAN_SIZE -> _spanSize.value = value as Int
+            FieldTags.SWITCH_ADD_DIALOG_STATE -> _addDialogState.value = value as Boolean
         }
 
     suspend fun addIntervalDoc(agencyID: String) {
@@ -74,7 +111,10 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
             "departureHour" to departureHour,
             "departureMinutes" to departureMinutes
         )
-        firestoreRepo.addDocument(intervalMap, "OnlineTransportAgency/$agencyID/Departure_Intervals")
+        firestoreRepo.addDocument(
+            intervalMap,
+            "OnlineTransportAgency/$agencyID/Departure_Intervals"
+        )
             .collect {
                 when (it) {
                     is State.Failed -> {
@@ -83,8 +123,8 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
                     }
                     is State.Loading -> _onLoading.value = true
                     is State.Success -> {
-                        _onLoading.value = true
                         _toastMessage.value = "Successfully created: $intervalName"
+                        _onLoading.value = false
                         //We re-init all variables
                         clearData()
                     }
@@ -94,7 +134,7 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
 
     suspend fun deleteIntervalDoc(agencyID: String, intervalID: String) {
         firestoreRepo.deleteDocument(
-            "OnlineTransportAgency/$agencyID/Time_Intervals/$intervalID"
+            "OnlineTransportAgency/$agencyID/Departure_Intervals/$intervalID"
         ).collect {
             when (it) {
                 is State.Failed -> {
@@ -110,7 +150,7 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
         }
     }
 
-    private fun clearData() {
+    fun clearData() {
         intervalName = ""
         fromHour = null
         fromMinutes = null

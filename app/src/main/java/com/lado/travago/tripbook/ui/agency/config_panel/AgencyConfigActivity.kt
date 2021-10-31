@@ -1,6 +1,7 @@
 package com.lado.travago.tripbook.ui.agency.config_panel
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +33,11 @@ class AgencyConfigActivity : AppCompatActivity() {
             if (it) CoroutineScope(Dispatchers.Main).launch {
                 viewModel.getCurrentBooker()
             }
+        }
+
+        supportFragmentManager.addFragmentOnAttachListener { fragmentManager, fragment ->
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
         }
 
         viewModel.bookerDoc.observe(this) {

@@ -27,6 +27,10 @@
     <string name="text_e_helper_trip_search_time">At what time do you wish to go?</string>
     <string name="text_message_error_invalid_phone">"Enter valid number "</string>
     <string name="text_message_error_photo_large">Photo is too large</string>
+    <string name="text_dialog_warning">Warning!!!</string>
+    <string name="text_dialog_fire_scanner_message">\"Are you sure you want to fire this scanner from your agency? \"</string>
+    <string name="text_trip_interval_24_h_format">24 Hour Format</string>
+    <string name="text_trip_interval_12_h_format">12 Hour Format</string>
 </resources>
 
 

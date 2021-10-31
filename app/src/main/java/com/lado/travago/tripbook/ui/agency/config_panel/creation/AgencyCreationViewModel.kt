@@ -217,7 +217,13 @@ class AgencyCreationViewModel : ViewModel() {
      */
     suspend fun createAgency(bookerDoc: DocumentSnapshot) = flow {
         emit(State.loading())
+        val db = firestoreRepo.db
+        val agencyDocRef = db.collection("OnlineTransportAgency").document()
+        val recordDocRef = db.collection("${agencyDocRef.path}/Record").document()
+        val scannerDocRef =
+            db.document("${agencyDocRef.path}/Scanners/${bookerDoc.id}")
         val newAgencyMap = OnlineTravelAgency(
+            id = agencyDocRef.id,
             agencyName = nameField,
             logoUrl = logoUrl,
             motto = mottoField,
@@ -231,11 +237,6 @@ class AgencyCreationViewModel : ViewModel() {
             supportCountryCode1 = phoneCode1,
             supportCountryCode2 = phoneCode2
         ).otaMap
-        val db = firestoreRepo.db
-        val agencyDocRef = db.collection("OnlineTransportAgency").document()
-        val recordDocRef = db.collection("${agencyDocRef.path}/Record").document()
-        val scannerDocRef =
-            db.document("${agencyDocRef.path}/Scanners/${bookerDoc.id}")
         val creatorScannerMap = hashMapOf<String, Any?>(
             "name" to bookerDoc.getString("name"),
             "phone" to bookerDoc.getString("phone"),
@@ -255,7 +256,8 @@ class AgencyCreationViewModel : ViewModel() {
 
         firestoreRepo.db.runBatch { batch ->
             /**1- We Upload the new agency info into firestore*/
-            batch.set(agencyDocRef, newAgencyMap)
+
+            batch.set(agencyDocRef, newAgencyMap) //TODO: REMOVE commit
 
             /**2- Adds the current user to the list of scanners with the admin tag and owner tag to true*/
             batch.set(scannerDocRef, creatorScannerMap)
@@ -297,6 +299,7 @@ class AgencyCreationViewModel : ViewModel() {
     suspend fun updateAgencyInfo(bookerDoc: DocumentSnapshot) = flow {
         emit(State.loading())
         val agencyMapData = OnlineTravelAgency(
+            id = bookerDoc.getString("agencyID")!!,
             agencyName = nameField,
             logoUrl = logoUrl,
             motto = mottoField,

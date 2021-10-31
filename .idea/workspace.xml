@@ -3,29 +3,30 @@
   <component name="AndroidLayouts">
     <shared>
       <config>
-        <device id="pixel_4_xl" />
-        <device id="pixel" />
-        <device id="Nexus 10" />
         <device id="pixel_3_xl" />
+        <device id="Nexus 10" />
+        <device id="pixel_4_xl" />
+        <device id="pixel_2_xl" />
+        <device id="pixel" />
+        <device id="pixel_xl" />
         <device id="pixel_c" />
         <device id="pixel_4" />
         <device id="Nexus 9" />
         <device id="tv_1080p" />
-        <device id="pixel_3" />
-        <device id="pixel_2" />
         <locale>fr</locale>
       </config>
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+    <option name="TOOL_WINDOW_REGEXP_FILTER" value="false" />
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe1abd30-5f7d-4de3-8900-da5a84a0b536" name="Default Changelist" comment="Emulators">
+    <list default="true" id="fe1abd30-5f7d-4de3-8900-da5a84a0b536" name="Default Changelist" comment="Good with agency and user creation">
       <change beforePath="$PROJECT_DIR$/.gradle/7.0.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0.2/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.0.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0.2/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.0.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0.2/fileHashes/fileHashes.bin" afterDir="false" />
@@ -36,37 +37,44 @@
       <change beforePath="$PROJECT_DIR$/.gradle/7.0.2/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0.2/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.0.2/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0.2/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/Transpido.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/Transpido.app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/admin/SummaryItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/admin/SummaryItem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/admin/OnlineTravelAgency.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/admin/OnlineTravelAgency.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/admin/TimeModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/admin/TimeModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/booking/Ticket.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/model/booking/Book.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/repo/firebase/FirestoreRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/repo/firebase/FirestoreRepo.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/AgencyConfigActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/AgencyConfigActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/AgencyConfigCenterFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/AgencyConfigCenterFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/AgencyEventPlannerFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/AgencyEventPlannerFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/TownsConfigFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/TownsConfigFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/TripIntervalsFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/TripIntervalsFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/TripsConfigFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/TripsConfigFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/creation/AgencyCreationFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/creation/AgencyCreationFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/viewmodel/AgencyConfigViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/viewmodel/AgencyConfigViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/viewmodel/TownsConfigViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/viewmodel/TownsConfigViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/ScannerConfigFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/ScannerConfigFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/TripIntervalsFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/TripsDepartureTimeConfigFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/creation/AgencyCreationViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/creation/AgencyCreationViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/viewmodel/AgencyEventPlannerViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/viewmodel/AgencyEventPlannerViewModel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/viewmodel/TripsConfigViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/viewmodel/TripsConfigViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/creation/BookerCreationActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/creation/BookerCreationActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/recycler_adapters/SimpleAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/recycler_adapters/SimpleAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/recycler_adapters/SummaryItemAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/recycler_adapters/SummaryItemAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/recycler_adapters/TownsConfigAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/recycler_adapters/TownsConfigAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/recycler_adapters/TripsConfigAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/recycler_adapters/TripsConfigAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/viewmodel/TripsDepartureTimeConfigViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/agency/config_panel/viewmodel/TripsDepartureTimeConfigViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/book_panel/TripDetailsFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/book_panel/TripDetailsFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/book_panel/TripSearchResultsFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/book_panel/TripSearchResultsFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/book_panel/viewmodel/TripSearchResultsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/book_panel/viewmodel/TripSearchResultsViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/book_panel/viewmodel/TripsDetailsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/booker/book_panel/viewmodel/TripsDetailsViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/recycler_adapters/TimeIntervalAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/ui/recycler_adapters/TripDepartureTimeConfigAdapter.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/utils/AdminUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/utils/AdminUtils.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/utils/Utils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lado/travago/tripbook/utils/Utils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout-land/fragment_trip_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout-land/fragment_trip_detail.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_agency_event_planner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_agency_event_planner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_towns_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_towns_config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trips_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trips_config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_detail.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_intervals.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_departure_time_config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_search_result.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trip_search_result.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_agency_event.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_agency_event.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_summary_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_summary_list.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_trips_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_trips_config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-fr/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-fr/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_time_interval.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_time_interval.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_trip_search_results.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_trip_search_results.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_add_trip_interval.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_add_trip_interval.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_scanner_search.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_scanner_search.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/navigation/nav_admin_panel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/navigation/nav_admin_panel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/navigation/nav_agency_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/navigation/nav_agency_config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/navigation/nav_search_trip.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/navigation/nav_search_trip.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/string_dialog_text.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/string_dialog_text.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -439,7 +447,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634134914833</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Good with agency and user creation">
+      <created>1634344848962</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1634344848962</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -487,7 +502,8 @@
     <MESSAGE value="Restructuring + string extraction&#10;converted all tasks to &quot;flow&quot;" />
     <MESSAGE value="Completed Agency Control panel&#10;Starting Book Fragment" />
     <MESSAGE value="Emulators" />
-    <option name="LAST_COMMIT_MESSAGE" value="Emulators" />
+    <MESSAGE value="Good with agency and user creation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Good with agency and user creation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

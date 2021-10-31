@@ -14,11 +14,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ListenerRegistration
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripSearchResultBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
-import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchResultsViewModel
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchResultsViewModel.*
 import com.lado.travago.tripbook.ui.recycler_adapters.TripSearchResultsAdapter
@@ -60,12 +58,27 @@ class TripSearchResultsFragment : Fragment() {
             false
         )
         initViewModelWithArgs()
-        tripsListener
+        searchListenerLauncher()
         liveDataObserver()
 
         return binding.root
     }
 
+    private fun searchListenerLauncher() {
+        viewModel.tripsListener(requireActivity())
+        viewModel.agencyIDList?.let {
+            viewModel.agenciesListener(requireActivity(), it)
+            viewModel.departureTimeListener(requireActivity(), it)
+        }
+    }
+
+    private fun removeListeners() {
+        viewModel.tripsListener(requireActivity()).remove()
+        viewModel.agencyIDList?.let {
+            viewModel.agenciesListener(requireActivity(), it).remove()
+            viewModel.departureTimeListener(requireActivity(), it).remove()
+        }
+    }
 
     private fun initViewModelWithArgs() {
         viewModel = ViewModelProvider(this)[TripSearchResultsViewModel::class.java]
@@ -78,6 +91,8 @@ class TripSearchResultsFragment : Fragment() {
                 tripMinutes = it.tripMinutes
             )
         }
+        binding.headline.text =
+            "${viewModel.localityName} ${getString(R.string.text_label_to)} ${viewModel.destinationName}"
     }
 
     //To start the booker signUp or LogIn if the user hasn't logIn already
@@ -87,7 +102,7 @@ class TripSearchResultsFragment : Fragment() {
                 FieldTags.TOAST_MESSAGE, when (content) {
                     Activity.RESULT_OK -> {
                         "Welcome! Dear Booker, select your trip"
-                        tripsListener
+                        removeListeners()
                     }
                     else -> "Something went wrong, try again now or later"
                 }
@@ -95,169 +110,38 @@ class TripSearchResultsFragment : Fragment() {
 
         }
 
-    /**
-     * We get all agency generated trips with the characteristics(locality, destination) searched by the booker
-     * Since these characteristics like prices can be changing, we put a snapshot listener
-     */
-    private val tripsListener: ListenerRegistration
-        get() {
-            viewModel.setField(FieldTags.ON_LOADING, true)
-            val sortedNames = listOf(viewModel.localityName, viewModel.destinationName).sorted()
-            return viewModel.firestoreRepo.db.collectionGroup("Trips_agency")
-                .limit(10)
-                .whereEqualTo("townNames.town1", sortedNames.first())
-                .whereEqualTo("townNames.town2", sortedNames.last())
-                .addSnapshotListener(requireActivity()) { tripsSnapshot, error ->
-                    if (tripsSnapshot != null) {
-                        when {
-                            !tripsSnapshot.isEmpty -> {
-                                /*1- We extract all ids of agencies which can offer this trip */
-                                val agencyIDList = mutableListOf<String>()
-                                tripsSnapshot.forEach {
-                                    agencyIDList += it.getString("agencyID")!!
-                                }
-                                /*2- We get all the documents of the agencies whose id appears in the list*/
-                                /*NB: We also only pick agencies which don't contain an event on that day and time*/
-                                viewModel.firestoreRepo.db.collection("OnlineTransportAgency")
-                                    .whereIn("id", agencyIDList.toList())
-                                    .addSnapshotListener(requireActivity()) { agencySnapshot, agencyError ->
-                                        if (agencySnapshot != null) {
+    private fun setRecycler(resultList: MutableList<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>>) {
 
-                                            /*3- We get all the departure times of agencies which met requirements for this trip*/
-                                            viewModel.firestoreRepo.db.collectionGroup("Departure_Intervals")
-                                                .whereIn(
-                                                    "agencyID",
-                                                    agencyIDList
-                                                )//Assert only intervals from selected agencies are gotten
-                                                .whereGreaterThanOrEqualTo(
-                                                    "fromHour",
-                                                    viewModel.tripTime.hour
-                                                )
-                                                .whereGreaterThanOrEqualTo(
-                                                    "fromMinute",
-                                                    viewModel.tripTime.minutes
-                                                )
-                                                .whereLessThanOrEqualTo(
-                                                    "toHour",
-                                                    viewModel.tripTime.hour
-                                                )
-                                                .whereLessThanOrEqualTo(
-                                                    "toMinute",
-                                                    viewModel.tripTime.minutes
-                                                )
-                                                .addSnapshotListener(requireActivity()) { departureTimesSnapshots, departureError ->
-                                                    if (departureTimesSnapshots != null) {
-                                                        /*4- We then create a triple list to inflate the adapter with information*/
-                                                        val agencyToTripPairList =
-                                                            mutableListOf<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>>()
-                                                        //At this stage, we can be sure the snapshot can't be empty
-                                                        /*
-                                                        Actually we find a trip document of each agency and pair it with the agency
-                                                       */
-                                                        agencySnapshot.forEach { agencyDoc ->
-                                                            val currentAgencyDepartureTimeDoc =
-                                                                departureTimesSnapshots.find {
-                                                                    it["agencyID"] == agencyDoc.id
-                                                                }
-                                                            val eventsList =
-                                                                (agencyDoc["eventDateList"]
-                                                                    ?: emptyList<Long>()) as List<Long>
-                                                            /*
-                                                            this is any event that is planned to happen before the tripDate and time
-                                                            E.g if trip date and time is 22/10/2021 at 14:25,
-                                                            A hindering event will be one planned for the 21/10/2021 at 14:25, or even 22/10/2021 at 14:00,
-                                                            */
-                                                            val hinderingEvent = eventsList.find {
-                                                                viewModel.tripDateInMillis > it
-                                                            }
-                                                            if (hinderingEvent == null/*No hindering event found*/ && currentAgencyDepartureTimeDoc != null) {
-                                                                val correspondingTripDoc =
-                                                                    tripsSnapshot.find { it["agencyID"] == agencyDoc.id }!!
-                                                                val departureTime =
-                                                                    TimeModel.from24Format(
-                                                                        currentAgencyDepartureTimeDoc.getLong(
-                                                                            "departureHour"
-                                                                        )!!.toInt(),
-                                                                        currentAgencyDepartureTimeDoc.getLong(
-                                                                            "departureMinutes"
-                                                                        )!!.toInt(),
-                                                                        null
-                                                                    )
-                                                                agencyToTripPairList += Triple(
-                                                                    agencyDoc,
-                                                                    correspondingTripDoc,
-                                                                    departureTime
-                                                                )
-                                                            }
-                                                        }
-                                                        /*4- We inflate the adapter and stop loading*/
-                                                        adapter = TripSearchResultsAdapter(
-                                                            TripSearchResultsClickListener { agencyID, tripDoc, tripTime, isVip ->
-                                                                //We check if he has an account or not
-                                                                if (viewModel.authRepo.currentUser == null) {
-                                                                    //Navigate to creation
-                                                                    bookerSignUpContract.launch(
-                                                                        Bundle.EMPTY
-                                                                    )
-                                                                } else {
-                                                                    //Navigate to config and stop all snapshot listeners
-                                                                    tripsListener.remove()
-                                                                    findNavController().navigate(
-                                                                        TripSearchResultsFragmentDirections.actionTripSearchResultsFragmentToTripDetailsFragment(
-                                                                            tripDoc.id,
-                                                                            agencyID,
-                                                                            isVip,
-                                                                            tripTime.hour,
-                                                                            tripTime.minutes,
-                                                                            viewModel.tripDateInMillis
-                                                                        )
-                                                                    )
-                                                                }
-                                                            }
-                                                        ).also {
-                                                            it.submitList(agencyToTripPairList)
-                                                            setRecycler(it)
-                                                        }
-                                                        viewModel.setField(
-                                                            FieldTags.ON_LOADING,
-                                                            false
-                                                        )
-
-                                                    } else {
-                                                        viewModel.setField(
-                                                            FieldTags.TOAST_MESSAGE,
-                                                            departureError?.handleError { }
-                                                                .toString()
-                                                        )
-                                                    }
-                                                }
-                                        }
-                                        agencyError?.let {
-                                            viewModel.setField(FieldTags.TOAST_MESSAGE,
-                                                it.handleError { }
-                                            )
-                                        }
-                                    }
-                            }
-                            else -> viewModel.setField(FieldTags.ON_NO_SUCH_RESULTS, true)
-                        }
-                    }
-                    error?.let {
-                        viewModel.setField(FieldTags.TOAST_MESSAGE,
-                            it.handleError { }
+        adapter = TripSearchResultsAdapter(
+            TripSearchResultsClickListener { agencyID, tripDoc, tripTime, isVip ->
+                //We check if he has an account or not
+                if (viewModel.authRepo.currentUser == null) {
+                    //Navigate to creation
+                    bookerSignUpContract.launch(
+                        Bundle.EMPTY
+                    )
+                } else {
+                    //Navigate to config and stop all snapshot listeners
+                    removeListeners()
+                    findNavController().navigate(
+                        TripSearchResultsFragmentDirections.actionTripSearchResultsFragmentToTripDetailsFragment(
+                            tripDoc.id,
+                            agencyID,
+                            isVip,
+                            tripTime.hour,
+                            tripTime.minutes,
+                            viewModel.tripDateInMillis,
+                            viewModel.localityName
                         )
-                    }
+                    )
                 }
-        }
-
-
-    /**
-     * Configures the results recycler
-     */
-    private fun setRecycler(adapter: TripSearchResultsAdapter) {
-        val recyclerManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewSearchResult.layoutManager = recyclerManager
-        binding.recyclerViewSearchResult.adapter = adapter
+            }
+        )
+        adapter.notifyDataSetChanged()
+        adapter.submitList(resultList)
+        binding.recyclerSearchResult.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerSearchResult.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
 
     private fun liveDataObserver() {
@@ -277,15 +161,40 @@ class TripSearchResultsFragment : Fragment() {
         viewModel.toastMessage.observe(viewLifecycleOwner) {
             if (it.isNotBlank()) {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                Log.d(this.tag, it)
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "")
             }
         }
         viewModel.onNoSuchResults.observe(viewLifecycleOwner) {
             if (it) {
-                Log.d("NO REASULT", "NOT FOUND")
+                Log.d("NO RESULT", "NOT FOUND")
             }
         }
+
+        viewModel.searchResultsTripleList.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                setRecycler(it)
+            }
+        }
+        viewModel.allTripsResultsList.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                viewModel.agencyIDList?.let { list ->
+                    viewModel.agenciesListener(requireActivity(), list)
+                }
+            }
+        }
+        viewModel.allAgenciesResultList.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                viewModel.agencyIDList?.let { list ->
+                    viewModel.departureTimeListener(requireActivity(), list)
+                }
+            }
+        }
+        viewModel.allDepartureResultList.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                viewModel.prepareForDisplay()
+            }
+        }
+//}
 /*
 binding.fabSortResults.setOnClickListener{
 //1-We create a spinner with options

@@ -4,19 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.firestore.ListenerRegistration
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripDetailBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
-import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripsDetailsViewModel
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripsDetailsViewModel.*
 import com.lado.travago.tripbook.utils.Utils
+import com.lado.travago.tripbook.utils.loadLogoFromUrl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.text.SimpleDateFormat
+import kotlinx.coroutines.launch
 
 /**
  * Seat selection and bus customisation fragment
@@ -35,60 +37,84 @@ class TripDetailsFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_trip_detail, container, false)
         initViewModelWithArgs()
-        documentsListener
-        initNumberPicker()
+        observeLiveData()
+        viewModel.agencyListener(requireActivity())
+
+        binding.btnProceedToPay.setOnClickListener {
+            //TODO: Launch Intent for the payment activity
+            viewModel.setField(FieldTags.START_CREATION, true)
+            viewModel.setField(FieldTags.START_CREATION, false)
+        }
 
         return binding.root
     }
+
+    override fun onDetach() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        super.onDetach()
+    }
+
+//    override fun onDestroy() {
+//        super.onDestroy()
+////        viewModel.agencyListener(requireActivity()).remove()
+////        viewModel.tripListener(requireActivity()).remove()
+//    }
+
     //TODO: Make sure trip documents also hold references to the regions
+    private fun observeLiveData() {
+        viewModel.onLoading.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBarDetails.visibility = View.VISIBLE
+                //Makes the screen untouchable
+                requireActivity().window.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                )
+            } else {
+                binding.progressBarDetails.visibility = View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        }
+        viewModel.agencyDoc.observe(viewLifecycleOwner) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.imageLogoAgency.loadLogoFromUrl(it.getString("logoUrl")!!)
+            }
+            viewModel.tripListener(requireActivity())
+        }
+        viewModel.tripDoc.observe(viewLifecycleOwner) {
+            try {
+                bindAllViews()
+            } catch (e: Exception) {
+            }
+        }
+        viewModel.numberOfBooks.observe(viewLifecycleOwner) {
+            try {
+                bindAllViews()
+            } catch (e: Exception) {
+            }
+        }
 
-    private val documentsListener: ListenerRegistration
-        get() {
-            viewModel.setField(FieldTags.ON_LOADING, true)
-            /*1- We get the agency document*/
-            return viewModel.firestoreRepo.db.document("OnlineTransportAgency/${viewModel.agencyID}")
-                .addSnapshotListener(requireActivity()) { agencyDoc, agencyError ->
-                    viewModel.setField(FieldTags.ON_LOADING, true)
-                    if (agencyDoc != null) {
-                        viewModel.setField(FieldTags.AGENCY_DOC, agencyDoc)
-
-                        /*2- We get the selected trip document from the agency's trips collection */
-                        viewModel.firestoreRepo.db.document(
-                            "OnlineTransportAgency/${
-                                viewModel.agencyID
-                            }/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/${viewModel.tripID}"
-                        ).addSnapshotListener(requireActivity()) { tripDoc, tripError ->
-                            if (tripDoc != null) {
-                                viewModel.setField(FieldTags.TRIP_DOC, tripDoc)
-                                /*3- We fill layout with information*/
-                                viewModel.setField(FieldTags.ON_LOADING, false)
-                                bindAllViews()
-                            } else {
-                                viewModel.setField(FieldTags.ON_LOADING, false)
-                                viewModel.setField(
-                                    FieldTags.TOAST_MESSAGE,
-                                    tripError?.handleError { }.toString()
-                                )
-                            }
-                        }
-                    } else {
-                        viewModel.setField(
-                            FieldTags.TOAST_MESSAGE,
-                            agencyError?.handleError { }.toString()
-                        )
-                        viewModel.setField(FieldTags.ON_LOADING, false)
-                    }
+        viewModel.startCreation.observe(viewLifecycleOwner) {
+            if (it)
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.createBookInDB()
                 }
         }
 
+        viewModel.tripHasBeenDeleted.observe(viewLifecycleOwner) {
+            viewModel.setField(FieldTags.TOAST_MESSAGE, "Sorry! Trip not found!!")
+        }
+
+    }
+
     private fun initNumberPicker() {
         binding.numberPicker.run {
-            value = 1
-            minValue = 0
+            minValue = 1
             maxValue = 140
-            setOnValueChangedListener { _, selectedNumber, _ ->
-                viewModel.setField(FieldTags.NUMBER_OF_BOOKS, selectedNumber)
-                bindPrices()
+            value = viewModel.numberOfBooks.value!!
+            setOnValueChangedListener { _, _, _ ->
+                viewModel.setField(FieldTags.NUMBER_OF_BOOKS, binding.numberPicker.value)
             }
         }
     }
@@ -116,57 +142,64 @@ class TripDetailsFragment : Fragment() {
                 FieldTags.ARG_TRIP_DATE,
                 it.tripDateInMillis
             )
+            viewModel.setField(
+                FieldTags.LOCALITY_NAME,
+                it.localityTownName
+            )
         }
     }
 
-    private fun bindAllViews() = binding.apply {
+    private fun bindAllViews() = binding.also { detailBinding ->
         //First Card in order
-        textAgency.text = viewModel.agencyDoc.getString("agencyName")
-        ratingReputationBar.rating = viewModel.agencyDoc.getDouble("reputation")!!.toFloat()
-        (viewModel.tripDoc["townNames"] as HashMap<String, String>).let {
-            textLocality.text = viewModel.destinationTownName
-            if (viewModel.destinationTownName != it["town1"]) textDestination.text = it["town1"]
-            else it["town2"]
+        detailBinding.textAgency.text = viewModel.agencyDoc.value!!.getString("agencyName")
+        detailBinding.ratingReputationBar.rating =
+            viewModel.agencyDoc.value!!.getDouble("reputation")!!.toFloat()
+        detailBinding.textLocality.text = viewModel.localityTownName
+        (viewModel.tripDoc.value!!["townNames"] as HashMap<String, String>).let {
+            detailBinding.textDestination.text =
+                if (viewModel.localityTownName != it["town1"]) it["town1"] else it["town2"]
         }
-        textDistances.text = "${viewModel.tripDoc.getLong("distance")} Km"
-        textTimeTaken.text = Utils.timeTakenCalculator(
-            viewModel.tripDoc.getLong("distance")!!.toDouble(),
+        detailBinding.textDistances.text = "${viewModel.tripDoc.value!!.getLong("distance")} Km"
+        detailBinding.textTimeTaken.text = Utils.timeTakenCalculator(
+            viewModel.tripDoc.value!!.getLong("distance")!!.toDouble(),
             60L
         )
-        textTripDate.text = Utils.formatDate(viewModel.tripDateInMillis, "EEEE dd MMMM YYYY")
-        textTripDepartureTime.text =
+        detailBinding.textTripDate.text =
+            Utils.formatDate(viewModel.tripDateInMillis, "EEEE dd MMMM YYYY")
+        detailBinding.textTripDepartureTime.text =
             viewModel.tripTime.formattedTime(TimeModel.TimeFormat.FORMAT_24H)
 
         //Second card in order
-        binding.checkIsVip.isChecked = viewModel.isVip
+//        binding.checkIsVip.isChecked = viewModel.isVip.value!!
+        initNumberPicker()
         bindPrices()
-
     }
 
-
-
     private fun bindPrices() {
-        val tripPrice = when (viewModel.isVip) {
+        val tripPrice = when (viewModel.isVip.value!!) {
             true -> {
-                if (viewModel.tripDoc.getBoolean("flagVipPriceFromDistance")!!) {
-                    (viewModel.agencyDoc.getDouble("vipPricePerKm")!! * viewModel.tripDoc.getLong("distance")!!).toLong()
+                if (viewModel.tripDoc.value!!.getBoolean("flagVipPriceFromDistance")!!) {
+                    (viewModel.agencyDoc.value!!.getDouble("vipPricePerKm")
+                        ?: 12.0 * viewModel.tripDoc.value!!.getLong("distance")!!).toLong()
                 } else {
-                    viewModel.tripDoc.getLong("vipPrice")!!
-                }
+                    viewModel.tripDoc.value!!.getLong("vipPrice")!!
+                }//TODO: Remove the price per km
             }
             false -> {
-                if (viewModel.tripDoc.getBoolean("flagNormalPriceFromDistance")!!) {
-                    (viewModel.agencyDoc.getDouble("normalPricePerKm")!! * viewModel.tripDoc.getLong(
-                        "distance"
-                    )!!).toLong()
+                if (viewModel.tripDoc.value!!.getBoolean("flagNormalPriceFromDistance")!!) {
+                    (viewModel.agencyDoc.value!!.getDouble("normalPricePerKm")
+                        ?: 11.0 * viewModel.tripDoc.value!!.getLong(
+                            "distance"
+                        )!!).toLong()
                 } else {
-                    viewModel.tripDoc.getLong("normalPrice")!!
+                    viewModel.tripDoc.value!!.getLong("normalPrice")!!
                 }
             }
         }
         binding.apply {
-            textSeatsTimesUnitPrice.text = "${viewModel.numberOfBooks} x $tripPrice"
-            textTotalPrice.text = Utils.formatFCFAPrice(viewModel.numberOfBooks * tripPrice)
+            val textPrice = "${viewModel.numberOfBooks.value} x $tripPrice"
+            textSeatsTimesUnitPrice.text = textPrice
+            textTotalPrice.text = Utils.formatFCFAPrice(viewModel.numberOfBooks.value!! * tripPrice)
         }
 
     }

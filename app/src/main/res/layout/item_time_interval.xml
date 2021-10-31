@@ -22,136 +22,71 @@
         app:cardElevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <!-- Title, secondary and supporting text -->
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_delete_interval"
                 style="@style/negativeButton"
+                android:layout_width="match_parent"
                 android:onClickListener="@{()-> clickListener.onClick(document.id)}"
+                android:singleLine="true"
                 android:text="@string/text_btn_delete"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_departure_time" />
 
             <TextView
                 android:id="@+id/text_interval_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="1dp"
+                android:textAlignment="center"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/text_time_interval"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/view23"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Morning" />
 
-            <View
-                android:id="@+id/view21"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view22"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <View
-                android:id="@+id/view23"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view24"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
-
             <TextView
-                android:id="@+id/text_from_time"
-                android:layout_width="wrap_content"
+                android:id="@+id/text_time_interval"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textAlignment="center"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/textView33"
+                app:layout_constraintBottom_toTopOf="@+id/text_departure_time"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toEndOf="@+id/view23"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_interval_name"
                 tools:text="12:13" />
 
             <TextView
-                android:id="@+id/text_to_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textSize="16sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView33"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/view24"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView33"
-                tools:text="15:30" />
-
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/text_departure_time"
-                app:layout_constraintEnd_toStartOf="@+id/text_departure_time"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/text_departure_time"
-                app:srcCompat="@drawable/baseline_departure_board_24"
-                app:tint="@color/colorPositiveButton" />
-
-            <TextView
                 android:id="@+id/text_departure_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/colorPositiveButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/imageView6"
-                app:layout_constraintTop_toBottomOf="@+id/text_to_time"
-                tools:text="16:00" />
-
-            <TextView
-                android:id="@+id/textView33"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:text="@string/text_label_to"
-                app:layout_constraintBaseline_toBaselineOf="@+id/text_from_time"
-                app:layout_constraintEnd_toStartOf="@+id/text_to_time"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@color/colorPositiveButton"
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/baseline_departure_board_24"
+                app:drawableTint="@color/colorPositiveButton"
+                app:layout_constraintBottom_toTopOf="@+id/btn_delete_interval"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/text_from_time" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_time_interval"
+                tools:text="16:00" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

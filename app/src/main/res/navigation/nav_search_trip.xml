@@ -62,5 +62,8 @@
         <argument
             android:name="tripDateInMillis"
             app:argType="long" />
+        <argument
+            android:name="localityTownName"
+            app:argType="string" />
     </fragment>
 </navigation>

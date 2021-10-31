@@ -70,7 +70,7 @@ class AgencyEventPlannerViewModel : ViewModel() {
                         eventList.remove(currentEventDate)
                         eventList.toSet().toList()
                         //We add this event date to the eventDateList in the agency document
-                        firestoreRepo.setDocument(
+                        firestoreRepo.updateDocument(
                             hashMapOf("eventDateList" to eventList),
                             "OnlineTransportAgency/$agencyID"
                         ).collect { state ->
