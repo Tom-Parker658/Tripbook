@@ -1,6 +1,7 @@
 package com.lado.travago.tripbook.model.admin
 
 import java.util.*
+import kotlin.math.roundToInt
 
 
 /**
@@ -16,8 +17,9 @@ class TimeModel private constructor(
     val minutes: Int,
     val millisecond: Int?,
 ) {
+
     //A number formatted timeModel
-    val timeInSeconds = (hour * 3600) + (minutes * 60)
+    val timeInSeconds: Int = (hour * 3600) + (minutes * 60)
 
     //Adds a zero before single numbers
 
@@ -64,10 +66,12 @@ class TimeModel private constructor(
             TimeModel(hour, minutes, millisecond)
 
         fun fromSeconds(inSeconds: Int): TimeModel {
-            val minutes = (inSeconds / 60)
+            //We get the number of whole hours
             val hours = (inSeconds / 3600)
+            //We get the decimal part of the hour and multiply by 60 to get the seconds
+            val minutes = ((inSeconds / 3600.0) - hours) * 60
             return TimeModel(
-                hours, minutes, null
+                hours, minutes.roundToInt(), null
             )
         }
 

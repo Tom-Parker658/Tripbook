@@ -79,37 +79,6 @@ object Utils {
         return (ageInMillis / (1000 * 3600 * 24 * 365.25)).toInt()
     }
 
-    /**
-     * This utility functions will be used to query all model descriptions e.g [Booker.travellerDescription]
-     * @see Booker.travellerDescription
-     * @see Book.ticketDescription
-     * Descriptions are of format {label:value, label:value} ans so on. e.g {travellerName:Tom Parker}
-     * This query utility is used to search for specific values. So you pass your label as query and
-     * the description to search for the value of that query.
-     * NOTE: Labels must be exact as shown by the class description variable
-     *
-     * @param description is the required description string we want to search in
-     * @param query is the label for which we want to get the value
-     * @return the value of the query else null
-     */
-    @Deprecated("Old Time boy!!!")
-    fun queryDescription(description: String, query: String): String? {
-        var cleanedDescString = ""
-        //We remove all curly braces from the description and add it to cleanedDescString
-        description.forEach {
-            if (it != '{' && it != '}') cleanedDescString += "$it"
-        }
-        /*
-         *We then split it into a list with delimeter , from which we choose the string containing our label(query)
-         *Lastly, we split the result with delimeter : from which a list is returned and we get the last member
-         *which is always the value
-         */
-        return run {
-            cleanedDescString.split(",").find {
-                it.contains(query)
-            }?.split(":")?.last()
-        }
-    }
 
     /**
      * Generate a QR based on the ticket
@@ -119,8 +88,8 @@ object Utils {
      */
     fun ticketQRCodeGenerator(qrCodeText: String): Bitmap? {
         val result: BitMatrix
-        val requiredHeight = 300
-        val requiredWidth = 300
+        val requiredHeight = 150
+        val requiredWidth = 150
         val encryptedSeed = qrCodeEncryptor(qrCodeText)
         //Try to encode the qrSeed to QR code or generate an error
         try {

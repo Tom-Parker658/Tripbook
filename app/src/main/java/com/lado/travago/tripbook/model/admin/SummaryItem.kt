@@ -88,47 +88,46 @@ data class SummaryItem(
         ): List<SummaryItem> {
             val books = mutableListOf<SummaryItem>()
             snapshots.forEach {
-                val tripTime = TimeModel.from24Format(
-                    it.getLong("tripHour")!!.toInt(),
-                    it.getLong("tripMinutes")!!.toInt(),
+                val tripTime = TimeModel.fromSeconds(
+                    it.getLong("departureTime")!!.toInt()
                 )
                 val datePlusTime = "${
                     Utils.formatDate(
-                        it.getLong("tripDateInMillis")!!,
-                        "EEEE dd/mm/yyyy"
+                        it.getLong("travelDateMillis")!!,
+                        "EEEE dd/MM/yyyy"
                     )
-                } ,${tripTime.formattedTime(TimeModel.TimeFormat.FORMAT_24H)}"
+                }, ${tripTime.formattedTime(TimeModel.TimeFormat.FORMAT_24H)}"
 
                 //It is a main item if it is happening today
                 val numberOfDaysFromNowToTakeOff = Utils.getNumberOfDaysBetween(
-                    it.getLong("tripDateInMillis")!!,
+                    it.getLong("travelDateMillis")!!,
                     Calendar.getInstance().timeInMillis
                 )
                 var state: SettingsItemState? = null
                 var extra: String? = null
                 when {
-                    it.getBoolean("tripWasDone")!! -> {
+                    it.getBoolean("taken")!! -> {
                         state = SettingsItemState.OK
                         extra = "Done"
                     }
-                    it.getBoolean("tripWasDone")!! && it.getBoolean("isExpired")!! -> {
+                    it.getBoolean("taken")!! && it.getBoolean("isExpired")!! -> {
                         state = SettingsItemState.NOT_OK
                         extra = "Missed"
                     }
                     //If we are still to take the trip, it is state pending
-                    Date().before(Date(it.getLong("tripDateInMillis")!!)) -> state =
+                    Date().before(Date(it.getLong("travelDateMillis")!!)) -> state =
                         SettingsItemState.PENDING
                 }
 
 
                 books += SummaryItem(
                     id = it.id,
-                    mainTitle = "${it.getString("locality")!!} -> ${it.getString("destination")!!}",
+                    mainTitle = "${it.getString("localityName")!!} -> ${it.getString("destinationName")!!}",
                     subTitle = datePlusTime,
                     logoResourceID = null,
                     state = state,
                     isMainItem = numberOfDaysFromNowToTakeOff <= 1.0,
-                    logoUrl = it.getString("agencyLogoUrl"),
+                    logoUrl = it.getString("agencyLogoUrl") ?: "",//TODO: Remove this
                     extraDetails = extra
                 )
             }

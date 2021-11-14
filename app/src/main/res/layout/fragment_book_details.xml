@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/book"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_book_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="1dp"
+                app:cardElevation="6dp"
+                app:layout_constraintBottom_toTopOf="@+id/card_book_info"
+                app:layout_constraintEnd_toEndOf="@+id/card_book_info"
+                app:layout_constraintStart_toStartOf="@+id/card_book_info"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/text_book_price"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="true"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textSize="20sp"
+                        app:drawableEndCompat="@drawable/baseline_verified_24"
+                        app:drawableTint="@color/colorPositiveButton"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/image_book_vip"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="7, 500 XAF" />
+
+                    <ImageView
+                        android:id="@+id/image_book_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/image_book_agency_logo"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/outline_schedule_24"
+                        app:tint="@color/quantum_grey" />
+
+                    <ImageView
+                        android:id="@+id/image_book_vip"
+                        android:layout_width="24dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/image_book_state"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/outline_diamond_20"
+                        app:tint="@color/colorSecondaryDark" />
+
+                    <ImageView
+                        android:id="@+id/image_book_agency_logo"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:srcCompat="@drawable/baseline_insert_photo_24" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_book_info"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                app:cardElevation="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_book_header">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/image_qr_code"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        app:layout_constraintBottom_toTopOf="@+id/text_book_destination"
+                        app:layout_constraintEnd_toStartOf="@+id/text_book_owner"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/textDark"
+                        tools:srcCompat="@drawable/baseline_qr_code_scanner_24" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/text_book_owner"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:drawablePadding="4dp"
+                        android:textAlignment="textStart"
+                        app:drawableStartCompat="@drawable/baseline_account_circle_24"
+                        app:drawableTint="@color/colorPrimary"
+                        app:layout_constraintBottom_toTopOf="@+id/text_book_phone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/image_qr_code"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Joe Taku" />
+
+                    <TextView
+                        android:id="@+id/text_book_agency"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        app:drawableStartCompat="@drawable/baseline_directions_bus_24"
+                        app:drawableTint="@color/colorPrimary"
+                        app:layout_constraintBottom_toTopOf="@+id/text_book_trip_date"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/image_qr_code"
+                        app:layout_constraintTop_toBottomOf="@+id/text_book_phone"
+                        tools:text="General Express Voyages" />
+
+                    <TextView
+                        android:id="@+id/text_book_trip_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:textAlignment="textStart"
+                        app:drawableStartCompat="@drawable/baseline_event_24"
+                        app:drawableTint="@color/colorPrimary"
+                        app:layout_constraintBottom_toTopOf="@+id/text_book_trip_time"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/image_qr_code"
+                        app:layout_constraintTop_toBottomOf="@+id/text_book_agency"
+                        tools:text="12 - 06 -2021" />
+
+                    <TextView
+                        android:id="@+id/text_book_trip_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/colorSecondary"
+                        app:drawableStartCompat="@drawable/baseline_departure_board_24"
+                        app:drawableTint="@color/colorPrimary"
+                        app:drawableTintMode="src_atop"
+                        app:layout_constraintBottom_toTopOf="@+id/text_book_destination"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/image_qr_code"
+                        app:layout_constraintTop_toBottomOf="@+id/text_book_trip_date"
+                        tools:text="13: 30" />
+
+                    <TextView
+                        android:id="@+id/text_book_locality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:textSize="20sp"
+                        android:textStyle="bold|italic"
+                        app:drawableEndCompat="@drawable/baseline_my_location_24"
+                        app:drawableTint="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_book_destination"
+                        app:layout_constraintEnd_toStartOf="@+id/text_book_destination"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/text_book_destination"
+                        tools:text="Abong Mbang" />
+
+                    <TextView
+                        android:id="@+id/text_book_destination"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:textAlignment="textEnd"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:drawableStartCompat="@drawable/baseline_place_24"
+                        app:drawableTint="@color/colorPrimaryDark"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/text_book_locality"
+                        tools:text="Akonolinga" />
+
+                    <TextView
+                        android:id="@+id/text_book_phone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:singleLine="true"
+                        android:textAlignment="textStart"
+                        app:drawableStartCompat="@drawable/baseline_phone_24"
+                        app:drawableTint="@color/colorPrimary"
+                        app:layout_constraintBottom_toTopOf="@+id/text_book_agency"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/image_qr_code"
+                        app:layout_constraintTop_toBottomOf="@+id/text_book_owner"
+                        tools:text="+237 6 99 55 44 12" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_book_footer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="4dp"
+                app:cardElevation="6dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/card_book_info"
+                app:layout_constraintStart_toStartOf="@+id/card_book_info"
+                app:layout_constraintTop_toBottomOf="@id/card_book_info">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/text_book_tripbook"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/baseline_settings_24"
+                        app:drawableTint="#FF9E80"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Tripbook" />
+
+                    <TextView
+                        android:id="@+id/text_book_timestamp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="4dp"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/colorNegativeButton"
+                        android:textSize="12sp"
+                        android:textStyle="italic"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/text_book_tripbook"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="generated on: 21-03-2021 16:25:31" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

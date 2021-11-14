@@ -93,6 +93,7 @@ data class Book(
         "isExpired" to false,
         "isScanned" to false,
         "failed" to failed,
+        "distance" to tripDoc["distance"],
         "taken" to false,
         "travelDateMillis" to travelDay,
         "departureTime" to departureTime.timeInSeconds,

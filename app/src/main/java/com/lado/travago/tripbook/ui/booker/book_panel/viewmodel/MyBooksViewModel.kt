@@ -19,12 +19,13 @@ class MyBooksViewModel : ViewModel() {
     val firestoreRepo = FirestoreRepo()
     val authRepo = FirebaseAuthRepo()
 
-    private val _onLoading = MutableLiveData(true)
+    lateinit var selectedBookDoc: DocumentSnapshot
+
+    private val _onLoading = MutableLiveData(false)
     val onLoading: LiveData<Boolean> get() = _onLoading
 
     private val _retry = MutableLiveData(true)
     val retry: LiveData<Boolean> get() = _retry
-
 
     // The list of all books for the current booker
     private val _allMyBooks = MutableLiveData(listOf<DocumentSnapshot>())
@@ -37,6 +38,28 @@ class MyBooksViewModel : ViewModel() {
     private val _toastMessage = MutableLiveData("")
     val toastMessage: LiveData<String> get() = _toastMessage
 
+    //When search is empty or anything yields no result
+    private val _notFound = MutableLiveData(false)
+    val notFound: LiveData<Boolean> get() = _notFound
+
+    //Visibility of the Fabs
+    private val _fabVisibilityState = MutableLiveData(true)
+    val fabVisibilityState: LiveData<Boolean> get() = _fabVisibilityState
+    fun invertFabVisibility() {
+        _fabVisibilityState.value = !_fabVisibilityState.value!!
+    }
+
+    /**
+     * Returns the selected book as a document and help the details fragment inflate the book view
+     * immediately after navigation
+     */
+    fun getSelectedBookFromID(bookID: String){
+        selectedBookDoc = _allMyBooks.value!!.find{
+            it["id"] == bookID
+        }!!
+    }
+
+
     enum class FieldTags { ON_LOADING, TOAST_MESSAGE }
 
     /**
@@ -44,7 +67,7 @@ class MyBooksViewModel : ViewModel() {
      */
     suspend fun getAllBooks() {
         firestoreRepo.getCollection(
-            "Bookers/${authRepo.firebaseAuth.currentUser!!.uid}/Books", Source.DEFAULT,
+            "Bookers/${authRepo.firebaseAuth.currentUser!!.uid}/My_Books", Source.DEFAULT,
         ).collect {
             when (it) {
                 is State.Failed -> {
@@ -53,7 +76,9 @@ class MyBooksViewModel : ViewModel() {
                 }
                 is State.Loading -> _onLoading.value = true
                 is State.Success -> {
-                    _allMyBooks.value = it.data.documents
+                    _retry.value = false
+                    if (!it.data.isEmpty) _allMyBooks.value = it.data.documents
+                    else _notFound.value = true
                     _onLoading.value = false
                 }
             }
@@ -79,7 +104,7 @@ class MyBooksViewModel : ViewModel() {
      */
     suspend fun searchBooks(query: (collection: CollectionReference) -> Query) {
         firestoreRepo.queryCollection(
-            "Bookers/${authRepo.firebaseAuth.currentUser!!.uid}/Books", Source.CACHE, query
+            "Bookers/${authRepo.firebaseAuth.currentUser!!.uid}/My_Books", Source.CACHE, query
         ).collect {
             when (it) {
                 is State.Failed -> {
@@ -88,8 +113,9 @@ class MyBooksViewModel : ViewModel() {
                 }
                 is State.Loading -> _onLoading.value = true
                 is State.Success -> {
+                    if (!it.data.isEmpty) _sortResultBookList.value = it.data.documents
+                    else _notFound.value = true
                     _onLoading.value = false
-                    _sortResultBookList.value = it.data.documents
                 }
             }
         }
@@ -97,11 +123,12 @@ class MyBooksViewModel : ViewModel() {
 
     fun setField(fieldTag: FieldTags, value: Any) =
         when (fieldTag) {
-            FieldTags.ON_LOADING -> _toastMessage.value = value.toString()
-            FieldTags.TOAST_MESSAGE -> _onLoading.value = value as Boolean
+            FieldTags.TOAST_MESSAGE -> _toastMessage.value = value.toString()
+            FieldTags.ON_LOADING -> _onLoading.value = value as Boolean
         }
 
     fun clearFilters() {
-        _sortResultBookList.value!!.clear()
+        _sortResultBookList.value = emptyList<DocumentSnapshot>().toMutableList()
     }
+
 }

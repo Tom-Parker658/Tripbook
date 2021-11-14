@@ -455,18 +455,35 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="tripDetailsFragment">
+                  <entry key="bookDetailsFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="460" />
-                            <option name="y" value="12" />
+                            <option name="x" value="720" />
+                            <option name="y" value="287" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="myBooksFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="492" />
+                            <option name="y" value="284" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_tripDetailsFragment_to_tripSearchResultsFragment">
+                            <entry key="action_myBooksFragment_to_bookDetailsFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_myBooksFragment_to_tripSearchFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -476,13 +493,24 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="tripDetailsFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="156" />
+                            <option name="y" value="-313" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="tripSearchFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="312" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -502,8 +530,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="236" />
-                            <option name="y" value="12" />
+                            <option name="x" value="-66" />
+                            <option name="y" value="-12" />
                           </Point>
                         </option>
                         <option name="myPositions">

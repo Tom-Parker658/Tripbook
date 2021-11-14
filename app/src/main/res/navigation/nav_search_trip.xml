@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_search_trip"
-    app:startDestination="@id/tripSearchFragment">
+    app:startDestination="@id/myBooksFragment">
 
     <fragment
         android:id="@+id/tripSearchFragment"
@@ -64,6 +64,25 @@
             app:argType="long" />
         <argument
             android:name="localityTownName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/myBooksFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.book_panel.MyBooksFragment"
+        android:label="MyBooksFragment" >
+        <action
+            android:id="@+id/action_myBooksFragment_to_tripSearchFragment"
+            app:destination="@id/tripSearchFragment" />
+        <action
+            android:id="@+id/action_myBooksFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookDetailsFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.book_panel.BookDetailsFragment"
+        android:label="BookDetailsFragment" >
+        <argument
+            android:name="selectedBookID"
             app:argType="string" />
     </fragment>
 </navigation>

@@ -14,65 +14,69 @@
         android:layout_height="match_parent"
         tools:context=".ui.booker.book_panel.MyBooksFragment">
 
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chip_book_sort_options"
+        <HorizontalScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
             android:layout_marginTop="1dp"
-            android:layout_marginEnd="4dp"
-            android:scrollbars="horizontal"
-            app:checkedChip="@id/chip_book_filter_departure_date"
+            android:fillViewport="true"
+            android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:singleLine="true">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_book_filter_departure_date"
-                android:layout_width="wrap_content"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_book_sort_options"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="@string/text_sort_book_by_departure_time"
-                android:textStyle="bold" />
+                app:checkedChip="@id/chip_book_filter_departure_date"
+                app:singleLine="true">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_book_filter_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="@string/text_sort_book_by_price" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_book_filter_departure_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/text_sort_book_by_departure_time"
+                    android:textStyle="bold" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_book_filter_vip_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="@string/text_sort_book_by_vips" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_book_filter_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/text_sort_book_by_price" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_book_filter_done_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="@string/text_sort_book_by_taken_already" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_book_filter_vip_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/text_sort_book_by_vips" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_book_filter_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="@string/text_sort_book_by_distance" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_book_filter_done_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/text_sort_book_by_taken_already" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_book_filter_expired_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="@string/text_sort_book_by_expired" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_book_filter_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/text_sort_book_by_distance" />
 
-        </com.google.android.material.chip.ChipGroup>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_book_filter_expired_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/text_sort_book_by_expired" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/books_recycler_view"
@@ -80,8 +84,10 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chip_book_sort_options"
+            app:layout_constraintTop_toBottomOf="@+id/scroll_view"
+            app:layout_constraintVertical_bias="0.0"
             tools:listitem="@layout/item_summary_list" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -103,12 +109,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toTopOf="@+id/fab_search_books"
             app:layout_constraintEnd_toEndOf="@+id/fab_search_books"
             app:layout_constraintStart_toStartOf="@+id/fab_search_books"
             app:srcCompat="@drawable/baseline_event_24"
-            tools:ignore="SpeakableTextPresentCheck"
-            android:focusable="true" />
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ProgressBar
             android:id="@+id/book_progress_bar"
@@ -119,7 +125,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chip_book_sort_options" />
+            app:layout_constraintTop_toBottomOf="@+id/scroll_view" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_revert_sort"
@@ -127,14 +133,15 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:clickable="true"
+            android:focusable="true"
             android:visibility="gone"
+            app:backgroundTint="@color/colorNegativeButton"
             app:layout_constraintBottom_toTopOf="@+id/fab_book_calendar"
             app:layout_constraintEnd_toEndOf="@+id/fab_book_calendar"
             app:layout_constraintStart_toStartOf="@+id/fab_book_calendar"
             app:srcCompat="@drawable/baseline_arrow_back_24"
             tools:ignore="SpeakableTextPresentCheck"
-            tools:visibility="visible"
-            android:focusable="true" />
+            tools:visibility="visible" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_tool_visibility"
@@ -146,6 +153,7 @@
             android:clickable="true"
             android:focusable="true"
             app:backgroundTint="@color/colorNeutralButton"
+            app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/baseline_visibility_off_24"

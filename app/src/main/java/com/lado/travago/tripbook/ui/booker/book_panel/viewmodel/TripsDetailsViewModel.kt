@@ -31,22 +31,21 @@ class TripsDetailsViewModel : ViewModel() {
     val firestoreRepo = FirestoreRepo()
     val authRepo = FirebaseAuthRepo()
 
-    // The document that contains info about the scheduled trip for a particular day
-    lateinit var currentDateScheduleDoc: QuerySnapshot
-
     private val _onLoading = MutableLiveData(true)
     val onLoading: LiveData<Boolean> get() = _onLoading
 
     private val _toastMessage = MutableLiveData("")
     val toastMessage: LiveData<String> get() = _toastMessage
 
+    //Number of seats paid for
     private val _numberOfBooks = MutableLiveData(1)
     val numberOfBooks: LiveData<Int> get() = _numberOfBooks
 
+    //Begin book creation, for now we don't launch the payment activity before creation
     private val _startCreation = MutableLiveData(false)
     val startCreation: LiveData<Boolean> get() = _startCreation
 
-    //To notify the user when the trips is not more available
+    //To notify the user when the trips is not more available during the current config session
     private val _tripHasBeenDeleted = MutableLiveData(false)
     val tripHasBeenDeleted: LiveData<Boolean> get() = _tripHasBeenDeleted
 
@@ -148,6 +147,7 @@ class TripsDetailsViewModel : ViewModel() {
                     tripTime,
                     firestoreRepo.db
                 )
+
                 //Creates n-books
                 val bookerBookRef =
                     firestoreRepo.db.collection("Bookers/${authRepo.currentUser!!.uid}/My_Books")
@@ -178,6 +178,7 @@ class TripsDetailsViewModel : ViewModel() {
                 }
                 is State.Loading -> _onLoading.value = true
                 is State.Success -> {
+                    //Increments popularity stats for that particular trip
                     firestoreRepo.incrementField(
                         _numberOfBooks.value!!,
                         "OnlineTransportAgency/$agencyID/Planets_agency/Earth_agency/Continents_agency/Africa_agency/Cameroon_agency/land/Trips_agency/$tripID",

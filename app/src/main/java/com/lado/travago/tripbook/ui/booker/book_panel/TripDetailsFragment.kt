@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.Timestamp
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripDetailBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
@@ -19,6 +20,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlin.random.Random
+import kotlin.random.nextULong
 
 /**
  * Seat selection and bus customisation fragment

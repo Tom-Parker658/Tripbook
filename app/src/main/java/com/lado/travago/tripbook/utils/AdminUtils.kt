@@ -14,7 +14,9 @@ import java.util.Collections.*
  * contains utilities for the admin panel
  */
 object AdminUtils {
-    const val LOCAL_SERVER_FIREBASE_IP = "192.168.28.179"
+    const val LOCAL_SERVER_FIREBASE_IP = "192.168.108.190"
+
+
 //    Link-local IPv6 address:	fe80::1c0c:b74e:2833:c83a%2
 //    IPv4 address:	192.168.110.167
 //    IPv4 DNS servers:	192.168.110.35
@@ -22,17 +24,16 @@ object AdminUtils {
 //    Description:	Remote NDIS based Internet Sharing Device
 //    Driver version:	10.0.18362.1
 //    Physical address (MAC):	16-1D-85-B5-76-21
-//    Link-local IPv6 address:	fe80::69c1:6ef9:9921:9584%2
-//    IPv4 address:	192.168.28.179
-//    IPv4 DNS servers:	192.168.28.221
-//    Manufacturer:	Microsoft
-//    Description:	Remote NDIS based Internet Sharing Device
-//    Driver version:	10.0.18362.1
-//    Physical address (MAC):	36-2E-1A-38-17-E6
+//    Link-local IPv6 address:	fe80::862:222e:7832:a3f7%2
 
-//
 //    Link-local IPv6 address:	fe80::eda8:f167:7dac:7cd0%2
-//    IPv4 address:	192.168.167.15
+//    IPv4 address:	192.168.167.15Link-local IPv6 address:	fe80::862:222e:7832:a3f7%2
+//IPv4 address:	192.168.246.6
+//IPv4 DNS servers:	192.168.246.145
+//Manufacturer:	Microsoft
+//Description:	Remote NDIS based Internet Sharing Device
+//Driver version:	10.0.18362.1
+//Physical address (MAC):	3A-C1-49-EE-2E-A6
 //    IPv4 DNS servers:	192.168.167.23
 //    Manufacturer:	Microsoft
 //    Description:	Remote NDIS based Internet Sharing Device
