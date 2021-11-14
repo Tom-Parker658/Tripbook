@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="string_menu_book_trip">Book Trips</string>
+    <string name="string_menu_my_books">My Books</string>
+    <string name="string_menu_personal_info">Personal Info</string>
+    <string name="string_menu_my_wallet">My Wallet</string>
+    <string name="string_menu_help">Help</string>
+</resources>

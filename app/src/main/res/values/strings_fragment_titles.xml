@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    Booker creation-->
+    <string name="frag_booker_creation_1">Welcome</string>
+    <string name="frag_booker_creation_2">Check at </string>
+    <string name="frag_booker_creation_final">Personal Info</string>
+
+    <!--    Trips Search-->
+    <string name="frag_trip_search" translatable="false">TripBook</string>
+    <string name="frag_trip_details">Customize Your Book</string>
+
+    <!--   Books and QR codes -->
+    <string name="frag_my_books">My Books</string>
+
+    <!--    -->
+</resources>

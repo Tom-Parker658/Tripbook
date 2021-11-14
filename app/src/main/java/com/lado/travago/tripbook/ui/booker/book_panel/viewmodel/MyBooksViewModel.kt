@@ -53,9 +53,9 @@ class MyBooksViewModel : ViewModel() {
      * Returns the selected book as a document and help the details fragment inflate the book view
      * immediately after navigation
      */
-    fun getSelectedBookFromID(bookID: String){
+    fun getSelectedBookFromFailedString(failedString: String){
         selectedBookDoc = _allMyBooks.value!!.find{
-            it["id"] == bookID
+            it["failed"] == failedString
         }!!
     }
 

@@ -1,4 +1,154 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--All the bookers nav options-->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_booker"/>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_booker"
+    app:startDestination="@id/nav_search_trip">
+
+    <!--    Booker Creation-->
+    <navigation
+        android:id="@+id/nav_booker_creation"
+        app:startDestination="@id/bookerCreation1Fragment">
+        <fragment
+            android:id="@+id/bookerCreation1Fragment"
+            android:name="com.lado.travago.tripbook.ui.booker.creation.BookerCreation1Fragment"
+            android:label="@string/frag_booker_creation_1"
+            tools:layout="@layout/fragment_booker_creation1">
+            <action
+                android:id="@+id/action_bookerCreation1Fragment_to_bookerCreation2Fragment"
+                app:destination="@id/bookerCreation2Fragment" />
+            <action
+                android:id="@+id/action_bookerCreation1Fragment_to_bookerCreationFinalFragment"
+                app:destination="@id/bookerCreationFinalFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/bookerCreation2Fragment"
+            android:name="com.lado.travago.tripbook.ui.booker.creation.BookerCreation2Fragment"
+            android:label="@string/frag_booker_creation_2"
+            tools:layout="@layout/fragment_booker_creation2">
+            <action
+                android:id="@+id/action_bookerCreation2Fragment_to_bookerCreationFinalFragment"
+                app:destination="@id/bookerCreationFinalFragment"
+                app:popUpTo="@id/bookerCreation1Fragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/bookerCreationFinalFragment"
+            android:name="com.lado.travago.tripbook.ui.booker.creation.BookerCreationFinalFragment"
+            android:label="@string/frag_booker_creation_final"
+            tools:layout="@layout/fragment_booker_creation_final" />
+        <action
+            android:id="@+id/action_nav_booker_creation_pop"
+            app:popUpTo="@id/nav_booker_creation"
+            app:popUpToInclusive="true" />
+
+    </navigation>
+
+    <!--   Trip Search -->
+    <navigation
+        android:id="@+id/nav_bookers_books"
+        app:startDestination="@id/myBooksFragment">
+        <fragment
+            android:id="@+id/myBooksFragment"
+            android:name="com.lado.travago.tripbook.ui.booker.book_panel.MyBooksFragment"
+            android:label="@string/frag_my_books"
+            tools:layout="@layout/fragment_my_books">
+            <action
+                android:id="@+id/action_myBooksFragment_to_bookDetailsFragment"
+                app:destination="@id/bookDetailsFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/bookDetailsFragment"
+            android:name="com.lado.travago.tripbook.ui.booker.book_panel.BookDetailsFragment"
+            tools:layout="@layout/fragment_book_details">
+            <argument
+                android:name="failedString"
+                app:argType="string" />
+        </fragment>
+        <action
+            android:id="@+id/action_nav_bookers_books_pop2"
+            app:popUpTo="@id/nav_bookers_books"
+            app:popUpToInclusive="true" />
+    </navigation>
+
+    <!--    Books and QrCodes-->
+    <navigation
+        android:id="@+id/nav_search_trip"
+        app:startDestination="@id/tripSearchFragment">
+        <fragment
+            android:id="@+id/tripSearchFragment"
+            android:name="com.lado.travago.tripbook.ui.booker.book_panel.TripSearchFragment"
+            android:label="@string/frag_trip_search"
+            tools:layout="@layout/fragment_trip_search">
+            <action
+                android:id="@+id/action_tripSearchFragment_to_tripSearchResultsFragment"
+                app:destination="@id/tripSearchResultsFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/tripDetailsFragment"
+            android:name="com.lado.travago.tripbook.ui.booker.book_panel.TripDetailsFragment"
+            android:label="@string/frag_my_books"
+            tools:layout="@layout/fragment_trip_detail">
+            <argument
+                android:name="tripId"
+                app:argType="string" />
+            <argument
+                android:name="agencyId"
+                app:argType="string" />
+            <argument
+                android:name="vip"
+                app:argType="boolean" />
+            <argument
+                android:name="tripTimeHour"
+                app:argType="integer" />
+            <argument
+                android:name="tripTimeMinutes"
+                app:argType="integer" />
+            <argument
+                android:name="tripDateInMillis"
+                app:argType="long" />
+            <argument
+                android:name="localityTownName"
+                app:argType="string" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/tripSearchResultsFragment"
+            android:name="com.lado.travago.tripbook.ui.booker.book_panel.TripSearchResultsFragment"
+            tools:layout="@layout/fragment_trip_search_result">
+            <action
+                android:id="@+id/action_tripSearchResultsFragment_to_tripDetailsFragment"
+                app:destination="@id/tripDetailsFragment" />
+            <action
+                android:id="@+id/action_tripSearchResultsFragment_to_tripSearchFragment"
+                app:destination="@id/tripSearchFragment" />
+            <argument
+                android:name="localityName"
+                app:argType="string" />
+            <argument
+                android:name="destinationName"
+                app:argType="string" />
+            <argument
+                android:name="tripDateInMillis"
+                app:argType="long" />
+            <argument
+                android:name="tripHour"
+                app:argType="integer" />
+            <argument
+                android:name="tripMinutes"
+                app:argType="integer" />
+        </fragment>
+
+    </navigation>
+<!--    Global calls-->
+    <action
+        android:id="@+id/action_global_nav_booker_creation"
+        app:destination="@id/nav_booker_creation" />
+    <action
+        android:id="@+id/action_global_nav_bookers_books"
+        app:destination="@id/nav_bookers_books" />
+    <action
+        android:id="@+id/action_global_nav_search_trip"
+        app:destination="@id/nav_search_trip" />
+
+</navigation>

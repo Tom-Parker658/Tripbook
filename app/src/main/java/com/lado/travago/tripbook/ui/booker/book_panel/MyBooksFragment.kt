@@ -100,10 +100,6 @@ class MyBooksFragment : Fragment() {
             if ((it as Chip).isChecked)
                 viewModel.sortBooks("isVip")
             else if (binding.chipBookSortOptions.checkedChipIds.isEmpty()) viewModel.clearFilters()
-            //TODO: Testing purposes
-            //TODO: Testing purposes
-            findNavController().navigate(R.id.action_myBooksFragment_to_tripSearchFragment)
-
         }
 
     }

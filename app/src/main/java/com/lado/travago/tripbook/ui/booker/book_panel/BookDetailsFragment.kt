@@ -1,16 +1,30 @@
 package com.lado.travago.tripbook.ui.booker.book_panel
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.DrawableUtils
+import androidx.core.graphics.BitmapCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.GlideBuilder
+import com.bumptech.glide.load.resource.bitmap.BitmapDrawableDecoder
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentBookDetailsBinding
+import com.lado.travago.tripbook.model.admin.TimeModel
+import com.lado.travago.tripbook.repo.firebase.FirebaseAuthRepo
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.MyBooksViewModel
+import com.lado.travago.tripbook.utils.Utils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.util.*
 
 
 @ExperimentalCoroutinesApi
@@ -35,11 +49,74 @@ class BookDetailsFragment : Fragment() {
 
     private fun getBookDocArgs() {
         viewModel = ViewModelProvider(requireActivity())[MyBooksViewModel::class.java]
-        val bookID = BookDetailsFragmentArgs.fromBundle(requireArguments()).selectedBookID
-        viewModel.getSelectedBookFromID(bookID)
+        val failedString = BookDetailsFragmentArgs.fromBundle(requireArguments()).failedString
+        viewModel.getSelectedBookFromFailedString(failedString)
     }
 
     private fun inflateBook() {
+        viewModel.selectedBookDoc.also { doc ->
+            //Book Header
+            binding.textBookPrice.text = Utils.formatFCFAPrice(doc.getLong("price")!!)
+            binding.imageBookVip.let {
+                if (doc.getBoolean("isVip")!!) it.visibility = View.VISIBLE
+                else it.visibility = View.GONE
+            }
+            binding.bookStatusImage.let {
+                when {
+                    //Pending
+                    !doc.getBoolean("isExpired")!! -> {
+                        it.setImageDrawable(resources.getDrawable(R.drawable.outline_schedule_24))
+                        it.setColorFilter(resources.getColor(R.color.colorPositiveButton))
+                    }
+                    //Missed the trip
+                    doc.getBoolean("isExpired")!! && !doc.getBoolean("isScanned")!! -> {
+                        it.setImageDrawable(resources.getDrawable(R.drawable.round_cancel_24))
+                        it.setBackgroundColor(resources.getColor(R.color.colorNegativeButton))
+                    }
+                    doc.getBoolean("isScanned")!! -> {
+                        it.setImageDrawable(resources.getDrawable(R.drawable.baseline_verified_24))
+                        it.setBackgroundColor(resources.getColor(R.color.colorPositiveButton))
+                    }
+                }
+            }
+
+            //Book Body
+            binding.textBookOwner.text = doc.getString("bookerName")
+            binding.textBookPhone.text = FirebaseAuthRepo().currentUser!!.phoneNumber
+            binding.textBookAgency.text = doc.getString("agencyName")
+            binding.textBookTripDate.text =
+                Utils.formatDate(doc.getLong("travelDateMillis")!!, "dd-MM-yyyy")
+            binding.textBookTripTime.text =
+                TimeModel.fromSeconds(doc.getLong("departureTime")!!.toInt())
+                    .formattedTime(TimeModel.TimeFormat.FORMAT_24H)
+            binding.textBookLocality.text = doc.getString("localityName")
+            binding.textBookDestination.text = doc.getString("destinationName")
+
+            //Booker Footer
+            binding.textBookTripbook.text = "TripBook"
+            val generatedOnText = "Generated On: ${
+                doc.getTimestamp("generatedOn")!!.toDate()
+            }"
+            binding.textBookTimestamp.text = generatedOnText
+
+            //The grand "frère" i.e the qr-code
+            val qrBitmap = Utils.bookQRCodeGenerator(
+                qrCodeText = doc.getString("failed")!!,
+                requiredHeight = 200,
+                requiredWidth = 200
+            )
+            Glide.with(requireContext())
+                .load(qrBitmap)
+                .error(R.drawable.baseline_image_error_24)
+                .into(binding.imageQrCode)
+
+            binding.imageQrCode.setOnClickListener {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setBackground(binding.imageQrCode.drawable)
+                    .show()
+            }
+
+        }
 
     }
 

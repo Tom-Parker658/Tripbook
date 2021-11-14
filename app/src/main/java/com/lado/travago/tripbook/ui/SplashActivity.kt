@@ -35,28 +35,28 @@ class SplashActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirestoreRepo()
 
-        when(auth.currentUser){
-            //If no user is found, we redirect the user to the Search screen
-            null  -> startActivity(Intent(this, BookerActivity::class.java))
-            else ->{
-                if(auth.currentUser!!.isAnonymous){
-                    auth.signOut()
-                    startActivity(Intent(this, BookerActivity::class.java))
-                }else {
-                    db.identifyUser(auth.currentUser!!.uid).collect {
-                        when(it){
-                            is State.Failed ->{
-                                Toast.makeText(applicationContext, "Its a Booker!", Toast.LENGTH_LONG).show()
-                                //Is a Booker, we redirect later to the ticket screen
-                            }
-                            is State.Success ->{
-                                Toast.makeText(applicationContext, "Its a Booker!", Toast.LENGTH_LONG).show()
-                                //Is a Scanner, Redirect to the Scanner panel
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//        when(auth.currentUser){
+//            //If no user is found, we redirect the user to the Search screen
+//            null  -> startActivity(Intent(this, BookerActivity::class.java))
+//            else ->{
+//                if(auth.currentUser!!.isAnonymous){
+//                    auth.signOut()
+//                    startActivity(Intent(this, BookerActivity::class.java))
+//                }else {
+//                    db.identifyUser(auth.currentUser!!.uid).collect {
+//                        when(it){
+//                            is State.Failed ->{
+//                                Toast.makeText(applicationContext, "Its a Booker!", Toast.LENGTH_LONG).show()
+//                                //Is a Booker, we redirect later to the ticket screen
+//                            }
+//                            is State.Success ->{
+//                                Toast.makeText(applicationContext, "Its a Booker!", Toast.LENGTH_LONG).show()
+//                                //Is a Scanner, Redirect to the Scanner panel
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }

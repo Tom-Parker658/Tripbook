@@ -121,7 +121,7 @@ data class SummaryItem(
 
 
                 books += SummaryItem(
-                    id = it.id,
+                    id = it.getString("failed")!!,//We get the qrCode string
                     mainTitle = "${it.getString("localityName")!!} -> ${it.getString("destinationName")!!}",
                     subTitle = datePlusTime,
                     logoResourceID = null,

@@ -1,6 +1,5 @@
 package com.lado.travago.tripbook.ui.booker.creation
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,11 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
-import com.google.firebase.emulators.EmulatedServiceSettings
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityBookerCreationBinding
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
@@ -39,9 +38,40 @@ class BookerCreationActivity : AppCompatActivity() {
         //Restore all fields after configuration changes
         binding = DataBindingUtil.setContentView(this, R.layout.activity_booker_creation)
         initViewModel()
+        setupNavigation()
 
         observeLiveData()
         showProgressBar()
+    }
+
+    private fun setupNavigation() {
+        val navController = findNavController(binding.bookerCreationNavHost.id)
+        NavigationUI.setupWithNavController(binding.bottomBookerNav, navController)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                //Within this view
+                R.id.nav_booker_creation -> {
+                    if (viewModel.authRepo.currentUser == null) {
+                        controller.navigate(BookerCreation1FragmentDirections.actionBookerCreation1FragmentToBookerCreationFinalFragment())
+                    }
+                }
+                R.id.bookerCreation1Fragment -> {
+                    if (viewModel.authRepo.currentUser == null) {
+                        controller.navigate(BookerCreation1FragmentDirections.actionBookerCreation1FragmentToBookerCreationFinalFragment())
+                    }
+                }
+                R.id.bookerCreation2Fragment -> {
+                    destination.label =
+                        "${getString(R.string.frag_booker_creation_2)}: ${viewModel.bookerPhoneField}"
+                }
+                R.id.bookerCreationFinalFragment -> {
+                    if (viewModel.authRepo.currentUser == null)
+                        binding.bottomBookerNav.visibility = View.GONE
+                    else binding.bottomBookerNav.visibility = View.VISIBLE
+                }
+
+            }
+        }
     }
 
     /**
@@ -76,7 +106,7 @@ class BookerCreationActivity : AppCompatActivity() {
         viewModel.onCodeSent.observe(this) {
             if (it) {
                 try {
-                    findNavController(binding.myBookerNavHostFragment.id).navigate(R.id.action_bookerCreation1Fragment_to_bookerCreation2Fragment)
+                    findNavController(binding.bookerCreationNavHost.id).navigate(R.id.action_bookerCreation1Fragment_to_bookerCreation2Fragment)
                 } catch (exception: Exception) {/*In case we are resending the sms  already at the booker creation 2 screen */
                 }
             }
@@ -102,7 +132,7 @@ class BookerCreationActivity : AppCompatActivity() {
         viewModel.navToInfoScreen.observe(this) {
             if (it) {
                 viewModel.stopLoading()
-                findNavController(binding.myBookerNavHostFragment.id).navigate(R.id.action_bookerCreation2Fragment_to_bookerCreationFinalFragment)
+                findNavController(binding.bookerCreationNavHost.id).navigate(R.id.action_bookerCreation2Fragment_to_bookerCreationFinalFragment)
                 viewModel.setField(FieldTags.NAV_TO_INFO, false)
             }
         }
@@ -114,7 +144,6 @@ class BookerCreationActivity : AppCompatActivity() {
             }
         }
     }
-
 
     //Callback to be called during phone verification
     private val phoneCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -182,11 +211,9 @@ class BookerCreationActivity : AppCompatActivity() {
         )
     }
 
-
     private fun initViewModel() {
         viewModel = ViewModelProvider(this)[BookerCreationViewModel::class.java]
     }
-
 
     /**
      * Navigates back to the UI which originally launched this creation as an intent. It returns with no data as intent,

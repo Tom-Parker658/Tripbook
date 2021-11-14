@@ -2,9 +2,13 @@ package com.lado.travago.tripbook.ui.booker.book_panel
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
+import com.lado.travago.tripbook.NavBookerCreationDirections
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityTripSearchBinding
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel
@@ -13,14 +17,43 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 class TripSearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTripSearchBinding
-    private lateinit var navController: NavController
+
+    //    private lateinit var navController: NavController
     private lateinit var viewModel: TripsConfigViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_trip_search)
         viewModel = ViewModelProvider(this)[TripsConfigViewModel::class.java]
-//        setupNav()
+        setupNav()
+    }
+
+    private fun setupNav() {
+        val navController = NavController(this)
+        NavigationUI.setupWithNavController(binding.bottomBookerNav, navController)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                //Within this view
+                R.id.tripSearchFragment -> {
+                    binding.bottomBookerNav.visibility = View.VISIBLE
+                }
+                controller.graph.startDestination -> binding.bottomBookerNav.visibility =
+                    View.VISIBLE
+                R.id.tripSearchResultsFragment -> {
+                    binding.bottomBookerNav.visibility = View.GONE
+                    val args = TripSearchResultsFragmentArgs.fromBundle(arguments!!)
+                    destination.label =
+                        "${args.localityName} ${R.string.text_label_to} ${args.destinationName}"
+                    binding.bookProgression.progress = 1
+                }
+                R.id.tripDetailsFragment -> {
+                    //TODO: Remove this and continue to payment
+                    binding.bottomBookerNav.visibility = View.VISIBLE
+                    binding.bookProgression.progress = 2
+                }
+
+            }
+        }
     }
 /*
     private fun setupNav() {

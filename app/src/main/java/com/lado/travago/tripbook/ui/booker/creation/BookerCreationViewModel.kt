@@ -30,7 +30,7 @@ class BookerCreationViewModel : ViewModel() {
     //FirebaseRepo utilities for db, signIn and cloud storage
     private val firestoreRepo = FirestoreRepo()
     private val storageRepo = StorageRepo()
-    private val authRepo = FirebaseAuthRepo()
+    val authRepo = FirebaseAuthRepo()
 
     //LiveData to know when a process is in loading state
     private val _onLoading = MutableLiveData(false)

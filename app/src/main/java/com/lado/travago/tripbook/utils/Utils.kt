@@ -1,6 +1,7 @@
 package com.lado.travago.tripbook.utils
 
 import android.graphics.Bitmap
+import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
@@ -86,10 +87,8 @@ object Utils {
      * @return the qrCode generated is returned as a bitmap image.
      *
      */
-    fun ticketQRCodeGenerator(qrCodeText: String): Bitmap? {
+    fun bookQRCodeGenerator(qrCodeText: String, requiredHeight: Int = 150, requiredWidth: Int = 150): Bitmap? {
         val result: BitMatrix
-        val requiredHeight = 150
-        val requiredWidth = 150
         val encryptedSeed = qrCodeEncryptor(qrCodeText)
         //Try to encode the qrSeed to QR code or generate an error
         try {
@@ -98,6 +97,7 @@ object Utils {
                 BarcodeFormat.QR_CODE, requiredHeight, requiredWidth, null
             )
         } catch (iae: IllegalArgumentException) {
+            Log.e("QRCODE", iae.message.toString())
             return null
         }
 

@@ -9,21 +9,26 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/book"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_book_header"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginEnd="2dp"
                 android:layout_marginBottom="1dp"
                 app:cardElevation="6dp"
                 app:layout_constraintBottom_toTopOf="@+id/card_book_info"
@@ -43,30 +48,19 @@
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         android:textSize="20sp"
-                        app:drawableEndCompat="@drawable/baseline_verified_24"
                         app:drawableTint="@color/colorPositiveButton"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/book_status_image"
                         app:layout_constraintStart_toEndOf="@+id/image_book_vip"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="7, 500 XAF" />
-
-                    <ImageView
-                        android:id="@+id/image_book_state"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/image_book_agency_logo"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/outline_schedule_24"
-                        app:tint="@color/quantum_grey" />
 
                     <ImageView
                         android:id="@+id/image_book_vip"
                         android:layout_width="24dp"
                         android:layout_height="0dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/image_book_state"
+                        app:layout_constraintStart_toEndOf="@+id/image_book_agency_logo"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/outline_diamond_20"
                         app:tint="@color/colorSecondaryDark" />
@@ -79,14 +73,26 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:srcCompat="@drawable/baseline_insert_photo_24" />
+
+                    <ImageView
+                        android:id="@+id/book_status_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/text_book_price"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/baseline_verified_24" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_book_info"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginEnd="2dp"
                 app:cardElevation="6dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -99,13 +105,12 @@
 
                     <ImageView
                         android:id="@+id/image_qr_code"
-                        android:layout_width="0dp"
-                        android:layout_height="200dp"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         app:layout_constraintBottom_toTopOf="@+id/text_book_destination"
                         app:layout_constraintEnd_toStartOf="@+id/text_book_owner"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/textDark"
                         tools:srcCompat="@drawable/baseline_qr_code_scanner_24" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -231,7 +236,9 @@
                 android:id="@+id/card_book_footer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginEnd="2dp"
                 android:layout_marginBottom="4dp"
                 app:cardElevation="6dp"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -15,7 +15,7 @@ import java.util.Collections.*
  */
 object AdminUtils {
     const val LOCAL_SERVER_FIREBASE_IP = "192.168.108.190"
-
+    //GITHUB token = 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
 
 //    Link-local IPv6 address:	fe80::1c0c:b74e:2833:c83a%2
 //    IPv4 address:	192.168.110.167

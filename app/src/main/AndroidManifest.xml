@@ -7,8 +7,6 @@
     <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <application
         android:fullBackupContent="@xml/backup_descriptor"
@@ -16,9 +14,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme.Dark"
+        android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup">
+
+        <activity
+            android:name=".ui.booker.book_panel.BooksActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.booker.book_panel.TripSearchActivity"
             android:exported="true">
@@ -29,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lado.travago.tripbook.ui.agency.config_panel.AgencyConfigActivity"
+            android:name=".ui.agency.config_panel.AgencyConfigActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,42 +42,43 @@
         <activity
             android:name=".ui.SplashActivity"
             android:theme="@style/SplashTheme" />
-        <activity android:name=".ui.agency.scanner_panel.AdminPanelActivity"
+        <activity
+            android:name=".ui.agency.scanner_panel.AdminPanelActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
-
         <activity
             android:name=".ui.administrator.AdminFunctionActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".ui.booker.creation.BookerCreationActivity"
             android:exported="true">
-             <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
-                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-        </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.PaymentActivity" /> <!-- Helps for screen orientation during barcode scanning -->
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:exported="true"
             android:screenOrientation="fullSensor"
-            tools:replace="screenOrientation"
-            android:exported="true">
-
-        </activity>
-        <activity android:name=".ui.BookerActivity" />
+            tools:replace="screenOrientation"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
