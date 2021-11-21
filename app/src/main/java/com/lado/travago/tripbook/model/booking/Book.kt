@@ -3,16 +3,10 @@ package com.lado.travago.tripbook.model.booking
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.model.Document
-import com.lado.travago.tripbook.model.admin.Journey
 import com.lado.travago.tripbook.model.admin.TimeModel
-import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
-import com.lado.travago.tripbook.utils.Utils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
-import javax.crypto.EncryptedPrivateKeyInfo
 import kotlin.random.Random
-import kotlin.random.asJavaRandom
 import kotlin.random.nextULong
 
 /**
@@ -99,6 +93,54 @@ data class Book(
         "departureTime" to departureTime.timeInSeconds,
         "generatedOn" to Timestamp.now()
     )
+
+    /**
+     * When a book is scanned, it can have the following states
+     */
+    enum class BookState {
+        OK,
+        EXPIRED,
+        SECOND_TIME,
+        NOT_THIS_BUS,
+        NOT_FOUND;
+
+//        fun state(bookDoc: DocumentSnapshot): BookState {
+//            when (bookDoc) {
+//                bookDoc.getString("")
+//                else ->
+//            }
+//
+//        }
+    }
+}
+
+data class BusOverview(
+    val townName: String,
+    val regionName: String,
+    val busCounts: Int,
+    val bookersCount: Int,
+    val scansCount: Int
+){
+
+    override fun hashCode(): Int {
+        var result = townName.hashCode()
+        result = 31 * result + regionName.hashCode()
+        result = 31 * result + busCounts
+        result = 31 * result + bookersCount
+        result = 31 * result + scansCount
+        return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as BusOverview
+
+        if (townName != other.townName) return false
+
+        return true
+    }
 }
 
 //TODO Info screen

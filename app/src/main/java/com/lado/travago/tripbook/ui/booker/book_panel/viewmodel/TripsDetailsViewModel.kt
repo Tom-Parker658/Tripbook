@@ -128,7 +128,7 @@ class TripsDetailsViewModel : ViewModel() {
      * @author Parkert805
      * @since 2021-10-31 UTC 01:19:00.00 AM
      * Creates the book in the bookers doc and the agency doc for that particular departure day
-     * Finally it tries to update the counts for the book number in the tripdc it self
+     * Finally it tries to update the counts for the book number in the tripdoc it self
      */
     suspend fun createBookInDB() = flow {
         emit(State.loading())
@@ -153,13 +153,16 @@ class TripsDetailsViewModel : ViewModel() {
                     firestoreRepo.db.collection("Bookers/${authRepo.currentUser!!.uid}/My_Books")
                         .document()
                 val agencyBookDocRef =
+                    //We save the book under .../#locality#/to/#destination#/book/bookID
                     firestoreRepo.db.document(
                         "OnlineTransportAgency/$agencyID/Books/${
                             Utils.formatDate(
                                 tripDateInMillis,
                                 "YYYY-MM-dd"
                             )
-                        }/Cameroon/$localityTownName/Books/${bookerBookRef.id}"
+                        }/Cameroon/$localityTownName/to/${
+                            book.bookMap["destinationName"]
+                        }/Books/${bookerBookRef.id}"
                     )
                 it.set(agencyBookDocRef, book.bookMap)
                 it.set(bookerBookRef, book.bookMap)
@@ -191,6 +194,7 @@ class TripsDetailsViewModel : ViewModel() {
                             }
                             is State.Loading -> _onLoading.value = true
                             is State.Success -> {
+                                //TODO: Navigate to confirmation page
                                 _toastMessage.value = "Congratulations!!!"
                                 _onLoading.value = false
                             }

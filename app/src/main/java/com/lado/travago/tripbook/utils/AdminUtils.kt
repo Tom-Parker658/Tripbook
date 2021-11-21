@@ -14,8 +14,15 @@ import java.util.Collections.*
  * contains utilities for the admin panel
  */
 object AdminUtils {
-    const val LOCAL_SERVER_FIREBASE_IP = "192.168.108.190"
+    const val LOCAL_SERVER_FIREBASE_IP = "192.168.236.200"
     //GITHUB token = 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
+//    Link-local IPv6 address:	fe80::ddc8:2129:1732:5645%2
+//    IPv4 address:	192.168.236.200
+//    IPv4 DNS servers:	192.168.236.52
+//    Manufacturer:	Microsoft
+//    Description:	Remote NDIS based Internet Sharing Device
+//    Driver version:	10.0.18362.1
+//    Physical address (MAC):	BA-EF-49-3C-EB-53
 
 //    Link-local IPv6 address:	fe80::1c0c:b74e:2833:c83a%2
 //    IPv4 address:	192.168.110.167

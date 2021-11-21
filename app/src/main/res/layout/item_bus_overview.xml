@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <!--        The listener to get the id of the current clicked item-->
+        <variable
+            name="clickListener"
+            type="com.lado.travago.tripbook.ui.recycler_adapters.BusOverviewClickListener" />
+
+        <variable
+            name="busOverview"
+            type="com.lado.travago.tripbook.model.booking.BusOverview" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_town_bus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!-- Title, secondary and supporting text -->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_enter"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:onClickListener="@{()-> clickListener.onClick(busOverview)}"
+                app:icon="@drawable/baseline_qr_code_scanner_24"
+                app:iconGravity="end|textStart"
+                app:layout_constraintBottom_toTopOf="@+id/text_scans_count"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_town"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/text_town"
+                android:layout_width="92dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/btn_enter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Yaounde" />
+
+            <TextView
+                android:id="@+id/text_region"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/text_town"
+                app:layout_constraintTop_toBottomOf="@+id/text_town"
+                tools:text=" Adamawa" />
+
+            <TextView
+                android:id="@+id/text_bookers_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="2dp"
+                android:textAllCaps="false"
+                android:textSize="12sp"
+                app:drawableStartCompat="@drawable/baseline_person_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/text_scans_count"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/text_buses_count"
+                app:layout_constraintTop_toBottomOf="@+id/text_region"
+                tools:text="25 000" />
+
+            <TextView
+                android:id="@+id/text_buses_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:textSize="12sp"
+                app:drawableStartCompat="@drawable/baseline_directions_bus_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/text_bookers_count"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="25" />
+
+            <TextView
+                android:id="@+id/text_scans_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:textSize="12sp"
+                app:drawableStartCompat="@drawable/baseline_qr_code_scanner_24"
+                app:drawableTint="@color/colorPositiveButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/text_bookers_count"
+                app:layout_constraintTop_toBottomOf="@+id/btn_enter"
+                tools:text="10 000" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

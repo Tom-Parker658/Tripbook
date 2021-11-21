@@ -14,7 +14,6 @@ import com.lado.travago.tripbook.R
  */
 class ScannerStatsFragment : Fragment() {
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

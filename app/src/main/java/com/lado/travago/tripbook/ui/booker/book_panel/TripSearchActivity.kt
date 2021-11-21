@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.lado.travago.tripbook.NavBookerCreationDirections
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityTripSearchBinding
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel
@@ -29,7 +28,7 @@ class TripSearchActivity : AppCompatActivity() {
     }
 
     private fun setupNav() {
-        val navController = NavController(this)
+        val navController = findNavController(R.id.trip_search_nav_host)
         NavigationUI.setupWithNavController(binding.bottomBookerNav, navController)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             when (destination.id) {
@@ -54,6 +53,11 @@ class TripSearchActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.trip_search_nav_host)
+        return navController.navigateUp()
     }
 /*
     private fun setupNav() {

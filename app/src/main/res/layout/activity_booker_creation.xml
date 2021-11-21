@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/nav_booker"
+            app:navGraph="@navigation/nav_booker_creation"
             tools:layout="@layout/fragment_booker_creation_final" />
 
         <LinearLayout

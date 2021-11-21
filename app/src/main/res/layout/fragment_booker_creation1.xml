@@ -15,10 +15,13 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/phone"
             style="@style/editTextStyle"
+            android:layout_marginBottom="32dp"
             android:hint="@string/text_e_hint_booker_creation_phone"
+            app:layout_constraintBottom_toTopOf="@+id/btn_send_sms"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/countryCode_picker"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5">
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/countryCode_picker">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -31,23 +34,26 @@
             android:id="@+id/countryCode_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
             app:ccp_autoDetectCountry="true"
             app:ccp_contentColor="@color/quantum_grey"
-            app:ccp_textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/phone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/phone" />
+            app:layout_constraintBottom_toTopOf="@+id/phone"
+            app:layout_constraintEnd_toEndOf="@+id/phone"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/phone"
+            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
         <ImageView
             android:id="@+id/imageView5"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/countryCode_picker"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed"
             app:srcCompat="@drawable/baseline_phone_24" />
 
@@ -58,9 +64,9 @@
             app:icon="@drawable/baseline_sms"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phone"
-            app:layout_constraintVertical_bias="0.18" />
+            app:layout_constraintTop_toBottomOf="@+id/phone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

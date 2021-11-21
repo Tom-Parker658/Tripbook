@@ -135,6 +135,7 @@
                     android:clickable="true"
                     app:layout_constraintBottom_toTopOf="@+id/fab_sort_trips"
                     app:layout_constraintEnd_toEndOf="@+id/fab_sort_trips"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/fab_sort_trips"
                     app:srcCompat="@drawable/baseline_settings_24"
                     tools:ignore="SpeakableTextPresentCheck" />

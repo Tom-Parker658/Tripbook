@@ -7,10 +7,16 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
@@ -45,18 +51,14 @@ class BookerCreationActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        val navController = findNavController(binding.bookerCreationNavHost.id)
+        val navController = NavHostController(this).
+
         NavigationUI.setupWithNavController(binding.bottomBookerNav, navController)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             when (destination.id) {
                 //Within this view
-                R.id.nav_booker_creation -> {
-                    if (viewModel.authRepo.currentUser == null) {
-                        controller.navigate(BookerCreation1FragmentDirections.actionBookerCreation1FragmentToBookerCreationFinalFragment())
-                    }
-                }
                 R.id.bookerCreation1Fragment -> {
-                    if (viewModel.authRepo.currentUser == null) {
+                    if (viewModel.authRepo.currentUser != null) {
                         controller.navigate(BookerCreation1FragmentDirections.actionBookerCreation1FragmentToBookerCreationFinalFragment())
                     }
                 }
@@ -68,6 +70,9 @@ class BookerCreationActivity : AppCompatActivity() {
                     if (viewModel.authRepo.currentUser == null)
                         binding.bottomBookerNav.visibility = View.GONE
                     else binding.bottomBookerNav.visibility = View.VISIBLE
+                }
+                else -> {
+                    Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
                 }
 
             }
