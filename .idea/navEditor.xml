@@ -620,18 +620,18 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="agencyJourneyFragment">
+                  <entry key="bookScanningFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="368" />
+                            <option name="x" value="454" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_agencyJourneyFragment_to_todayJourneyFragment">
+                            <entry key="action_fragmentBookScanning_to_busesToFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -641,7 +641,7 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="agencyStatsFragment">
+                  <entry key="busesFromFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -650,22 +650,19 @@
                             <option name="y" value="12" />
                           </Point>
                         </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="fragmentTicketScanPanel">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="454" />
-                            <option name="y" value="12" />
-                          </Point>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_busesFromFragment_to_busesToFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="scannerStatsFragment">
+                  <entry key="busesToFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -674,17 +671,19 @@
                             <option name="y" value="12" />
                           </Point>
                         </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="todayJourneyFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="233" />
-                            <option name="y" value="368" />
-                          </Point>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_busesToFragment_to_busesFromFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_busesToFragment_to_fragmentTicketScanPanel">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

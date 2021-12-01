@@ -13,7 +13,7 @@
         tools:context=".ui.agency.scanner_panel.BusesToFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_bus_overview"
+            android:id="@+id/recycler_bus_to_overview"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="1dp"
@@ -21,20 +21,95 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header_bus_to"
             tools:itemCount="10"
-            tools:listitem="@layout/item_bus_overview" />
+            tools:listitem="@layout/item_towns_overview" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_date"
+            android:id="@+id/fab_to_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/fab_toggle_bus_to_toolbox"
+            app:layout_constraintEnd_toEndOf="@+id/fab_toggle_bus_to_toolbox"
+            app:layout_constraintStart_toStartOf="@+id/fab_toggle_bus_to_toolbox"
+            app:srcCompat="@drawable/baseline_event_24"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_bus_to_span_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@+id/fab_to_date"
+            app:layout_constraintEnd_toEndOf="@+id/fab_to_date"
+            app:layout_constraintStart_toStartOf="@+id/fab_to_date"
+            app:srcCompat="@drawable/baseline_settings_24"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_sort_bus_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@+id/fab_bus_to_span_size"
+            app:layout_constraintEnd_toEndOf="@+id/fab_bus_to_span_size"
+            app:layout_constraintStart_toStartOf="@+id/fab_bus_to_span_size"
+            app:srcCompat="@drawable/baseline_sort_24"
+            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_toggle_bus_to_toolbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:clickable="true"
-            app:srcCompat="@drawable/baseline_event_24"
+            app:backgroundTint="@color/colorNeutralButton"
+            app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/baseline_visibility_off_24"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/header_bus_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/recycler_bus_to_overview"
+            app:layout_constraintEnd_toStartOf="@+id/text_selected_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="From Douala:" />
+
+        <ProgressBar
+            android:id="@+id/progress_bus_to_bar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recycler_bus_to_overview" />
+
+        <TextView
+            android:id="@+id/text_selected_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/recycler_bus_to_overview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="22/10/2021" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

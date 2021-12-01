@@ -13,7 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
-class ScannerPanelViewModel: ViewModel() {
+class ScannerPanelViewModel : ViewModel() {
     private var firestoreRepo: FirestoreRepo = FirestoreRepo()
     var authRepo: FirebaseAuthRepo = FirebaseAuthRepo()
 
@@ -29,12 +29,12 @@ class ScannerPanelViewModel: ViewModel() {
     /**
      * Get the current booker document
      */
-    suspend fun getCurrentBooker() {
+    suspend fun getCurrentScanner() {
         _retry.value = false
         //TODO: CHANGE ${authRepo.currentUser?.uid}, TO ${authRepo.currentUser!!.uid}", it must throw an exception
         //TODO: For testing
         firestoreRepo.getDocument(
-            "Bookers/${ authRepo.currentUser!!.uid }",
+            "Bookers/${authRepo.currentUser!!.uid}",
             Source.SERVER
         ).collect { bookerDocState ->
             when (bookerDocState) {

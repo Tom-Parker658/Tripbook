@@ -21,7 +21,6 @@
             name="tripTime"
             type="com.lado.travago.tripbook.model.admin.TimeModel" />
 
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

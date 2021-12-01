@@ -1,5 +1,6 @@
 package com.lado.travago.tripbook.repo.firebase
 
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.*
 import com.lado.travago.tripbook.model.enums.DbOperations
 import com.lado.travago.tripbook.repo.FirestoreTags
@@ -9,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
@@ -21,8 +21,9 @@ class FirestoreRepo {
     //TODO: Emulator
     init {
         val settings = FirebaseFirestoreSettings.Builder()
-            .setHost("${AdminUtils.LOCAL_SERVER_FIREBASE_IP}:8080")
+            .setHost("${AdminUtils.LOCAL_SERVER_FIREBASE_IP}:8081")
             .setSslEnabled(false)
+            .setPersistenceEnabled(false)
             .build()
         db.firestoreSettings = settings
     }
@@ -40,6 +41,35 @@ class FirestoreRepo {
 
     }
 
+    /**
+     * This is to update the database once a legit book has been scanned
+     */
+    fun updateScannedBook(
+        bookDoc: DocumentSnapshot,
+        scannerID: String,
+        scannedOn: Long
+    ) = flow {
+        emit(State.loading())
+
+        val agencyBookRef = bookDoc.reference
+        val bookerBookRef =
+            db.document("Bookers/${bookDoc.getString("bookerID")}/My_Books/${bookDoc.id}")
+
+        val update = mapOf(
+            "isScanned" to true,
+            "isTaken" to true,
+            "scannedBy" to scannerID,
+            "scannedAt" to scannedOn
+        )
+        val task = db.runTransaction {
+            it.update(agencyBookRef, update)
+            it.update(bookerBookRef, update)
+        }.await()
+
+        emit(State.success(Unit))
+    }.catch {
+        emit(State.failed(it as Exception))
+    }.flowOn(Dispatchers.IO)
 
     /**
      * Uses the .add() to add a document to a collection from the path. A random id is given to the

@@ -114,18 +114,45 @@ data class Book(
     }
 }
 
-data class BusOverview(
-    val townName: String,
-    val regionName: String,
-    val busCounts: Int,
-    val bookersCount: Int,
-    val scansCount: Int
-){
+/**
+ * @property fromLocality is to be called only for destinations overviews
+ */
+data class TownsOverview(
+    var travelDayString: String,
+    var townName: String,
+//    val regionName: String,
+    var busCounts: Int,
+    var bookersCount: Int,
+    var scansCount: Int,
+    var fromLocality: String? = null,
+    val destinations: MutableList<DocumentSnapshot> = emptyList<DocumentSnapshot>() as MutableList<DocumentSnapshot>
+) {
+    companion object {
+        //Creates a new overview
+        fun newBookOverView(
+            travelDay: String,
+            townName: String,
+            from: String?,
+            townDoc: DocumentSnapshot
+        ): TownsOverview {
+            val newBusCount = 1
+            val newScanCounts = if (townDoc.getBoolean("isScanned")!!) 1 else 0
+            val newDestinations = mutableListOf(townDoc)
+            return TownsOverview(
+                travelDayString = travelDay,
+                townName = townName,
+                busCounts = newBusCount,
+                bookersCount = 1,
+                scansCount = newScanCounts,
+                fromLocality = from,
+                destinations = newDestinations
+            )
+
+        }
+    }
 
     override fun hashCode(): Int {
         var result = townName.hashCode()
-        result = 31 * result + regionName.hashCode()
-        result = 31 * result + busCounts
         result = 31 * result + bookersCount
         result = 31 * result + scansCount
         return result
@@ -135,11 +162,34 @@ data class BusOverview(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as BusOverview
+        other as TownsOverview
 
+        //We only want to compare localityNames
         if (townName != other.townName) return false
 
         return true
+    }
+
+    fun insertNewTown(townDoc: DocumentSnapshot) {
+        bookersCount += 1
+        if (townDoc.getBoolean("isScanned")!!) scansCount += 1
+        //We check if this is the first time the destination of this book is appearing so that we can increment destination count
+        //Also we want to do this only for localities overviews
+        if (destinations.find { it.getString("destinationName") == townDoc.getString("destinationName") } == null && fromLocality == null)
+            busCounts += 1
+        destinations.add(townDoc)
+
+    }
+
+    fun reInsertExistingTown(townDoc: DocumentSnapshot) {
+        // In case the modification in the database was a scan
+        if (townDoc.getBoolean("isScanned")!!) scansCount += 1
+        else scansCount -= 1
+        destinations.withIndex().find {
+            it.value.id == townDoc.id
+        }?.let {
+            destinations[it.index] = townDoc
+        }
     }
 }
 

@@ -4,9 +4,13 @@
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ef1455bc6b6382d9929c4919cfb1b694/transformed/cardview-1.0.0/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ef1455bc6b6382d9929c4919cfb1b694/transformed/cardview-1.0.0/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ef1455bc6b6382d9929c4919cfb1b694/transformed/cardview-1.0.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ef1455bc6b6382d9929c4919cfb1b694/transformed/cardview-1.0.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ef1455bc6b6382d9929c4919cfb1b694/transformed/cardview-1.0.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ef1455bc6b6382d9929c4919cfb1b694/transformed/cardview-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.cardview/cardview/1.0.0/c9f3ce7ca74ad2c978230f4094ba6804c5166f9c/cardview-1.0.0-sources.jar!/" />
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.cardview/cardview/1.0.0/c9f3ce7ca74ad2c978230f4094ba6804c5166f9c/cardview-1.0.0-sources.jar!/" />
     </SOURCES>
   </library>

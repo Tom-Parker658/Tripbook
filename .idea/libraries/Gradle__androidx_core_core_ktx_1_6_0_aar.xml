@@ -4,9 +4,13 @@
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/bd2354afe48e4f6187ebca6f3a907883/transformed/jetified-core-ktx-1.6.0/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/bd2354afe48e4f6187ebca6f3a907883/transformed/jetified-core-ktx-1.6.0/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/bd2354afe48e4f6187ebca6f3a907883/transformed/jetified-core-ktx-1.6.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/bd2354afe48e4f6187ebca6f3a907883/transformed/jetified-core-ktx-1.6.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/bd2354afe48e4f6187ebca6f3a907883/transformed/jetified-core-ktx-1.6.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/bd2354afe48e4f6187ebca6f3a907883/transformed/jetified-core-ktx-1.6.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.core/core-ktx/1.6.0/37796e61aa8cca0d3d43d8fd4cfec054f9ef5d31/core-ktx-1.6.0-sources.jar!/" />
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.core/core-ktx/1.6.0/37796e61aa8cca0d3d43d8fd4cfec054f9ef5d31/core-ktx-1.6.0-sources.jar!/" />
     </SOURCES>
   </library>

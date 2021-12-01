@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.lado.travago.tripbook.R
-import com.lado.travago.tripbook.databinding.ItemBusOverviewBinding
-import com.lado.travago.tripbook.model.booking.BusOverview
+import com.lado.travago.tripbook.databinding.ItemTownsOverviewBinding
+import com.lado.travago.tripbook.model.booking.TownsOverview
 
 class BusOverviewAdapter(
     private val clickListener: BusOverviewClickListener,
-    private val res: Resources
-) : ListAdapter<BusOverview, BusOverviewViewHolder>(
+    private val res: Resources,
+) : ListAdapter<TownsOverview, BusOverviewViewHolder>(
     BusOverviewDiffUtils()
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BusOverviewViewHolder =
@@ -27,37 +27,41 @@ class BusOverviewAdapter(
 }
 
 class BusOverviewViewHolder private constructor(
-    val binding: ItemBusOverviewBinding,
-    val res: Resources
+    val binding: ItemTownsOverviewBinding,
+    val res: Resources,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(clickListener: BusOverviewClickListener, busOverview: BusOverview) {
+    fun bind(clickListener: BusOverviewClickListener, townsOverview: TownsOverview) {
+
         binding.clickListener = clickListener
-        binding.busOverview = busOverview
+        binding.busOverview = townsOverview
 
         //Information
-        binding.textTown.text = busOverview.townName
-        binding.textRegion.text = busOverview.regionName
+        binding.textTown.text = townsOverview.townName
+//        binding.textRegion.text = busOverview.regionName
 
 
-        if (busOverview.busCounts == 0) {
+        if (townsOverview.fromLocality != null) {
             //In this case, we on the trip
             binding.textBusesCount.visibility = View.GONE
             //We show the qr scan button
-            binding.btnEnter.icon = ResourcesCompat.getDrawable(res, R.drawable.baseline_qr_code_scanner_24, null)
+            binding.btnEnter.icon =
+                ResourcesCompat.getDrawable(res, R.drawable.baseline_qr_code_scanner_24, null)
         } else {
             //In this case, we are on the localities
-            binding.textBusesCount.text = busOverview.busCounts.toString()
+            binding.textBusesCount.text = townsOverview.busCounts.toString()
             //We show the continue button
-            binding.btnEnter.icon = ResourcesCompat.getDrawable(res, R.drawable.baseline_arrow_forward_24, null)
+            binding.btnEnter.icon =
+                ResourcesCompat.getDrawable(res, R.drawable.baseline_arrow_forward_24, null)
         }
 
-        binding.textBookersCount.text = busOverview.bookersCount.toString()
-        binding.textScansCount.text = busOverview.scansCount.toString()
+        binding.textBookersCount.text = townsOverview.bookersCount.toString()
+        binding.textScansCount.text = townsOverview.scansCount.toString()
+
     }
 
     companion object {
         fun from(parent: ViewGroup, res: Resources): BusOverviewViewHolder {
-            val binding = ItemBusOverviewBinding.inflate(
+            val binding = ItemTownsOverviewBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -68,13 +72,13 @@ class BusOverviewViewHolder private constructor(
 }
 
 class BusOverviewClickListener(val clickListener: (townName: String) -> Unit) {
-    fun onClick(busOverview: BusOverview) = clickListener(busOverview.townName)
+    fun onClick(townsOverview: TownsOverview) = clickListener(townsOverview.townName)
 }
 
-class BusOverviewDiffUtils : DiffUtil.ItemCallback<BusOverview>() {
-    override fun areItemsTheSame(oldItem: BusOverview, newItem: BusOverview) =
+class BusOverviewDiffUtils : DiffUtil.ItemCallback<TownsOverview>() {
+    override fun areItemsTheSame(oldItem: TownsOverview, newItem: TownsOverview) =
         oldItem.townName == newItem.townName
 
-    override fun areContentsTheSame(oldItem: BusOverview, newItem: BusOverview) =
+    override fun areContentsTheSame(oldItem: TownsOverview, newItem: TownsOverview) =
         oldItem == newItem
 }

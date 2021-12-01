@@ -8,6 +8,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.preference/preference/1.1.1/a65e127aa3d1be8feb41a53808f7b3f978503cca/preference-1.1.1-sources.jar!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.preference/preference/1.1.1/a65e127aa3d1be8feb41a53808f7b3f978503cca/preference-1.1.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

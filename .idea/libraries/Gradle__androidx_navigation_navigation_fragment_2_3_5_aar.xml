@@ -4,9 +4,13 @@
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3f73dcd5daf16237a250fd37051533ed/transformed/navigation-fragment-2.3.5/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3f73dcd5daf16237a250fd37051533ed/transformed/navigation-fragment-2.3.5/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3f73dcd5daf16237a250fd37051533ed/transformed/navigation-fragment-2.3.5/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3f73dcd5daf16237a250fd37051533ed/transformed/navigation-fragment-2.3.5/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3f73dcd5daf16237a250fd37051533ed/transformed/navigation-fragment-2.3.5/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3f73dcd5daf16237a250fd37051533ed/transformed/navigation-fragment-2.3.5/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.navigation/navigation-fragment/2.3.5/3622ca880ed637740e391a55d7cd5d0869285d29/navigation-fragment-2.3.5-sources.jar!/" />
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.navigation/navigation-fragment/2.3.5/3622ca880ed637740e391a55d7cd5d0869285d29/navigation-fragment-2.3.5-sources.jar!/" />
     </SOURCES>
   </library>

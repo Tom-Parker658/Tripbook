@@ -3,37 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_admin_panel"
-    app:startDestination="@id/fragmentTicketScanPanel">
-
+    app:startDestination="@id/busesFromFragment">
     <fragment
-        android:id="@+id/agencyJourneyFragment"
+        android:id="@+id/busesFromFragment"
         android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.BusesFromFragment"
-        android:label="fragment_agency_journey"
-        tools:layout="@layout/fragment_buses_from" >
+        android:label="BusesFromFragment"
+        tools:layout="@layout/fragment_buses_from">
         <action
-            android:id="@+id/action_agencyJourneyFragment_to_todayJourneyFragment"
-            app:destination="@id/todayJourneyFragment" />
+            android:id="@+id/action_busesFromFragment_to_busesToFragment"
+            app:destination="@id/busesToFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/busesToFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.BusesToFragment"
+        android:label="BusesToFragment"
+        tools:layout="@layout/fragment_buses_to">
+        <action
+            android:id="@+id/action_busesToFragment_to_fragmentTicketScanPanel"
+            app:destination="@id/bookScanningFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookScanningFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.BookScanningFragment"
+        android:label="fragment_ticket_scan_panel"
+        tools:layout="@layout/fragment_book_scanning">
+        <action
+            android:id="@+id/action_fragmentBookScanning_to_busesToFragment"
+            app:destination="@id/busesToFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/agencyStatsFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.AgencyStatsFragment"
-        android:label="fragment_agency_stats"
-        tools:layout="@layout/fragment_agency_stats" />
-
-    <fragment
-        android:id="@+id/scannerStatsFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.ScannerStatsFragment"
-        android:label="fragment_scanner_stats"
-        tools:layout="@layout/fragment_scanner_stats" />
-    <fragment
-        android:id="@+id/todayJourneyFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.TodayBusesFragment"
-        android:label="fragment_today_journey"
-        tools:layout="@layout/fragment_today_journey" />
-    <fragment
-        android:id="@+id/fragmentTicketScanPanel"
-        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.FragmentBookScanning"
-        android:label="fragment_ticket_scan_panel"
-        tools:layout="@layout/fragment_book_scanning" />
 </navigation>

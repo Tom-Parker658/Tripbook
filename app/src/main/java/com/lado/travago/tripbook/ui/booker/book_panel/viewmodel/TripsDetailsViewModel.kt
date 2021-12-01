@@ -160,10 +160,18 @@ class TripsDetailsViewModel : ViewModel() {
                                 tripDateInMillis,
                                 "YYYY-MM-dd"
                             )
-                        }/Cameroon/$localityTownName/to/${
-                            book.bookMap["destinationName"]
-                        }/Books/${bookerBookRef.id}"
+                        }/Cameroon/${bookerBookRef.id}"
                     )
+                /*firestoreRepo.db.document(
+                    "OnlineTransportAgency/$agencyID/Books/${
+                        Utils.formatDate(
+                            tripDateInMillis,
+                            "YYYY-MM-dd"
+                        )
+                    }/Cameroon/$localityTownName/to/${
+                        book.bookMap["destinationName"]
+                    }/Books/${bookerBookRef.id}"
+                )*/
                 it.set(agencyBookDocRef, book.bookMap)
                 it.set(bookerBookRef, book.bookMap)
                 count++

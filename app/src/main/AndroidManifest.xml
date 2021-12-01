@@ -19,25 +19,50 @@
         tools:ignore="AllowBackup">
 
         <activity
+            android:name=".ui.agency.scanner_panel.ScannerPanelActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".ui.booker.book_panel.BooksActivity"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.booker.book_panel.TripSearchActivity"
-            android:exported="true" />
+            android:exported="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+
+        </activity>
         <activity
             android:name=".ui.agency.config_panel.AgencyConfigActivity"
-            android:exported="true" />
+            android:exported="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
         <activity
             android:name=".ui.SplashActivity"
             android:theme="@style/SplashTheme" />
-        <activity
-            android:name=".ui.agency.scanner_panel.ScannerPanelActivity"
-            android:exported="true" />
+
         <activity
             android:name=".ui.administrator.AdminFunctionActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"/>
         <activity
             android:name=".ui.booker.creation.BookerCreationActivity"
             android:exported="true">

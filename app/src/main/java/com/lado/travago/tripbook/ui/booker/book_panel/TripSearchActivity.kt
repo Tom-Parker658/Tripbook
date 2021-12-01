@@ -24,36 +24,37 @@ class TripSearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_trip_search)
         viewModel = ViewModelProvider(this)[TripsConfigViewModel::class.java]
-        setupNav()
+//        setupNav()
+        //TODO: NAV
     }
 
-    private fun setupNav() {
-        val navController = findNavController(R.id.trip_search_nav_host)
-        NavigationUI.setupWithNavController(binding.bottomBookerNav, navController)
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            when (destination.id) {
-                //Within this view
-                R.id.tripSearchFragment -> {
-                    binding.bottomBookerNav.visibility = View.VISIBLE
-                }
-                controller.graph.startDestination -> binding.bottomBookerNav.visibility =
-                    View.VISIBLE
-                R.id.tripSearchResultsFragment -> {
-                    binding.bottomBookerNav.visibility = View.GONE
-                    val args = TripSearchResultsFragmentArgs.fromBundle(arguments!!)
-                    destination.label =
-                        "${args.localityName} ${R.string.text_label_to} ${args.destinationName}"
-                    binding.bookProgression.progress = 1
-                }
-                R.id.tripDetailsFragment -> {
-                    //TODO: Remove this and continue to payment
-                    binding.bottomBookerNav.visibility = View.VISIBLE
-                    binding.bookProgression.progress = 2
-                }
-
-            }
-        }
-    }
+//    private fun setupNav() {
+//        val navController = findNavController(R.id.trip_search_nav_host)
+//        NavigationUI.setupWithNavController(binding.bottomBookerNav, navController)
+//        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+//            when (destination.id) {
+//                //Within this view
+//                R.id.tripSearchFragment -> {
+//                    binding.bottomBookerNav.visibility = View.VISIBLE
+//                }
+//                controller.graph.startDestination -> binding.bottomBookerNav.visibility =
+//                    View.VISIBLE
+//                R.id.tripSearchResultsFragment -> {
+//                    binding.bottomBookerNav.visibility = View.GONE
+//                    val args = TripSearchResultsFragmentArgs.fromBundle(arguments!!)
+//                    destination.label =
+//                        "${args.localityName} ${R.string.text_label_to} ${args.destinationName}"
+//                    binding.bookProgression.progress = 1
+//                }
+//                R.id.tripDetailsFragment -> {
+//                    //TODO: Remove this and continue to payment
+//                    binding.bottomBookerNav.visibility = View.VISIBLE
+//                    binding.bookProgression.progress = 2
+//                }
+//
+//            }
+//        }
+//    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.trip_search_nav_host)

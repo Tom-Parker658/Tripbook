@@ -195,7 +195,6 @@ class TownsConfigFragment : Fragment() {
         viewModel.toastMessage.observe(viewLifecycleOwner) {
             if (it?.isNotBlank() == true) {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                Log.d("TownsConfig", it)
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "")
             }
         }

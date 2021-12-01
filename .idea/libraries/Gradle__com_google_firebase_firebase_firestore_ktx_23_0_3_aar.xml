@@ -7,8 +7,10 @@
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-firestore-ktx/23.0.3/edd04f9b56895fd2cc487c235c8325d25f3359f9/firebase-firestore-ktx-23.0.3-javadoc.jar!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-firestore-ktx/23.0.3/edd04f9b56895fd2cc487c235c8325d25f3359f9/firebase-firestore-ktx-23.0.3-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-firestore-ktx/23.0.3/9b9e45ed9db728e89ebffdbc69f949595c4e8a39/firebase-firestore-ktx-23.0.3-sources.jar!/" />
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-firestore-ktx/23.0.3/9b9e45ed9db728e89ebffdbc69f949595c4e8a39/firebase-firestore-ktx-23.0.3-sources.jar!/" />
     </SOURCES>
   </library>

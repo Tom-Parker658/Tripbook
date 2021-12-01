@@ -55,6 +55,7 @@
             android:id="@+id/bottom_booker_nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:itemHorizontalTranslationEnabled="true"
             app:labelVisibilityMode="auto"
             app:layout_constraintBottom_toBottomOf="parent"
