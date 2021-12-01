@@ -36,9 +36,5 @@ class ScannerPanelActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return super.onSupportNavigateUp()
-    }
-
 
 }

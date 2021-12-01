@@ -1,9 +1,6 @@
 package com.lado.travago.tripbook.utils
 
 
-import com.google.firebase.firestore.DocumentSnapshot
-import com.lado.travago.tripbook.model.admin.Destination
-import com.lado.travago.tripbook.model.admin.Journey
 import com.lado.travago.tripbook.model.enums.DataResources
 //import com.lado.travago.tripbook.model.enums.Region
 import java.util.*
@@ -57,17 +54,6 @@ object AdminUtils {
 
 
     /**
-     * Removes a particular predicate from all the list
-     */
-    fun Collection<String>.removePredicate(vararg predicate: String): Collection<String> {
-        var newList = emptyList<String>() as Collection<String>
-        this.forEach {
-            if (it !in predicate) newList += it
-        }
-        return newList
-    }
-
-    /**
      * Removes a predicate
      */
     /*   */
@@ -90,49 +76,6 @@ object AdminUtils {
             else -> Region.UNKNOWN
         }
 */
-
-
-    /**
-     *
-     * @author Tom Parkert
-     *
-     * This utility method takes in 2 locations names and return the actual road distance separating them.
-    It uses the string resource [DataResources.journeyDistanceList] table which contains all distances between cities in Cameroon.
-     * Finally we get the distance and from there using the 60km/h standard sped we can get the
-     * time taken
-     *
-     * @param currentJourney is the journey object which we wish to get the distance and time taken
-     * @param from is the [Destination] Place location of origin
-     * @param to is the [Destination] Place final destination from the origin
-     * @returns Pair<Float, Long> which is made up of the distance and travel time. Distance in Kms
-     * and time in Minutes
-     */
-    @Suppress("KDocUnresolvedReference")
-    fun distanceEvaluator(currentJourney: Journey): Pair<Int, Double> {
-        val from = currentJourney.location
-        val to = currentJourney.destination
-
-        //Average speed a bus can move
-        val averageCarSpeed = 60.0
-        //We query to find the parameter locations from the list if not, return "0"
-        val journeysDistanceList =
-            DataResources.journeyDistanceListOriginal.trimIndent().reader().buffered().readLines()
-        val journeyString = journeysDistanceList.find {
-            it.contains(
-                from.placeMap["name"].toString().replace(" ", "-"),
-                true
-            ) && it.contains(to.placeMap["name"].toString().replace(" ", "-"), true)
-        }
-        //Finally we get the distance in km part of the journey and convert it to an integer and return that
-        var distanceString = ""
-        journeyString?.forEach {
-            if ("0123456789".contains("$it")) distanceString += it
-        }
-
-        val distance = distanceString.toInt()
-        //We get the average time taken in hours and convert into minutes
-        val timeTakenInMinutes = distance / averageCarSpeed
-        return Pair(distance, timeTakenInMinutes)
-    }
 }
+
 

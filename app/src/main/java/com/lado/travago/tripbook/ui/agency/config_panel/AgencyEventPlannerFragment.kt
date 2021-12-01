@@ -195,7 +195,7 @@ class AgencyEventPlannerFragment : Fragment() {
                 timePicker()
             }
             eventBinding.editTextReason.editText!!.addTextChangedListener {
-                viewModel.setField(FieldTags.EVENT_REASON, it.toString() ?: "")
+                viewModel.setField(FieldTags.EVENT_REASON, it.toString())
             }
             when (eventBinding.chipGroupEventTypes.checkedChipId) {
                 eventBinding.chipDeletion.id -> viewModel.setField(

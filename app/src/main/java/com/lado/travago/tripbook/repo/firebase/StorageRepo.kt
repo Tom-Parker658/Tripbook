@@ -14,7 +14,7 @@ import kotlinx.coroutines.tasks.await
 import java.io.InputStream
 
 @ExperimentalCoroutinesApi
-class StorageRepo() {
+class StorageRepo {
     var storage = FirebaseStorage.getInstance().apply{
         //TODO: Emulator
         useEmulator(

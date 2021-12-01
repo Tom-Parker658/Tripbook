@@ -7,7 +7,6 @@ import com.lado.travago.tripbook.utils.Utils
 import java.util.*
 
 /**
- * This a [User] which books journeys
  *
  * @author Tom Parkert
  * [Booker] is a model which represents a person who wants to book a ticket.

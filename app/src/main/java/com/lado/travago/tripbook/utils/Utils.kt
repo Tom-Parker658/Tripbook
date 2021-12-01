@@ -8,6 +8,7 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
 import com.lado.travago.tripbook.model.booking.Book
 import com.lado.travago.tripbook.model.users.Booker
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
@@ -18,6 +19,7 @@ import kotlin.math.sqrt
 /**
  * Contains a set of utilities for our app_user .
  */
+@ExperimentalCoroutinesApi
 object Utils {
     private val oneDayInMillis: Long
         get() {
@@ -139,6 +141,7 @@ object Utils {
      * it is marked as invalid and QRCode becomes useless.
      * @param book is a Ticket object from which the travelTime and travelDay will be extracted.
      */
+    //TODO: Use this to check if a book is still fine
     fun isTicketExpired(book: Book): Boolean {
         val travelDay = book.travelDay
 
