@@ -1,12 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.journeyapps:zxing-android-embedded:4.2.0@aar">
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a5a8806bf6abedb6759f81191374d42e/transformed/jetified-zxing-android-embedded-4.2.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a5a8806bf6abedb6759f81191374d42e/transformed/jetified-zxing-android-embedded-4.2.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a5a8806bf6abedb6759f81191374d42e/transformed/jetified-zxing-android-embedded-4.2.0/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a5a8806bf6abedb6759f81191374d42e/transformed/jetified-zxing-android-embedded-4.2.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a5a8806bf6abedb6759f81191374d42e/transformed/jetified-zxing-android-embedded-4.2.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a5a8806bf6abedb6759f81191374d42e/transformed/jetified-zxing-android-embedded-4.2.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/49e8b84e95f84c26978d9953c141a46f/transformed/jetified-zxing-android-embedded-4.2.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/49e8b84e95f84c26978d9953c141a46f/transformed/jetified-zxing-android-embedded-4.2.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/49e8b84e95f84c26978d9953c141a46f/transformed/jetified-zxing-android-embedded-4.2.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

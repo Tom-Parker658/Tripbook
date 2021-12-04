@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
@@ -19,6 +20,8 @@ import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityBookerCreationBinding
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.ui.agency.config_panel.AgencyConfigActivity
+import com.lado.travago.tripbook.ui.booker.book_panel.BooksActivity
+import com.lado.travago.tripbook.ui.booker.book_panel.TripSearchActivity
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationViewModel.FieldTags
 import com.lado.travago.tripbook.utils.Utils.removeSpaces
 import kotlinx.coroutines.*
@@ -31,16 +34,82 @@ import java.util.concurrent.TimeUnit
 class BookerCreationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBookerCreationBinding
     private lateinit var viewModel: BookerCreationViewModel
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Restore all fields after configuration changes
         binding = DataBindingUtil.setContentView(this, R.layout.activity_booker_creation)
+        setupNavigation()
         initViewModel()
-//        setupNavigation()
-
         observeLiveData()
         showProgressBar()
+    }
+//    override fun onResume() {
+//        bottomNavigationView.selectedItemId = R.id.action_booker_info
+//        super.onResume()
+//    }
+
+    
+    override fun overridePendingTransition(enterAnim: Int, exitAnim: Int) {
+        super.overridePendingTransition(0, 0 )
+    }
+
+    private fun setupNavigation() {
+        bottomNavigationView = binding.bookerBottomNav.bookerBottomNav
+        bottomNavigationView.selectedItemId = R.id.action_booker_info
+        bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.action_trip_search -> {
+                    startActivity(
+                        Intent(this, TripSearchActivity::class.java)
+                    )
+                    true
+                }
+                R.id.myBooksFragment -> {
+                    startActivity(
+                        Intent(this, BooksActivity::class.java)
+                    )
+                    true
+                }
+                R.id.action_booker_wallet -> {
+                    //TODO: Wallet Panel
+                    true
+                }
+                R.id.action_help -> {
+                    //TODO: Help pages
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+        bottomNavigationView.setOnItemReselectedListener {
+            when (it.itemId) {
+                R.id.action_trip_search -> {
+                    false
+                }
+                R.id.myBooksFragment -> {
+                    false
+                }
+                R.id.action_booker_info -> {
+                    false
+                }
+                R.id.action_booker_wallet -> {
+                    //TODO: Wallet Panel
+                    false
+                }
+                R.id.action_help -> {
+                    //TODO: Help pages
+                    false
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+
     }
 
 //    private fun setupNavigation() {

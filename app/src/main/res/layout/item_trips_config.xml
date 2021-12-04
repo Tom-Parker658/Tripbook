@@ -108,7 +108,6 @@
                 android:layout_height="wrap_content"
                 android:checkable="true"
                 android:checked="false"
-                android:fontFamily="@font/aclonica"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_CHECK_VIP, changesMap)}"
                 android:text="@string/switch_vip_trip"
                 app:layout_constraintBottom_toBottomOf="parent"

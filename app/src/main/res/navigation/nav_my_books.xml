@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_my_books"
+    app:startDestination="@id/myBooksFragment">
+
+    <fragment
+        android:id="@+id/myBooksFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.book_panel.MyBooksFragment"
+        android:label="@string/frag_my_books"
+        tools:layout="@layout/fragment_my_books">
+        <action
+            android:id="@+id/action_myBooksFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookDetailsFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.book_panel.BookDetailsFragment"
+        tools:layout="@layout/fragment_book_details">
+        <argument
+            android:name="failedString"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

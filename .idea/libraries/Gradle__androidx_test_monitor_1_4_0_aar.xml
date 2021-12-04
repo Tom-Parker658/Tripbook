@@ -1,11 +1,10 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.test:monitor:1.4.0@aar">
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8eb0b69d3d82dd7b525d5a467fca8bdc/transformed/monitor-1.4.0/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8eb0b69d3d82dd7b525d5a467fca8bdc/transformed/monitor-1.4.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8eb0b69d3d82dd7b525d5a467fca8bdc/transformed/monitor-1.4.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8eb0b69d3d82dd7b525d5a467fca8bdc/transformed/monitor-1.4.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8eb0b69d3d82dd7b525d5a467fca8bdc/transformed/monitor-1.4.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/4fc1931e71c02a813ef3c5ac3509a58e/transformed/monitor-1.4.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/4fc1931e71c02a813ef3c5ac3509a58e/transformed/monitor-1.4.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/4fc1931e71c02a813ef3c5ac3509a58e/transformed/monitor-1.4.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.test/monitor/1.4.0/2770e38fa6d39242c2fa2e9d2ca3275b1d9debd8/monitor-1.4.0-javadoc.jar!/" />

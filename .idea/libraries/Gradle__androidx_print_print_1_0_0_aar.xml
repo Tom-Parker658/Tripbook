@@ -1,15 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.print:print:1.0.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/53e33d0bd5c361a65c68b8359eb5cfc3/transformed/print-1.0.0/annotations.zip!/" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/53e33d0bd5c361a65c68b8359eb5cfc3/transformed/print-1.0.0/annotations.zip!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/91328ad4f6c3bdc372e55cec2c72bc43/transformed/print-1.0.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/53e33d0bd5c361a65c68b8359eb5cfc3/transformed/print-1.0.0/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/53e33d0bd5c361a65c68b8359eb5cfc3/transformed/print-1.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/53e33d0bd5c361a65c68b8359eb5cfc3/transformed/print-1.0.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/53e33d0bd5c361a65c68b8359eb5cfc3/transformed/print-1.0.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/53e33d0bd5c361a65c68b8359eb5cfc3/transformed/print-1.0.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/91328ad4f6c3bdc372e55cec2c72bc43/transformed/print-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/91328ad4f6c3bdc372e55cec2c72bc43/transformed/print-1.0.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/91328ad4f6c3bdc372e55cec2c72bc43/transformed/print-1.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

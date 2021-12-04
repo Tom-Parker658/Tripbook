@@ -103,7 +103,6 @@
                 android:layout_height="wrap_content"
                 android:checkable="true"
                 android:checked="false"
-                android:fontFamily="@font/aclonica"
                 android:onClickListener="@{()-> clickListener.onClick(buttonTag.BUTTON_IS_ADMIN, scannerDoc)}"
                 android:text="@string/text_chip_scanner_config_admin"
                 app:layout_constraintBottom_toTopOf="@+id/text_number_scan"

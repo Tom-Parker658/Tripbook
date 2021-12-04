@@ -1,12 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.constraintlayout:constraintlayout:2.1.0@aar">
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d523365dbaade39730322d0e176dbd51/transformed/constraintlayout-2.1.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d523365dbaade39730322d0e176dbd51/transformed/constraintlayout-2.1.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d523365dbaade39730322d0e176dbd51/transformed/constraintlayout-2.1.0/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d523365dbaade39730322d0e176dbd51/transformed/constraintlayout-2.1.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d523365dbaade39730322d0e176dbd51/transformed/constraintlayout-2.1.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d523365dbaade39730322d0e176dbd51/transformed/constraintlayout-2.1.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/e30b43a3cae42db465c8215f8fabead1/transformed/constraintlayout-2.1.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/e30b43a3cae42db465c8215f8fabead1/transformed/constraintlayout-2.1.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/e30b43a3cae42db465c8215f8fabead1/transformed/constraintlayout-2.1.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

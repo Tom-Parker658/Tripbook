@@ -21,7 +21,7 @@ class FirestoreRepo {
     //TODO: Emulator
     init {
         val settings = FirebaseFirestoreSettings.Builder()
-            .setHost("${AdminUtils.LOCAL_SERVER_FIREBASE_IP}:8081")
+            .setHost("${AdminUtils.LOCAL_SERVER_FIREBASE_IP}:8080")
             .setSslEnabled(false)
             .setPersistenceEnabled(false)
             .build()

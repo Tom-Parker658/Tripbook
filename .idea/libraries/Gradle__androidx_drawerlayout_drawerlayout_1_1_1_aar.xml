@@ -1,16 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.drawerlayout:drawerlayout:1.1.1@aar">
     <ANNOTATIONS>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9eaec067c7493b6cfc56cb6bb6633089/transformed/drawerlayout-1.1.1/annotations.zip!/" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9eaec067c7493b6cfc56cb6bb6633089/transformed/drawerlayout-1.1.1/annotations.zip!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9b1c29385da3a68041cc193857a14762/transformed/drawerlayout-1.1.1/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9eaec067c7493b6cfc56cb6bb6633089/transformed/drawerlayout-1.1.1/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9eaec067c7493b6cfc56cb6bb6633089/transformed/drawerlayout-1.1.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9eaec067c7493b6cfc56cb6bb6633089/transformed/drawerlayout-1.1.1/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9eaec067c7493b6cfc56cb6bb6633089/transformed/drawerlayout-1.1.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9eaec067c7493b6cfc56cb6bb6633089/transformed/drawerlayout-1.1.1/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9eaec067c7493b6cfc56cb6bb6633089/transformed/drawerlayout-1.1.1/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9b1c29385da3a68041cc193857a14762/transformed/drawerlayout-1.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9b1c29385da3a68041cc193857a14762/transformed/drawerlayout-1.1.1/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9b1c29385da3a68041cc193857a14762/transformed/drawerlayout-1.1.1/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -1,11 +1,10 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.loader:loader:1.0.0@aar">
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/83ac802e3abf76d9fa22fc45e0844b53/transformed/loader-1.0.0/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/83ac802e3abf76d9fa22fc45e0844b53/transformed/loader-1.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/83ac802e3abf76d9fa22fc45e0844b53/transformed/loader-1.0.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/83ac802e3abf76d9fa22fc45e0844b53/transformed/loader-1.0.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/83ac802e3abf76d9fa22fc45e0844b53/transformed/loader-1.0.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/5f81fb0abb0532dad357ac9c2c3df7a1/transformed/loader-1.0.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/5f81fb0abb0532dad357ac9c2c3df7a1/transformed/loader-1.0.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/5f81fb0abb0532dad357ac9c2c3df7a1/transformed/loader-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -17,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripSearchBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
@@ -86,6 +85,9 @@ class TripSearchFragment : Fragment() {
         binding.editTextTime.editText!!.inputType = InputType.TYPE_NULL
     }
 
+
+    //TODO: Date picker not working
+
     private fun datePicker() {
         val titleText = "Trip Date"
         val calendar = Calendar.getInstance()//An instance of the current Calendar
@@ -108,7 +110,9 @@ class TripSearchFragment : Fragment() {
             viewModel.setField(FieldTags.TRIP_DATE, it)
             binding.editTextDates.editText!!.setText(Utils.formatDate(it, "EEEE, dd MMMM YYYY"))
         }
-        datePicker.showNow(childFragmentManager, "")
+
+        datePicker.showNow(childFragmentManager, "Date")
+
     }
 
 
@@ -153,6 +157,7 @@ class TripSearchFragment : Fragment() {
             )
         )
     }
+
     /**
      * Inorder to stop any loading blocking the ui
      */
@@ -179,13 +184,18 @@ class TripSearchFragment : Fragment() {
      */
     private fun adaptAutoCompleteNames() {
         val townNames = resources.getStringArray(R.array.localities).toList()
-        val adapter = ArrayAdapter(
+        val adapterLocality = ArrayAdapter(
             requireContext(),
             R.layout.item_dropdown_textview,
             townNames
         )
-        (binding.editTextLocality.editText as AutoCompleteTextView).setAdapter(adapter)
-        (binding.editTextDestination.editText as AutoCompleteTextView).setAdapter(adapter)
+        val adapterDestination = ArrayAdapter(
+            requireContext(),
+            R.layout.item_dropdown_textview,
+            townNames
+        )
+        (binding.editTextLocality.editText as AutoCompleteTextView).setAdapter(adapterLocality)
+        (binding.editTextDestination.editText as AutoCompleteTextView).setAdapter(adapterDestination)
     }
 
     /**
@@ -229,13 +239,15 @@ class TripSearchFragment : Fragment() {
                     binding.editTextDates.requestFocus()
                 }
                 else -> {
+                    val tripTitle = "${viewModel.locality} ${getString(R.string.text_label_to)} ${viewModel.destination}"
                     findNavController().navigate(
                         TripSearchFragmentDirections.actionTripSearchFragmentToTripSearchResultsFragment(
                             viewModel.locality,
                             viewModel.destination,
                             viewModel.tripDateInMillis,
                             viewModel.tripTime!!.hour,
-                            viewModel.tripTime!!.minutes
+                            viewModel.tripTime!!.minutes,
+                            tripTitle
                         )
                     )
                 }

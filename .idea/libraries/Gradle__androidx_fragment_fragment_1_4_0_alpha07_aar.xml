@@ -1,16 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.fragment:fragment:1.4.0-alpha07@aar">
     <ANNOTATIONS>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/17663c50e821160f0b3fd86bd6cc4845/transformed/fragment-1.4.0-alpha07/annotations.zip!/" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/17663c50e821160f0b3fd86bd6cc4845/transformed/fragment-1.4.0-alpha07/annotations.zip!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3a52f25e708e99bb819dba01e7003086/transformed/fragment-1.4.0-alpha07/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/17663c50e821160f0b3fd86bd6cc4845/transformed/fragment-1.4.0-alpha07/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/17663c50e821160f0b3fd86bd6cc4845/transformed/fragment-1.4.0-alpha07/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/17663c50e821160f0b3fd86bd6cc4845/transformed/fragment-1.4.0-alpha07/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/17663c50e821160f0b3fd86bd6cc4845/transformed/fragment-1.4.0-alpha07/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/17663c50e821160f0b3fd86bd6cc4845/transformed/fragment-1.4.0-alpha07/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/17663c50e821160f0b3fd86bd6cc4845/transformed/fragment-1.4.0-alpha07/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3a52f25e708e99bb819dba01e7003086/transformed/fragment-1.4.0-alpha07/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3a52f25e708e99bb819dba01e7003086/transformed/fragment-1.4.0-alpha07/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3a52f25e708e99bb819dba01e7003086/transformed/fragment-1.4.0-alpha07/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

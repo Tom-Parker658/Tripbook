@@ -1,12 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.hbb20:ccp:2.5.4@aar">
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0ae582552c7cedccc5c297d5f54846d0/transformed/jetified-ccp-2.5.4/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0ae582552c7cedccc5c297d5f54846d0/transformed/jetified-ccp-2.5.4/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0ae582552c7cedccc5c297d5f54846d0/transformed/jetified-ccp-2.5.4/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0ae582552c7cedccc5c297d5f54846d0/transformed/jetified-ccp-2.5.4/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0ae582552c7cedccc5c297d5f54846d0/transformed/jetified-ccp-2.5.4/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0ae582552c7cedccc5c297d5f54846d0/transformed/jetified-ccp-2.5.4/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/450d727d58e84e8316e0b07e70565fbe/transformed/jetified-ccp-2.5.4/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/450d727d58e84e8316e0b07e70565fbe/transformed/jetified-ccp-2.5.4/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/450d727d58e84e8316e0b07e70565fbe/transformed/jetified-ccp-2.5.4/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.hbb20/ccp/2.5.4/b964f99aea2b51414c2347c4ce5cc6d4d172d697/ccp-2.5.4-javadoc.jar!/" />

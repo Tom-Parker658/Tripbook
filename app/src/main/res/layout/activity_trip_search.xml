@@ -7,50 +7,30 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.booker.book_panel.TripSearchActivity">
 
-
-        <SeekBar
-            android:id="@+id/book_progression"
-            style="@style/Widget.AppCompat.SeekBar.Discrete"
-            android:layout_width="0dp"
+        <include
+            android:id="@+id/bottom_nav_trip_search"
+            layout="@layout/element_booker_bottom_nav"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:indeterminate="false"
-            android:max="4"
-            android:progress="0"
-            android:thumb="@drawable/baseline_directions_bus_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="bottom"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
-        <androidx.fragment.app.FragmentContainerView
+        <fragment
             android:id="@+id/trip_search_nav_host"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_booker_nav"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/book_progression"
-            app:navGraph="@navigation/nav_booker" />
+            app:navGraph="@navigation/nav_trip_search" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_booker_nav"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:itemHorizontalTranslationEnabled="true"
-            app:labelVisibilityMode="auto"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/booker_menu" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

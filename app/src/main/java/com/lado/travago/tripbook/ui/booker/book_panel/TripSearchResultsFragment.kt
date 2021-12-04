@@ -46,6 +46,7 @@ class TripSearchResultsFragment : Fragment() {
         super.onDetach()
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -63,6 +64,7 @@ class TripSearchResultsFragment : Fragment() {
 
         return binding.root
     }
+
 
     private fun searchListenerLauncher() {
         viewModel.tripsListener(requireActivity())
@@ -91,8 +93,6 @@ class TripSearchResultsFragment : Fragment() {
                 tripMinutes = it.tripMinutes
             )
         }
-        binding.headline.text =
-            "${viewModel.localityName} ${getString(R.string.text_label_to)} ${viewModel.destinationName}"
     }
 
     //To start the booker signUp or LogIn if the user hasn't logIn already
@@ -149,13 +149,13 @@ class TripSearchResultsFragment : Fragment() {
             if (it) {
                 binding.searchResultProgressBar.visibility = View.VISIBLE
                 //Makes the screen untouchable
-                requireActivity().window.setFlags(
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                )
+//                requireActivity().window.setFlags(
+//                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+//                )
             } else {
                 binding.searchResultProgressBar.visibility = View.GONE
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+//                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         }
         viewModel.toastMessage.observe(viewLifecycleOwner) {
