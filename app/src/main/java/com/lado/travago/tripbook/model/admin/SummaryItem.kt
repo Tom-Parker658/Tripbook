@@ -2,9 +2,9 @@ package com.lado.travago.tripbook.model.admin
 
 import android.content.res.Resources
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.utils.Utils
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
 
 data class SummaryItem(
@@ -20,21 +20,22 @@ data class SummaryItem(
 
     enum class SettingsItemState { OK, NOT_OK, PENDING }
 
+    @ExperimentalCoroutinesApi
     companion object {
         @JvmStatic
         fun getAdminScannerItems(resources: Resources) = listOf(
             SummaryItem(
                 "1",
-                resources.getString(R.string.text_label_agency_config_profile),
+                resources.getString(R.string.text_agency_details),
                 subTitle = "OK!",
-                logoResourceID = R.drawable.baseline_password_24,
+                logoResourceID = R.drawable.outline_agency_profile_24,
                 isMainItem = true,
                 state = null,
                 logoUrl = null
             ),
             SummaryItem(
                 "2",
-                resources.getString(R.string.text_label_agency_config_intervals),
+                resources.getString(R.string.text_take_off_periods),
                 "OK!",
                 R.drawable.baseline_departure_board_24,
                 state = null,
@@ -42,7 +43,7 @@ data class SummaryItem(
             ),
             SummaryItem(
                 "3",
-                resources.getString(R.string.text_label_agency_config_trips),
+                resources.getString(R.string.text_trips),
                 "OK!",
                 R.drawable.baseline_directions_bus_24,
                 state = null,
@@ -50,7 +51,7 @@ data class SummaryItem(
             ),
             SummaryItem(
                 "4",
-                resources.getString(R.string.text_label_agency_config_scanners),
+                resources.getString(R.string.text_scanners),
                 "OK!",
                 R.drawable.baseline_groups_24,
                 state = null,
@@ -58,7 +59,7 @@ data class SummaryItem(
             ),
             SummaryItem(
                 "5",
-                resources.getString(R.string.text_label_agency_config_events_planner),
+                resources.getString(R.string.text_event_planner),
                 "OK!",
                 R.drawable.baseline_calendar_today_24,
                 state = null,
@@ -66,7 +67,7 @@ data class SummaryItem(
             ),
             SummaryItem(
                 "6",
-                resources.getString(R.string.text_label_agency_config_money),
+                resources.getString(R.string.text_money),
                 "OK!",
                 R.drawable.baseline_payments_24,
                 state = null,
@@ -74,7 +75,7 @@ data class SummaryItem(
             ),
             SummaryItem(
                 "7",
-                resources.getString(R.string.text_label_agency_config_delete_agency),
+                resources.getString(R.string.text_delete_agency),
                 "OK!",
                 R.drawable.round_cancel_24,
                 state = null,
@@ -88,13 +89,14 @@ data class SummaryItem(
         ): List<SummaryItem> {
             val books = mutableListOf<SummaryItem>()
             snapshots.forEach {
-                val tripTime = TimeModel.fromSeconds(
-                    it.getLong("departureTime")!!.toInt()
+                val tripTime = TimeModel.fromTimeParameter(
+                    TimeModel.TimeParameter.MILLISECONDS,
+                    it.getLong("tripTimeInMillis")!!
                 )
                 val datePlusTime = "${
                     Utils.formatDate(
                         it.getLong("travelDateMillis")!!,
-                        "EEEE dd/MM/yyyy"
+                        "EEEE dd MM yyyy"
                     )
                 }, ${tripTime.formattedTime(TimeModel.TimeFormat.FORMAT_24H)}"
 
@@ -122,7 +124,7 @@ data class SummaryItem(
 
                 books += SummaryItem(
                     id = it.getString("failed")!!,//We get the qrCode string
-                    mainTitle = "${it.getString("localityName")!!} -> ${it.getString("destinationName")!!}",
+                    mainTitle = "${it.getString("tripLocalityName")!!} -> ${it.getString("tripDestinationName")!!}",
                     subTitle = datePlusTime,
                     logoResourceID = null,
                     state = state,

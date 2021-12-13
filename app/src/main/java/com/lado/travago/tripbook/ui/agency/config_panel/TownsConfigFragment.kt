@@ -202,7 +202,7 @@ class TownsConfigFragment : Fragment() {
             if (it) {
                 val searchBinding: ItemSearchFormBinding =
                     DataBindingUtil.inflate(layoutInflater, R.layout.item_search_form, null, false)
-                searchBinding.searchBar.hint = getString(R.string.text_label_town)
+                searchBinding.searchBar.hint = getString(R.string.text_town)
 
                 //Sets adapter for the autocomplete text view
                 val searchAdapter = ArrayAdapter(
@@ -317,8 +317,8 @@ class TownsConfigFragment : Fragment() {
                 setSingleChoiceItems(
                     arrayOf(
                         getString(R.string.text_sort_by_none),
-                        getString(R.string.text_sort_town_by_name),
-                        getString(R.string.text_sort_town_by_region)
+                        getString(R.string.text_sort_by_name_asc),
+                        getString(R.string.text_sort_by_region_asc)
                     ),
                     viewModel.sortCheckedItem
                 ) { dialog, which ->
@@ -352,7 +352,7 @@ class TownsConfigFragment : Fragment() {
         }
         binding.fabTownsSpanSize.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.text_dialog_title_span_size))
+                .setTitle(getString(R.string.text_items_per_row))
                 .setSingleChoiceItems(
                     arrayOf("1", "2", "3", "4", "5", "6"),
                     viewModel.spanSize.value!! - 1
@@ -406,10 +406,10 @@ class TownsConfigFragment : Fragment() {
             )
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
-                .setTitle(R.string.text_label_town)
+                .setTitle(R.string.text_town)
                 .setIcon(R.drawable.baseline_add_24)
                 .setView(recyclerBinding.root)
-                .setPositiveButton(R.string.text_dialog_btn_add) { dialog, _ ->
+                .setPositiveButton(R.string.text_btn_add) { dialog, _ ->
                     CoroutineScope(Dispatchers.Main).launch {
                         viewModel.commitToAddList(parentViewModel.bookerDoc.value!!.getString("agencyID")!!)
                     }

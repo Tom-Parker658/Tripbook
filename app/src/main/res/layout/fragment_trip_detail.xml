@@ -22,12 +22,10 @@
                 android:id="@+id/btn_proceed_to_pay"
                 style="@style/positiveButton"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="32dp"
                 android:text="Proceed to payment"
                 app:icon="@drawable/baseline_wallet_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/card_modify_details" />
 
@@ -35,11 +33,10 @@
                 android:id="@+id/card_trip_details"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 app:layout_constraintBottom_toTopOf="@+id/card_modify_details"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image_logo_agency"
                 app:layout_constraintVertical_chainStyle="packed">
@@ -50,6 +47,7 @@
 
                     <TextView
                         android:id="@+id/text_agency"
+                        style="@style/titleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -61,13 +59,11 @@
 
                     <TextView
                         android:id="@+id/text_locality"
+                        style="@style/titleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:drawablePadding="4dp"
                         android:textAlignment="center"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
                         app:drawableStartCompat="@drawable/baseline_my_location_24"
                         app:layout_constraintBottom_toTopOf="@+id/text_distances"
                         app:layout_constraintEnd_toStartOf="@+id/text_destination"
@@ -79,13 +75,11 @@
 
                     <TextView
                         android:id="@+id/text_destination"
+                        style="@style/titleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:drawablePadding="4dp"
                         android:textAlignment="center"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
                         app:drawableEndCompat="@drawable/baseline_directions_bus_24"
                         app:layout_constraintBottom_toBottomOf="@+id/text_locality"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
-                        android:text="@string/text_label_to"
+                        android:text="@string/text_to"
                         android:textAlignment="center"
                         app:layout_constraintBottom_toBottomOf="@+id/text_destination"
                         app:layout_constraintEnd_toStartOf="@+id/text_destination"
@@ -209,15 +203,13 @@
 
                     <TextView
                         android:id="@+id/text_total_price"
-                        android:layout_width="0dp"
+                        style="@style/titleStyle"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
-                        android:drawablePadding="4dp"
                         android:textAlignment="textEnd"
                         android:textColor="@color/colorPositiveButton"
-                        android:textSize="34sp"
-                        android:textStyle="bold|italic"
-                        app:drawableTint="@color/colorPositiveButton"
+                        android:textSize="32sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/numberPicker"
@@ -268,7 +260,7 @@
                         app:drawableStartCompat="@drawable/baseline_payments_24"
                         app:layout_constraintEnd_toEndOf="@+id/text_seats_times_unit_price"
                         app:layout_constraintStart_toStartOf="@+id/text_seats_times_unit_price"
-                        app:layout_constraintTop_toBottomOf="@+id/text_total_tickets_number" />
+                        app:layout_constraintTop_toTopOf="@+id/text_total_tickets_number" />
 
                     <TextView
                         android:id="@+id/text_seats_times_unit_price"

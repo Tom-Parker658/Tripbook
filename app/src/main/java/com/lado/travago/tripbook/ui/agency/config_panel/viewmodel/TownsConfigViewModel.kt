@@ -140,7 +140,7 @@ class TownsConfigViewModel : ViewModel() {
                     _agencyTownsList.value = snapshot.documents
                     addTownsNames()
                 } else {
-                    _toastMessage.value = hostActivity.getString(R.string.text_dialog_empty_content)
+                    _toastMessage.value = hostActivity.getString(R.string.text_empty_content)
                     //We clear the list completely if it is empty inorder to clear off recycler
                     _agencyTownsList.value?.clear()
                     //It may be because the admin scanner has removed all towns so we notify adapter

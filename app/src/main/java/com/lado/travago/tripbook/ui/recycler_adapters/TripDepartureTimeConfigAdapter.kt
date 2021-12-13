@@ -40,30 +40,32 @@ class TimeIntervalViewHolder private constructor(
 
         //We format the time in a 24h format and display it to the screen
         val fromTime =
-            TimeModel.from24Format(
-                doc.getLong("fromHour")!!.toInt(),
-                doc.getLong("fromMinutes")!!.toInt(),
-                null
+            TimeModel.fromTimeParameter(
+                TimeModel.TimeParameter.MILLISECONDS,
+                doc.getLong("fromTime")!!
             ).formattedTime(timeFormat)
 
         val toTime =
-            TimeModel.from24Format(
-                doc.getLong("toHour")!!.toInt(),
-                doc.getLong("toMinutes")!!.toInt(),
-                null
+            TimeModel.fromTimeParameter(
+                TimeModel.TimeParameter.MILLISECONDS,
+                doc.getLong("toTime")!!
             ).formattedTime(timeFormat)
-        val timeInterval ="$fromTime ${resources.getString(R.string.text_label_to)} $toTime"
+
+        val timeInterval = "$fromTime ${resources.getString(R.string.text_to)} $toTime"
         binding.textTimeInterval.text = timeInterval
         binding.textDepartureTime.text =
-            TimeModel.from24Format(
-                doc.getLong("departureHour")!!.toInt(),
-                doc.getLong("departureMinutes")!!.toInt(),
-                null
+            TimeModel.fromTimeParameter(
+                TimeModel.TimeParameter.MILLISECONDS,
+                doc.getLong("departureTime")!!
             ).formattedTime(timeFormat)
     }
 
     companion object {
-        fun from(parent: ViewGroup, timeFormat: TimeModel.TimeFormat, resources: Resources): TimeIntervalViewHolder {
+        fun from(
+            parent: ViewGroup,
+            timeFormat: TimeModel.TimeFormat,
+            resources: Resources
+        ): TimeIntervalViewHolder {
             val binding = ItemTimeIntervalBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,

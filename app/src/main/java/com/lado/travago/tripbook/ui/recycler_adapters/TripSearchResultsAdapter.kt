@@ -85,13 +85,13 @@ class TripSearchResultsViewHolder(
     }
 }
 
-class TripSearchResultsClickListener(val clickListener: (agencyId: String, tripDoc: DocumentSnapshot, tripTime: TimeModel, vip: Boolean) -> Unit) {
+class TripSearchResultsClickListener(val clickListener: (agencyId: String, agencyName: String, tripDoc: DocumentSnapshot, tripTime: TimeModel, vip: Boolean) -> Unit) {
     fun onClick(
         agencyDoc: DocumentSnapshot,
         tripDoc: DocumentSnapshot,
         tripTime: TimeModel,
         isVip: Boolean
-    ) = clickListener(agencyDoc.id, tripDoc, tripTime, isVip)
+    ) = clickListener(agencyDoc.id,agencyDoc.getString("agencyName")!!, tripDoc, tripTime, isVip)
 }
 
 class TripSearchResultDiffUtils :

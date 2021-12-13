@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.notification.NotificationFragment">
+
+
+        <ImageView
+            android:id="@+id/img_notif"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="4dp"
+            android:padding="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/text_notif_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:srcCompat="@drawable/baseline_login_24" />
+
+        <TextView
+            android:id="@+id/text_notif_title"
+            style="@style/titleStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/text_notif_message"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_notif"
+            tools:text="No Tripbook account found!" />
+
+        <TextView
+            android:id="@+id/text_notif_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:padding="4dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/btn_notif_positive"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_notif_title"
+            tools:text="You must create your account before booking trips. Tap continue to create your Tripbook account." />
+
+        <Button
+            android:id="@+id/btn_notif_negative"
+            style="@style/negativeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_notif_positive"
+            app:layout_constraintEnd_toStartOf="@+id/btn_notif_positive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_notif_positive"
+            tools:text="Delete" />
+
+        <Button
+            android:id="@+id/btn_notif_positive"
+            style="@style/positiveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:icon="@drawable/baseline_arrow_forward_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_notif_negative"
+            app:layout_constraintTop_toBottomOf="@+id/text_notif_message"
+            tools:text="Create my account" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

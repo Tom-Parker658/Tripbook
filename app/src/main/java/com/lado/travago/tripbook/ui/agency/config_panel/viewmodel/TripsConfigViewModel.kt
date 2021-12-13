@@ -171,7 +171,7 @@ class TripsConfigViewModel : ViewModel() {
                     _agencyTripList.value = snapshot.documents
                     addDestinationTownNames()
                 } else {
-                    _toastMessage.value = hostActivity.getString(R.string.text_dialog_empty_content)
+                    _toastMessage.value = hostActivity.getString(R.string.text_empty_content)
                     _notifyAdapterChanges.value = true
                     _agencyTripList.value?.clear()
                 }

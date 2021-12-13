@@ -68,7 +68,7 @@ class BusesFromFragment : Fragment() {
 
     private fun spanPicker() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.text_dialog_title_span_size)
+            .setTitle(R.string.text_items_per_row)
             .setSingleChoiceItems(
                 arrayOf("1", "2", "3", "4", "5", "6"),
                 viewModel.spanSizeLocality.value!! - 1

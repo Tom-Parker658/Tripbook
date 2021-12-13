@@ -19,7 +19,7 @@
             style="@style/positiveButton"
             android:layout_marginEnd="16dp"
             android:enabled="true"
-            android:text="@string/text_add_trips"
+            android:text="@string/text_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/name_text"
-            style="@style/headlineStyle"
+            style="@style/titleStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="18sp"

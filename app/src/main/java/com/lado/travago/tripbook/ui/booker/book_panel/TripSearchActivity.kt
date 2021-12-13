@@ -3,22 +3,30 @@ package com.lado.travago.tripbook.ui.booker.book_panel
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.LocaleList
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityTripSearchBinding
+import com.lado.travago.tripbook.model.enums.NotificationType
+import com.lado.travago.tripbook.ui.administrator.AdminFunctionActivity
+import com.lado.travago.tripbook.ui.agency.config_panel.AgencyConfigActivity
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationActivity
+import com.lado.travago.tripbook.ui.notification.NotificationFragmentArgs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
+import java.util.*
 
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
@@ -33,6 +41,7 @@ class TripSearchActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[TripsConfigViewModel::class.java]
 
         bottomNavView = binding.bottomNavTripSearch.bookerBottomNav
+        "".uppercase(Locale.getDefault())
 
         val navController = findNavController(R.id.trip_search_nav_host)
 
@@ -115,11 +124,17 @@ class TripSearchActivity : AppCompatActivity() {
                     true
                 }
                 R.id.action_booker_wallet -> {
-                    //TODO: Wallet Panel
+                    //TODO: Remove this, this is just to add things to the universal database
+//                    startActivity(
+//                        Intent(this, AdminFunctionActivity::class.java)
+//                    )
                     true
                 }
                 R.id.action_help -> {
                     //TODO: Help pages
+                    startActivity(
+                        Intent(this, AgencyConfigActivity::class.java)
+                    )
                     true
                 }
                 else -> {
@@ -128,66 +143,5 @@ class TripSearchActivity : AppCompatActivity() {
             }
         }
     }
-
-/*    private fun setupNav() {
-        val navController = findNavController(R.id.trip_search_nav_host)
-        NavigationUI.setupWithNavController(binding.bottomBookerNav, navController)
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            when (destination.id) {
-                //Within this view
-                R.id.tripSearchFragment -> {
-                    binding.bottomBookerNav.visibility = View.VISIBLE
-                }
-                controller.graph.startDestination -> binding.bottomBookerNav.visibility =
-                    View.VISIBLE
-                R.id.tripSearchResultsFragment -> {
-                    binding.bottomBookerNav.visibility = View.GONE
-                    val args = TripSearchResultsFragmentArgs.fromBundle(arguments!!)
-                    destination.label =
-                        "${args.localityName} ${R.string.text_label_to} ${args.destinationName}"
-                    binding.bookProgression.progress = 1
-                }
-                R.id.tripDetailsFragment -> {
-                    //TODO: Remove this and continue to payment
-                    binding.bottomBookerNav.visibility = View.VISIBLE
-                    binding.bookProgression.progress = 2
-                }
-
-            }
-        }
-    }*/
-
-/*
-    private fun setupNav() {
-        setSupportActionBar(binding.tripToolbar)
-        navController =
-            (supportFragmentManager.findFragmentById(R.id.my_trip_search_nav_host_fragment) as NavHostFragment).navController
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-
-        navController.addOnDestinationChangedListener { _, destination, arguments ->
-            when (destination.id) {
-                R.layout.fragment_trip_search -> {
-                    binding.tripToolbar.navigationIcon = null
-                    binding.tripToolbar.title = "Explore the Universe"
-                    binding.bookProgression.progress = 1
-                }
-                R.layout.fragment_trip_search_result -> {
-                    binding.tripToolbar.navigationIcon =
-                        resources.getDrawable(R.drawable.baseline_arrow_back_24)
-                    binding.tripToolbar.title =
-                        "${arguments?.get("location")}-${arguments?.get("destination")}, ${
-                            arguments?.get("distance")
-                        }"
-                    binding.bookProgression.progress = 2
-                }
-                R.layout.fragment_trip_detail -> {
-                    binding.tripToolbar.navigationIcon =
-                        resources.getDrawable(R.drawable.baseline_arrow_back_24)
-                    binding.bookProgression.progress = 3
-                }
-            }
-        }
-        setupActionBarWithNavController(navController, appBarConfiguration)
-    }*/
 
 }

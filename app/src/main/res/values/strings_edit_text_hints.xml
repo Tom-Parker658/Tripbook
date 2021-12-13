@@ -1,48 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- All hints for text views-->
-    <string name="text_e_hint_trips_config_standard_price">Standard Price</string>
-    <string name="text_e_hint_trips_config_vip_price">VIP Price</string>
+    <string name="text_standard_price">Standard Price</string>
+    <string name="text_vip_price">VIP Price</string>
 
     <!--    Booker Creation-->
-    <string name="text_e_hint_booker_creation_phone">Phone Number</string>
-    <string name="text_e_hint_booker_creation_occupation">Occupation</string>
-    <string name="text_e_hint_booker_creation_birthday">Birthday</string>
-    <string name="text_e_hint_booker_creation_name">Name</string>
-    <string name="text_e_hint_booker_creation_recovery_phone">Recovery phone</string>
-    <string name="text_e_hint_booker_creation_sms_code">Validation Code</string>
-    <string name="text_e_helper_booker_creation_sms_code">Enter 6 digit code from your sms</string>
+    <string name="text_phone_num">Phone Number</string>
+    <string name="text_occupation">Occupation</string>
+    <string name="text_birth_on">Birthday</string>
+    <string name="text_name">Name</string>
+    <string name="text_recovery_phone">Recovery phone</string>
+    <string name="text_sms_code">Validation Code</string>
+    <string name="text_helper_sms_code">Enter 6 digit code from your sms</string>
 
-    <string name="text_chip_booker_creation_sex_male">Male</string>
-    <string name="text_chip_booker_creation_sex_female">Female</string>
-    <string name="text_e_helper_booker_creation_locality">Tap the button to get your current location</string>
-    <string name="text_e_helper_booker_creation_email">abc@example.com</string>
-    <string name="text_helper_booker_creation_check_sms_at">Check SMS at:</string>
-    <string name="text_label_booker_creation_profile_photo">Profile Photo</string>
+    <string name="text_sex_male">Male</string>
+    <string name="text_sex_female">Female</string>
+    <string name="text_helper_email">abc@example.com</string>
+    <string name="text_helper_check_sms_at">Check SMS at</string>
+    <string name="text_profile_photo">Profile Photo</string>
 
     <!--    Trip Search-->
-    <string name="text_e_hint_trip_search_location">Current Town</string>
-    <string name="text_e_hint_trip_search_destination">Destination Town</string>
-    <string name="text_e_hint_trip_search_date">Travel Date</string>
-    <string name="text_e_hint_trip_search_time">Travel Time</string>
-    <string name="text_e_helper_trip_search_destination">Where are you going to?</string>
+    <string name="text_locality">Current Town</string>
+    <string name="text_destination">Destination Town</string>
+    <string name="text_date">Date</string>
+    <string name="text_time">Time</string>
+    <string name="text_helper_destination">Where are you going to?</string>
 <!--    <string name="text_e_helper_trip_search_time">What time?</string>-->
-    <string name="text_e_helper_trip_search_day">Which day?</string>
+    <string name="text_helper_day">Which day?</string>
 
     <!--    Agency Creation Info-->
-    <string name="text_e_agency_creation_label_name">Agency Name</string>
-    <string name="text_e_agency_creation_label_decree">Ministerial Decree Number</string>
-    <string name="text_e_agency_creation_label_phone_1">"Customer Assistance Phone "</string>
-    <string name="text_e_agency_creation_label_ceo">Agency\'s CEO Name</string>
-    <string name="text_e_agency_creation_label_creation_year">Agency\'s Creation year</string>
-    <string name="text_e_agency_creation_label_motto">Agency Motto or Slogan</string>
-    <string name="text_e_agency_creation_label_phone_2">*Customer Assistance Phone 2</string>
-    <string name="text_e_agency_creation_label_email">"Customer Assistance Email "</string>
-    <string name="text_e_agency_creation_label_bank_account">Bank Account Number</string>
-    <string name="text_e_agency_creation_label_mtn_momo">MTN MoMo Number</string>
-    <string name="text_e_agency_creation_label_orange_money">Orange Money Number</string>
-    <string name="text_e_agency_creation_btn_save">Save Profile</string>
-    <string name="text_e_helper_agency_creation_decree">Enter the official ministerial decree associated to this agency.</string>
+    <string name="text_min_decree">Ministerial Decree Number</string>
+    <string name="text_support_phone">"Customer Assistance Phone "</string>
+    <string name="text_ceo">CEO Name</string>
+    <string name="text_creation_year">Creation year</string>
+    <string name="text_motto">Agency Motto or Slogan</string>
+    <string name="text_support_email">"Customer Assistance Email "</string>
+    <string name="text_bank_account_num">Bank Account Number</string>
+    <string name="text_momo_num">MTN MoMo Number</string>
+    <string name="text_om_num">Orange Money Number</string>
+    <string name="text_helper_min_decree">Enter the official ministerial decree associated to this agency.</string>
 
     <!--Descriptions-->
     <string name="desc_user_image">Tap to change photo</string>
@@ -54,20 +50,18 @@
     <string name="text_e_helper_scanner_addition_phone">Enter the future scanner\'s phone number</string>
 
     <!--    Interval Creation-->
-    <string name="text_e_helper_optional">Optional!</string>
-    <string name="text_e_helper_interval_creation_name">e.g from: 5:00AM to:10:00AM is \'MORNING\'</string>
-    <string name="text_e_hint_interval_creation_from_time">From</string>
-    <string name="text_e_hint_interval_creation_to_time">To</string>
-    <string name="text_e_hint_interval_creation_departure_time">Departure Time</string>
-    <string name="text_e_hint_interval_creation_name">Name of the interval</string>
-    <string name="text_e_helper_interval_creation_reason">Short description about your event</string>
-    <string name="text_e_helper_interval_creation_departure_time">Make sure it is at least 30 minutes after the End time of the interval</string>
+    <string name="text_helper_optional">Optional!</string>
+    <string name="text_helper_interval_name">e.g from: 5:00AM to:10:00AM is \'MORNING\'</string>
+    <string name="text_start">From</string>
+    <string name="text_end">To</string>
+    <string name="text_departure_time">Departure Time</string>
+    <string name="text_interval_name">Name of the interval</string>
+    <string name="text_helper_event_reason">Short description about your event</string>
+    <string name="text_helper_departure_time">Make sure it is at least 30 minutes after the End time of the interval</string>
 
     <!--    Event creation-->
-    <string name="text_e_hint_event_creation_reason">Event Reason</string>
-    <string name="text_e_hint_event_creation_date">Event Starting Date</string>
-    <string name="text_e_hint_event_creation_time">Event Starting Time</string>
-    <string name="text_chip_event_creation_maintenance">Maintenance</string>
-    <string name="text_chip_event_creation_deletion">Agency Deletion</string>
+    <string name="text_reason">Reason</string>
+    <string name="text_maintenance">Maintenance</string>
+    <string name="text_delete_agency">Delete agency</string>
 
 </resources>

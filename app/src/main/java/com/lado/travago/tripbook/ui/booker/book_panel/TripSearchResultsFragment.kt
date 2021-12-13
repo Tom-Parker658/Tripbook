@@ -1,6 +1,5 @@
 package com.lado.travago.tripbook.ui.booker.book_panel
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,11 +16,13 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripSearchResultBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
+import com.lado.travago.tripbook.model.enums.NotificationType
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchResultsViewModel
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchResultsViewModel.*
+import com.lado.travago.tripbook.ui.notification.NotificationFragment
+import com.lado.travago.tripbook.ui.notification.NotificationFragmentArgs
 import com.lado.travago.tripbook.ui.recycler_adapters.TripSearchResultsAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.TripSearchResultsClickListener
-import com.lado.travago.tripbook.utils.contracts.BookerSignUpContract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -89,55 +90,34 @@ class TripSearchResultsFragment : Fragment() {
                 fromName = it.localityName,
                 toName = it.destinationName,
                 dateInMillis = it.tripDateInMillis,
-                tripHour = it.tripHour,
-                tripMinutes = it.tripMinutes
+                timeInMillis = it.tripTimeInMillis.toLong()
             )
         }
     }
 
-    //To start the booker signUp or LogIn if the user hasn't logIn already
-    private val bookerSignUpContract =
-        registerForActivityResult(BookerSignUpContract()) { content ->
-            viewModel.setField(
-                FieldTags.TOAST_MESSAGE, when (content) {
-                    Activity.RESULT_OK -> {
-                        "Welcome! Dear Booker, select your trip"
-                        removeListeners()
-                    }
-                    else -> "Something went wrong, try again now or later"
-                }
-            )
-
-        }
-
     private fun setRecycler(resultList: MutableList<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>>) {
-
         adapter = TripSearchResultsAdapter(
-            TripSearchResultsClickListener { agencyID, tripDoc, tripTime, isVip ->
-                //We check if he has an account or not
-                if (viewModel.authRepo.currentUser == null) {
-                    //Navigate to creation
-                    bookerSignUpContract.launch(
-                        Bundle.EMPTY
+            TripSearchResultsClickListener { agencyID, agencyName, tripDoc, tripTime, isVip ->
+                //Navigate to config and stop all snapshot listeners
+                val pageTitle = "${
+                    if (isVip) "(vip) " else ""
+                }${agencyName}"
+
+                removeListeners()
+                findNavController().navigate(
+                    TripSearchResultsFragmentDirections.actionTripSearchResultsFragmentToTripDetailsFragment(
+                        tripDoc.id,
+                        agencyID,
+                        isVip,
+                        viewModel.tripDateInMillis,
+                        viewModel.localityName,
+                        tripTime.fullTimeInMillis,
+                        pageTitle
                     )
-                } else {
-                    //Navigate to config and stop all snapshot listeners
-                    removeListeners()
-                    findNavController().navigate(
-                        TripSearchResultsFragmentDirections.actionTripSearchResultsFragmentToTripDetailsFragment(
-                            tripDoc.id,
-                            agencyID,
-                            isVip,
-                            tripTime.hour,
-                            tripTime.minutes,
-                            viewModel.tripDateInMillis,
-                            viewModel.localityName
-                        )
-                    )
-                }
+                )
             }
+
         )
-        adapter.notifyDataSetChanged()
         adapter.submitList(resultList)
         binding.recyclerSearchResult.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerSearchResult.adapter = adapter
@@ -146,17 +126,11 @@ class TripSearchResultsFragment : Fragment() {
 
     private fun liveDataObserver() {
         viewModel.onLoading.observe(viewLifecycleOwner) {
-            if (it) {
+            if (it)
                 binding.searchResultProgressBar.visibility = View.VISIBLE
-                //Makes the screen untouchable
-//                requireActivity().window.setFlags(
-//                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-//                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-//                )
-            } else {
+            else
                 binding.searchResultProgressBar.visibility = View.GONE
-//                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            }
+
         }
         viewModel.toastMessage.observe(viewLifecycleOwner) {
             if (it.isNotBlank()) {
@@ -166,8 +140,19 @@ class TripSearchResultsFragment : Fragment() {
         }
         viewModel.onNoSuchResults.observe(viewLifecycleOwner) {
             if (it) {
-                Log.d("NO RESULT", "NOT FOUND")
+                val args =
+                    NotificationFragmentArgs.Builder(
+                        NotificationType.EMPTY_RESULTS,
+                        "${viewModel.localityName} ${getString(R.string.text_to)} ${viewModel.destinationName}",
+                        R.layout.fragment_trip_search_result
+                    ).build()
+                        .toBundle()
+                findNavController().navigate(
+                    R.id.notificationFragment,
+                    args
+                )
             }
+
         }
 
         viewModel.searchResultsTripleList.observe(viewLifecycleOwner) {

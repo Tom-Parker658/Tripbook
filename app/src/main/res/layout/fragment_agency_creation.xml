@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="@string/text_label_agency_creation_logo"
+                android:text="@string/text_logo"
                 app:layout_constraintBottom_toTopOf="@+id/name"
                 app:layout_constraintEnd_toEndOf="@+id/logoField"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -47,7 +47,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_agency_creation_label_name"
+                android:hint="@string/text_name"
                 app:layout_constraintBottom_toTopOf="@+id/decree_number"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/motto"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_agency_creation_label_motto"
+                android:hint="@string/text_motto"
                 app:layout_constraintBottom_toTopOf="@+id/support_phone_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_of_CEO"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_agency_creation_label_ceo"
+                android:hint="@string/text_ceo"
                 app:layout_constraintBottom_toTopOf="@+id/creation_year"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +87,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/creation_year"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_agency_creation_label_creation_year"
+                android:hint="@string/text_creation_year"
                 app:layout_constraintBottom_toTopOf="@+id/motto"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -102,8 +102,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/decree_number"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_agency_creation_label_decree"
-                app:helperText="@string/text_e_helper_agency_creation_decree"
+                android:hint="@string/text_min_decree"
+                app:helperText="@string/text_helper_min_decree"
                 app:layout_constraintBottom_toTopOf="@+id/name_of_CEO"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -129,7 +129,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/support_phone_1"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_agency_creation_label_phone_1"
+                android:hint="@string/text_support_phone"
                 app:layout_constraintBottom_toTopOf="@+id/support_phone_2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/countryCode_picker_1"
@@ -157,8 +157,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/support_phone_2"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_agency_creation_label_phone_2"
-                app:helperText="@string/text_e_helper_optional"
+                android:hint="@string/text_support_phone"
+                app:helperText="@string/text_helper_optional"
                 app:layout_constraintBottom_toTopOf="@+id/support_email"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/countryCode_picker_2"
@@ -173,8 +173,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/support_email"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_agency_creation_label_email"
-                app:helperText="@string/text_e_helper_agency_creation_support_email"
+                android:hint="@string/text_support_email"
+                app:helperText="@string/text_helper_support_email"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/support_phone_2">
@@ -188,7 +188,7 @@
                 android:id="@+id/btn_next"
                 style="@style/positiveButton"
                 android:layout_marginTop="8dp"
-                android:text="@string/text_e_agency_creation_btn_save"
+                android:text="@string/text_save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/support_email" />

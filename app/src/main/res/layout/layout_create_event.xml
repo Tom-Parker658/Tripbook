@@ -18,9 +18,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_text_reason"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_hint_event_creation_reason"
+                android:hint="@string/text_reason"
                 app:counterEnabled="true"
-                app:helperText="@string/text_e_helper_interval_creation_reason"
+                app:helperText="@string/text_helper_event_reason"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chip_group_event_types">
@@ -35,7 +35,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_text_date"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_hint_event_creation_date"
+                android:hint="@string/text_start"
                 app:endIconDrawable="@drawable/baseline_event_24"
                 app:endIconMode="custom"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +50,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_text_time"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_hint_event_creation_time"
+                android:hint="@string/text_start"
                 app:endIconDrawable="@drawable/outline_schedule_24"
                 app:endIconMode="custom"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="@string/text_chip_event_creation_maintenance"
+                    android:text="@string/text_maintenance"
                     app:chipIcon="@drawable/baseline_engineering_24" />
 
                 <com.google.android.material.chip.Chip
@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="@string/text_chip_event_creation_deletion"
+                    android:text="@string/text_delete_agency"
                     app:chipIcon="@drawable/round_cancel_24"
                     app:checkedIconTint="@color/colorNegativeButton" />
             </com.google.android.material.chip.ChipGroup>

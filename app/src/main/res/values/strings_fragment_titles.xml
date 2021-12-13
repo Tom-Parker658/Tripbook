@@ -6,7 +6,7 @@
     <string name="frag_booker_creation_final">Personal Info</string>
 
     <!--    Trips Search-->
-    <string name="frag_trip_search" translatable="false">TripBook</string>
+    <string name="frag_trip_search" translatable="false">@string/app_name</string>
     <string name="frag_trip_details">Customize Your Book</string>
 
     <!--   Books and QR codes -->

@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentBookDetailsBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
+import com.lado.travago.tripbook.model.enums.NotificationType
 import com.lado.travago.tripbook.repo.firebase.FirebaseAuthRepo
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.MyBooksViewModel
+import com.lado.travago.tripbook.ui.notification.NotificationFragmentArgs
 import com.lado.travago.tripbook.utils.Utils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -56,7 +59,7 @@ class BookDetailsFragment : Fragment() {
                 when {
                     //Pending
                     !doc.getBoolean("isExpired")!! -> {
-                        it.setImageDrawable(resources.getDrawable(R.drawable.outline_schedule_24))
+                        it.setImageDrawable(resources.getDrawable(R.drawable.baseline_departure_board_24))
                         it.setColorFilter(resources.getColor(R.color.colorPositiveButton))
                     }
                     //Missed the trip
@@ -73,18 +76,33 @@ class BookDetailsFragment : Fragment() {
 
             //Book Body
             binding.textBookOwner.text = doc.getString("bookerName")
-            binding.textBookPhone.text = FirebaseAuthRepo().currentUser!!.phoneNumber
+            if (FirebaseAuthRepo().currentUser == null) {
+                //Navigate to creation
+                val args =
+                    NotificationFragmentArgs.Builder(
+                        NotificationType.ACCOUNT_NOT_FOUND,
+                        NotificationType.ACCOUNT_NOT_FOUND.toString()
+                    ).build()
+                        .toBundle()
+                findNavController().navigate(R.id.notificationFragment, args)
+
+            } else {
+                binding.textBookPhone.text = FirebaseAuthRepo().currentUser!!.phoneNumber
+            }
             binding.textBookAgency.text = doc.getString("agencyName")
             binding.textBookTripDate.text =
                 Utils.formatDate(doc.getLong("travelDateMillis")!!, "dd-MM-yyyy")
             binding.textBookTripTime.text =
-                TimeModel.fromSeconds(doc.getLong("departureTime")!!.toInt())
+                TimeModel.fromTimeParameter(
+                    TimeModel.TimeParameter.MILLISECONDS,
+                    doc.getLong("tripTimeInMillis")!!
+                )
                     .formattedTime(TimeModel.TimeFormat.FORMAT_24H)
-            binding.textBookLocality.text = doc.getString("localityName")
-            binding.textBookDestination.text = doc.getString("destinationName")
+            binding.textBookLocality.text = doc.getString("tripLocalityName")
+            binding.textBookDestination.text = doc.getString("tripDestinationName")
 
             //Booker Footer
-            binding.textBookTripbook.text = "TripBook"
+            binding.textBookTripbook.setText(R.string.app_name)
             val generatedOnText = "Generated On: ${
                 doc.getTimestamp("generatedOn")!!.toDate()
             }"

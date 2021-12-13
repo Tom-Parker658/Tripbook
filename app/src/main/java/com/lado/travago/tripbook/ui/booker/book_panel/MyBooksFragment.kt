@@ -77,7 +77,7 @@ class MyBooksFragment : Fragment() {
         }
         binding.chipBookFilterDepartureDate.setOnClickListener {
             if ((it as Chip).isChecked)
-                viewModel.sortBooks("travelDateMillis")
+                viewModel.sortBooks("tripDateInMillis")
             else if (binding.chipBookSortOptions.checkedChipIds.isEmpty()) viewModel.clearFilters()
         }
         binding.chipBookFilterDistance.setOnClickListener {
@@ -225,18 +225,18 @@ class MyBooksFragment : Fragment() {
                     )
                         viewModel.searchBooks {
                             it.whereEqualTo(
-                                "localityName",
+                                "tripLocalityName",
                                 searchBinding.editTextLocality.editText!!.toString()
                             )
                             it.whereEqualTo(
-                                "destinationName",
+                                "tripDestinationName",
                                 searchBinding.editTextDestination.editText!!.toString()
                             )
                         }
                     else if (searchBinding.editTextLocality.editText!!.toString().isNotBlank())
                         viewModel.searchBooks {
                             it.whereEqualTo(
-                                "localityName",
+                                "tripLocalityName",
                                 searchBinding.editTextLocality.editText!!.toString()
                             )
                         }
@@ -245,7 +245,7 @@ class MyBooksFragment : Fragment() {
                     )
                         viewModel.searchBooks {
                             it.whereEqualTo(
-                                "destinationName",
+                                "tripDestinationName",
                                 searchBinding.editTextDestination.editText!!.toString()
                             )
                         }
@@ -271,7 +271,7 @@ class MyBooksFragment : Fragment() {
         picker.addOnPositiveButtonClickListener { selectedDate ->
             CoroutineScope(Dispatchers.Main).launch {
                 viewModel.searchBooks {
-                    it.whereEqualTo("travelDateMillis", selectedDate)
+                    it.whereEqualTo("tripDateInMillis", selectedDate)
                 }
             }
         }
@@ -288,12 +288,12 @@ class MyBooksFragment : Fragment() {
             CoroutineScope(Dispatchers.Main).launch {
                 if (datePair.first >= datePair.second)
                     viewModel.searchBooks {
-                        it.whereLessThanOrEqualTo("travelDateMillis", datePair.first)
-                        it.whereGreaterThanOrEqualTo("travelDateMillis", datePair.second)
+                        it.whereLessThanOrEqualTo("tripDateInMillis", datePair.first)
+                        it.whereGreaterThanOrEqualTo("tripDateInMillis", datePair.second)
                     }
                 else viewModel.searchBooks {
-                    it.whereLessThanOrEqualTo("travelDateMillis", datePair.second)
-                    it.whereGreaterThanOrEqualTo("travelDateMillis", datePair.first)
+                    it.whereLessThanOrEqualTo("tripDateInMillis", datePair.second)
+                    it.whereGreaterThanOrEqualTo("tripDateInMillis", datePair.first)
                 }
             }
         }

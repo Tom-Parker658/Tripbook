@@ -1,13 +1,13 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme.Dark" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="AppTheme.Dark" parent="Theme.MaterialComponents">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorSurface">#6C6868</item>
         <item name="fontFamily">@font/montserrat</item>
         <item name="font">@font/montserrat</item>
+        <item name="android:textColor">#FFFFFF</item>
     </style>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
@@ -17,6 +17,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="fontFamily">@font/montserrat</item>
         <item name="font">@font/montserrat_bold</item>
+        <item name="android:textColor">@color/textDark</item>
     </style>
 
     <!--Style for TextLayoutInput-->
@@ -63,55 +64,70 @@
         <item name="android:textSize">16sp</item>
     </style>
     <!--Style for headlines-->
-    <style name="headlineStyle">
+    <style name="titleStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textAlignment">center</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
     </style>
+
+    <style name="messageStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/montserrat</item>
+    </style>
+
+<!--    Chips-->
+    <style name="chipsGroup" parent="Widget.MaterialComponents.ChipGroup">
+        <item name="fontFamily">@font/montserrat</item>
+        <item name="font">@font/montserrat</item>
+    </style>
+
+    <style name="chipButtons">
+        <item name="android:checkable">true</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
     <!--next and previous Button styles-->
-    <style name="navButtonStyles" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+    <style name="navButtonStyles" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">8dp</item>
         <item name="backgroundTint">@color/colorAccent</item>
         <item name="iconPadding">8dp</item>
-        <item name="iconTintMode">src_in</item>
     </style>
 
-<!--    Positive button-->
-    <style name="positiveButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+    <!--    Positive button-->
+    <style name="positiveButton" parent="Widget.MaterialComponents.Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">8dp</item>
         <item name="backgroundTint">@color/colorPositiveButton</item>
         <item name="icon">@drawable/baseline_check_circle_24</item>
-        <item name="iconPadding">8dp</item>
-        <item name="iconTintMode">src_in</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:includeFontPadding">true</item>
+        <item name="iconGravity">textEnd</item>
     </style>
-<!--    Negative button-->
-    <style name="negativeButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+    <!--    Negative button-->
+    <style name="negativeButton" parent="Widget.MaterialComponents.Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">8dp</item>
         <item name="backgroundTint">@color/colorNegativeButton</item>
         <item name="icon">@drawable/round_cancel_24</item>
-        <item name="iconPadding">8dp</item>
-        <item name="iconTintMode">src_in</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="iconGravity">textEnd</item>
     </style>
-<!--    Neutral button-->
-    <style name="neutralButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+    <!--    Neutral button-->
+    <style name="neutralButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">8dp</item>
-        <item name="backgroundTint">@color/quantum_grey</item>
-        <item name="iconPadding">8dp</item>
-        <item name="iconTintMode">src_in</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="infoTextStyle">
@@ -153,8 +169,6 @@
         <item name="fontFamily">@font/montserrat</item>
         <item name="font">@font/montserrat</item>
     </style>
-
-
 
     <color name="textDark">#000000</color>
 </resources>

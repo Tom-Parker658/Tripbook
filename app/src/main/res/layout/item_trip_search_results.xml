@@ -51,10 +51,9 @@
                     android:id="@+id/verified_bitmap"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/agency_logo"
-                    app:layout_constraintStart_toStartOf="@+id/agency_logo"
-                    app:layout_constraintTop_toBottomOf="@+id/agency_logo"
+                    app:layout_constraintBottom_toBottomOf="@+id/text_agency_name"
+                    app:layout_constraintStart_toEndOf="@+id/text_agency_name"
+                    app:layout_constraintTop_toTopOf="@+id/text_agency_name"
                     app:srcCompat="@drawable/baseline_verified_24"
                     app:tint="@color/colorPositiveButton" />
 
@@ -69,10 +68,10 @@
 
                 <TextView
                     android:id="@+id/text_agency_name"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textAppearance="@style/titleStyle"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/ratingBar"
@@ -97,16 +96,15 @@
                 <Button
                     android:id="@+id/btn_normal"
                     style="@style/positiveButton"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:onClickListener="@{() -> clickListener.onClick(agencyDoc, tripDoc, tripTime,  false)}"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
                     app:icon="@drawable/baseline_payments_24"
                     app:layout_constraintEnd_toStartOf="@+id/btn_vip"
-                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintStart_toEndOf="@+id/agency_logo"
                     app:layout_constraintTop_toBottomOf="@+id/ratingBar"
-                    tools:text="4, 500FCFA" />
+                    tools:text="4 500 FCFA" />
 
                 <TextView
                     android:id="@+id/text_agency_motto"
@@ -118,39 +116,31 @@
                     android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_vip"
                     tools:text="Your comfort, Our Priority!" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_vip"
                     style="@style/positiveButton"
-                    android:layout_width="0dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:drawableStart="@drawable/baseline_vip_24"
+                    android:layout_width="wrap_content"
                     android:onClickListener="@{() -> clickListener.onClick(agencyDoc, tripDoc, tripTime, true)}"
-                    android:textSize="12sp"
                     app:backgroundTint="@color/vip"
                     app:icon="@drawable/baseline_vip_24"
                     app:layout_constraintBottom_toBottomOf="@+id/btn_normal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_normal"
                     app:layout_constraintTop_toTopOf="@+id/btn_normal"
-                    tools:text="6 125 FCFA" />
+                    tools:text="16 125 FCFA" />
 
                 <TextView
                     android:id="@+id/text_interval_departure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorNegativeButton"
                     android:textSize="16sp"
-                    android:textStyle="bold|italic"
-                    app:drawableStartCompat="@drawable/outline_schedule_24"
+                    app:drawableStartCompat="@drawable/baseline_departure_board_24"
                     app:drawableTint="@color/colorNegativeButton"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/text_agency_motto"
-                    app:layout_constraintHorizontal_bias="0.16"
-                    app:layout_constraintStart_toEndOf="@+id/verified_bitmap"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_normal"
+                    app:layout_constraintStart_toStartOf="parent"
                     tools:text=" 22 : 35 " />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

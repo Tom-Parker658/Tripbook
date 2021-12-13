@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyConfigCenterBinding
 import com.lado.travago.tripbook.model.admin.SummaryItem
@@ -77,27 +76,27 @@ class AgencyConfigCenterFragment : Fragment() {
     private fun handleNavClicks(it: SummaryItem) {
         when (it.mainTitle) {
             // Trips
-            getString(R.string.text_label_agency_config_trips) -> findNavController().navigate(
+            getString(R.string.text_trips) -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTownsConfigFragment()
             )
             // Agency Profile
-            getString(R.string.text_label_agency_config_profile) -> findNavController().navigate(
+            getString(R.string.text_agency_details) -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyCreationFragment()
             )
             // Money
-            getString(R.string.text_label_agency_config_money) -> {
+            getString(R.string.text_money) -> {
                 //TODO: Payment Modules
             }
             // Scanners
-            getString(R.string.text_label_agency_config_scanners) -> findNavController().navigate(
+            getString(R.string.text_scanners) -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToScannerConfigFragment()
             )
             //Events
-            getString(R.string.text_label_agency_config_events_planner) -> findNavController().navigate(
+            getString(R.string.text_event_planner) -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyEventPlannerFragment()
             )
             //Intervals
-            getString(R.string.text_label_agency_config_intervals) -> findNavController().navigate(
+            getString(R.string.text_take_off_periods) -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTripDepartureTimeConfigFragment()
             )
         }

@@ -173,7 +173,6 @@ class BookerCreationViewModel : ViewModel() {
                         storageState.exception.handleError { /**TODO: Handle Error lambda*/ }
                 }
                 is State.Success -> {
-                    _toastMessage.value = "FireStorage OK! link =${storageState.data}"
                     photoUrl = storageState.data
                     //The scanner map as a booker
                     val booker = Booker(
@@ -195,7 +194,7 @@ class BookerCreationViewModel : ViewModel() {
                             is State.Success -> {
                                 _toastMessage.value = "Welcome!"
                                 _onBookerCreated.value = true
-                                _onBookerCreated.value = false
+
                             }
                             is State.Loading -> _onLoading.value = true
                             is State.Failed -> {
@@ -221,7 +220,6 @@ class BookerCreationViewModel : ViewModel() {
         authRepo.signInWithPhoneAuthCredential(phoneCredential).collect { authState ->
             when (authState) {
                 is State.Success -> {
-                    _toastMessage.value = "Booker phone auth succeeded!"
                     //Get id from created user
                     bookerGeneratedID = authState.data.uid
                     //Checks if the booker is  logging-in or signing-up

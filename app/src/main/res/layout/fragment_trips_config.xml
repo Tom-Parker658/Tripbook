@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/text_master_label"
-            style="@style/headlineStyle"
+            style="@style/titleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/recycler_trips"
@@ -147,7 +147,7 @@
             android:id="@+id/btn_trip_save"
             style="@style/positiveButton"
             android:layout_marginBottom="16dp"
-            android:text="@string/text_btn_save"
+            android:text="@string/text_save"
             app:layout_constraintBottom_toBottomOf="@+id/recycler_trips"
             app:layout_constraintEnd_toEndOf="@+id/recycler_trips"
             app:layout_constraintStart_toStartOf="@+id/recycler_trips"

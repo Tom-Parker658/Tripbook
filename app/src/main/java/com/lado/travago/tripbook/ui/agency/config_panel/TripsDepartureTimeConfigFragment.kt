@@ -84,15 +84,15 @@ class TripsDepartureTimeConfigFragment : Fragment() {
         binding.fabTimeFormat.setOnClickListener {
             //To switch time format from 24 to 12 or 12 to 24
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.text_title_trip_interval_time_format))
+                .setTitle(getString(R.string.text_pick_time))
                 .setSingleChoiceItems(
                     arrayOf(
-                        getString(R.string.text_trip_interval_24_h_format),
-                        getString(R.string.text_trip_interval_12_h_format)
+                        ""//TODO: Time format
                     ),
                     when (viewModel.timeFormat.value!!) {
                         TimeModel.TimeFormat.FORMAT_24H -> 0
                         TimeModel.TimeFormat.FORMAT_12H -> 1
+                        else -> 2//TODO: Remove
                     }
                 ) { dialogInterface, index ->
                     when (index) {
@@ -117,7 +117,7 @@ class TripsDepartureTimeConfigFragment : Fragment() {
         }
         binding.fabSettingsSpan.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.text_dialog_title_span_size)
+                .setTitle(R.string.text_items_per_row)
                 .setSingleChoiceItems(
                     arrayOf("1", "2", "3", "4", "5", "6"),
                     viewModel.spanSize.value!! - 1
@@ -249,15 +249,15 @@ class TripsDepartureTimeConfigFragment : Fragment() {
 
         private fun validateFields() {
             when {
-                viewModel.fromHour == null || viewModel.fromMinutes == null -> {
+                viewModel.fromTime == null -> {
                     viewModel.setField(FieldTags.TOAST_MESSAGE, "You must set Initial Time.")
                     creationBinding.editTextFrom.requestFocus()
                 }
-                viewModel.toHour == null || viewModel.toMinutes == null -> {
+                viewModel.toTime == null -> {
                     viewModel.setField(FieldTags.TOAST_MESSAGE, "You must set Final Time.")
                     creationBinding.editTextTo.requestFocus()
                 }
-                viewModel.departureHour == null && viewModel.departureMinutes == null -> {
+                viewModel.departureTime == null -> {
                     viewModel.setField(FieldTags.TOAST_MESSAGE, "You must set Departure Time.")
                     creationBinding.editTextDepartureTime.requestFocus()
                 }
@@ -268,43 +268,22 @@ class TripsDepartureTimeConfigFragment : Fragment() {
                     )
                     creationBinding.editTextName.requestFocus()
                 }
-                TimeModel.timesDifferenceInMinutes(
-                    TimeModel.from24Format(viewModel.toHour!!, viewModel.toMinutes!!, null),
-                    TimeModel.from24Format(viewModel.fromHour!!, viewModel.fromMinutes!!, null),
-                ) == null -> {
+                viewModel.fromTime!! >= viewModel.toTime!! -> {
                     viewModel.setField(
                         FieldTags.TOAST_MESSAGE,
-                        "Logically Initial Time can't be greater than final right?"
+                        "Final time should be greater than initial time."
                     )
                     restoreFields()
                     creationBinding.editTextFrom.requestFocus()
                 }
-                TimeModel.timesDifferenceInMinutes(
-                    TimeModel.from24Format(
-                        viewModel.departureHour!!,
-                        viewModel.departureHour!!,
-                        null
-                    ),
-                    TimeModel.from24Format(viewModel.toHour!!, viewModel.toMinutes!!, null),
-                ) == null -> {
+
+                //15*60*1000 is 15 minutes in milliseconds
+                viewModel.departureTime!! <= viewModel.toTime!! || viewModel.departureTime!!.absDifference(
+                    viewModel.toTime!!
+                ) < (15 * 60 * 1000) -> {
                     viewModel.setField(
                         FieldTags.TOAST_MESSAGE,
-                        "Please the departure time must be greater the the final time"
-                    )
-                    restoreFields()
-                    creationBinding.editTextDepartureTime.requestFocus()
-                }
-                TimeModel.timesDifferenceInMinutes(
-                    TimeModel.from24Format(
-                        viewModel.departureHour!!,
-                        viewModel.departureHour!!,
-                        null
-                    ),
-                    TimeModel.from24Format(viewModel.toHour!!, viewModel.toMinutes!!, null),
-                )!! < 15 -> {
-                    viewModel.setField(
-                        FieldTags.TOAST_MESSAGE,
-                        "Please the departure time must be at least 15 minutes after the final Time!"
+                        "Please the departure time must be at least 15 minutes greater the the final time"
                     )
                     restoreFields()
                     creationBinding.editTextDepartureTime.requestFocus()
@@ -329,8 +308,10 @@ class TripsDepartureTimeConfigFragment : Fragment() {
                     .build()
 
                 timePicker.addOnPositiveButtonClickListener {
-                    viewModel.setField(FieldTags.FROM_HOUR, timePicker.hour)
-                    viewModel.setField(FieldTags.FROM_MINUTES, timePicker.minute)
+                    viewModel.setField(
+                        FieldTags.FROM_TIME,
+                        TimeModel.from24Format(timePicker.hour, timePicker.minute, 0, 0)
+                    )
                     timePicker.dismiss()
                     restoreFields()
                 }
@@ -344,8 +325,10 @@ class TripsDepartureTimeConfigFragment : Fragment() {
                     .build()
 
                 timePicker.addOnPositiveButtonClickListener {
-                    viewModel.setField(FieldTags.TO_HOUR, timePicker.hour)
-                    viewModel.setField(FieldTags.TO_MINUTES, timePicker.minute)
+                    viewModel.setField(
+                        FieldTags.TO_TIME,
+                        TimeModel.from24Format(timePicker.hour, timePicker.minute, 0, 0)
+                    )
                     timePicker.dismiss()
                     restoreFields()
                 }
@@ -359,8 +342,10 @@ class TripsDepartureTimeConfigFragment : Fragment() {
                     .build()
 
                 timePicker.addOnPositiveButtonClickListener {
-                    viewModel.setField(FieldTags.DEPARTURE_HOUR, timePicker.hour)
-                    viewModel.setField(FieldTags.DEPARTURE_MINUTES, timePicker.minute)
+                    viewModel.setField(
+                        FieldTags.DEPARTURE_TIME,
+                        TimeModel.from24Format(timePicker.hour, timePicker.minute, 0, 0)
+                    )
                     timePicker.dismiss()
                     restoreFields()
                 }
@@ -373,26 +358,19 @@ class TripsDepartureTimeConfigFragment : Fragment() {
 
         private fun restoreFields() {
             creationBinding.editTextName.editText!!.setText(viewModel.intervalName)
-            if (viewModel.fromHour != null && viewModel.fromMinutes != null) {
-                val timeModel =
-                    TimeModel.from24Format(viewModel.fromHour!!, viewModel.fromMinutes!!)
+            if (viewModel.fromTime != null) {
                 creationBinding.editTextFrom.editText!!.setText(
-                    timeModel.formattedTime(viewModel.timeFormat.value!!)
+                    viewModel.fromTime!!.formattedTime(viewModel.timeFormat.value!!)
                 )
             }
-
-            if (viewModel.toHour != null && viewModel.toMinutes != null) {
-                val timeModel = TimeModel.from24Format(viewModel.toHour!!, viewModel.toMinutes!!)
+            if (viewModel.toTime != null) {
                 creationBinding.editTextTo.editText!!.setText(
-                    timeModel.formattedTime(viewModel.timeFormat.value!!)
+                    viewModel.toTime!!.formattedTime(viewModel.timeFormat.value!!)
                 )
             }
-
-            if (viewModel.departureHour != null && viewModel.departureMinutes != null) {
-                val timeModel =
-                    TimeModel.from24Format(viewModel.departureHour!!, viewModel.departureMinutes!!)
+            if (viewModel.departureTime != null) {
                 creationBinding.editTextDepartureTime.editText!!.setText(
-                    timeModel.formattedTime(viewModel.timeFormat.value!!)
+                    viewModel.departureTime!!.formattedTime(viewModel.timeFormat.value!!)
                 )
             }
 
@@ -411,10 +389,10 @@ class TripsDepartureTimeConfigFragment : Fragment() {
                 .setTitle("Create a Trip Interval")
                 .setIcon(R.drawable.baseline_add_24)
                 .setView(creationBinding.root)
-                .setPositiveButton(R.string.text_btn_save) { _, _ ->
+                .setPositiveButton(R.string.text_save) { _, _ ->
                     validateFields()
                 }
-                .setNegativeButton(R.string.text_btn_cancel) { _, _ ->
+                .setNegativeButton(R.string.text_cancel) { _, _ ->
                     viewModel.setField(FieldTags.SWITCH_ADD_DIALOG_STATE, false)
                 }
                 .create()

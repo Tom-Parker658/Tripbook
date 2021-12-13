@@ -34,7 +34,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_hint_booker_creation_name"
+                android:hint="@string/text_name"
                 app:layout_constraintBottom_toTopOf="@+id/birthday"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
                 android:id="@+id/text_profile_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_label_booker_creation_profile_photo"
+                android:text="@string/text_profile_photo"
                 app:layout_constraintEnd_toEndOf="@+id/profile_photo"
                 app:layout_constraintStart_toStartOf="@+id/profile_photo"
                 app:layout_constraintTop_toBottomOf="@+id/profile_photo" />
@@ -58,7 +58,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/birthday"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_hint_booker_creation_birthday"
+                android:hint="@string/text_birth_on"
                 app:endIconDrawable="@drawable/baseline_event_24"
                 app:endIconMode="custom"
                 app:layout_constraintBottom_toTopOf="@+id/nationality"
@@ -75,7 +75,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nationality"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_hint_booker_creation_nationality"
+                android:hint="@string/text_nationality"
                 app:layout_constraintBottom_toTopOf="@+id/occupation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +90,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/occupation"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_hint_booker_creation_occupation"
+                android:hint="@string/text_occupation"
                 app:endIconMode="dropdown_menu"
                 app:helperTextEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/recoveryPhone"
@@ -118,7 +118,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/recoveryPhone"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_hint_booker_creation_recovery_phone"
+                android:hint="@string/text_recovery_phone"
                 app:counterEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/countryCode_picker"
@@ -152,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="@string/text_chip_booker_creation_sex_male"
+                    android:text="@string/text_sex_male"
                     app:chipIcon="@drawable/baseline_male_24"
                     app:chipIconTint="@color/color_male" />
 
@@ -161,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="@string/text_chip_booker_creation_sex_female"
+                    android:text="@string/text_sex_female"
                     app:chipIcon="@drawable/baseline_female_24"
                     app:chipIconTint="@color/color_female" />
             </com.google.android.material.chip.ChipGroup>
@@ -169,7 +169,7 @@
             <Button
                 android:id="@+id/btn_save_info"
                 style="@style/positiveButton"
-                android:text="@string/text_btn_save_info"
+                android:text="@string/text_save"
                 app:icon="@drawable/baseline_save_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -45,6 +45,9 @@ class TripsDetailsViewModel : ViewModel() {
     private val _startCreation = MutableLiveData(false)
     val startCreation: LiveData<Boolean> get() = _startCreation
 
+    private val _bookingComplete = MutableLiveData(false)
+    val bookingComplete: LiveData<Boolean> get() = _bookingComplete
+
     //To notify the user when the trips is not more available during the current config session
     private val _tripHasBeenDeleted = MutableLiveData(false)
     val tripHasBeenDeleted: LiveData<Boolean> get() = _tripHasBeenDeleted
@@ -117,9 +120,12 @@ class TripsDetailsViewModel : ViewModel() {
             FieldTags.ARG_TRIP_ID -> tripID = value.toString()
             FieldTags.ARG_IS_VIP -> _isVip.value = value as Boolean
             FieldTags.LOCALITY_NAME -> localityTownName = value.toString()
-            FieldTags.ARG_TRIP_TIME -> (value as Pair<Int, Int>).let {
-                tripTime = TimeModel.from24Format(it.first, it.second)
-            }
+            FieldTags.ARG_TRIP_TIME -> tripTime =
+                TimeModel.fromTimeParameter(
+                    TimeModel.TimeParameter.MILLISECONDS,
+                    (value as Int).toLong()
+                )
+
             FieldTags.ARG_TRIP_DATE -> tripDateInMillis = value as Long
             FieldTags.START_CREATION -> _startCreation.value = value as Boolean
         }
@@ -202,8 +208,7 @@ class TripsDetailsViewModel : ViewModel() {
                             }
                             is State.Loading -> _onLoading.value = true
                             is State.Success -> {
-                                //TODO: Navigate to confirmation page
-                                _toastMessage.value = "Congratulations!!!"
+                                _bookingComplete.value = true
                                 _onLoading.value = false
                             }
                         }

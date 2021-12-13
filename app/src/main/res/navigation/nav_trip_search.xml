@@ -21,8 +21,8 @@
     <fragment
         android:id="@+id/tripSearchResultsFragment"
         android:name="com.lado.travago.tripbook.ui.booker.book_panel.TripSearchResultsFragment"
-        tools:layout="@layout/fragment_trip_search_result"
-        android:label="{tripTitle}">
+        android:label="{tripTitle}"
+        tools:layout="@layout/fragment_trip_search_result">
         <!--        We change the label depending on the parameters-->
         <action
             android:id="@+id/action_tripSearchResultsFragment_to_tripDetailsFragment"
@@ -41,19 +41,16 @@
             android:name="tripDateInMillis"
             app:argType="long" />
         <argument
-            android:name="tripHour"
-            app:argType="integer" />
-        <argument
-            android:name="tripMinutes"
+            android:name="tripTimeInMillis"
             app:argType="integer" />
         <argument
             android:name="tripTitle"
-            app:argType="string"/>
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/tripDetailsFragment"
         android:name="com.lado.travago.tripbook.ui.booker.book_panel.TripDetailsFragment"
-        android:label="@string/frag_my_books"
+        android:label="{detailsTitle}"
         tools:layout="@layout/fragment_trip_detail">
         <argument
             android:name="tripId"
@@ -65,17 +62,42 @@
             android:name="vip"
             app:argType="boolean" />
         <argument
-            android:name="tripTimeHour"
-            app:argType="integer" />
-        <argument
-            android:name="tripTimeMinutes"
-            app:argType="integer" />
-        <argument
             android:name="tripDateInMillis"
             app:argType="long" />
         <argument
             android:name="localityTownName"
             app:argType="string" />
+        <argument
+            android:name="tripTimeInMillis"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_tripDetailsFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/slide_down"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down"
+            app:popUpTo="@id/tripDetailsFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="detailsTitle"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.lado.travago.tripbook.ui.notification.NotificationFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_notification">
+        <argument
+            android:name="notificationType"
+            app:argType="com.lado.travago.tripbook.model.enums.NotificationType" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="callerResID"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 
 </navigation>

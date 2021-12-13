@@ -11,7 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentBusesToBinding
@@ -20,10 +19,7 @@ import com.lado.travago.tripbook.ui.agency.scanner_panel.viewmodel.BusesManageVi
 import com.lado.travago.tripbook.ui.agency.scanner_panel.viewmodel.ScannerPanelViewModel
 import com.lado.travago.tripbook.ui.recycler_adapters.BusOverviewAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.BusOverviewClickListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 
 
 /**
@@ -54,7 +50,7 @@ class BusesToFragment : Fragment() {
 
         //Header and tile date
         val headerText =
-            "${getString(R.string.text_dialog_title_from)}: ${viewModel.selectedLocality}"
+            "${getString(R.string.text_from)}: ${viewModel.selectedLocality}"
         binding.headerBusTo.text = headerText
         binding.textSelectedDate.text = viewModel.formattedTravelDate()
 
@@ -67,7 +63,7 @@ class BusesToFragment : Fragment() {
 
     private fun spanPicker() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.text_dialog_title_span_size)
+            .setTitle(R.string.text_items_per_row)
             .setSingleChoiceItems(
                 arrayOf("1", "2", "3", "4", "5", "6"),
                 viewModel.spanSizeDestination.value!! - 1

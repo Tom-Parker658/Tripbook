@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
-                        android:text="@string/text_label_to"
+                        android:text="@string/text_to"
                         android:textAlignment="center"
                         app:layout_constraintBottom_toBottomOf="@+id/text_destination"
                         app:layout_constraintEnd_toStartOf="@+id/text_destination"
@@ -278,7 +278,7 @@
                         app:drawableStartCompat="@drawable/baseline_payments_24"
                         app:layout_constraintEnd_toEndOf="@+id/text_seats_times_unit_price"
                         app:layout_constraintStart_toStartOf="@+id/text_seats_times_unit_price"
-                        app:layout_constraintTop_toBottomOf="@+id/text_total_tickets_number" />
+                        app:layout_constraintTop_toTopOf="@+id/text_total_tickets_number" />
 
                     <TextView
                         android:id="@+id/text_seats_times_unit_price"

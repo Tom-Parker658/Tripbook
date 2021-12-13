@@ -78,10 +78,10 @@ data class Book(
         "bookerName" to bookerDoc.getString("name"),
         "agencyName" to agencyDoc.getString("agencyName"),
         "tripID" to tripDoc.id,
-        "localityID" to localityID,
-        "destinationID" to destinationID,
-        "localityName" to localityName,
-        "destinationName" to destinationName,
+        "tripLocalityID" to localityID,
+        "tripDestinationID" to destinationID,
+        "tripLocalityName" to localityName,
+        "tripDestinationName" to destinationName,
         "isVip" to isVip,
         "price" to price,
         "isExpired" to false,
@@ -90,28 +90,10 @@ data class Book(
         "distance" to tripDoc["distance"],
         "taken" to false,
         "travelDateMillis" to travelDay,
-        "departureTime" to departureTime.timeInSeconds,
+        "tripTimeInMillis" to departureTime.fullTimeInMillis,
         "generatedOn" to Timestamp.now()
     )
 
-    /**
-     * When a book is scanned, it can have the following states
-     */
-    enum class BookState {
-        OK,
-        EXPIRED,
-        SECOND_TIME,
-        NOT_THIS_BUS,
-        NOT_FOUND;
-
-//        fun state(bookDoc: DocumentSnapshot): BookState {
-//            when (bookDoc) {
-//                bookDoc.getString("")
-//                else ->
-//            }
-//
-//        }
-    }
 }
 
 /**
@@ -175,7 +157,7 @@ data class TownsOverview(
         if (townDoc.getBoolean("isScanned")!!) scansCount += 1
         //We check if this is the first time the destination of this book is appearing so that we can increment destination count
         //Also we want to do this only for localities overviews
-        if (destinations.find { it.getString("destinationName") == townDoc.getString("destinationName") } == null && fromLocality == null)
+        if (destinations.find { it.getString("tripDestinationName") == townDoc.getString("tripDestinationName") } == null && fromLocality == null)
             busCounts += 1
         destinations.add(townDoc)
 

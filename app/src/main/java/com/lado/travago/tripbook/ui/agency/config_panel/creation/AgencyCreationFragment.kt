@@ -244,14 +244,14 @@ class AgencyCreationFragment : Fragment() {
             } else {
                 viewModel.setField(
                     FieldTags.TOAST_MESSAGE,
-                    getString(R.string.text_message_error_invalid_phone)
+                    getString(R.string.text_enter_valid_phone)
                 )
                 binding.supportPhone2.requestFocus()
             }
         } else {
             viewModel.setField(
                 FieldTags.TOAST_MESSAGE,
-                getString(R.string.text_message_error_invalid_phone)
+                getString(R.string.text_enter_valid_phone)
             )
             binding.supportPhone1.requestFocus()
         }
@@ -274,7 +274,7 @@ class AgencyCreationFragment : Fragment() {
             if (viewModel.logoBitmap?.byteCount!! < 0) { //In case image larger than 10-MegaByte
                 viewModel.setField(
                     FieldTags.TOAST_MESSAGE,
-                    getString(R.string.text_message_error_photo_large)
+                    getString(R.string.text_photo_too_large)
                 )
                 initLogoSelection()
             } else // Sets the logo field to the name of the selected photo

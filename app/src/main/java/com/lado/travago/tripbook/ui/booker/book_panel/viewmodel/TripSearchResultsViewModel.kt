@@ -1,17 +1,16 @@
 package com.lado.travago.tripbook.ui.booker.book_panel.viewmodel
 
 import android.app.Activity
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
 import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.firebase.FirebaseAuthRepo
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
+import com.lado.travago.tripbook.utils.AdminUtils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
@@ -23,6 +22,25 @@ class TripSearchResultsViewModel : ViewModel() {
     var firestoreRepo: FirestoreRepo = FirestoreRepo()
     val authRepo = FirebaseAuthRepo()
 
+    //TODO: Sorting will be done last
+    /*val sortOptions = listOf(
+        AdminUtils.SortOption(
+            AdminUtils.SortingParams.REPUTATION_ASC,
+            "reputation"
+        ),
+        AdminUtils.SortOption(
+            AdminUtils.SortingParams.REPUTATION_DESC,
+            "reputation"
+        ), AdminUtils.SortOption(
+            AdminUtils.SortingParams.PRICE_ASC,
+            "price"
+        ),
+        AdminUtils.SortOption(
+            AdminUtils.SortingParams.PRICE_DESC,
+            "price"
+        )
+    )
+*/
     //These are used to fill the header
     var localityName = ""
         private set
@@ -36,9 +54,6 @@ class TripSearchResultsViewModel : ViewModel() {
 
     private val _onNoSuchResults = MutableLiveData(false)
     val onNoSuchResults: LiveData<Boolean> get() = _onNoSuchResults
-
-//    private val _agencyIDList = MutableLiveData(mutableListOf<String>())
-//    val agencyIDList: LiveData<MutableList<String>> get() = _agencyIDList
 
     //All the live documents
     private val _allTripsResultsList = MutableLiveData(mutableListOf<DocumentSnapshot>())
@@ -54,7 +69,6 @@ class TripSearchResultsViewModel : ViewModel() {
     private val _searchResultsTripleList =
         MutableLiveData(mutableListOf<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>>())
     val searchResultsTripleList: LiveData<MutableList<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>>> get() = _searchResultsTripleList
-
 
     //This a snapshot to know from where in the DB to start retrieving new documents when the user reaches the bottom of th screen
     private val startAfterSnapshot: DocumentSnapshot? = null
@@ -93,13 +107,12 @@ class TripSearchResultsViewModel : ViewModel() {
         fromName: String,
         toName: String,
         dateInMillis: Long,
-        tripHour: Int,
-        tripMinutes: Int
+        timeInMillis: Long
     ) {
         localityName = fromName
         destinationName = toName
         tripDateInMillis = dateInMillis
-        tripTime = TimeModel.from24Format(tripHour, tripMinutes, null)
+        tripTime = TimeModel.fromTimeParameter(TimeModel.TimeParameter.MILLISECONDS, timeInMillis)
     }
 
 
@@ -175,8 +188,6 @@ class TripSearchResultsViewModel : ViewModel() {
     ) = firestoreRepo.db.collectionGroup("Departure_Intervals")
         //Assert only intervals from selected agencies are gotten
         .whereIn("agencyID", agencyIDList)
-//        .whereGreaterThanOrEqualTo("fromInSeconds", tripTime.timeInSeconds)
-//        .whereLessThan("toInSeconds", tripTime.timeInSeconds)
         .addSnapshotListener(hostActivity) { querySnapshot, error ->
             _onLoading.value = false
             if (querySnapshot != null) {
@@ -209,14 +220,11 @@ class TripSearchResultsViewModel : ViewModel() {
                 val correspondingTripDoc =
                     _allTripsResultsList.value!!.find { it["agencyID"] == agencyDoc.id }!!
                 val departureTime =
-                    TimeModel.from24Format(
+                    TimeModel.fromTimeParameter(
+                        TimeModel.TimeParameter.MILLISECONDS,
                         currentAgencyDepartureTimeDoc.getLong(
-                            "departureHour"
-                        )!!.toInt(),
-                        currentAgencyDepartureTimeDoc.getLong(
-                            "departureMinutes"
-                        )!!.toInt(),
-                        null
+                            "departureTimeInMillis"
+                        )!!
                     )
                 tempTriple += Triple(
                     agencyDoc,

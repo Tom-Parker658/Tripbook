@@ -9,10 +9,13 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.Observable
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
@@ -50,9 +53,9 @@ class BookerCreationActivity : AppCompatActivity() {
 //        super.onResume()
 //    }
 
-    
+
     override fun overridePendingTransition(enterAnim: Int, exitAnim: Int) {
-        super.overridePendingTransition(0, 0 )
+        super.overridePendingTransition(0, 0)
     }
 
     private fun setupNavigation() {
@@ -140,6 +143,7 @@ class BookerCreationActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
+    //TODO: Take into account when a signup fails because the account has been suspeded
 
     /**
      * Observes live-data and reacts accordingly
@@ -206,7 +210,8 @@ class BookerCreationActivity : AppCompatActivity() {
 
         viewModel.onBookerCreated.observe(this) {
             if (it) {
-                navigateToLauncherUI()
+                //We return to the caller
+                setResult(RESULT_OK)
                 finish()
             }
         }
@@ -282,24 +287,7 @@ class BookerCreationActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[BookerCreationViewModel::class.java]
     }
 
-    /**
-     * Navigates back to the UI which originally launched this creation as an intent. It returns with no data as intent,
-     * But only with the RESULT status
-     */
-    //TODO: TEST: For now, we navigate to config center lobby
-    private fun navigateToLauncherUI() {
-        startActivity(
-            Intent(this, AgencyConfigActivity::class.java)
-        )
-        finish()
-//        viewModel.onBookerCreated.observe(this) {
-//            if (it) {
-//                setResult(Activity.RESULT_OK, null)
-//                finish()
-//                viewModel.stopLoading()
-//            }
-//        }
-    }
+
 
     /**
      * Observe the [BookerCreationViewModel.onLoading] live data to know when a process is actually in the loading state

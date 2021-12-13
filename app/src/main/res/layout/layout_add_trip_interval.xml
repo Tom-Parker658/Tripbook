@@ -14,7 +14,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_text_from"
             style="@style/editTextStyle"
-            android:hint="@string/text_e_hint_interval_creation_from_time"
+            android:hint="@string/text_start"
             app:endIconDrawable="@drawable/outline_schedule_24"
             app:endIconMode="custom"
             app:layout_constraintBottom_toTopOf="@+id/edit_text_departure_time"
@@ -32,7 +32,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_text_to"
             style="@style/editTextStyle"
-            android:hint="@string/text_e_hint_interval_creation_to_time"
+            android:hint="@string/text_end"
             app:endIconDrawable="@drawable/outline_schedule_24"
             app:endIconMode="custom"
             app:layout_constraintBaseline_toBaselineOf="@+id/edit_text_from"
@@ -48,10 +48,10 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_text_departure_time"
             style="@style/editTextStyle"
-            android:hint="@string/text_e_hint_interval_creation_departure_time"
+            android:hint="@string/text_departure_time"
             app:endIconDrawable="@drawable/outline_schedule_24"
             app:endIconMode="custom"
-            app:helperText="@string/text_e_helper_interval_creation_departure_time"
+            app:helperText="@string/text_helper_departure_time"
             app:layout_constraintBottom_toTopOf="@+id/edit_text_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,9 +67,9 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_text_name"
             style="@style/editTextStyle"
-            android:hint="@string/text_e_hint_interval_creation_name"
+            android:hint="@string/text_interval_name"
             app:endIconDrawable="@drawable/outline_schedule_24"
-            app:helperText="@string/text_e_helper_interval_creation_name"
+            app:helperText="@string/text_helper_interval_name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

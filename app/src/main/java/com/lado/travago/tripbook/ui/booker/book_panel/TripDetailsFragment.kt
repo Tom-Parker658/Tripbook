@@ -8,20 +8,21 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.Timestamp
+import androidx.navigation.fragment.findNavController
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripDetailBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
+import com.lado.travago.tripbook.model.enums.NotificationType
+import com.lado.travago.tripbook.repo.firebase.FirebaseAuthRepo
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripsDetailsViewModel
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripsDetailsViewModel.*
+import com.lado.travago.tripbook.ui.notification.NotificationFragmentArgs
 import com.lado.travago.tripbook.utils.Utils
 import com.lado.travago.tripbook.utils.loadLogoFromUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import kotlin.random.Random
-import kotlin.random.nextULong
 
 /**
  * Seat selection and bus customisation fragment
@@ -99,16 +100,39 @@ class TripDetailsFragment : Fragment() {
         }
 
         viewModel.startCreation.observe(viewLifecycleOwner) {
-            if (it)
-                CoroutineScope(Dispatchers.Main).launch {
-                    viewModel.createBookInDB()
-                }
+            //We always make sure the user is loggedIn before we start else we force him to log In
+            if (it) {
+                if (FirebaseAuthRepo().currentUser == null) {
+                    val args =
+                        NotificationFragmentArgs.Builder(
+                            NotificationType.ACCOUNT_NOT_FOUND,
+                            NotificationType.ACCOUNT_NOT_FOUND.toString()
+                        ).build()
+                            .toBundle()
+                    findNavController().navigate(R.id.action_tripDetailsFragment_to_notificationFragment, args)
+
+                } else
+                    CoroutineScope(Dispatchers.Main).launch {
+                        viewModel.createBookInDB()
+                    }
+            }
         }
 
         viewModel.tripHasBeenDeleted.observe(viewLifecycleOwner) {
-            viewModel.setField(FieldTags.TOAST_MESSAGE, "Sorry! Trip not found!!")
+            viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.text_empty_content))
         }
 
+        viewModel.bookingComplete.observe(viewLifecycleOwner){
+            if(it){
+                val args =
+                    NotificationFragmentArgs.Builder(
+                        NotificationType.BOOKING_COMPLETE,
+                        NotificationType.BOOKING_COMPLETE.toString()
+                    ).build()
+                        .toBundle()
+                findNavController().navigate(R.id.action_tripDetailsFragment_to_notificationFragment, args)
+            }
+        }
     }
 
     private fun initNumberPicker() {
@@ -139,7 +163,7 @@ class TripDetailsFragment : Fragment() {
             )
             viewModel.setField(
                 FieldTags.ARG_TRIP_TIME,
-                (it.tripTimeHour to it.tripTimeMinutes)
+                it.tripTimeInMillis
             )
             viewModel.setField(
                 FieldTags.ARG_TRIP_DATE,
@@ -170,7 +194,7 @@ class TripDetailsFragment : Fragment() {
         detailBinding.textTripDate.text =
             Utils.formatDate(viewModel.tripDateInMillis, "EEEE dd MMMM YYYY")
         detailBinding.textTripDepartureTime.text =
-            viewModel.tripTime.formattedTime(TimeModel.TimeFormat.FORMAT_24H)
+            viewModel.tripTime.localTimeFormat()
 
         //Second card in order
 //        binding.checkIsVip.isChecked = viewModel.isVip.value!!
@@ -202,7 +226,8 @@ class TripDetailsFragment : Fragment() {
         binding.apply {
             val textPrice = "${viewModel.numberOfBooks.value} x $tripPrice"
             textSeatsTimesUnitPrice.text = textPrice
-            textTotalPrice.text = Utils.formatFCFAPrice(viewModel.numberOfBooks.value!! * tripPrice)
+            textTotalPrice.text =
+                Utils.formatFCFAPrice(viewModel.numberOfBooks.value!! * tripPrice)
         }
 
     }

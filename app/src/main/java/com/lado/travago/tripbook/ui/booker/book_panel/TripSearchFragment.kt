@@ -86,13 +86,11 @@ class TripSearchFragment : Fragment() {
     }
 
 
-    //TODO: Date picker not working
-
     private fun datePicker() {
         val titleText = "Trip Date"
         val calendar = Calendar.getInstance()//An instance of the current Calendar
-        val minDate = calendar.timeInMillis // The current date(today) in millis
-        calendar.roll(Calendar.DAY_OF_YEAR, 29)
+        val minDate = Date().time // The current date(today) in millis
+        calendar.roll(Calendar.DATE, 30)
         val maxDate = calendar.timeInMillis
         //We create constraint so that the user can only select dates between a particular interval
         val bounds = CalendarConstraints.Builder()
@@ -104,35 +102,38 @@ class TripSearchFragment : Fragment() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(bounds)//Constrain the possible dates
             .setTitleText(titleText)//Set the Title of the Picker
+            .setSelection(viewModel.tripDateInMillis)
             .build()
+
         //Sets the value of the edit text to the formatted value of the selection
         datePicker.addOnPositiveButtonClickListener {
-            viewModel.setField(FieldTags.TRIP_DATE, it)
-            binding.editTextDates.editText!!.setText(Utils.formatDate(it, "EEEE, dd MMMM YYYY"))
+            if (Date().date > Date(it).date) datePicker()
+            else {
+                viewModel.setField(FieldTags.TRIP_DATE, it)
+                binding.editTextDates.editText!!.setText(Utils.formatDate(it, "EEEE dd MMMM YYYY"))
+            }
         }
-
         datePicker.showNow(childFragmentManager, "Date")
 
     }
 
-
     private fun timePicker() {
-        val titleText = "Trip Time"
+        val titleText = getString(R.string.text_pick_time)//TODO Translate
         val timePicker = MaterialTimePicker.Builder()
             .setTitleText(titleText)
+            .setHour(viewModel.tripTime.hour)
+            .setMinute(viewModel.tripTime.minutes)
             .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
             .build()
         timePicker.addOnPositiveButtonClickListener {
             viewModel.setField(
                 FieldTags.TRIP_TIME,
                 TimeModel.from24Format(
-                    timePicker.hour, timePicker.minute, null
+                    timePicker.hour, timePicker.minute, 0
                 )
             )
             binding.editTextTime.editText!!.setText(
-                viewModel.tripTime!!.formattedTime(
-                    TimeModel.TimeFormat.FORMAT_24H
-                )
+                viewModel.tripTime.localTimeFormat()
             )
         }
         timePicker.showNow(childFragmentManager, "")
@@ -146,14 +147,12 @@ class TripSearchFragment : Fragment() {
         binding.editTextLocality.editText!!.setText(viewModel.locality)
         binding.editTextDestination.editText!!.setText(viewModel.destination)
         binding.editTextTime.editText!!.setText(
-            viewModel.tripTime?.formattedTime(
-                TimeModel.TimeFormat.FORMAT_24H
-            )
+            viewModel.tripTime.localTimeFormat()
         )
         binding.editTextDates.editText!!.setText(
             Utils.formatDate(
                 viewModel.tripDateInMillis,
-                "EEEE, dd MMMM YYYY"
+                getString(R.string.text_date_pattern_in_words)
             )
         )
     }
@@ -207,30 +206,24 @@ class TripSearchFragment : Fragment() {
                 viewModel.townNames.contains(viewModel.locality) -> {
                     viewModel.setField(
                         FieldTags.TOAST_MESSAGE,
-                        "Please choose your locality from the dropdown"
+                        getString(R.string.text_message_not_found_drop_down)
                     )
                     binding.editTextLocality.requestFocus()
                 }
                 viewModel.townNames.contains(viewModel.destination) -> {
                     viewModel.setField(
                         FieldTags.TOAST_MESSAGE,
-                        "Please choose your destination from the dropdown"
+                        getString(R.string.text_message_not_found_drop_down)
                     )
                     binding.editTextLocality.requestFocus()
                 }
                 viewModel.locality == viewModel.destination -> {
                     viewModel.setField(
                         FieldTags.TOAST_MESSAGE,
-                        "It is logically impossible for your locality to be your destination, right?"
+                        getString(R.string.text_error_locality_same_as_destination)
                     )
                 }
-                viewModel.tripTime == null -> {
-                    viewModel.setField(
-                        FieldTags.TOAST_MESSAGE,
-                        "You must choose the time to go"
-                    )
-                    binding.editTextTime.requestFocus()
-                }
+
                 viewModel.tripDateInMillis == 0L -> {
                     viewModel.setField(
                         FieldTags.TOAST_MESSAGE,
@@ -239,14 +232,14 @@ class TripSearchFragment : Fragment() {
                     binding.editTextDates.requestFocus()
                 }
                 else -> {
-                    val tripTitle = "${viewModel.locality} ${getString(R.string.text_label_to)} ${viewModel.destination}"
+                    val tripTitle =
+                        "${viewModel.locality} ${getString(R.string.text_to)} ${viewModel.destination}"
                     findNavController().navigate(
                         TripSearchFragmentDirections.actionTripSearchFragmentToTripSearchResultsFragment(
                             viewModel.locality,
                             viewModel.destination,
                             viewModel.tripDateInMillis,
-                            viewModel.tripTime!!.hour,
-                            viewModel.tripTime!!.minutes,
+                            viewModel.tripTime.fullTimeInMillis,
                             tripTitle
                         )
                     )

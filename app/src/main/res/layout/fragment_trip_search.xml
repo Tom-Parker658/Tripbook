@@ -25,14 +25,13 @@
                 style="@style/editTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/text_e_hint_trip_search_location"
+                android:hint="@string/text_locality"
                 app:boxBackgroundMode="outline"
                 app:endIconMode="dropdown_menu"
-                app:helperText="@string/text_e_helper_trip_search_location"
+                app:helperText="@string/text_helper_locality"
                 app:helperTextEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/edit_text_destination"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/btn_launch_gps"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed"
@@ -48,11 +47,11 @@
                 style="@style/editTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/text_e_hint_trip_search_date"
+                android:hint="@string/text_date"
                 app:endIconDrawable="@drawable/baseline_event_24"
                 app:endIconMode="custom"
                 app:endIconTintMode="src_atop"
-                app:helperText="@string/text_e_helper_trip_search_day"
+                app:helperText="@string/text_helper_day"
                 app:helperTextEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/edit_text_time"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -72,11 +71,11 @@
                 style="@style/editTextStyle"
                 android:layout_width="0dp"
                 android:layout_marginBottom="8dp"
-                android:hint="@string/text_e_hint_trip_search_time"
+                android:hint="@string/text_time"
                 app:endIconDrawable="@drawable/outline_schedule_24"
                 app:endIconMode="custom"
                 app:endIconTintMode="src_atop"
-                app:helperText="@string/text_e_helper_trip_search_time"
+                app:helperText="@string/text_helper_trip_time"
                 app:helperTextEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/btn_search_journey"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -88,7 +87,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -96,9 +95,9 @@
                 style="@style/editTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/text_e_hint_trip_search_destination"
+                android:hint="@string/text_destination"
                 app:endIconMode="dropdown_menu"
-                app:helperText="@string/text_e_helper_trip_search_destination"
+                app:helperText="@string/text_helper_destination"
                 app:helperTextEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/edit_text_dates"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -114,8 +113,13 @@
 
             <Button
                 android:id="@+id/btn_search_journey"
-                style="@style/navButtonStyles"
-                android:text="@string/btn_search_journey"
+                style="@style/positiveButton"
+                android:layout_marginTop="16dp"
+                android:drawablePadding="8dp"
+                android:padding="16dp"
+                android:text="@string/text_search"
+                android:textAllCaps="true"
+                android:textSize="16sp"
                 app:icon="@drawable/baseline_directions_bus_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -146,6 +150,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/edit_text_locality" />
+
+            <ImageButton
+                android:id="@+id/btn_launch_gps"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="14dp"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_text_locality"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_tripbook"
+                app:layout_constraintVertical_bias="0.64"
+                app:srcCompat="@drawable/baseline_place_24"
+                app:tint="@color/colorAccent"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

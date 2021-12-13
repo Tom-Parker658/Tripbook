@@ -14,7 +14,6 @@ import com.lado.travago.tripbook.databinding.ItemSimpleBinding
 class SimpleAdapter(
     val clickListener: SimpleClickListener,
     private val selectedItemList: List<String>,
-
 ) : ListAdapter<HashMap<String, String>, SimpleViewHolder>(
     SimpleDiffCallbacks()
 ) {

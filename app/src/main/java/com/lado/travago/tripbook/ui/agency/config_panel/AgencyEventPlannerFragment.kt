@@ -108,7 +108,7 @@ class AgencyEventPlannerFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setIcon(R.drawable.baseline_help_24)
             .setMessage(R.string.text_help_event_planner)
-            .setPositiveButton(getString(R.string.text_btn_event_planner_add)) { dialog, _ ->
+            .setPositiveButton(getString(R.string.text_plan_event)) { dialog, _ ->
                 showAddDialog()
                 dialog.dismiss()
             }
@@ -169,7 +169,7 @@ class AgencyEventPlannerFragment : Fragment() {
                 viewModel.setField(
                     FieldTags.EVENT_TIME,
                     TimeModel.from24Format(
-                        timePicker.hour, timePicker.minute, null
+                        timePicker.hour, timePicker.minute, 0
                     )
                 )
                 eventBinding.editTextTime.editText!!.setText(

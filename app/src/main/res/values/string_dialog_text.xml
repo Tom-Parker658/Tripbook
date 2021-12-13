@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="text_dialog_title_span_size">How many items per row</string>
-    <string name="text_dialog_title_from">"From "</string>
-    <string name="text_dialog_empty_content">Empty result!</string>
-    <string name="text_title_trip_interval_time_format">Time Format</string>
-</resources>

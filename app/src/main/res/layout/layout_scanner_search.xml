@@ -21,7 +21,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phone_field"
                 style="@style/editTextStyle"
-                android:hint="@string/text_e_hint_booker_creation_phone"
+                android:hint="@string/text_phone_num"
                 app:helperText="@string/text_e_helper_scanner_addition_phone"
                 app:layout_constraintBottom_toTopOf="@+id/search_progress_bar"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +109,7 @@
                         style="@style/positiveButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_btn_scanner_addition_recruit"
+                        android:text="@string/text_recruit"
                         app:icon="@drawable/baseline_add_24"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

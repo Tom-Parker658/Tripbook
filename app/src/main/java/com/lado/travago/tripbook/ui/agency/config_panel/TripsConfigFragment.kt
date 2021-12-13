@@ -28,7 +28,6 @@ import com.lado.travago.tripbook.databinding.ItemSimpleRecyclerLayoutBinding
 import com.lado.travago.tripbook.databinding.ItemTripPriceFormBinding
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
-import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TownsConfigViewModel
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel.*
 import com.lado.travago.tripbook.ui.recycler_adapters.SimpleAdapter
@@ -79,7 +78,7 @@ class TripsConfigFragment : Fragment() {
         val tripArgs = TripsConfigFragmentArgs.fromBundle(requireArguments())
         viewModel.setField(FieldTags.TOWN_ID, tripArgs.townID)
         viewModel.setField(FieldTags.TOWN_NAME, tripArgs.townName)
-        val masterTxt = "${getString(R.string.text_dialog_title_from)} ${viewModel.currentTownName} ${getString(R.string.text_label_to)}: "
+        val masterTxt = "${getString(R.string.text_from)} ${viewModel.currentTownName} ${getString(R.string.text_to)}: "
         binding.textMasterLabel.text = masterTxt
     }
 
@@ -264,7 +263,7 @@ class TripsConfigFragment : Fragment() {
                         null,
                         false
                     )
-                searchBinding.searchBar.hint = getString(R.string.text_label_town)
+                searchBinding.searchBar.hint = getString(R.string.text_town)
 
                 //Sets adapter for the autocomplete text view
                 val searchAdapter = ArrayAdapter(
@@ -378,10 +377,10 @@ class TripsConfigFragment : Fragment() {
                 setSingleChoiceItems(
                     arrayOf(
                         getString(R.string.text_sort_by_none),
-                        getString(R.string.text_sort_town_by_name),
-                        getString(R.string.text_sort_trip_by_price),
-                        getString(R.string.text_sort_trip_by_vip_price),
-                        getString(R.string.text_sort_trip_by_distance)
+                        getString(R.string.text_sort_by_name_asc),
+                        getString(R.string.text_sort_by_price_asc),
+//                        getString(R.string.text_sort_by_vip_price),//TODO: Change
+                        getString(R.string.text_sort_by_distance_asc)
                     ),
                     viewModel.sortCheckedItem
                 ) { dialog, which ->
@@ -426,7 +425,7 @@ class TripsConfigFragment : Fragment() {
         }
         binding.fabTripSpanSize.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.text_dialog_title_span_size)
+                .setTitle(R.string.text_items_per_row)
                 .setSingleChoiceItems(
                     arrayOf("1", "2", "3", "4", "5", "6"),
                     viewModel.spanSize.value!! - 1
@@ -548,10 +547,10 @@ class TripsConfigFragment : Fragment() {
             )
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
-                .setTitle("${getString(R.string.text_dialog_title_from)}: Trips From ${viewModel.currentTownName}")
+                .setTitle("${getString(R.string.text_from)}: Trips From ${viewModel.currentTownName}")
                 .setIcon(R.drawable.baseline_add_24)
                 .setView(recyclerBinding.root)
-                .setPositiveButton(R.string.text_dialog_btn_add) { dialog, _ ->
+                .setPositiveButton(R.string.text_btn_add) { dialog, _ ->
                     CoroutineScope(Dispatchers.Main).launch {
                         viewModel.commitToAddList(
                             parentViewModel.bookerDoc.value!!.getString(
@@ -586,12 +585,12 @@ class TripsConfigFragment : Fragment() {
                 null,
                 true
             )
-            priceBinding.price.setHint(R.string.text_e_hint_trips_config_standard_price)
+            priceBinding.price.setHint(R.string.text_standard_price)
 
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
                 .setView(priceBinding.root)
-                .setNegativeButton(R.string.text_btn_cancel) { dialog, _ ->
+                .setNegativeButton(R.string.text_cancel) { dialog, _ ->
                     dialog.cancel()
                     dialog.dismiss()
                     viewModel.setField(
@@ -599,7 +598,7 @@ class TripsConfigFragment : Fragment() {
                         false
                     )
                 }
-                .setPositiveButton(R.string.text_btn_save) { dialog, _ ->
+                .setPositiveButton(R.string.text_save) { dialog, _ ->
                     val price =
                         if (priceBinding.price.editText!!.text.toString().isBlank()) 0L
                         else priceBinding.price.editText!!.text.toString().toLong()
@@ -648,16 +647,16 @@ class TripsConfigFragment : Fragment() {
                 null,
                 true
             )
-            priceBinding.price.setHint(R.string.text_e_hint_trips_config_vip_price)
+            priceBinding.price.setHint(R.string.text_vip_price)
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
                 .setView(priceBinding.root)
-                .setNegativeButton(R.string.text_btn_cancel) { dialog, _ ->
+                .setNegativeButton(R.string.text_cancel) { dialog, _ ->
                     dialog.cancel()
                     dialog.dismiss()
                     viewModel.setField(FieldTags.ON_VIP_PRICE_FORM, false)
                 }
-                .setPositiveButton(R.string.text_btn_save) { dialog, _ ->
+                .setPositiveButton(R.string.text_save) { dialog, _ ->
                     val price =
                         if (priceBinding.price.editText!!.text.toString().isBlank()) 0L
                         else priceBinding.price.editText!!.text.toString().toLong()

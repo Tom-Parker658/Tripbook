@@ -102,9 +102,9 @@ class ScannerConfigFragment : Fragment() {
                         }
                         ScannerConfigViewModel.ScannerButtonTags.BUTTON_FIRE_SCANNER -> {
                             MaterialAlertDialogBuilder(requireContext()).apply {
-                                setTitle(getString(R.string.text_dialog_warning))
-                                setMessage(getString(R.string.text_dialog_fire_scanner_message))
-                                setNegativeButton(R.string.text_btn_scanner_config_fire) { dialog, _ ->
+                                setTitle(getString(R.string.text_warning))
+                                setMessage(getString(R.string.text_fire_scanner_warning))
+                                setNegativeButton(R.string.text_un_employ) { dialog, _ ->
                                     CoroutineScope(Dispatchers.Main).launch {
                                         viewModel.fireScanner(scannerId = scannerID,
                                             agencyID = parentViewModel.bookerDoc.value!!.getString("agencyID")!!
@@ -190,9 +190,9 @@ class ScannerConfigFragment : Fragment() {
                 setSingleChoiceItems(
                     arrayOf(
                         getString(R.string.text_sort_by_none),
-                        getString(R.string.text_sort_town_by_name),
+                        getString(R.string.text_sort_by_name_asc),
                         "Number of Scans", "Recruitment date",
-                    getString(R.string.text_chip_scanner_config_admin)),
+                    getString(R.string.text_admin_full)),
                     viewModel.sortCheckedItem
                 ) { dialog, which ->
                     when (which) {
@@ -241,7 +241,7 @@ class ScannerConfigFragment : Fragment() {
 
             return MaterialAlertDialogBuilder(requireContext())
                 // Add customization options here
-                .setTitle(R.string.text_btn_scanner_addition_recruit)
+                .setTitle(R.string.text_recruit)
                 .setIcon(R.drawable.baseline_person_add_24)
                 .setView(scannerBinding.root)
                 .create()
@@ -276,7 +276,7 @@ class ScannerConfigFragment : Fragment() {
                 }
             }
             scannerBinding.btnRecruitScanner.setOnClickListener {
-                if ((scannerBinding.btnRecruitScanner as MaterialButton).text == getString(R.string.text_btn_scanner_addition_recruit))
+                if ((scannerBinding.btnRecruitScanner as MaterialButton).text == getString(R.string.text_recruit))
                     CoroutineScope(Dispatchers.Main).launch {
                         viewModel.recruitScanner(
                             viewModel.newScannerDoc.value!!,
@@ -306,13 +306,13 @@ class ScannerConfigFragment : Fragment() {
                         } != null) {
                         //We instead fire a scanner if he is already employed
                         (scannerBinding.btnRecruitScanner as MaterialButton).apply {
-                            text = getString(R.string.text_btn_scanner_config_fire)
+                            text = getString(R.string.text_un_employ)
                             setIconResource(R.drawable.round_cancel_24)
                             setBackgroundColor(requireActivity().resources.getColor(R.color.colorNegativeButton))
                         }
                     } else {//Not found in this list, we recruit
                         (scannerBinding.btnRecruitScanner as MaterialButton).apply {
-                            text = getString(R.string.text_btn_scanner_addition_recruit)
+                            text = getString(R.string.text_recruit)
                             setIconResource(R.drawable.baseline_add_24)
                             setBackgroundColor(requireActivity().resources.getColor(R.color.colorPositiveButton))
                         }

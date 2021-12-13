@@ -16,7 +16,7 @@
             android:id="@+id/phone"
             style="@style/editTextStyle"
             android:layout_marginBottom="32dp"
-            android:hint="@string/text_e_hint_booker_creation_phone"
+            android:hint="@string/text_phone_num"
             app:layout_constraintBottom_toTopOf="@+id/btn_send_sms"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -60,7 +60,7 @@
         <Button
             android:id="@+id/btn_send_sms"
             style="@style/positiveButton"
-            android:text="@string/text_btn_booker_creation_send_sms"
+            android:text="@string/text_send_sms"
             app:icon="@drawable/baseline_sms"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

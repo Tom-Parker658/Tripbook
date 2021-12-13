@@ -109,7 +109,7 @@
                 android:checkable="true"
                 android:checked="false"
                 android:onClickListener="@{()-> clickListener.onClick(tripButtonTag.TRIPS_CHECK_VIP, changesMap)}"
-                android:text="@string/switch_vip_trip"
+                android:text="@string/text_vip"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

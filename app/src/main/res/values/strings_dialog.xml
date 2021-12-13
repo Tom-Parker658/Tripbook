@@ -4,19 +4,27 @@
     <!--    General -->
     <string name="text_dialog_title_sort_by">Sort by</string>
     <string name="text_sort_by_none">None</string>
-    <string name="text_dialog_btn_add">Add</string>
-    <!--    Town Sorting-->
-    <string name="text_sort_town_by_name">Town name</string>
-    <string name="text_sort_town_by_region">Regions</string>
-    <!--    Trips Sorting-->
-    <string name="text_sort_trip_by_price">Standard price</string>
-    <string name="text_sort_trip_by_vip_price">VIP price</string>
-    <string name="text_sort_trip_by_distance">Distance</string>
-    <!--    Books Sorting-->
-    <string name="text_sort_book_by_departure_time">Closest</string>
-    <string name="text_sort_book_by_price">Price</string>
-    <string name="text_sort_book_by_distance">Distance</string>
-    <string name="text_sort_book_by_vips">VIPs</string>
-    <string name="text_sort_book_by_taken_already">Already taken</string>
-    <string name="text_sort_book_by_expired">Expired</string>
+    <string name="text_btn_add">Add</string>
+    <!--    Ascending order-->
+    <string name="text_sort_by_name_asc">Names (A to Z)</string>
+    <string name="text_sort_by_region_asc">Regions (A to Z)</string>
+    <string name="text_sort_by_distance_asc">Distance (shortest first)</string>
+    <string name="text_sort_by_departure_time_asc">Take off time (closest first)</string>
+    <string name="text_sort_by_price_asc">Price (cheapest first)</string>
+    <string name="text_sort_by_vips">VIPs first</string>
+    <string name="text_sort_by_taken_already">Taken first</string>
+    <string name="text_sort_by_expired">Expired first</string>
+    <string name="text_sort_by_popularity_asc">Least popular first</string>
+    <string name="text_sort_by_reputation_asc">Low-reputation first</string>
+
+    <!--inverse order (descending)-->
+    <string name="text_sort_by_name_desc">Names (Z to A)</string>
+    <string name="text_sort_by_region_desc">Regions (Z to A)</string>
+    <string name="text_sort_by_distance_desc">Distance (longest first)</string>
+    <string name="text_sort_by_departure_time_desc">Take off time (farthest first)</string>
+    <string name="text_sort_by_price_desc">Price (expensive first)</string>
+    <string name="text_sort_by_vips_reverse">Non VIPs first</string>
+    <string name="text_sort_by_not_taken">Upcoming First</string>
+    <string name="text_sort_by_popularity_desc">Most popular first</string>
+    <string name="text_sort_by_reputation_desc">High-reputation first</string>
 </resources>

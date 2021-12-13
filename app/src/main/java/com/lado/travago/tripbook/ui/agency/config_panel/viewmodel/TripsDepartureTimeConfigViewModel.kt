@@ -45,24 +45,18 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
     }
 
     //Addition Data
-    var fromHour: Int? = null
+    var fromTime: TimeModel? = null
         private set
-    var toHour: Int? = null
+    var toTime: TimeModel? = null
         private set
-    var departureHour: Int? = null
-        private set
-    var fromMinutes: Int? = null
-        private set
-    var toMinutes: Int? = null
-        private set
-    var departureMinutes: Int? = null
+    var departureTime: TimeModel? = null
         private set
 
     var intervalName = ""
         private set
 
     enum class FieldTags {
-        FROM_HOUR, FROM_MINUTES, TO_HOUR, TO_MINUTES, DEPARTURE_HOUR, DEPARTURE_MINUTES, INTERVAL_NAME, TOAST_MESSAGE, ON_LOADING, TIME_FORMAT, SPAN_SIZE, SWITCH_ADD_DIALOG_STATE
+        FROM_TIME, TO_TIME, DEPARTURE_TIME, INTERVAL_NAME, TOAST_MESSAGE, ON_LOADING, TIME_FORMAT, SPAN_SIZE, SWITCH_ADD_DIALOG_STATE
     }
 
     //Get all the departure times
@@ -86,12 +80,9 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
 
     fun setField(fieldTags: FieldTags, value: Any) =
         when (fieldTags) {
-            FieldTags.FROM_HOUR -> fromHour = value as Int
-            FieldTags.FROM_MINUTES -> fromMinutes = value as Int
-            FieldTags.TO_HOUR -> toHour = value as Int
-            FieldTags.TO_MINUTES -> toMinutes = value as Int
-            FieldTags.DEPARTURE_HOUR -> departureHour = value as Int
-            FieldTags.DEPARTURE_MINUTES -> departureMinutes = value as Int
+            FieldTags.FROM_TIME -> fromTime = value as TimeModel
+            FieldTags.TO_TIME -> toTime = value as TimeModel
+            FieldTags.DEPARTURE_TIME -> departureTime = value as TimeModel
             FieldTags.INTERVAL_NAME -> intervalName = value.toString()
             FieldTags.TOAST_MESSAGE -> _toastMessage.value = value.toString()
             FieldTags.ON_LOADING -> _onLoading.value = value as Boolean
@@ -104,12 +95,9 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
         val intervalMap = hashMapOf<String, Any?>(
             "intervalName" to intervalName,
             "agencyID" to agencyID,
-            "fromHour" to fromHour,
-            "fromMinutes" to fromMinutes,
-            "toHour" to toHour,
-            "toMinutes" to toMinutes,
-            "departureHour" to departureHour,
-            "departureMinutes" to departureMinutes
+            "fromTimeInMillis" to fromTime!!.fullTimeInMillis,
+            "toTimeInMillis" to toTime!!.fullTimeInMillis,
+            "departureTimeInMillis" to departureTime!!.fullTimeInMillis,
         )
         firestoreRepo.addDocument(
             intervalMap,
@@ -152,11 +140,8 @@ class TripsDepartureTimeConfigViewModel : ViewModel() {
 
     fun clearData() {
         intervalName = ""
-        fromHour = null
-        fromMinutes = null
-        toHour = null
-        toMinutes = null
-        departureHour = null
-        departureMinutes = null
+        fromTime = null
+        toTime = null
+        departureTime = null
     }
 }

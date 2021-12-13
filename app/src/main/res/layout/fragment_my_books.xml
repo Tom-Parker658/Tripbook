@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="@string/text_sort_book_by_departure_time"
+                    android:text="@string/text_sort_by_departure_time_asc"
                     android:textStyle="bold" />
 
                 <com.google.android.material.chip.Chip
@@ -45,35 +45,35 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="@string/text_sort_book_by_price" />
+                    android:text="@string/text_sort_by_price_asc" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_book_filter_vip_first"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="@string/text_sort_book_by_vips" />
+                    android:text="@string/text_sort_by_vips" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_book_filter_done_first"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="@string/text_sort_book_by_taken_already" />
+                    android:text="@string/text_sort_by_taken_already" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_book_filter_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="@string/text_sort_book_by_distance" />
+                    android:text="@string/text_sort_by_distance_asc" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_book_filter_expired_first"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="@string/text_sort_book_by_expired" />
+                    android:text="@string/text_sort_by_expired" />
 
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
