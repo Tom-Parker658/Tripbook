@@ -21,6 +21,7 @@ import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentNotificationBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.model.enums.NotificationType
+import com.lado.travago.tripbook.model.enums.SignUpCaller
 import com.lado.travago.tripbook.ui.booker.book_panel.BooksActivity
 import com.lado.travago.tripbook.ui.booker.book_panel.TripDetailsFragmentArgs
 import com.lado.travago.tripbook.ui.booker.book_panel.TripSearchActivity
@@ -86,7 +87,6 @@ class NotificationFragment : Fragment() {
                     this.visibility = View.VISIBLE
                 }
                 binding.btnNotifNegative.setOnClickListener {
-
                     startActivity(Intent(requireContext(), TripSearchActivity::class.java))
                 }
                 //We get all info to inflate the message
@@ -108,8 +108,12 @@ class NotificationFragment : Fragment() {
             }
             //Trip Not found
             NotificationType.EMPTY_RESULTS -> {
+                //We want to remove everything
+                val callerResID =
+                    NotificationFragmentArgs.fromBundle(requireArguments()).callerResID
+//
                 binding.imgNotif.setImageResource(R.drawable.not_found_24)
-                binding.textNotifTitle.text = getString(R.string.text_message_not_found_drop_down)
+                binding.textNotifTitle.text = getString(R.string.text_empty_content)
                 binding.btnNotifPositive.text = "Notify us"
                 binding.btnNotifPositive.setOnClickListener {
 //                    startActivity(Intent(requireContext(), BooksActivity::class.java))
@@ -124,7 +128,9 @@ class NotificationFragment : Fragment() {
                     this.setIconResource(R.drawable.baseline_arrow_back_24)
                     this.visibility = View.VISIBLE
                     setOnClickListener {
-                        findNavController().navigateUp()
+                        if (callerResID == R.layout.fragment_trip_search_result) {
+                            findNavController().navigate(R.id.tripSearchFragment)
+                        }
                     }
                 }
                 //We get all info to inflate the message
@@ -134,27 +140,31 @@ class NotificationFragment : Fragment() {
             }
         }
 
+
     }
+
 
     private val bookerCreationContract =
         registerForActivityResult(BookerSignUpContract()) { resultCode ->
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    displayMessage("Congrats!! You can please continue.")
+                    displayMessage("Congrats you are now signedUp!! You can please continue.")
                     findNavController().navigateUp()
                     onDestroyView()
                 }
-                Activity.RESULT_CANCELED -> {}
+                Activity.RESULT_CANCELED -> {
+                    displayMessage("We're sorry, something went wrong. Please try again.")
+                }
                 else -> displayMessage("We're sorry, something went wrong. Please try again.")
             }
         }
 
-    private fun startBookerCreationActivity() {
+    private fun startBookerCreationActivity() =
         //To start the booker signUp or LogIn if the user hasn't logIn already
         bookerCreationContract.launch(
-            Bundle.EMPTY
+            SignUpCaller.OTHER_ACTIVITY
         )
-    }
+
 
     private fun displayMessage(text: String) {
         Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).apply {
@@ -166,7 +176,7 @@ class NotificationFragment : Fragment() {
     fun InflateViewForEmptyResults() {
         val view = binding.apply {
             this.imgNotif.setImageResource(R.drawable.not_found_24)
-            this.textNotifTitle.text = "No results :<("
+            this.textNotifTitle.text = "No results (>_<)"
 //            this.btnNotifPositive.text = ""
         }
     }

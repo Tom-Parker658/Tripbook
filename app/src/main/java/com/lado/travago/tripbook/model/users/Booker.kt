@@ -15,7 +15,6 @@ import java.util.*
  * @property sex is the sex of the booker which can be [SEX.FEMALE], [SEX.MALE]
  * @property birthdayInMillis is the place of birth of the booker
  * @property photoUrl is the url link to the face picture of the booker
- * @property occupation is the user's occupation which can be any value among those of the
  * @property nationality is the country from which the user comes from
  * @property recoveryPhoneNumber is any SIM phoneNumber which can be used to recover a lost account. It must be different from the
  */
@@ -26,7 +25,6 @@ data class Booker(
     val birthdayInMillis: Long,
     val photoUrl: String,
     val nationality: String,
-    var occupation: String,
     val phone: String,
     var recoveryPhoneNumber: String,
 ) {
@@ -35,12 +33,11 @@ data class Booker(
 
     val bookerMap: HashMap<String, Any?> = hashMapOf(
         "name" to name,
-        "sex" to sex,
+        "sex" to sex.toString(),
         "phone" to phone,
         "recoveryPhoneNumber" to recoveryPhoneNumber,
         "birthday" to birthdayInMillis,
         "nationality" to nationality,
-        "occupation" to occupation,
         "photoUrl" to photoUrl,
         "addedOn" to addedOn
     )

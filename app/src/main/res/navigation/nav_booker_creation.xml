@@ -3,33 +3,97 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_booker_creation"
-    app:startDestination="@id/bookerCreation1Fragment">
+    app:startDestination="@id/bookerCreationCenter">
 
     <fragment
-        android:id="@+id/bookerCreation1Fragment"
-        android:name="com.lado.travago.tripbook.ui.booker.creation.BookerCreation1Fragment"
-        android:label="@string/frag_booker_creation_1"
-        tools:layout="@layout/fragment_booker_creation1">
+        android:id="@+id/bookerSignInFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.creation.BookerSignInFragment"
+        android:label="@string/text_signUp"
+        tools:layout="@layout/fragment_booker_sign_in">
+
         <action
-            android:id="@+id/action_bookerCreation1Fragment_to_bookerCreation2Fragment"
-            app:destination="@id/bookerCreation2Fragment" />
+            android:id="@+id/action_bookerSignInFragment_to_bookerConfirmationFragment"
+            app:destination="@id/bookerConfirmationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="caller"
+            app:argType="com.lado.travago.tripbook.model.enums.SignUpCaller" />
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookerConfirmationFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.creation.BookerConfirmationFragment"
+        android:label="{phoneNumber}"
+        tools:layout="@layout/fragment_booker_confirmation">
+        <argument
+            android:name="phoneNumber"
+            app:argType="string" />
         <action
-            android:id="@+id/action_bookerCreation1Fragment_to_bookerCreationFinalFragment"
-            app:destination="@id/bookerCreationFinalFragment" />
+            android:id="@+id/action_bookerConfirmationFragment_to_bookerProfileFragment"
+            app:destination="@id/bookerProfileFragment"
+            app:popUpTo="@id/bookerSignInFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookerProfileFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.creation.BookerProfileFragment"
+        android:label="@string/string_menu_personal_info"
+        tools:layout="@layout/fragment_booker_profile">
+        <argument
+            android:name="isNewBooker"
+            app:argType="boolean" />
+        <argument
+            android:name="caller"
+            app:argType="com.lado.travago.tripbook.model.enums.SignUpCaller" />
+
     </fragment>
     <fragment
-        android:id="@+id/bookerCreation2Fragment"
-        android:name="com.lado.travago.tripbook.ui.booker.creation.BookerCreation2Fragment"
-        android:label="@string/frag_booker_creation_2"
-        tools:layout="@layout/fragment_booker_creation2">
+        android:id="@+id/bookerCreationCenter"
+        android:name="com.lado.travago.tripbook.ui.booker.creation.BookerCreationCenter"
+        android:label="@string/text_account">
         <action
-            android:id="@+id/action_bookerCreation2Fragment_to_bookerCreationFinalFragment"
-            app:destination="@id/bookerCreationFinalFragment"
-            app:popUpTo="@id/bookerCreation1Fragment" />
+            android:id="@+id/action_bookerCreationCenter_to_bookerSignUp"
+            app:destination="@id/bookerSignInFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_bookerCreationCenter_to_changePhoneFragment"
+            app:destination="@id/changePhoneFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_bookerCreationCenter_to_bookerProfileFragment"
+            app:destination="@id/bookerProfileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
-        android:id="@+id/bookerCreationFinalFragment"
-        android:name="com.lado.travago.tripbook.ui.booker.creation.BookerCreationFinalFragment"
-        android:label="@string/frag_booker_creation_final"
-        tools:layout="@layout/fragment_booker_creation_final" />
+        android:id="@+id/changePhoneFragment"
+        android:name="com.lado.travago.tripbook.ui.booker.creation.ChangePhoneFragment"
+        android:label="@string/text_change_phone_number"
+        tools:layout="@layout/fragment_change_phone" >
+        <action
+            android:id="@+id/action_changePhoneFragment_to_bookerSignInFragment"
+            app:destination="@id/bookerSignInFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
 </navigation>

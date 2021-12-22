@@ -15,11 +15,11 @@
     <string name="text_nationality">Nationalité</string>
     <string name="text_recovery_phone">Tél de Récuperation</string>
     <string name="text_sms_code">Code de Validation</string>
-    <string name="text_helper_sms_code">Entrez le code de récuperation à 6 chiffres</string>
+    <string name="text_helper_sms_code">Entrez le code de confirmation à 6 chiffres</string>
     <string name="text_sex_male">Homme</string>
     <string name="text_sex_female">Femme</string>
     <string name="text_helper_email">abc@exemple.fr</string>
-    <string name="text_helper_check_sms_at">Vérifiez vos SMS au:</string>
+    <string name="text_helper_check_sms_at">Nous vénons de vous envoyer le code de confirmation par SMS au numéro si dessus. Si vous n\'avez rien reçu, veulliez appuyer sur le bouton gauche.</string>
     <string name="text_profile_photo">Photo de Profil</string>
     <string name="text_locality">Ville Actuelle</string>
     <string name="text_destination">Ville de Destination</string>
@@ -117,4 +117,17 @@
     <string name="text_sort_by_popularity_desc">Plus populaire d\'abord</string>
 
     <string name="text_error_locality_same_as_destination">Votre localité ne peut etre votre destination</string>
+    <string name="string_menu_help">Aide</string>
+    <string name="string_menu_my_agency">Mon Agence</string>
+    <string name="text_account">Mon Compte</string>
+    <string name="text_booker_profile">Mon Profile</string>
+    <string name="text_new">Nouveau</string>
+    <string name="text_old">Ancien</string>
+    <string name="text_qty_left">restant</string>
+    <string name="text_welcome">Bienvenue</string>
+    <string name="text_swap_phone">Echanger les numéros</string>
+    <string name="text_change_phone_number">Changer mon numéro</string>
+    <string name="text_message_enter_new_phone">Entrer le nouveau numéro</string>
+    <string name="text_message_enter_old_phone">Entrer l\'ancien numéro</string>
+    <string name="text_you_will_receive_an_sms">Vous allez recevoir un SMS à ce numéro</string>
 </resources>

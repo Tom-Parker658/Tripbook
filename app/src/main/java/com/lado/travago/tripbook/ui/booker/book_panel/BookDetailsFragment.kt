@@ -81,7 +81,8 @@ class BookDetailsFragment : Fragment() {
                 val args =
                     NotificationFragmentArgs.Builder(
                         NotificationType.ACCOUNT_NOT_FOUND,
-                        NotificationType.ACCOUNT_NOT_FOUND.toString()
+                        NotificationType.ACCOUNT_NOT_FOUND.toString(),
+                        R.layout.fragment_book_details
                     ).build()
                         .toBundle()
                 findNavController().navigate(R.id.notificationFragment, args)

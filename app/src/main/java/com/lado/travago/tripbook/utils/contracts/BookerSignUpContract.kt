@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContract
+import com.lado.travago.tripbook.model.enums.SignUpCaller
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationActivity
 //import com.lado.travago.tripbook.ui.agency.config_panel.AgencyConfigActivity.AgencyConfigResources.StartUpTags
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,15 +17,12 @@ import kotlinx.coroutines.InternalCoroutinesApi
  */
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
-class BookerSignUpContract : ActivityResultContract<Bundle, Int>() {
-
-    /** Create an intent that can be used for [Activity.startActivityForResult]  */
-    override fun createIntent(
-        context: Context,
-        dataBundle: Bundle
-    ) = Intent(context, BookerCreationActivity::class.java)
+class BookerSignUpContract : ActivityResultContract<SignUpCaller, Int>() {
+    override fun createIntent(context: Context, input: SignUpCaller): Intent {
+        return Intent(context, BookerCreationActivity::class.java)
+            .putExtra("caller", input)
+    }
 
     /** Convert result obtained from [Activity.onActivityResult] to Output  */
     override fun parseResult(resultCode: Int, infoIntent: Intent?) = resultCode
-
 }

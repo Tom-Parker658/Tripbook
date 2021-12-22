@@ -178,7 +178,9 @@ object Utils {
     /**
      * A function to remove all spaces
      */
-    fun String.removeSpaces() = replace(" ", "")
+    fun String.removeSpaces() = this.filter {
+        it != ' '
+    }
     fun formatDistance(distance: Long) = "$distance km"
 
 

@@ -23,7 +23,7 @@ data class SummaryItem(
     @ExperimentalCoroutinesApi
     companion object {
         @JvmStatic
-        fun getAdminScannerItems(resources: Resources) = listOf(
+        fun createForAgencyConfigOptions(resources: Resources) = listOf(
             SummaryItem(
                 "1",
                 resources.getString(R.string.text_agency_details),
@@ -83,7 +83,6 @@ data class SummaryItem(
             )
         )
 
-
         fun createSummaryItemsFromBooks(
             snapshots: List<DocumentSnapshot>
         ): List<SummaryItem> {
@@ -135,6 +134,27 @@ data class SummaryItem(
             }
             return books
         }
+
+        fun createForBookerConfigOptions(resources: Resources) = listOf(
+            SummaryItem(
+                "1",
+                resources.getString(R.string.text_booker_profile),
+                subTitle = "OK!",
+                logoResourceID = R.drawable.baseline_person_24,
+                isMainItem = true,
+                state = null,
+                logoUrl = null
+            ),
+            SummaryItem(
+                "2",
+                resources.getString(R.string.text_change_phone_number),
+                subTitle = "OK!",
+                logoResourceID = R.drawable.baseline_phone_24,
+                isMainItem = false,
+                state = null,
+                logoUrl = null
+            ),
+        )
     }
 }
 

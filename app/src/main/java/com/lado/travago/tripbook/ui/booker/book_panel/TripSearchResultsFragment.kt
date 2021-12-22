@@ -38,15 +38,6 @@ class TripSearchResultsFragment : Fragment() {
     private lateinit var adapter: TripSearchResultsAdapter
     private lateinit var viewModel: TripSearchResultsViewModel
 
-    /**
-     * Inorder to stop any loading blocking the ui
-     */
-    override fun onDetach() {
-        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-        super.onDetach()
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +73,7 @@ class TripSearchResultsFragment : Fragment() {
             viewModel.departureTimeListener(requireActivity(), it).remove()
         }
     }
+
 
     private fun initViewModelWithArgs() {
         viewModel = ViewModelProvider(this)[TripSearchResultsViewModel::class.java]
@@ -147,6 +139,8 @@ class TripSearchResultsFragment : Fragment() {
                         R.layout.fragment_trip_search_result
                     ).build()
                         .toBundle()
+                //To avoid going back to this screen again after the user presses the back button
+                findNavController().popBackStack(R.id.tripSearchFragment, false)
                 findNavController().navigate(
                     R.id.notificationFragment,
                     args
@@ -179,96 +173,6 @@ class TripSearchResultsFragment : Fragment() {
                 viewModel.prepareForDisplay()
             }
         }
-//}
-/*
-binding.fabSortResults.setOnClickListener{
-//1-We create a spinner with options
-MaterialAlertDialogBuilder(requireContext()).apply {
-setIcon(R.drawable.baseline_sort_24)
-setTitle("Sort By?")
-setSingleChoiceItems(
-arrayOf(
-"Agency Reputation",
-"Agency Name",
-"Trip Price",
-"Trip VIP Price",
-"Agency Popularity"
-),
-viewModel.sortCheckedItem
-) { dialog, which ->
-when (which) {
-0 -> {
-viewModel.sortTripsResult(SortTags.REPUTATION)
-viewModel.setField(FieldTags.CHECKED_ITEM, 0)
-}
-1 -> {
-viewModel.sortTripsResult(SortTags.AGENCY_NAME)
-viewModel.setField(FieldTags.CHECKED_ITEM, 1)
-}
-2 -> {
-viewModel.sortTripsResult(SortTags.PRICES)
-viewModel.setField(FieldTags.CHECKED_ITEM, 2)
-}
-3 -> {
-viewModel.sortTripsResult(SortTags.VIP_PRICES)
-viewModel.setField(FieldTags.CHECKED_ITEM, 3)
-}
-4 -> {
-viewModel.sortTripsResult(SortTags.POPULARITY)
-viewModel.setField(FieldTags.CHECKED_ITEM, 4)
-}
-}
-try {
-adapter.notifyDataSetChanged()
-} catch (e: Exception) {
 
-}
-dialog.dismiss()
-}
-
-}.create().show()
-}
-}
-*/
-
-        /* private val tripsQueryListener: ListenerRegistration
-        get() {
-            //We sort the town names alphabetically
-            val sortedTownList = listOf(viewModel.localityName, viewModel.destinationName).sorted()
-            val town1 = sortedTownList.first()
-            val town2 = sortedTownList.last()
-            viewModel.setField(FieldTags.ON_LOADING, true)
-            return viewModel.firestoreRepo.db.collectionGroup("Trips_agency")
-                .whereEqualTo("townNames.town1", town1)
-                .whereEqualTo("townNames.town2", town2)
-                .limit(10L)
-                .addSnapshotListener(requireActivity()) { tripSnapshot, error ->
-                    if (tripSnapshot != null) {
-                        viewModel.setField(FieldTags.ON_LOADING, false)
-                        if (!tripSnapshot.isEmpty) {
-    //                            Log.d("DO IT", tripSnapshot.documents.toString())
-                            viewModel.setLists(ListTag.TRIPS_DOC, tripSnapshot.documents)
-                        } else {
-                            viewModel.setField(FieldTags.ON_NO_SUCH_RESULTS, true)
-                        }
-                    }
-                    if (error != null) {
-                        Log.e("ERROR", "FAILURE: ${error.message.toString()}")
-                        viewModel.setField(FieldTags.ON_LOADING, false)
-                    }
-                }
-        }
-
-    private val agencyQueryListener
-        get() = viewModel.firestoreRepo.db.collection("OnlineTransportAgency")
-    //            .whereIn("id", viewModel.agencyIDList.value!!)
-    //            .orderBy("reputation")
-            .addSnapshotListener(requireActivity()) { agencySnapshot, error ->
-                if (agencySnapshot != null) {
-                    Log.d("DO IT KNOW", agencySnapshot.documents.toString())
-                    viewModel.setLists(ListTag.AGENCY_DOC, agencySnapshot.documents)
-                }
-                if (error != null) viewModel.setField(FieldTags.ON_LOADING, false)
-            }*/
     }
 }

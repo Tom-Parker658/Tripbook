@@ -108,7 +108,7 @@ class FirestoreRepo {
 
         val document = db.document(documentPath)
         document.set(data).await()
-        emit(State.success(null))
+        emit(State.success(Unit))
 
     }.catch {
         emit(State.failed(it as Exception))
@@ -122,7 +122,7 @@ class FirestoreRepo {
 
         val document = db.document(documentPath)
         document.update(data).await()
-        emit(State.success(null))
+        emit(State.success(Unit))
 
     }.catch {
         emit(State.failed(it as Exception))

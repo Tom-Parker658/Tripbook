@@ -23,7 +23,8 @@ import kotlinx.coroutines.tasks.await
  */
 @ExperimentalCoroutinesApi
 class FirebaseAuthRepo {
-    var firebaseAuth = FirebaseAuth.getInstance().apply{
+    var firebaseAuth = FirebaseAuth.getInstance().apply {
+        useAppLanguage()
         //TODO: Emulator
         useEmulator(
             AdminUtils.LOCAL_SERVER_FIREBASE_IP,
@@ -44,7 +45,6 @@ class FirebaseAuthRepo {
      * @return FirebaseUser which the signIn scanner(booker, scanner etc) see [FirebaseUser]
      */
     fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) = flow {
-        firebaseAuth.useAppLanguage()
         emit(State.loading())
 
         //loading: SignIn process in progress
@@ -53,6 +53,19 @@ class FirebaseAuthRepo {
         emit(State.success(user!!))
     }.catch {
         //Failed to register
+        emit(State.failed(it as Exception))
+    }.flowOn(Dispatchers.IO)
+
+    /**
+     * Uses a phone credential with a new phone number then overrides the old phone number
+     * of the user
+     * Call only when [currentUser] is not null
+     */
+    fun swapPhoneNumbers(credential: PhoneAuthCredential) = flow {
+        emit(State.loading())
+        firebaseAuth.currentUser!!.updatePhoneNumber(credential).await()
+        emit(State.success(Unit))
+    }.catch {
         emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 

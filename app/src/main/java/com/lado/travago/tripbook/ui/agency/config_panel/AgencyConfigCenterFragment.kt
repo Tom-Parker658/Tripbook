@@ -49,7 +49,7 @@ class AgencyConfigCenterFragment : Fragment() {
     }
 
     private fun initSettingsRecycler() {
-        val adminList = SummaryItem.getAdminScannerItems(resources)
+        val adminList = SummaryItem.createForAgencyConfigOptions(resources)
 
         SummaryItemAdapter(
             SummaryItemClickListener {

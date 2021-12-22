@@ -147,7 +147,6 @@ class TripSearchResultsViewModel : ViewModel() {
                     agencyIDList?.let {
                         agenciesListener(hostActivity, it)
                     }
-                    _toastMessage.value = "No Trips found from $localityName to $destinationName"
                 }
 
             error?.let {

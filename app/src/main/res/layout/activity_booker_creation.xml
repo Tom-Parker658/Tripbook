@@ -10,28 +10,20 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.booker.creation.BookerCreationActivity">
-
+        tools:context=".ui.booker.book_panel.TripSearchActivity">
 
         <!--  A navigation host fragment to hold our fragments  -->
-        <androidx.fragment.app.FragmentContainerView
+        <fragment
             android:id="@+id/booker_creation_nav_host"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_booker_creation"
-            tools:layout="@layout/fragment_booker_creation_final" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:visibility="gone" />
+            tools:layout="@layout/fragment_booker_profile" />
 
         <include
             android:id="@+id/booker_bottom_nav"

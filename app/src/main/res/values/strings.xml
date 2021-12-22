@@ -33,6 +33,35 @@
     <string name="text_date_pattern_in_words" translatable="false">EEEE dd MMMM yyyy</string>
 
     <string name="text_error_locality_same_as_destination">Your locality cannot be your destination</string>
+    <string name="string_menu_my_agency">My Agency</string>
+    <string name="text_signUp" translatable="false">Signup/Login</string>
+    <string name="text_booker_profile">My Profile</string>
+    <string name="text_change_phone_number">Change phone number</string>
+    <string name="text_new">New</string>
+    <string name="text_message_enter_new_phone">Enter the new phone number</string>
+    <string name="text_old">Old</string>
+    <string name="text_message_enter_old_phone">Enter your old phone number</string>
+    <string name="text_you_will_receive_an_sms">You will receive a an SMS at this number</string>
+    <string name="text_swap_phone">Swap phone numbers</string>
+    <string name="text_qty_left">left</string>
+    <string name="text_welcome">Welcome!</string>
+    <string name="text_account">My Account</string>
+
+<!--    Dialog messages-->
+    <string name="warn_select_photo">You must select profile photo</string>
+    <string name="warn_recovery_phone_differnce_with_phone">Recovery phone number must be different from your phone number</string>
+    <string name="warn_internet_required">You must be connected to access this page!</string>
+    <string name="warn_is_required">Is required!</string>
+    <string name="warn_gender_required">Specify your gender</string>
+    <string name="warn_choose_correct_date">Choose a correct date</string>
+    <string name="warn_invalid_phone">Invalid phone number</string>
+    <string name="warn_wrong_confirmation_code">Wrong confirmation code</string>
+    <string name="create_profile">Create your profile</string>
+    <string name="warn_old_phone_not_match">That is not your old phone number</string>
+    <string name="sign_in_with_new_phone">Please, sign in with your new phone number</string>
+    <string name="congrats_phone_changed">Congratulations! Your phone number has successfully been changed!</string>
+    <string name="warn_code_not_send_yet">Code has not yet been sent yet, wait or try to resend it.</string>
+    <string name="warn_old_phone_same_as_new">Your old phone number cannot be your new phone number</string>
 </resources>
 
 

@@ -35,17 +35,17 @@ class BooksActivity : AppCompatActivity() {
                     )
                     true
                 }
-                R.id.action_booker_info -> {
+                R.id.action_booker_account -> {
                     startActivity(
                         Intent(this, BookerCreationActivity::class.java)
                     )
                     true
                 }
-                R.id.action_booker_wallet -> {
+                R.id.action_booker_help -> {
                     //TODO: Wallet Panel
                     true
                 }
-                R.id.action_help -> {
+                R.id.action_booker_my_agency -> {
                     //TODO: Help pages
                     true
                 }
@@ -62,14 +62,14 @@ class BooksActivity : AppCompatActivity() {
                 R.id.myBooksFragment -> {
                     false
                 }
-                R.id.action_booker_info -> {
+                R.id.action_booker_account -> {
                     false
                 }
-                R.id.action_booker_wallet -> {
+                R.id.action_booker_help -> {
                     //TODO: Wallet Panel
                     false
                 }
-                R.id.action_help -> {
+                R.id.action_booker_my_agency -> {
                     //TODO: Help pages
                     false
                 }

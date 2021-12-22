@@ -15,9 +15,10 @@ import java.io.InputStream
 
 @ExperimentalCoroutinesApi
 class StorageRepo {
-    var storage = FirebaseStorage.getInstance().apply{
-        //TODO: Emulator
-        useEmulator(
+    var storage = FirebaseStorage.getInstance()
+
+    init {
+        storage.useEmulator(
             AdminUtils.LOCAL_SERVER_FIREBASE_IP,
             9199
         )

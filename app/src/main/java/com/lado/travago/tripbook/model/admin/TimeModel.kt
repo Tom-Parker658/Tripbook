@@ -1,8 +1,12 @@
 package com.lado.travago.tripbook.model.admin
 
+import android.os.CountDownTimer
 import androidx.annotation.IntRange
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.lado.travago.tripbook.model.admin.TimeModel.Companion.from12Format
 import com.lado.travago.tripbook.model.admin.TimeModel.Companion.from24Format
+import com.lado.travago.tripbook.model.admin.TimeModel.Companion.fromTimeParameter
 import java.util.*
 import kotlin.math.absoluteValue
 
@@ -34,6 +38,7 @@ class TimeModel private constructor(
         }
         TimeFormat.FORMAT_24H -> "${hour.toStringF()}:${minutes.toStringF()}"
         TimeFormat.FORMAT_FULL_TIME -> "${hour.toStringF()}:${minutes.toStringF()}:${seconds.toStringF()}.${millisecond.toStringF()}"
+        TimeFormat.FORMAT_SECONDS -> "${seconds}s"
     }
 
     /**
@@ -52,8 +57,12 @@ class TimeModel private constructor(
      * or a positive number if it's greater than other.
      */
     operator fun compareTo(other: TimeModel): Int {
-        return difference(this, other)
-
+        val thisMinusOther = difference(this, other)
+        return when {
+            thisMinusOther == 0 -> 1
+            thisMinusOther < 0 -> -1
+            else -> 1
+        }
     }
 
     /**
@@ -83,7 +92,7 @@ class TimeModel private constructor(
         return result
     }
 
-    enum class TimeFormat { FORMAT_12H, FORMAT_24H, FORMAT_FULL_TIME }
+    enum class TimeFormat { FORMAT_12H, FORMAT_24H, FORMAT_FULL_TIME, FORMAT_SECONDS }
     enum class Meridian { AM, PM }
     enum class TimeParameter { HOUR, MINUTE, SECONDS, MILLISECONDS }
 
@@ -178,5 +187,53 @@ class TimeModel private constructor(
          * [TimeModel]
          */
         fun now() = fromTimeParameter(TimeParameter.MILLISECONDS, Date().time)
+    }
+
+    class CountDown(
+        val toInMillis: Long,
+        val countInterval: Long = 1_000L//1 second timer
+    ) {
+        private lateinit var currentTick: TimeModel
+
+        private val _left = MutableLiveData("")
+        val left: LiveData<String> get() = _left
+
+        private val _isRunning = MutableLiveData(false)
+        val isRunning: LiveData<Boolean> get() = _isRunning
+
+        private val _isEnded = MutableLiveData(false)
+        val isEnded: LiveData<Boolean> get() = _isEnded
+
+
+        private val timer = object : CountDownTimer(toInMillis, countInterval) {
+            override fun onTick(p0: Long) {
+                currentTick = fromTimeParameter(
+                    TimeParameter.MILLISECONDS,
+                    p0
+                )
+                _left.value = "${currentTick.seconds}s"
+            }
+
+            override fun onFinish() {
+                stop()
+            }
+
+        }
+
+
+        fun start() {
+            timer.start()
+            _isRunning.value = true
+            _isEnded.value = false
+        }
+
+
+        //Make sure you set isEnded before isRunning inorder to allow observers to listen to the last tick
+        fun stop() {
+            timer.cancel()
+            _isEnded.value = true
+            _isRunning.value = false
+        }
+
     }
 }

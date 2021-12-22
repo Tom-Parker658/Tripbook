@@ -15,8 +15,28 @@ import com.lado.travago.tripbook.model.enums.SEX.*
  * @property UNKNOWN for initialising sex variables
  */
 enum class SEX {
-    MALE, FEMALE, UNKNOWN
+    MALE {
+        override fun toString() = "M"
+    },
+    FEMALE {
+        override fun toString() = "F"
+    },
+    UNKNOWN;
+
+    companion object {
+        fun String.toSEX() =
+            when {
+                this == "Male" || this == "M" || this == "MALE" -> MALE
+                this == "Female" || this == "F" || this == "FEMALE" -> FEMALE
+                else -> UNKNOWN
+            }
+    }
 }
+
+enum class SignUpCaller {
+    PHONE_CHANGE, USER, OTHER_ACTIVITY
+}
+
 
 /**
  * Contains options for occupations of travellers

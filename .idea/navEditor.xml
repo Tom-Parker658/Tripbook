@@ -560,23 +560,18 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="action_booker_info">
+                  <entry key="bookerConfirmationFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="54" />
+                            <option name="x" value="641" />
+                            <option name="y" value="365" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_bookerCreation1Fragment_to_bookerCreation2Fragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="action_bookerCreation1Fragment_to_bookerCreationFinalFragment">
+                            <entry key="action_bookerConfirmationFragment_to_bookerProfileFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -586,18 +581,28 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="bookerCreation2Fragment">
+                  <entry key="bookerCreationCenter">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="233" />
-                            <option name="y" value="12" />
+                            <option name="x" value="-9" />
+                            <option name="y" value="139" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_bookerCreation2Fragment_to_bookerCreationFinalFragment">
+                            <entry key="action_bookerCreationCenter_to_bookerProfileFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_bookerCreationCenter_to_bookerSignUp">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_bookerCreationCenter_to_changePhoneFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -607,14 +612,56 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="bookerCreationFinalFragment">
+                  <entry key="bookerProfileFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="454" />
-                            <option name="y" value="54" />
+                            <option name="x" value="896" />
+                            <option name="y" value="155" />
                           </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="bookerSignInFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="338" />
+                            <option name="y" value="366" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_bookerSignInFragment_to_bookerConfirmationFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="changePhoneFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="281" />
+                            <option name="y" value="-187" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_changePhoneFragment_to_bookerSignInFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

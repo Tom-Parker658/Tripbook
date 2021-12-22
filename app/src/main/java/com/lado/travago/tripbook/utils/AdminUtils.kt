@@ -2,11 +2,9 @@ package com.lado.travago.tripbook.utils
 
 import com.google.firebase.firestore.DocumentSnapshot
 
-/**
- * contains utilities for the admin panel
- */
 object AdminUtils {
     const val LOCAL_SERVER_FIREBASE_IP = "192.168.236.114"
+
 
     /**
      * Takes a list of document snapshots and sort them accordingly to the parameter[SortOption]

@@ -106,7 +106,8 @@ class TripDetailsFragment : Fragment() {
                     val args =
                         NotificationFragmentArgs.Builder(
                             NotificationType.ACCOUNT_NOT_FOUND,
-                            NotificationType.ACCOUNT_NOT_FOUND.toString()
+                            NotificationType.ACCOUNT_NOT_FOUND.toString(),
+                            R.layout.fragment_trip_detail
                         ).build()
                             .toBundle()
                     findNavController().navigate(R.id.action_tripDetailsFragment_to_notificationFragment, args)
@@ -127,7 +128,8 @@ class TripDetailsFragment : Fragment() {
                 val args =
                     NotificationFragmentArgs.Builder(
                         NotificationType.BOOKING_COMPLETE,
-                        NotificationType.BOOKING_COMPLETE.toString()
+                        NotificationType.BOOKING_COMPLETE.toString(),
+                        R.layout.fragment_trip_detail
                     ).build()
                         .toBundle()
                 findNavController().navigate(R.id.action_tripDetailsFragment_to_notificationFragment, args)
@@ -231,6 +233,5 @@ class TripDetailsFragment : Fragment() {
         }
 
     }
-
 
 }

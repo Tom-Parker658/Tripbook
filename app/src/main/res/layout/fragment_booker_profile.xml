@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/profile_photo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/desc_user_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_account_circle_24" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name"
+                style="@style/editTextStyle"
+                android:hint="@string/text_name"
+                app:layout_constraintBottom_toTopOf="@+id/birthday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_profile_photo"
+                app:startIconDrawable="@drawable/baseline_person_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/text_profile_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_profile_photo"
+                app:layout_constraintEnd_toEndOf="@+id/profile_photo"
+                app:layout_constraintStart_toStartOf="@+id/profile_photo"
+                app:layout_constraintTop_toBottomOf="@+id/profile_photo" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/birthday"
+                style="@style/editTextStyle"
+                android:hint="@string/text_birth_on"
+                app:endIconDrawable="@drawable/baseline_event_24"
+                app:endIconMode="custom"
+                app:layout_constraintBottom_toTopOf="@+id/nationality"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name"
+                app:startIconDrawable="@drawable/baseline_cake_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nationality"
+                style="@style/editTextStyle"
+                android:hint="@string/text_nationality"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/birthday"
+                app:startIconDrawable="@drawable/baseline_flag_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/countryCode_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@+id/recoveryPhone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/recoveryPhone" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/recoveryPhone"
+                style="@style/editTextStyle"
+                android:hint="@string/text_recovery_phone"
+                app:counterEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/countryCode_picker"
+                app:layout_constraintTop_toBottomOf="@+id/nationality"
+                app:startIconDrawable="@drawable/baseline_phone_24"
+                tools:helperText="It should not be +23766559988">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/textInputStyle"
+                    android:inputType="phone">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/btn_save_info"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recoveryPhone"
+                app:layout_constraintVertical_bias="0.0"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/sex_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/text_sex_male"
+                    app:checkedIcon="@drawable/baseline_male_24"
+                    app:checkedIconTint="@color/color_male"
+                    app:checkedIconEnabled="true" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/sex_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/text_sex_female"
+                    app:checkedIcon="@drawable/baseline_female_24"
+                    app:checkedIconTint="@color/color_female"
+                    app:checkedIconEnabled="true"  />
+            </com.google.android.material.chip.ChipGroup>
+
+            <Button
+                android:id="@+id/btn_save_info"
+                style="@style/positiveButton"
+                android:layout_marginBottom="16dp"
+                android:text="@string/text_save"
+                app:icon="@drawable/baseline_save_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

@@ -11,12 +11,12 @@
     <string name="text_name">Name</string>
     <string name="text_recovery_phone">Recovery phone</string>
     <string name="text_sms_code">Validation Code</string>
-    <string name="text_helper_sms_code">Enter 6 digit code from your sms</string>
+    <string name="text_helper_sms_code">Enter the 6 digit confirmation code</string>
 
     <string name="text_sex_male">Male</string>
     <string name="text_sex_female">Female</string>
     <string name="text_helper_email">abc@example.com</string>
-    <string name="text_helper_check_sms_at">Check SMS at</string>
+    <string name="text_helper_check_sms_at">We have sent you the confirmation code by SMS at the number above. If you did not receive it, click the left button.</string>
     <string name="text_profile_photo">Profile Photo</string>
 
     <!--    Trip Search-->

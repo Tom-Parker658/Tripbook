@@ -3,27 +3,17 @@ package com.lado.travago.tripbook.ui.booker.book_panel
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.LocaleList
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityTripSearchBinding
-import com.lado.travago.tripbook.model.enums.NotificationType
-import com.lado.travago.tripbook.ui.administrator.AdminFunctionActivity
 import com.lado.travago.tripbook.ui.agency.config_panel.AgencyConfigActivity
-import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsConfigViewModel
 import com.lado.travago.tripbook.ui.booker.creation.BookerCreationActivity
-import com.lado.travago.tripbook.ui.notification.NotificationFragmentArgs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.*
@@ -33,15 +23,14 @@ import java.util.*
 class TripSearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTripSearchBinding
     private lateinit var bottomNavView: BottomNavigationView
-    private lateinit var viewModel: TripsConfigViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_trip_search)
-        viewModel = ViewModelProvider(this)[TripsConfigViewModel::class.java]
 
         bottomNavView = binding.bottomNavTripSearch.bookerBottomNav
-        "".uppercase(Locale.getDefault())
+
 
         val navController = findNavController(R.id.trip_search_nav_host)
 
@@ -63,6 +52,11 @@ class TripSearchActivity : AppCompatActivity() {
     override fun onResume() {
         bottomNavView.selectedItemId = R.id.action_trip_search
         super.onResume()
+    }
+
+    override fun onRestart() {
+        bottomNavView.selectedItemId = R.id.action_trip_search
+        super.onRestart()
     }
 
     private fun hideBottomBar() {
@@ -117,20 +111,20 @@ class TripSearchActivity : AppCompatActivity() {
                     )
                     true
                 }
-                R.id.action_booker_info -> {
+                R.id.action_booker_account -> {
                     startActivity(
                         Intent(this, BookerCreationActivity::class.java)
                     )
                     true
                 }
-                R.id.action_booker_wallet -> {
+                R.id.action_booker_help -> {
                     //TODO: Remove this, this is just to add things to the universal database
 //                    startActivity(
 //                        Intent(this, AdminFunctionActivity::class.java)
 //                    )
-                    true
+                    false
                 }
-                R.id.action_help -> {
+                R.id.action_booker_my_agency -> {
                     //TODO: Help pages
                     startActivity(
                         Intent(this, AgencyConfigActivity::class.java)
