@@ -1,18 +1,15 @@
 package com.lado.travago.tripbook.ui.booker.creation
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.datepicker.CalendarConstraints
@@ -22,17 +19,14 @@ import com.lado.travago.tripbook.model.enums.SEX
 import com.lado.travago.tripbook.utils.Utils
 import java.util.*
 
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentBookerProfileBinding
-import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.model.enums.SignUpCaller
 import com.lado.travago.tripbook.ui.booker.creation.viewmodel.BookerProfileViewModel
 import com.lado.travago.tripbook.ui.booker.creation.viewmodel.BookerProfileViewModel.*
-import com.lado.travago.tripbook.utils.AdminUtils
-import com.lado.travago.tripbook.utils.Utils.removeSpaces
+import com.lado.travago.tripbook.utils.UIUtils
 import com.lado.travago.tripbook.utils.loadImageFromUrl
 import kotlinx.coroutines.*
 
@@ -45,20 +39,22 @@ import kotlinx.coroutines.*
 class BookerProfileFragment : Fragment() {
     private lateinit var binding: FragmentBookerProfileBinding
     private lateinit var viewModel: BookerProfileViewModel
+    private lateinit var uiUtils: UIUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         viewModel = ViewModelProvider(this)[BookerProfileViewModel::class.java]
-        val arguments = BookerProfileFragmentArgs.fromBundle(requireArguments())
+        uiUtils = UIUtils(this, requireActivity(), viewLifecycleOwner)
 
-        //We want to call it only once
-        if (viewModel.existingProfileDoc.value == null && !arguments.isNewBooker) {
-            CoroutineScope(Dispatchers.Main).launch {
-                viewModel.getExistingProfile()
-            }
-        }
+        //We want to call it only once and only when the booker has an existing profile
+        if (uiUtils.getSharedPreference(UIUtils.SP_BOOL_BOOKER_PROFILE_EXIST) == true) {
+            if (viewModel.existingProfileDoc.value == null)
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.getExistingProfile()
+                }
+        } else viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.create_profile))
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -67,21 +63,26 @@ class BookerProfileFragment : Fragment() {
             null,
             false
         )
-        getArgsAndRespond()
-        observeLiveData()
-        phoneWidgetConfig()
-        //Restore field should come before field change
-        restoreFields()
-        onFieldChange()
-        getSharedData()
+
         return binding.root
     }
 
-    fun getArgsAndRespond() {
-        getSharedData()
+    override fun onStart() {
+        super.onStart()
+        //Restore field should come before field change
+        observeLiveData()
+        getArgsAndRespond()
+        restoreFields()
+        onFieldChange()
+        phoneWidgetConfig()
+        getCachedCredentials()
+
+    }
+
+    private fun getArgsAndRespond() {
+        getCachedCredentials()
         val args = BookerProfileFragmentArgs.fromBundle(requireArguments())
         viewModel.setField(FieldTags.ARG_CALLER, args.caller)
-        viewModel.setField(FieldTags.ARG_IS_NEW_BOOKER, args.isNewBooker)
     }
 
 
@@ -281,15 +282,13 @@ class BookerProfileFragment : Fragment() {
     /**
      * We 'try' get the phoneNumber of the booker from the devices SharedPreferences
      */
-    private fun getSharedData() {
-        val preferences =
-            requireActivity().getSharedPreferences("Booker_Phone_Info", Context.MODE_PRIVATE)
+    private fun getCachedCredentials() {
+        val phone = (uiUtils.getSharedPreference(UIUtils.SP_STRING_BOOKER_PHONE) as String?) ?: ""
+        val phoneCode =
+            (uiUtils.getSharedPreference(UIUtils.SP_INT_BOOKER_COUNTRY_CODE) as Int?) ?: -1
 
-        val phone = preferences.getString("bookerPhoneNumber", "").toString()
-        val phoneCode = preferences.getInt("bookerCountryCode", -1)
-
-        viewModel.setField(FieldTags.PREFERENCE_PHONE, phone)
-        viewModel.setField(FieldTags.PREFERENCE_CODE, phoneCode)
+        viewModel.setField(FieldTags.CACHED_PHONE, phone)
+        viewModel.setField(FieldTags.CACHED_COUNTRY_CODE, phoneCode)
 
     }
 
@@ -323,19 +322,24 @@ class BookerProfileFragment : Fragment() {
 
         viewModel.onInfoSaved.observe(viewLifecycleOwner) {
             if (it) {
+                uiUtils.editSharedPreference(UIUtils.SP_BOOL_BOOKER_PROFILE_EXIST, true)
                 //To creation center
-                when(viewModel.caller){
+                when (viewModel.caller) {
                     SignUpCaller.PHONE_CHANGE -> {
-
+                        //Can't really happen
+                        findNavController().navigateUp()
                     }
                     SignUpCaller.USER -> {
                         findNavController().navigateUp()
                     }
                     SignUpCaller.OTHER_ACTIVITY -> {
-                        if(!viewModel.onFailed.value!!)
-                            requireActivity().finishActivity(Activity.RESULT_OK)
-                        else
+                        if (!viewModel.onFailed.value!!) {
+                            requireActivity().setResult(Activity.RESULT_OK)
+                            requireActivity().finish()
+                        } else {
                             requireActivity().finishActivity(Activity.RESULT_CANCELED)
+                            requireActivity().finish()
+                        }
                     }
                 }
             }

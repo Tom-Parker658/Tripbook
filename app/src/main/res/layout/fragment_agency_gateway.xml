@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/btn_help"
+                style="@style/neutralButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/string_menu_help"
+                android:visibility="gone"
+                app:icon="@drawable/baseline_help_24"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_enter_agency"
+                app:layout_constraintEnd_toStartOf="@+id/btn_enter_agency"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btn_enter_agency" />
+
+            <ImageView
+                android:id="@+id/img_agency_logo"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:contentDescription="@string/desc_agency_logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/outline_travel_agency_24" />
+
+            <Button
+                android:id="@+id/btn_enter_agency"
+                style="@style/positiveButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Enter"
+                android:visibility="gone"
+                app:icon="@drawable/baseline_login_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_help"
+                app:layout_constraintTop_toBottomOf="@+id/text_warning_gateway"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/text_warning_gateway"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Warning!\nYou are about to take up the Scanner Cap.\n Be sincere and note that any changes you make will be visible to your agency's managers."
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_agency_logo" />
+
+            <ProgressBar
+                android:id="@+id/progressBar4"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_agency_logo" />
+
+            <Button
+                android:id="@+id/btn_retry"
+                style="@style/neutralButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="retry"
+                android:visibility="gone"
+                app:icon="@drawable/outline_retry_24"
+                app:layout_constraintEnd_toEndOf="@+id/text_warning_gateway"
+                app:layout_constraintStart_toStartOf="@+id/text_warning_gateway"
+                app:layout_constraintTop_toBottomOf="@+id/btn_enter_agency" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

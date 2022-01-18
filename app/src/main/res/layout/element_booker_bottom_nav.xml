@@ -11,10 +11,9 @@
         style="@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        app:itemHorizontalTranslationEnabled="true"
-        app:labelVisibilityMode="labeled"
+        android:animateLayoutChanges="false"
+        app:itemHorizontalTranslationEnabled="false"
 
-        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/booker_menu" />
 </layout>

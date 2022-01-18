@@ -1,56 +1,98 @@
 package com.lado.travago.tripbook.ui.agency.config_panel
 
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.ActivityAgencyConfigBinding
+import com.lado.travago.tripbook.model.enums.NotificationType
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.lado.travago.tripbook.ui.notification.NotificationFragmentArgs
+import com.lado.travago.tripbook.utils.UIUtils
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.InternalCoroutinesApi
 
 /**
  * This activity is to manage the configuration of an agency
  * Functions:
  * manage navigation across all activities
  */
+@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 class AgencyConfigActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAgencyConfigBinding
     private lateinit var viewModel: AgencyConfigViewModel
+    private lateinit var bottomNavView: BottomNavigationView
+    private lateinit var uiUtils: UIUtils
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        uiUtils = UIUtils(null, this, this)
         viewModel = ViewModelProvider(this)[AgencyConfigViewModel::class.java]
-//        binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
+        bottomNavView = binding.bottomNavAgencyConfig.bookerBottomNav
+        setupFragmentNavigation()
+        uiUtils.activityNavigation(bottomNavView, R.id.action_agency_config)
+        uiUtils.onNetworkChange(binding.networkStateHeader)
+//        controlGateway()
+    }
 
-        viewModel.retry.observe(this) {
-            if (it) CoroutineScope(Dispatchers.Main).launch {
-                viewModel.getCurrentBooker()
+    /**<-------------------------------Navigation----------------------->**/
+    private fun setupFragmentNavigation() {
+        val navController = findNavController(R.id.agency_config_nav_host)
+        NavigationUI.setupActionBarWithNavController(this, navController)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                navController.graph.startDestination -> {
+                    uiUtils.bottomBarVisibility(true, bottomNavView)
+                }
+                R.id.notification_fragment_agency -> {
+                    uiUtils.bottomBarVisibility(true, bottomNavView)
+                    if (uiUtils.getSharedPreference(UIUtils.SP_BOOL_BOOKER_PROFILE_EXIST) == true) {
+                        navController.navigate(R.id.agencyGatewayFragment)
+                    }
+                }
+                else -> uiUtils.bottomBarVisibility(false, bottomNavView)
             }
         }
+    }
+//
+//    fun controlGateway() {
+//        viewModel.navArgs.observe(this) {
+//            if (it == Bundle.EMPTY) {
+//                val navController = findNavController(R.id.agency_config_nav_host)
+//                if (navController.currentDestination != null && navController.currentDestination!!.id == R.id.notificationFragment) {
+//                    navController.navigate(R.id.agencyGatewayFragment)
+//                    navController.popBackStack()
+//                }
+//            }
+//        }
+//        viewModel.authRepo.firebaseAuth.addAuthStateListener {
+//            if (it.currentUser != null) {
+//                val navController = findNavController(R.id.agency_config_nav_host)
+//                if (navController.currentDestination != null && navController.currentDestination!!.id == R.id.notificationFragment) {
+//                    navController.navigate(R.id.agencyGatewayFragment)
+//                    navController.popBackStack()
+//                }
+//            }
+//        }
+//    }
 
-        supportFragmentManager.addFragmentOnAttachListener { fragmentManager, fragment ->
-            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.agency_config_nav_host)
+        return navController.navigateUp()
+    }
 
-        viewModel.bookerDoc.observe(this) {
-            //If this a scanner, he nav to panel
-            if (it.exists()) binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
-            //If this just any user, he navigates to agency creation
-            else {
-                binding = DataBindingUtil.setContentView(this, R.layout.activity_agency_config)
-                findNavController(R.id.my_agency_config_nav_host_fragment).navigate(R.id.action_agencyConfigCenterFragment_to_agencyCreationFragment)
+    override fun onResume() {
+        super.onResume()
 
-            }
-        }
+        // disable transition when coming back from an activity
+        overridePendingTransition(0, 0)
     }
 
 }

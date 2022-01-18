@@ -3,7 +3,8 @@ package com.lado.travago.tripbook.utils
 import com.google.firebase.firestore.DocumentSnapshot
 
 object AdminUtils {
-    const val LOCAL_SERVER_FIREBASE_IP = "192.168.236.114"
+    const val LOCAL_SERVER_FIREBASE_IP = "192.168.58.159"
+
 
 
     /**

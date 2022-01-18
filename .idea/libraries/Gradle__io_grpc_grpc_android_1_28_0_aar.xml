@@ -1,17 +1,16 @@
 <component name="libraryTable">
   <library name="Gradle: io.grpc:grpc-android:1.28.0@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d6e16ea324e057bbcd104acdea158b10/transformed/jetified-grpc-android-1.28.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f07b4d12578210ffc91667a253d02970/transformed/jetified-grpc-android-1.28.0/AndroidManifest.xml" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f07b4d12578210ffc91667a253d02970/transformed/jetified-grpc-android-1.28.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f07b4d12578210ffc91667a253d02970/transformed/jetified-grpc-android-1.28.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/009715444749e0f4b6ff8062e43a88ac/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/793ee391f7b032c207b4aa1e95982d24/transformed/jetified-grpc-android-1.28.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/793ee391f7b032c207b4aa1e95982d24/transformed/jetified-grpc-android-1.28.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/793ee391f7b032c207b4aa1e95982d24/transformed/jetified-grpc-android-1.28.0/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/io.grpc/grpc-android/1.28.0/e7c3f4a90a5862818fc0ff52806ab2b2986bea67/grpc-android-1.28.0-javadoc.jar!/" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/io.grpc/grpc-android/1.28.0/e7c3f4a90a5862818fc0ff52806ab2b2986bea67/grpc-android-1.28.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/io.grpc/grpc-android/1.28.0/64355636f33bb77e4e0677e3de8ba7a48d6a74d/grpc-android-1.28.0-sources.jar!/" />
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/io.grpc/grpc-android/1.28.0/64355636f33bb77e4e0677e3de8ba7a48d6a74d/grpc-android-1.28.0-sources.jar!/" />
     </SOURCES>
   </library>

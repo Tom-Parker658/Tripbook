@@ -15,9 +15,9 @@
         android:title="@string/text_account" />
 
     <item
-        android:id="@+id/action_booker_my_agency"
+        android:id="@+id/action_agency_config"
         android:icon="@drawable/outline_travel_agency_24"
-        android:title="@string/string_menu_my_agency" />
+        android:title="@string/string_menu_agency" />
 
     <item
         android:id="@+id/action_booker_help"

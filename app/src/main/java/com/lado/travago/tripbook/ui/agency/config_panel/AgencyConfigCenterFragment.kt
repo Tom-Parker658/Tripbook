@@ -1,5 +1,6 @@
 package com.lado.travago.tripbook.ui.agency.config_panel
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyConfigCenterBinding
 import com.lado.travago.tripbook.model.admin.SummaryItem
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
+import com.lado.travago.tripbook.ui.agency.scanner_panel.ScannerPanelActivity
 import com.lado.travago.tripbook.ui.recycler_adapters.SummaryItemAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.SummaryItemClickListener
 import kotlinx.coroutines.*
@@ -21,7 +23,7 @@ import kotlinx.coroutines.*
 @InternalCoroutinesApi
 class AgencyConfigCenterFragment : Fragment() {
     private lateinit var binding: FragmentAgencyConfigCenterBinding
-//    TODO: TEST COMMENTING
+    //    TODO: TEST COMMENTING
     private lateinit var parentViewModel: AgencyConfigViewModel
 
     override fun onCreateView(
@@ -80,8 +82,8 @@ class AgencyConfigCenterFragment : Fragment() {
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTownsConfigFragment()
             )
             // Agency Profile
-            getString(R.string.text_agency_details) -> findNavController().navigate(
-                AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyCreationFragment()
+            getString(R.string.text_agency_profile) -> findNavController().navigate(
+                AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyProfileFragment()
             )
             // Money
             getString(R.string.text_money) -> {
@@ -98,6 +100,13 @@ class AgencyConfigCenterFragment : Fragment() {
             //Intervals
             getString(R.string.text_take_off_periods) -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTripDepartureTimeConfigFragment()
+            )
+            //All the agencies books
+            getString(R.string.text_all_trip_books) -> startActivity(
+                Intent(
+                    requireActivity(),
+                    ScannerPanelActivity::class.java
+                )
             )
         }
     }

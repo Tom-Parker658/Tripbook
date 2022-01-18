@@ -34,7 +34,7 @@ enum class SEX {
 }
 
 enum class SignUpCaller {
-    PHONE_CHANGE, USER, OTHER_ACTIVITY
+    PHONE_CHANGE, USER, OTHER_ACTIVITY,
 }
 
 
@@ -58,4 +58,3 @@ enum class OCCUPATION {
 enum class DbOperations {
     SET, DELETE, UPDATE, GET
 }
-

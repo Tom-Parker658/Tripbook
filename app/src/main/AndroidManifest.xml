@@ -20,7 +20,8 @@
 
         <activity
             android:name=".ui.agency.scanner_panel.ScannerPanelActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleInstance">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 
@@ -29,10 +30,12 @@
         </activity>
         <activity
             android:name=".ui.booker.book_panel.BooksActivity"
-            android:exported="true"/>
+            android:exported="true"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.booker.book_panel.TripSearchActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,10 +58,12 @@
             android:theme="@style/SplashTheme" />
         <activity
             android:name=".ui.administrator.AdminFunctionActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.booker.creation.BookerCreationActivity"
-            android:exported="true"/>
+            android:exported="true"
+            android:launchMode="singleTask"/>
         <activity android:name=".ui.PaymentActivity" /> <!-- Helps for screen orientation during barcode scanning -->
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"

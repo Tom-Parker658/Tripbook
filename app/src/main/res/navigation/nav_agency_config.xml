@@ -1,89 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_agency_config"
-    app:startDestination="@id/agencyConfigCenterFragment">
+    app:startDestination="@id/agencyGatewayFragment">
+
     <fragment
         android:id="@+id/scannerConfigFragment"
         android:name="com.lado.travago.tripbook.ui.agency.config_panel.ScannerConfigFragment"
-        android:label="fragment_scanner_config" >
-        <action
-            android:id="@+id/action_scannerConfigFragment_to_agencyConfigCenterFragment"
-            app:destination="@id/agencyConfigCenterFragment"
-            app:popUpTo="@id/agencyConfigCenterFragment" />
-    </fragment>
+        android:label="@string/text_scanners" />
     <fragment
         android:id="@+id/townsConfigFragment"
         android:name="com.lado.travago.tripbook.ui.agency.config_panel.TownsConfigFragment"
-        android:label="TownsConfigFragment" >
+        android:label="@string/text_cameroon_towns">
         <action
             android:id="@+id/action_townsConfigFragment_to_tripsConfigFragment"
-            app:destination="@id/tripsConfigFragment" />
-        <action
-            android:id="@+id/action_townsConfigFragment_to_agencyConfigCenterFragment"
-            app:destination="@id/agencyConfigCenterFragment"
-            app:popUpTo="@id/agencyConfigCenterFragment" />
+            app:destination="@id/tripsConfigFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
     <fragment
         android:id="@+id/tripsConfigFragment"
         android:name="com.lado.travago.tripbook.ui.agency.config_panel.TripsConfigFragment"
-        android:label="TripsConfigFragment" >
+        android:label="{townName}">
         <argument
             android:name="townID"
             app:argType="string" />
         <argument
             android:name="townName"
             app:argType="string" />
-        <action
-            android:id="@+id/action_tripsConfigFragment_to_townsConfigFragment"
-            app:destination="@id/townsConfigFragment"
-            app:popUpTo="@id/townsConfigFragment" />
     </fragment>
+
     <fragment
-        android:id="@+id/agencyCreationFragment"
-        android:name="com.lado.travago.tripbook.ui.agency.config_panel.creation.AgencyCreationFragment"
-        android:label="AgencyCreationFragment" >
-        <action
-            android:id="@+id/action_agencyCreationFragment_to_agencyConfigCenterFragment"
-            app:destination="@id/agencyConfigCenterFragment"
-            app:popUpTo="@id/agencyConfigCenterFragment" />
-    </fragment>
+        android:id="@+id/agencyProfileFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.config_panel.creation.AgencyProfileFragment"
+        android:label="@string/text_booker_profile" />
+
     <fragment
         android:id="@+id/agencyConfigCenterFragment"
         android:name="com.lado.travago.tripbook.ui.agency.config_panel.AgencyConfigCenterFragment"
-        android:label="AgencyConfigCenterFragment" >
+        android:label="@string/string_menu_agency">
+        <action
+            android:id="@+id/action_agencyConfigCenterFragment_to_agencyProfileFragment"
+            app:destination="@id/agencyProfileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_agencyConfigCenterFragment_to_scannerConfigFragment"
-            app:destination="@id/scannerConfigFragment" />
-        <action
-            android:id="@+id/action_agencyConfigCenterFragment_to_agencyCreationFragment"
-            app:destination="@id/agencyCreationFragment" />
-        <action
-            android:id="@+id/action_agencyConfigCenterFragment_to_townsConfigFragment"
-            app:destination="@id/townsConfigFragment" />
-        <action
-            android:id="@+id/action_agencyConfigCenterFragment_to_tripDepartureTimeConfigFragment"
-            app:destination="@id/tripDepartureTimeConfigFragment" />
+            app:destination="@id/scannerConfigFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_agencyConfigCenterFragment_to_agencyEventPlannerFragment"
-            app:destination="@id/agencyEventPlannerFragment" />
+            app:destination="@id/agencyEventPlannerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_agencyConfigCenterFragment_to_townsConfigFragment"
+            app:destination="@id/townsConfigFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_agencyConfigCenterFragment_to_tripDepartureTimeConfigFragment"
+            app:destination="@id/tripDepartureTimeConfigFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_agencyConfigCenterFragment_to_scannerPanelActivity"
+            app:destination="@id/scannerPanelActivity" />
     </fragment>
+
     <fragment
         android:id="@+id/tripDepartureTimeConfigFragment"
         android:name="com.lado.travago.tripbook.ui.agency.config_panel.TripsDepartureTimeConfigFragment"
-        android:label="fragment_trip_departure_time_config"
-        tools:layout="@layout/fragment_trip_departure_time_config" >
-        <action
-            android:id="@+id/action_tripDepartureTimeConfigFragment_to_agencyConfigCenterFragment"
-            app:destination="@id/agencyConfigCenterFragment" />
-    </fragment>
+        android:label="@string/text_take_off_periods"
+        tools:layout="@layout/fragment_trip_departure_time_config" />
+
     <fragment
         android:id="@+id/agencyEventPlannerFragment"
         android:name="com.lado.travago.tripbook.ui.agency.config_panel.AgencyEventPlannerFragment"
-        android:label="AgencyEventPlannerFragment" >
-        <action
-            android:id="@+id/action_agencyEventPlannerFragment_to_agencyConfigCenterFragment"
-            app:destination="@id/agencyConfigCenterFragment" />
+        android:label="@string/text_event_planner" />
+
+    <activity
+        android:id="@+id/scannerPanelActivity"
+        android:name="com.lado.travago.tripbook.ui.agency.scanner_panel.ScannerPanelActivity"
+        android:label="ScannerPanelActivity" />
+    <fragment
+        android:id="@+id/notification_fragment_agency"
+        android:name="com.lado.travago.tripbook.ui.notification.NotificationFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_notification">
+        <argument
+            android:name="notificationType"
+            app:argType="com.lado.travago.tripbook.model.enums.NotificationType" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="callerResID"
+            app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/agencyGatewayFragment"
+        android:name="com.lado.travago.tripbook.ui.agency.config_panel.AgencyGatewayFragment"
+        android:label="@string/text_agency_gateway">
+        <action
+            android:id="@+id/action_agencyGatewayFragment_to_agencyConfigCenterFragment"
+            app:destination="@id/agencyConfigCenterFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
+    </fragment>
+
 </navigation>

@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.agency.scanner_panel.ScannerPanelActivity">
 
-        <androidx.fragment.app.FragmentContainerView
+        <fragment
             android:id="@+id/myAdminPanelNavHostFragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"

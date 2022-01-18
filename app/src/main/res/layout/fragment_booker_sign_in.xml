@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:ccp_autoDetectCountry="true"
-                app:ccp_contentColor="@color/quantum_grey"
+                app:ccp_textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/phone"
                 app:layout_constraintEnd_toEndOf="@+id/phone"
                 app:layout_constraintHorizontal_bias="0.0"

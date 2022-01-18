@@ -26,11 +26,9 @@ import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsDeparture
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.TripsDepartureTimeConfigViewModel.FieldTags
 import com.lado.travago.tripbook.ui.recycler_adapters.TripDepartureTimeConfigAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.TimeIntervalClickListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
+@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 class TripsDepartureTimeConfigFragment : Fragment() {
     private lateinit var binding: FragmentTripDepartureTimeConfigBinding

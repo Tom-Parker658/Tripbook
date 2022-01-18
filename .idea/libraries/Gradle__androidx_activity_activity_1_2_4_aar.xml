@@ -1,17 +1,17 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.activity:activity:1.2.4@aar">
     <ANNOTATIONS>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/cab793c3a17c82da17782d9a5566407d/transformed/jetified-activity-1.2.4/annotations.zip!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/758b393a77cec6fb3d3c25a2b4443dbb/transformed/jetified-activity-1.2.4/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ccc02f688caf4a8f8080851f0df67538/transformed/jetified-activity-1.2.4/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/cab793c3a17c82da17782d9a5566407d/transformed/jetified-activity-1.2.4/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/cab793c3a17c82da17782d9a5566407d/transformed/jetified-activity-1.2.4/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/cab793c3a17c82da17782d9a5566407d/transformed/jetified-activity-1.2.4/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a889c592c468c5c2795e2419e70df09a/transformed/jetified-activity-1.2.4/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/758b393a77cec6fb3d3c25a2b4443dbb/transformed/jetified-activity-1.2.4/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/758b393a77cec6fb3d3c25a2b4443dbb/transformed/jetified-activity-1.2.4/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/758b393a77cec6fb3d3c25a2b4443dbb/transformed/jetified-activity-1.2.4/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.activity/activity/1.2.4/2572345ff3e71e4e97140b01423cb80765b5b3e5/activity-1.2.4-sources.jar!/" />
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/androidx.activity/activity/1.2.4/2572345ff3e71e4e97140b01423cb80765b5b3e5/activity-1.2.4-sources.jar!/" />
     </SOURCES>
   </library>

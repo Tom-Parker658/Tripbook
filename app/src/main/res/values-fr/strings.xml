@@ -59,13 +59,13 @@
     <string name="text_admin_full">Administrateur</string>
     <string name="text_un_employ">Licencier le Scanneur!</string>
     <string name="text_parks">Garre Routières</string>
-    <string name="text_agency_details">Profil de l\'Agence</string>
+    <string name="text_agency_profile">Profil de l\'Agence</string>
     <string name="text_take_off_periods">Horraires de Départ</string>
-    <string name="text_event_planner">Planificateur D\'événement</string>
+    <string name="text_event_planner">Planificateur d\'événement</string>
     <string name="text_trips">Voyages</string>
     <string name="text_scanner">Scanneur</string>
     <string name="text_money">Argent</string>
-    <string name="text_scanners">Scanneurs</string>
+    <string name="text_scanners">Les scanneurs</string>
     <string name="text_delete_agency">Supprimer l\'Agence</string>
     <string name="text_logo">LOGO</string>
     <string name="text_helper_support_email">Pour permettre a vos passagers de faire des suggestion</string>
@@ -74,6 +74,7 @@
     <string name="text_delete">Supprimer</string>
     <string name="text_to">à</string>
     <string name="text_helper_locality">Choissisez votre localité de la liste</string>
+    <string name="text_cameroon_towns">Villes du Caméroun</string>
 
     <string name="text_message_not_found_drop_down">Aucun resultat. Choissisez dans la liste deroulante</string>
     <string name="text_dialog_search">Rechercher</string>
@@ -118,9 +119,10 @@
 
     <string name="text_error_locality_same_as_destination">Votre localité ne peut etre votre destination</string>
     <string name="string_menu_help">Aide</string>
-    <string name="string_menu_my_agency">Mon Agence</string>
+    <string name="string_menu_agency">Agence</string>
     <string name="text_account">Mon Compte</string>
     <string name="text_booker_profile">Mon Profile</string>
+
     <string name="text_new">Nouveau</string>
     <string name="text_old">Ancien</string>
     <string name="text_qty_left">restant</string>

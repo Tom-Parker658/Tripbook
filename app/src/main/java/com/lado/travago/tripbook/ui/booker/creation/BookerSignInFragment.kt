@@ -32,7 +32,7 @@ class BookerSignInFragment : Fragment() {
     private lateinit var viewModel: BookerSignInViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -43,16 +43,20 @@ class BookerSignInFragment : Fragment() {
         )
         createViewModel()
 
-        getAndRespondToArgs()
-        binding.phone.requestFocus()
+        return binding.root
+    }
 
-        observeLiveData()
-        watchCountDownTimer()
+
+    override fun onStart() {
+        super.onStart()
+        getAndRespondToArgs()
         phoneWidgetConfig()
         restoreFields()
+        binding.phone.requestFocus()
         onFieldChanged()
         onButtonSendSMS()
-        return binding.root
+        watchCountDownTimer()
+        observeLiveData()
     }
 
     private fun createViewModel() {
@@ -69,7 +73,8 @@ class BookerSignInFragment : Fragment() {
             )
         }
     }
-    private fun restoreFields(){
+
+    private fun restoreFields() {
         binding.phone.editText!!.setText(viewModel.phoneField)
         binding.countryCodePicker.setCountryForPhoneCode(viewModel.phoneCountryCode)
     }
@@ -99,7 +104,6 @@ class BookerSignInFragment : Fragment() {
     private fun watchCountDownTimer() {
         viewModel.countDown.isRunning.observe(viewLifecycleOwner) {
             if (it) {
-
                 binding.chronoTimer.visibility = View.VISIBLE
                 binding.btnSendSms.visibility = View.INVISIBLE
 
@@ -120,6 +124,7 @@ class BookerSignInFragment : Fragment() {
         val args = BookerSignInFragmentArgs.fromBundle(requireArguments())
         viewModel.setField(FieldTags.SIGNUP_CALLER, args.caller)
         when (args.caller) {
+            //TODO: Serves nothing
             SignUpCaller.PHONE_CHANGE -> {
                 viewModel.setField(FieldTags.BOOKER_PHONE, viewModel.newPhoneField)
                 viewModel.setField(FieldTags.BOOKER_COUNTRY_CODE, viewModel.newPhoneCountryCode)

@@ -14,5 +14,12 @@ enum class NotificationType {
             return "Complete"
         }
     },
-    EMPTY_RESULTS,  NOT_PERMITTED_SCANNER, AGENCY_PROFILE_NOT_FOUND,
+
+    EMPTY_RESULTS,
+    BOOKER_IS_NOT_SCANNER{
+        override fun toString(): String {
+            return "Become a Partner"
+        }
+                                         }, AGENCY_PROFILE_NOT_FOUND,
+
 }

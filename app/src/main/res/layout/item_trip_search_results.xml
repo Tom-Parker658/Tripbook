@@ -99,6 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:onClickListener="@{() -> clickListener.onClick(agencyDoc, tripDoc, tripTime,  false)}"
+                    android:textSize="14sp"
                     app:icon="@drawable/baseline_payments_24"
                     app:layout_constraintEnd_toStartOf="@+id/btn_vip"
                     app:layout_constraintHorizontal_chainStyle="spread"
@@ -113,17 +114,19 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="4dp"
                     android:paddingBottom="2dp"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btn_vip"
-                    tools:text="Your comfort, Our Priority!" />
+                    tools:text="~~Your comfort, Our Priority~~" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_vip"
                     style="@style/positiveButton"
                     android:layout_width="wrap_content"
                     android:onClickListener="@{() -> clickListener.onClick(agencyDoc, tripDoc, tripTime, true)}"
+                    android:textSize="14sp"
                     app:backgroundTint="@color/vip"
                     app:icon="@drawable/baseline_vip_24"
                     app:layout_constraintBottom_toBottomOf="@+id/btn_normal"

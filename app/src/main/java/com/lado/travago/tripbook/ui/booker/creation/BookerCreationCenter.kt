@@ -31,7 +31,7 @@ class BookerCreationCenter : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -60,6 +60,7 @@ class BookerCreationCenter : Fragment() {
                 )
             )
         }
+        val caller = (requireActivity().intent.extras?.get("caller")  ?: SignUpCaller.USER) as SignUpCaller
 
         adapter = SummaryItemAdapter(
             /**@see SummaryItem.createForBookerConfigOptions for the ids*/
@@ -69,8 +70,7 @@ class BookerCreationCenter : Fragment() {
                     "1" -> {
                         findNavController().navigate(
                             BookerCreationCenterDirections.actionBookerCreationCenterToBookerProfileFragment(
-                                false,
-                                SignUpCaller.USER
+                                caller
                             )
                         )
                     }
@@ -83,7 +83,7 @@ class BookerCreationCenter : Fragment() {
                     else -> {
                         findNavController().navigate(
                             BookerCreationCenterDirections.actionBookerCreationCenterToBookerSignUp(
-                                SignUpCaller.USER
+                                caller
                             )
                         )
                     }

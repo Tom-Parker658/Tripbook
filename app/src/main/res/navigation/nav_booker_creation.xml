@@ -50,9 +50,6 @@
         android:label="@string/string_menu_personal_info"
         tools:layout="@layout/fragment_booker_profile">
         <argument
-            android:name="isNewBooker"
-            app:argType="boolean" />
-        <argument
             android:name="caller"
             app:argType="com.lado.travago.tripbook.model.enums.SignUpCaller" />
 
@@ -60,7 +57,8 @@
     <fragment
         android:id="@+id/bookerCreationCenter"
         android:name="com.lado.travago.tripbook.ui.booker.creation.BookerCreationCenter"
-        android:label="@string/text_account">
+        android:label="@string/text_account"
+        tools:layout="@layout/fragment_booker_creation_center">
         <action
             android:id="@+id/action_bookerCreationCenter_to_bookerSignUp"
             app:destination="@id/bookerSignInFragment"

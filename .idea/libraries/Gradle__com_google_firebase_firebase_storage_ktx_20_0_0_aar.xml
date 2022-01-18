@@ -1,17 +1,16 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-storage-ktx:20.0.0@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f62ecdee28294f54be45cd84825f5940/transformed/jetified-firebase-storage-ktx-20.0.0/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/89180c5b5ef69af530577a4a47c9db8f/transformed/jetified-firebase-storage-ktx-20.0.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/89180c5b5ef69af530577a4a47c9db8f/transformed/jetified-firebase-storage-ktx-20.0.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/89180c5b5ef69af530577a4a47c9db8f/transformed/jetified-firebase-storage-ktx-20.0.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/48f8d05cd3a71c570080ade98ebf8c39/transformed/jetified-firebase-storage-ktx-20.0.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ef0c9d8d1d14c030af7d6070f40935ea/transformed/jetified-firebase-storage-ktx-20.0.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ef0c9d8d1d14c030af7d6070f40935ea/transformed/jetified-firebase-storage-ktx-20.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ef0c9d8d1d14c030af7d6070f40935ea/transformed/jetified-firebase-storage-ktx-20.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-storage-ktx/20.0.0/efb33ed8df8c7bb186d3a544e6837cb1e6f66b17/firebase-storage-ktx-20.0.0-javadoc.jar!/" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-storage-ktx/20.0.0/efb33ed8df8c7bb186d3a544e6837cb1e6f66b17/firebase-storage-ktx-20.0.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-storage-ktx/20.0.0/71fe7ef6676ccadec89ee17089b35c24466830a4/firebase-storage-ktx-20.0.0-sources.jar!/" />
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-storage-ktx/20.0.0/71fe7ef6676ccadec89ee17089b35c24466830a4/firebase-storage-ktx-20.0.0-sources.jar!/" />
     </SOURCES>
   </library>

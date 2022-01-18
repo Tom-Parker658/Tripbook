@@ -19,7 +19,6 @@ import com.lado.travago.tripbook.repo.StorageTags
 import com.lado.travago.tripbook.repo.firebase.FirebaseAuthRepo
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import com.lado.travago.tripbook.repo.firebase.StorageRepo
-import com.lado.travago.tripbook.utils.AdminUtils
 import com.lado.travago.tripbook.utils.Utils
 import com.lado.travago.tripbook.utils.Utils.removeSpaces
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -86,13 +85,12 @@ class BookerProfileViewModel : ViewModel() {
         private set
 
     //Navigation Info
-    var isNewBooker by Delegates.notNull<Boolean>()
     lateinit var caller: SignUpCaller
 
 
     enum class FieldTags {
-        PREFERENCE_PHONE, PREFERENCE_CODE, NAME, SEX, BIRTHDAY, PROFILE_PHOTO, ON_LOADING, TOAST_MESSAGE, RECOVERY_PHONE, NATIONALITY, RECOVERY_COUNTRY_CODE /*Tags*/,
-        ON_INFO_SAVED, PROFILE_PHOTO_CHANGED, PROFILE_INFO_CHANGED, RES, ARG_IS_NEW_BOOKER, ARG_CALLER
+        CACHED_PHONE, CACHED_COUNTRY_CODE, NAME, SEX, BIRTHDAY, PROFILE_PHOTO, ON_LOADING, TOAST_MESSAGE, RECOVERY_PHONE, NATIONALITY, RECOVERY_COUNTRY_CODE /*Tags*/,
+        ON_INFO_SAVED, PROFILE_PHOTO_CHANGED, PROFILE_INFO_CHANGED, RES, ARG_CALLER
     }
 
     /**
@@ -112,11 +110,10 @@ class BookerProfileViewModel : ViewModel() {
         FieldTags.PROFILE_PHOTO_CHANGED -> _profilePhotoChanged.value = value as Boolean
         FieldTags.PROFILE_INFO_CHANGED -> _profileInfoChanged.value = value as Boolean
         FieldTags.ON_INFO_SAVED -> _onInfoSaved.value = value as Boolean
-        FieldTags.PREFERENCE_PHONE -> phoneNumber = (value as String).removeSpaces()
-        FieldTags.PREFERENCE_CODE -> phoneCountryCode = value as Int
+        FieldTags.CACHED_PHONE -> phoneNumber = (value as String).removeSpaces()
+        FieldTags.CACHED_COUNTRY_CODE -> phoneCountryCode = value as Int
         FieldTags.ON_LOADING -> _onLoading.value = value as Boolean
         FieldTags.RES -> res = value as Resources
-        FieldTags.ARG_IS_NEW_BOOKER -> isNewBooker = value as Boolean
         FieldTags.ARG_CALLER -> caller = value as SignUpCaller
     }
 
@@ -134,7 +131,7 @@ class BookerProfileViewModel : ViewModel() {
                         /**Fills the views backing fields with existing data*/
                         it.data.run {
                             nameField = getString("name")!!
-                            sex = getString("sex")!!.toSEX().apply {}
+                            sex = getString("sex")!!.toSEX()
                             birthdayField = getLong("birthdayInMillis")!!
                             photoUrl = getString("photoUrl")!!
                             nationalityField = getString("nationality")!!
@@ -156,7 +153,7 @@ class BookerProfileViewModel : ViewModel() {
         _onLoading.value = true
         val photoStream = Utils.convertBitmapToStream(
             photoField,
-            Bitmap.CompressFormat.JPEG,
+            Bitmap.CompressFormat.WEBP_LOSSLESS,
             0
         )
         //Upload the profile photo to the cloud storage and retrieve url
@@ -176,10 +173,8 @@ class BookerProfileViewModel : ViewModel() {
                 is State.Success -> {
                     photoUrl = storageState.data
                     //We save info  only when they have been modified my the booker else we just finish
-                    if (_profileInfoChanged.value == true)
-                        saveBookerInfo()
-                    else
-                        _onInfoSaved.value = true
+                    if (_profileInfoChanged.value == true) saveBookerInfo()
+                    else _onInfoSaved.value = true
                 }
             }
         }
@@ -220,6 +215,5 @@ class BookerProfileViewModel : ViewModel() {
         }
 
     }
-
 
 }

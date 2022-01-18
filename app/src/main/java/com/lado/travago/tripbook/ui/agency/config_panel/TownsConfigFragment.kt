@@ -32,15 +32,13 @@ import com.lado.travago.tripbook.ui.recycler_adapters.SimpleAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.SimpleClickListener
 import com.lado.travago.tripbook.ui.recycler_adapters.TownClickListener
 import com.lado.travago.tripbook.ui.recycler_adapters.TownConfigAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 /**
  * A fragment used by agency admins to add and subtract towns and access trips from that town.
  * @property parentViewModel is the viewmodel to hold the booker info and is loaded before launch
  */
+@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 class TownsConfigFragment : Fragment() {
     private lateinit var parentViewModel: AgencyConfigViewModel
@@ -245,9 +243,7 @@ class TownsConfigFragment : Fragment() {
         }
         viewModel.onClose.observe(viewLifecycleOwner) {
             if (it) {
-                findNavController().navigate(
-                    TownsConfigFragmentDirections.actionTownsConfigFragmentToAgencyConfigCenterFragment()
-                )
+                findNavController().navigateUp()
                 viewModel.setField(FieldTags.ON_CLOSE, false)
                 viewModel.agencyTownsListener(
                     requireActivity(),

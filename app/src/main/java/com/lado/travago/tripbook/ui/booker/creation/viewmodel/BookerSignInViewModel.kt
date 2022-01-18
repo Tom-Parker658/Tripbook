@@ -120,7 +120,7 @@ class BookerSignInViewModel : ViewModel() {
 
         override fun onCodeSent(
             verificationID: String,
-            forceResendToken: PhoneAuthProvider.ForceResendingToken
+            forceResendToken: PhoneAuthProvider.ForceResendingToken,
         ) {
             resendToken = forceResendToken
             verificationId = verificationID
@@ -228,8 +228,13 @@ class BookerSignInViewModel : ViewModel() {
                                 }
                                 is State.Success -> {
                                     //Sign up/Sign in
-                                    if (it.data.exists()) _onSignIn.value = false
-                                    else _onSignUp.value = true
+                                    if (it.data.exists()) {
+                                        _onSignIn.value = true
+                                        _onSignUp.value = false
+                                    } else {
+                                        _onSignIn.value = false
+                                        _onSignUp.value = true
+                                    }
                                     _onLoading.value = false
                                 }
                                 is State.Loading -> _onLoading.value = true

@@ -1,17 +1,16 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-firestore:23.0.3@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8b1de312596559256348e19426929f63/transformed/jetified-firebase-firestore-23.0.3/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/55d2b3b949636f57c9e1674336266cb0/transformed/jetified-firebase-firestore-23.0.3/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/55d2b3b949636f57c9e1674336266cb0/transformed/jetified-firebase-firestore-23.0.3/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/55d2b3b949636f57c9e1674336266cb0/transformed/jetified-firebase-firestore-23.0.3/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/33f5acab5727c0f6b795954872ed8743/transformed/jetified-firebase-firestore-23.0.3/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9e5d20d464bbe2dd9444ee527e213279/transformed/jetified-firebase-firestore-23.0.3/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9e5d20d464bbe2dd9444ee527e213279/transformed/jetified-firebase-firestore-23.0.3/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9e5d20d464bbe2dd9444ee527e213279/transformed/jetified-firebase-firestore-23.0.3/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-firestore/23.0.3/e0a35744124e1ac4a50f470d32e8cc5b19b78209/firebase-firestore-23.0.3-javadoc.jar!/" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-firestore/23.0.3/e0a35744124e1ac4a50f470d32e8cc5b19b78209/firebase-firestore-23.0.3-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-firestore/23.0.3/f00e9b79aebc756f913f5eacb38e81a58dca62e9/firebase-firestore-23.0.3-sources.jar!/" />
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-firestore/23.0.3/f00e9b79aebc756f913f5eacb38e81a58dca62e9/firebase-firestore-23.0.3-sources.jar!/" />
     </SOURCES>
   </library>

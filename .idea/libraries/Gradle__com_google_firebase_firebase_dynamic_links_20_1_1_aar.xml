@@ -1,17 +1,16 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-dynamic-links:20.1.1@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ea73e328538488abde6d85064d505754/transformed/jetified-firebase-dynamic-links-20.1.1/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a0ef4498203002f5d717e17af454693d/transformed/jetified-firebase-dynamic-links-20.1.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a0ef4498203002f5d717e17af454693d/transformed/jetified-firebase-dynamic-links-20.1.1/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a0ef4498203002f5d717e17af454693d/transformed/jetified-firebase-dynamic-links-20.1.1/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/1fa1ca0e247c3a38d6f4b1966130aa1c/transformed/jetified-firebase-dynamic-links-20.1.1/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/725674970cf586bca673270a4c4a8c55/transformed/jetified-firebase-dynamic-links-20.1.1/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/725674970cf586bca673270a4c4a8c55/transformed/jetified-firebase-dynamic-links-20.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/725674970cf586bca673270a4c4a8c55/transformed/jetified-firebase-dynamic-links-20.1.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-dynamic-links/20.1.1/266a036354553edfe9543d4b5c2500917e9f021a/firebase-dynamic-links-20.1.1-javadoc.jar!/" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-dynamic-links/20.1.1/266a036354553edfe9543d4b5c2500917e9f021a/firebase-dynamic-links-20.1.1-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-dynamic-links/20.1.1/e4fb6741ca9dd256c2ede3156e9b7652fa1669f7/firebase-dynamic-links-20.1.1-sources.jar!/" />
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-dynamic-links/20.1.1/e4fb6741ca9dd256c2ede3156e9b7652fa1669f7/firebase-dynamic-links-20.1.1-sources.jar!/" />
     </SOURCES>
   </library>

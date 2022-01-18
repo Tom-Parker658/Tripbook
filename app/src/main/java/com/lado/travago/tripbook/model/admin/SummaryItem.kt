@@ -26,7 +26,7 @@ data class SummaryItem(
         fun createForAgencyConfigOptions(resources: Resources) = listOf(
             SummaryItem(
                 "1",
-                resources.getString(R.string.text_agency_details),
+                resources.getString(R.string.text_agency_profile),
                 subTitle = "OK!",
                 logoResourceID = R.drawable.outline_agency_profile_24,
                 isMainItem = true,
@@ -75,12 +75,21 @@ data class SummaryItem(
             ),
             SummaryItem(
                 "7",
+                resources.getString(R.string.text_all_trip_books),
+                "OK!",
+                R.drawable.baseline_qr_code_scanner_24,
+                state = null,
+                logoUrl = null
+            ),
+            SummaryItem(
+                "8",
                 resources.getString(R.string.text_delete_agency),
                 "OK!",
                 R.drawable.round_cancel_24,
                 state = null,
                 logoUrl = null
-            )
+            ),
+
         )
 
         fun createSummaryItemsFromBooks(

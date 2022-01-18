@@ -159,9 +159,7 @@ class ScannerConfigFragment : Fragment() {
         }
         viewModel.onClose.observe(viewLifecycleOwner) {
             if (it) {
-                findNavController().navigate(
-                    TripsConfigFragmentDirections.actionTripsConfigFragmentToTownsConfigFragment()
-                )
+                findNavController().navigateUp()
                 viewModel.setField(ScannerConfigViewModel.FieldTags.ON_CLOSE, false)
                 viewModel.setField(ScannerConfigViewModel.FieldTags.RETRY_SEARCH, true)
             }

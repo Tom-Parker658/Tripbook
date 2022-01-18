@@ -7,30 +7,56 @@
 
     </data>
 
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.booker.book_panel.TripSearchActivity">
+        android:layout_height="match_parent">
 
         <include
-            android:id="@+id/bottom_nav_trip_search"
-            layout="@layout/element_booker_bottom_nav"
+            android:id="@+id/network_state_header"
+            layout="@layout/element_network_state_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/coordinator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <fragment
-            android:id="@+id/trip_search_nav_host"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+        <include
+            layout="@layout/element_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_trip_search" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/network_state_header"
+            tools:context=".ui.booker.book_panel.TripSearchActivity">
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <include
+                android:id="@+id/bottom_nav_trip_search"
+                layout="@layout/element_booker_bottom_nav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
+            <fragment
+                android:id="@+id/trip_search_nav_host"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/nav_trip_search" />
 
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

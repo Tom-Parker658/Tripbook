@@ -201,7 +201,7 @@ class ScannerConfigViewModel : ViewModel() {
                     "isAdmin",
                     map["isAdmin"]
                 ).addOnCompleteListener {
-                    if (!it.isSuccessful) _toastMessage.value = "${it.exception.message}"
+                    if (!it.isSuccessful) _toastMessage.value = "${it.exception?.message}"
                 }.await()
         }
         _onLoading.value = false

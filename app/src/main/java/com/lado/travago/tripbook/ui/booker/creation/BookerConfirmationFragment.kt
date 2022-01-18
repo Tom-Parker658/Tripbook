@@ -3,7 +3,6 @@ package com.lado.travago.tripbook.ui.booker.creation
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +14,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentBookerConfirmationBinding
-import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.model.enums.SignUpCaller
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.ui.booker.creation.viewmodel.BookerSignInViewModel
 import com.lado.travago.tripbook.ui.booker.creation.viewmodel.BookerSignInViewModel.*
-import com.lado.travago.tripbook.utils.AdminUtils
+import com.lado.travago.tripbook.utils.UIUtils
 import com.lado.travago.tripbook.utils.Utils.removeSpaces
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -34,10 +32,11 @@ import kotlinx.coroutines.flow.collect
 class BookerConfirmationFragment : Fragment() {
     private lateinit var binding: FragmentBookerConfirmationBinding
     private lateinit var viewModel: BookerSignInViewModel
+    private lateinit var uiUtils: UIUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -47,10 +46,15 @@ class BookerConfirmationFragment : Fragment() {
             false
         )
         createViewModel()
+        uiUtils = UIUtils(this, requireActivity(), viewLifecycleOwner)
+        return binding.root
+    }
+
+    override fun onStart() {
         onFieldChange()
         observeLiveData()
         watchCountDownTimer()
-        return binding.root
+        super.onStart()
     }
 
     private fun createViewModel() {
@@ -141,18 +145,16 @@ class BookerConfirmationFragment : Fragment() {
 
         viewModel.onCodeSent.observe(viewLifecycleOwner) {
             if (it) binding.verificationCode.requestFocus()
+
         }
 
         viewModel.onPhoneSwapped.observe(viewLifecycleOwner) {
             if (it) {
-                requireActivity().getSharedPreferences(
-                    "Booker_Phone_Info",
-                    Context.MODE_PRIVATE
-                )
-                    .edit()
-                    .putInt("bookerCountryCode", viewModel.phoneCountryCode)
-                    .putString("bookerPhoneNumber", viewModel.phoneField.removeSpaces())
-                    .apply()
+                //We save the new credentials to the cache memory
+                uiUtils.editSharedPreference(UIUtils.SP_STRING_BOOKER_PHONE,
+                    viewModel.phoneField.removeSpaces())
+                uiUtils.editSharedPreference(UIUtils.SP_INT_BOOKER_COUNTRY_CODE,
+                    viewModel.phoneCountryCode)
 
                 val newData = hashMapOf<String, Any?>(
                     "phone" to viewModel.phoneField,
@@ -176,12 +178,7 @@ class BookerConfirmationFragment : Fragment() {
                                 true
                             )
                             is State.Success -> {
-                                findNavController().popBackStack(
-                                    R.id.bookerCreationCenter,
-                                    false
-                                )
-                                findNavController().graph.clear()
-
+                                findNavController().navigate(R.id.bookerCreationCenter)
                                 viewModel.setField(
                                     FieldTags.TOAST_MESSAGE,
                                     getString(R.string.congrats_phone_changed)
@@ -202,18 +199,15 @@ class BookerConfirmationFragment : Fragment() {
                  * We are saving the booker phone number so that we can get it and save it under the profile
                  * at anytime
                  */
-                requireActivity().getSharedPreferences(
-                    "Booker_Phone_Info",
-                    Context.MODE_PRIVATE
-                )
-                    .edit()
-                    .putInt("bookerCountryCode", viewModel.phoneCountryCode)
-                    .putString("bookerPhoneNumber", viewModel.phoneField.removeSpaces())
-                    .apply()
+                //We save the new credentials to the cache memory
+                uiUtils.editSharedPreference(UIUtils.SP_STRING_BOOKER_PHONE,
+                    viewModel.phoneField.removeSpaces())
+                uiUtils.editSharedPreference(UIUtils.SP_INT_BOOKER_COUNTRY_CODE,
+                    viewModel.phoneCountryCode)
+                uiUtils.editSharedPreference(UIUtils.SP_BOOL_BOOKER_PROFILE_EXIST, false)
 
                 findNavController().navigate(
                     BookerConfirmationFragmentDirections.actionBookerConfirmationFragmentToBookerProfileFragment(
-                        true,
                         viewModel.caller
                     )
                 )
@@ -223,12 +217,21 @@ class BookerConfirmationFragment : Fragment() {
         //The booker is not new
         viewModel.onSignIn.observe(viewLifecycleOwner) {
             if (it) {
-                if (viewModel.caller == SignUpCaller.USER) {
-                    findNavController().popBackStack(R.id.bookerCreationCenter, false)
-                    findNavController().graph.clear()
-                } else if (viewModel.caller == SignUpCaller.OTHER_ACTIVITY) {
-                    findNavController().popBackStack()
-                    requireActivity().finishActivity(Activity.RESULT_OK)
+                uiUtils.editSharedPreference(UIUtils.SP_BOOL_BOOKER_PROFILE_EXIST, true)
+                when (viewModel.caller) {
+                    SignUpCaller.USER -> {
+                        findNavController().popBackStack()
+                        findNavController().navigate(R.id.bookerCreationCenter)
+                    }
+                    SignUpCaller.OTHER_ACTIVITY -> {
+                        findNavController().popBackStack()
+                        requireActivity().setResult(Activity.RESULT_OK)
+                        requireActivity().finish()
+                    }
+                    else -> {
+                        findNavController().popBackStack()
+                        findNavController().navigate(R.id.bookerCreationCenter)
+                    }
                 }
             }
         }

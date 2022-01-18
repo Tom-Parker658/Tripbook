@@ -189,7 +189,7 @@ class TimeModel private constructor(
         fun now() = fromTimeParameter(TimeParameter.MILLISECONDS, Date().time)
     }
 
-    class CountDown(
+    open class CountDown(
         val toInMillis: Long,
         val countInterval: Long = 1_000L//1 second timer
     ) {
@@ -197,6 +197,9 @@ class TimeModel private constructor(
 
         private val _left = MutableLiveData("")
         val left: LiveData<String> get() = _left
+
+        private val _leftInMillis = MutableLiveData(0L)
+        val leftInMillis: LiveData<Long> get() = _leftInMillis
 
         private val _isRunning = MutableLiveData(false)
         val isRunning: LiveData<Boolean> get() = _isRunning
@@ -211,6 +214,7 @@ class TimeModel private constructor(
                     TimeParameter.MILLISECONDS,
                     p0
                 )
+                _leftInMillis.value = currentTick.seconds.toLong()
                 _left.value = "${currentTick.seconds}s"
             }
 
@@ -221,18 +225,20 @@ class TimeModel private constructor(
         }
 
 
-        fun start() {
+        fun start(): CountDown {
             timer.start()
             _isRunning.value = true
             _isEnded.value = false
+            return this
         }
 
 
         //Make sure you set isEnded before isRunning inorder to allow observers to listen to the last tick
-        fun stop() {
+        fun stop():CountDown {
             timer.cancel()
             _isEnded.value = true
             _isRunning.value = false
+            return this
         }
 
     }

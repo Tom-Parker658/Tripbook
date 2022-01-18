@@ -7,7 +7,6 @@
     <data>
 
         <import type="android.text.InputType" />
-
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -166,5 +165,6 @@
                 tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
 </layout>
