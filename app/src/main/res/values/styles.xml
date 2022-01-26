@@ -100,27 +100,28 @@
     </style>
 
     <!--    Positive button-->
-    <style name="positiveButton" parent="Widget.MaterialComponents.Button">
+    <style name="positiveButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="backgroundTint">@color/colorPositiveButton</item>
+        <item name="strokeColor">@color/colorPositiveButton</item>
         <item name="icon">@drawable/baseline_check_circle_24</item>
+        <item name="iconTint">@color/colorPositiveButton</item>
         <item name="fontFamily">@font/montserrat</item>
+        <item name="rippleColor">@color/colorPositiveButton</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:singleLine">true</item>
         <item name="android:includeFontPadding">true</item>
         <item name="android:textSize">16sp</item>
-        <item name="iconGravity">textEnd</item>
     </style>
     <!--    Negative button-->
-    <style name="negativeButton" parent="Widget.MaterialComponents.Button">
+    <style name="negativeButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="backgroundTint">@color/colorNegativeButton</item>
-        <item name="icon">@drawable/round_cancel_24</item>
+        <item name="rippleColor">@color/colorNegativeButton</item>
+        <item name="strokeColor">@color/colorNegativeButton</item>
         <item name="android:textAllCaps">false</item>
+        <item name="iconTint">@color/colorNegativeButton</item>
         <item name="android:singleLine">true</item>
-        <item name="iconGravity">textEnd</item>
         <item name="android:textSize">16sp</item>
     </style>
     <!--    Neutral button-->

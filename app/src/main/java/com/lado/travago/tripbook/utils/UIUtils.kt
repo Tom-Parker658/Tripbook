@@ -2,11 +2,10 @@ package com.lado.travago.tripbook.utils
 
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.util.AttributeSet
 import android.view.View
-import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.annotation.IdRes
@@ -22,14 +21,21 @@ import com.lado.travago.tripbook.ui.booker.creation.BookerCreationActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
-import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.annotation.IntDef
+import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
-import com.google.android.material.textview.MaterialTextView
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.timepicker.MaterialTimePicker
 import com.lado.travago.tripbook.databinding.ElementNetworkStateHeaderBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
+import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchViewModel
 
 
 /**
@@ -131,6 +137,84 @@ class UIUtils(
                 }
             }
         }
+    }
+
+    /**
+     * This is a warning dialog to ask for short confirmation request e.g "Are you sure you wnat to ...."-kind or dialog
+     */
+    fun warningDialog(
+        title: String,
+        message: String,
+        positiveText: String?,
+        negativeText: String?,
+        neutralText: String?,
+        onPositiveListener: DialogInterface.OnClickListener?,
+        onNegativeListener: DialogInterface.OnClickListener?,
+        onNeutralListener: DialogInterface.OnClickListener?,
+    ) {
+        val dialog = MaterialAlertDialogBuilder(hostActivity)
+            .setIcon(R.drawable.outline_info_24)
+            .setTitle(title)
+            .setMessage(message)
+
+        positiveText?.let {
+            dialog.setPositiveButton(it, onPositiveListener)
+        }
+        negativeText?.let {
+            dialog.setNegativeButton(it, onNegativeListener)
+        }
+        neutralText?.let {
+            dialog.setNeutralButton(it, onNeutralListener)
+        }
+        dialog.create()
+        dialog.show()
+    }
+
+
+    /**
+     * Date picker
+     * @param positiveListener is just a lambda of what to do when selection is completed
+     */
+    fun timePicker(
+        fragmentManager: FragmentManager,
+        title: String,
+        @IntRange(from = 0L, to = 23L) hour: Int,
+        @IntRange(from = 0L, to = 60L) minutes: Int,
+        inputMode: Int = MaterialTimePicker.INPUT_MODE_CLOCK,
+        positiveListener: (MaterialTimePicker) -> View.OnClickListener,
+    ) {
+        val timePicker = MaterialTimePicker.Builder()
+            .setTitleText(title)
+            .setHour(hour)
+            .setMinute(minutes)
+            .setInputMode(inputMode)
+            .build()
+
+        timePicker.addOnPositiveButtonClickListener(positiveListener(timePicker))
+        timePicker.showNow(fragmentManager, "Time Picker")
+    }
+
+    /**
+     * Date picker
+     * @param positiveListener is just a lambda of what to do when selection is completed
+     */
+    fun datePicker(
+        fragmentManager: FragmentManager,
+        title: String,
+        currentSelection: Long,
+        bounds: CalendarConstraints,
+        @MaterialDatePicker.InputMode inputMode: Int = MaterialDatePicker.INPUT_MODE_CALENDAR,
+        positiveListener: MaterialPickerOnPositiveButtonClickListener<Long>,
+    ) {
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(title)
+            .setSelection(currentSelection)
+            .setCalendarConstraints(bounds)
+            .setInputMode(inputMode)
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener(positiveListener)
+        datePicker.showNow(fragmentManager, "")
     }
 
     //TODO: Implement this all over the app

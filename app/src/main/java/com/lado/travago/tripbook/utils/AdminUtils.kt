@@ -3,9 +3,17 @@ package com.lado.travago.tripbook.utils
 import com.google.firebase.firestore.DocumentSnapshot
 
 object AdminUtils {
-    const val LOCAL_SERVER_FIREBASE_IP = "192.168.58.159"
-
-
+    const val LOCAL_SERVER_FIREBASE_IP = "192.168.58.145"
+//    Link speed (Receive/Transmit):	425/425 (Mbps)
+//    Link-local IPv6 address:	fe80::21ff:9a0c:664c:66cf%8
+//    IPv4 address:	192.168.58.145
+//    IPv4 DNS servers:	192.168.58.95
+//    Manufacturer:	Microsoft
+//    Description:	Remote NDIS based Internet Sharing Device
+//    Driver version:	10.0.19041.1
+//    Physical address (MAC):	22-34-40-70-23-DF
+//
+//
 
     /**
      * Takes a list of document snapshots and sort them accordingly to the parameter[SortOption]

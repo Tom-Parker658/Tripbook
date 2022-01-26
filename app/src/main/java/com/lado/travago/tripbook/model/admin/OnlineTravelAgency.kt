@@ -29,12 +29,11 @@ import java.util.*
 
 
 data class OnlineTravelAgency(
-    val id : String,
+    val id: String,
     val agencyName: String,
     var logoUrl: String = "",
     val motto: String,
-    val nameCEO: String,
-    val creationYear: Int,
+    val creationDateInMillis: Long,
     val creationDecree: String,
     val supportEmail: String,
     val supportPhone1: String,
@@ -42,7 +41,7 @@ data class OnlineTravelAgency(
     val supportCountryCode1: Int, //e.g 237
     val supportCountryCode2: Int, //e.g 237
     val isSuspended: Boolean = false,
-    val modifiedOn: Timestamp?
+    val modifiedOn: Timestamp?,
 ) {
     //    @DocumentId
 //    var uid: String =""
@@ -60,8 +59,7 @@ data class OnlineTravelAgency(
                 "id" to id,
                 "agencyName" to agencyName,
                 "logoUrl" to logoUrl,
-                "nameCEO" to nameCEO,
-                "creationYear" to creationYear,
+                "creationDateInMillis" to creationDateInMillis,
                 "pricePerKm" to costPerKm,
                 "motto" to motto,
                 "supportEmail" to supportEmail,
@@ -70,13 +68,23 @@ data class OnlineTravelAgency(
                 "phoneCode1" to supportCountryCode1,
                 "phoneCode2" to supportCountryCode2,
                 "creationDecree" to creationDecree,
-                "isVerified" to false,
                 "likes" to likes,
                 "dislikes" to dislikes,
                 "reputation" to reputation,
                 "addedOn" to addedOn,
                 "modifiedOn" to addedOn,
                 "isSuspended" to isSuspended,
+
+                //Pre verification parameters
+                "isVerified" to false,
+                "hasScans" to false,
+                "hasTrips" to false,
+                "hasScanners" to false,
+                "hasTakeOffPeriods" to false,
+                "hasOngoingEvent" to true,
+                "hasConfiguresPayments" to false
+
+                //IS
             )
         } else {//We are updating agency info instead of creating
             hashMapOf<String, Any?>(
@@ -90,6 +98,7 @@ data class OnlineTravelAgency(
                 "supportPhone2" to supportPhone2,
                 "creationDecree" to creationDecree,
                 "modifiedOn" to modifiedOn,
+                "creationDateInMillis" to creationDateInMillis,
             )
         }
 }

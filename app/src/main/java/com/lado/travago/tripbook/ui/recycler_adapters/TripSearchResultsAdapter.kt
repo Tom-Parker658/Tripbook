@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.databinding.ItemTripSearchResultsBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
+import com.lado.travago.tripbook.model.enums.PlaceHolder
 import com.lado.travago.tripbook.utils.Utils
-import com.lado.travago.tripbook.utils.loadLogoFromUrl
+import com.lado.travago.tripbook.utils.imageFromUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 class TripSearchResultsAdapter(
-    private val clickListener: TripSearchResultsClickListener
+    private val clickListener: TripSearchResultsClickListener,
 ) : ListAdapter<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>, TripSearchResultsViewHolder>(
     TripSearchResultDiffUtils()
 ) {
@@ -32,14 +33,14 @@ class TripSearchResultsAdapter(
 }
 
 class TripSearchResultsViewHolder(
-    private val binding: ItemTripSearchResultsBinding
+    private val binding: ItemTripSearchResultsBinding,
 ) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(
         clickListener: TripSearchResultsClickListener,
         agencyDoc: DocumentSnapshot,
         tripDoc: DocumentSnapshot,
-        departureTime: TimeModel
+        departureTime: TimeModel,
     ) {
         // Data def
         binding.agencyDoc = agencyDoc
@@ -48,8 +49,8 @@ class TripSearchResultsViewHolder(
         binding.tripDoc = tripDoc
 
         // pending bindings
-        binding.agencyLogo.loadLogoFromUrl(
-            agencyDoc.getString("logoUrl")!!
+        binding.agencyLogo.imageFromUrl(
+            agencyDoc.getString("logoUrl")!!, PlaceHolder.AGENCY, null
         )
         binding.textAgencyName.let {
             it.text = agencyDoc.getString("agencyName")
@@ -90,20 +91,20 @@ class TripSearchResultsClickListener(val clickListener: (agencyId: String, agenc
         agencyDoc: DocumentSnapshot,
         tripDoc: DocumentSnapshot,
         tripTime: TimeModel,
-        isVip: Boolean
-    ) = clickListener(agencyDoc.id,agencyDoc.getString("agencyName")!!, tripDoc, tripTime, isVip)
+        isVip: Boolean,
+    ) = clickListener(agencyDoc.id, agencyDoc.getString("agencyName")!!, tripDoc, tripTime, isVip)
 }
 
 class TripSearchResultDiffUtils :
     DiffUtil.ItemCallback<Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>>() {
     override fun areItemsTheSame(
         oldItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>,
-        newItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>
+        newItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>,
     ) = oldItem.first.id == oldItem.first.id
 
     override fun areContentsTheSame(
         oldItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>,
-        newItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>
+        newItem: Triple<DocumentSnapshot, DocumentSnapshot, TimeModel>,
     ) = oldItem == newItem
 
 }

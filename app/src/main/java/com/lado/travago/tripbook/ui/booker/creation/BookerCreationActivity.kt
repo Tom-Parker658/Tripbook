@@ -68,8 +68,9 @@ class BookerCreationActivity : AppCompatActivity() {
 
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.booker_creation_nav_host)
-        return navController.navigateUp()
+//        val navController = findNavController(R.id.booker_creation_nav_host)
+        onBackPressed()
+        return true
     }
 
 

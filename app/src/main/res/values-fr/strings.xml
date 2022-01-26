@@ -37,7 +37,7 @@
     <string name="text_bank_account_num">Numéro de Compte Bancaire</string>
     <string name="text_momo_num">Numéro du compte MTN MoMo</string>
     <string name="text_om_num">Numéro du compte Orange Money</string>
-    <string name="text_helper_min_decree">Entré le numéro du décret ministeriel associé a votre Agence</string>
+    <string name="text_helper_min_decree">Entrer le numéro du décret ministeriel associé a votre Agence</string>
     <string name="desc_user_image">Appuyez pour changer votre logo</string>
     <string name="desc_agency_logo">Logo de L\'agence</string>
     <string name="desc_qr_code">Le code QR de votre Billet de voyage</string>

@@ -1,15 +1,15 @@
 package com.lado.travago.tripbook.ui.booker.creation
 
 import android.app.Activity
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.datepicker.CalendarConstraints
@@ -20,14 +20,22 @@ import com.lado.travago.tripbook.utils.Utils
 import java.util.*
 
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.setFragmentResultListener
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentBookerProfileBinding
+import com.lado.travago.tripbook.model.enums.PlaceHolder
+import com.lado.travago.tripbook.model.enums.SEX.Companion.toSEX
 import com.lado.travago.tripbook.model.enums.SignUpCaller
 import com.lado.travago.tripbook.ui.booker.creation.viewmodel.BookerProfileViewModel
 import com.lado.travago.tripbook.ui.booker.creation.viewmodel.BookerProfileViewModel.*
+import com.lado.travago.tripbook.ui.notification.ImageViewerFragmentArgs
 import com.lado.travago.tripbook.utils.UIUtils
-import com.lado.travago.tripbook.utils.loadImageFromUrl
+import com.lado.travago.tripbook.utils.imageFromUri
+import com.lado.travago.tripbook.utils.imageFromUrl
 import kotlinx.coroutines.*
 
 
@@ -40,6 +48,40 @@ class BookerProfileFragment : Fragment() {
     private lateinit var binding: FragmentBookerProfileBinding
     private lateinit var viewModel: BookerProfileViewModel
     private lateinit var uiUtils: UIUtils
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val hasChanged = haveFieldsBeenModified()
+                    if (hasChanged) {
+                        Log.d("HAS CHANGED", hasChanged.toString())
+                        uiUtils.warningDialog(
+                            getString(R.string.text_unsaved_changes),
+                            "All your changes will be discarded if you don't save. What should we do?",
+                            getString(R.string.save_changes),
+                            null,
+                            getString(R.string.text_do_not_save),
+                            onPositiveListener = { dialog, _ ->
+                                dialog.cancel()
+                                verifyFields()
+                            },
+                            onNegativeListener = null,
+                            onNeutralListener = { dialog, _ ->
+                                isEnabled = false
+                                requireActivity().onBackPressed()
+                            }
+                        )
+                    } else {
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
+                }
+            }
+        )
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,18 +106,29 @@ class BookerProfileFragment : Fragment() {
             false
         )
 
-        return binding.root
-    }
-
-    override fun onStart() {
-        super.onStart()
-        //Restore field should come before field change
         observeLiveData()
         getArgsAndRespond()
         restoreFields()
         onFieldChange()
+        clickListeners()
         phoneWidgetConfig()
         getCachedCredentials()
+
+        return binding.root
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        //Restore field should come before field change
+        setFragmentResultListener("PHOTO") { requestKey: String, bundle: Bundle ->
+            if (requestKey == "PHOTO" && !bundle.isEmpty) {
+                (bundle["PHOTO_URI"] as Uri?)?.let {
+                    viewModel.setField(FieldTags.PHOTO_URI, it)
+                    binding.profilePhoto.imageFromUri(viewModel.photoUri!!, PlaceHolder.PERSON)
+                }
+            }
+        }
 
     }
 
@@ -85,6 +138,36 @@ class BookerProfileFragment : Fragment() {
         viewModel.setField(FieldTags.ARG_CALLER, args.caller)
     }
 
+    private fun clickListeners() {
+        binding.profilePhoto.setOnClickListener {
+            val args = ImageViewerFragmentArgs.Builder(
+                viewModel.photoUrl,
+                null,
+                viewModel.photoUri,
+                true,
+                true,
+                false,
+                getString(R.string.desc_agency_logo),
+                PlaceHolder.PERSON
+            ).build().toBundle()
+            val navOptions = NavOptions.Builder()
+                .setEnterAnim(R.anim.expand_out)
+                .setExitAnim(R.anim.shrink_in)
+//                .setPopEnterAnim(R.anim.expand_out)
+//                .setPopExitAnim(R.anim.shrink_in)
+                .build()
+            findNavController().navigate(R.id.imageViewerFragment, args, navOptions)
+        }
+        binding.btnSaveInfo.setOnClickListener {
+            verifyFields()
+        }
+        binding.birthday.setOnClickListener {
+            datePicker()
+        }
+        binding.birthday.setEndIconOnClickListener {
+            datePicker()
+        }
+    }
 
     /**
      * Set ways to get data from the views and assign it to the viewModels
@@ -98,34 +181,14 @@ class BookerProfileFragment : Fragment() {
                 FieldTags.RECOVERY_COUNTRY_CODE,
                 binding.countryCodePicker.selectedCountryCodeAsInt
             )
-            viewModel.setField(FieldTags.PROFILE_INFO_CHANGED, true)
         }
 
         binding.name.editText!!.doAfterTextChanged {
             viewModel.setField(FieldTags.NAME, it.toString())
-            viewModel.setField(FieldTags.PROFILE_INFO_CHANGED, true)
         }
 
         binding.nationality.editText!!.doAfterTextChanged {
             viewModel.setField(FieldTags.NATIONALITY, it.toString())
-            viewModel.setField(FieldTags.PROFILE_INFO_CHANGED, true)
-        }
-
-        // An onClick listener to to initiate the picture selection when the profile photo imageView is clicked
-        binding.profilePhoto.setOnClickListener {
-            initPictureSelection()
-        }
-
-        binding.textProfilePhoto.setOnClickListener {
-            initPictureSelection()
-        }
-
-        // Add an onClick listener to the birthday endIcon to select the birthday
-        binding.birthday.setEndIconOnClickListener {
-            datePicker()
-        }
-        binding.birthday.setOnClickListener {
-            datePicker()
         }
 
         binding.chipGroupSex.setOnCheckedChangeListener { _, id ->
@@ -135,11 +198,6 @@ class BookerProfileFragment : Fragment() {
                 else -> SEX.UNKNOWN
             }
             viewModel.setField(FieldTags.SEX, sex)
-            viewModel.setField(FieldTags.PROFILE_INFO_CHANGED, true)
-        }
-
-        binding.btnSaveInfo.setOnClickListener {
-            checkFields()
         }
     }
 
@@ -147,14 +205,30 @@ class BookerProfileFragment : Fragment() {
      * Loads all values of the fields from the viewModel in case of config change
      */
     private fun restoreFields() {
-        viewModel.photoField?.let {
-            binding.profilePhoto.setImageBitmap(it)
+        when {
+            //Load the Photo
+            viewModel.photoUri == null && viewModel.photoUrl.isNotBlank() -> {
+                binding.profilePhoto.imageFromUrl(viewModel.photoUrl,
+                    PlaceHolder.PERSON,
+                    binding.progressBarPhoto
+                )
+            }
+            viewModel.photoUri != null && viewModel.photoUrl.isBlank() -> {
+                binding.profilePhoto.imageFromUri(viewModel.photoUri!!,
+                    PlaceHolder.PERSON
+                )
+            }
+            else -> {//In this case, we are during the agency creation
+
+            }
+
         }
+
         binding.recoveryPhone.editText!!.setText(viewModel.recoveryPhoneField)
         binding.name.editText!!.setText(viewModel.nameField)
         binding.birthday.editText!!.setText(
             Utils.formatDate(
-                viewModel.birthdayField,
+                viewModel.birthdayInMillis,
                 getString(R.string.text_date_pattern_in_words)
             )
         )
@@ -172,47 +246,6 @@ class BookerProfileFragment : Fragment() {
         else binding.countryCodePicker.defaultCountryCode
     }
 
-    private fun checkFields() {
-        if (binding.name.editText!!.text.isBlank()) binding.name.requestFocus()
-        else if (viewModel.photoUrl == "" && viewModel.photoField == null) {
-            viewModel.setField(
-                FieldTags.TOAST_MESSAGE,
-                getString(R.string.warn_select_photo)
-            )
-        } else if (binding.nationality.editText!!.text.isBlank()) {
-            binding.nationality.requestFocus()
-            viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.warn_is_required))
-        } else if (!binding.sexMale.isChecked && !binding.sexFemale.isChecked) {
-            viewModel.setField(
-                FieldTags.TOAST_MESSAGE,
-                getString(R.string.warn_gender_required)
-            )
-            binding.chipGroupSex.requestFocus()
-        } else if (!binding.countryCodePicker.isValidFullNumber) {
-            viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.warn_invalid_phone))
-            binding.recoveryPhone.requestFocus()
-        } else if (binding.recoveryPhone.editText!!.text.toString() == viewModel.authRepo.currentUser!!.phoneNumber) {
-            viewModel.setField(
-                FieldTags.TOAST_MESSAGE,
-                getString(R.string.warn_recovery_phone_differnce_with_phone)
-            )
-        } else {
-            when {
-                viewModel.profilePhotoChanged.value == true -> {
-                    viewModel.setField(FieldTags.ON_LOADING, true)
-                    CoroutineScope(Dispatchers.Main).launch {
-                        viewModel.uploadProfilePhoto()
-                    }
-                }
-                viewModel.profileInfoChanged.value == true -> CoroutineScope(Dispatchers.Main).launch {
-                    viewModel.saveBookerInfo()
-                }
-                else -> viewModel.setField(FieldTags.ON_INFO_SAVED, true)
-            }
-
-        }
-    }
-
     private fun datePicker() {
         val calendar = Calendar.getInstance()//An instance of the current Calendar
         val today = calendar.timeInMillis// The current date in millis
@@ -225,31 +258,26 @@ class BookerProfileFragment : Fragment() {
             .setEnd(today)//Furthest
             .build()
 
-        //We create our date picker which the user will use to enter his travel day
-        //Showing the created date picker onScreen
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setCalendarConstraints(bounds)//Constrain the possible dates
-            .setTitleText(R.string.text_date)//Set the Title of the Picker
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-            .setSelection(viewModel.birthdayField)
-            .build()
-
-        //Sets the value of the edit text to the formatted value of the selection
-        datePicker.addOnPositiveButtonClickListener {
-            if (Date().date < Date(it).date) datePicker()
-            else {
-                viewModel.setField(FieldTags.BIRTHDAY, it)
-                binding.birthday.editText!!.setText(
-                    Utils.formatDate(
-                        viewModel.birthdayField,
-                        getString(R.string.text_date_pattern_in_words)
+        uiUtils.datePicker(
+            childFragmentManager,
+            getString(R.string.text_birth_on),
+            viewModel.birthdayInMillis,
+            bounds,
+            MaterialDatePicker.INPUT_MODE_CALENDAR,
+            positiveListener = {
+                if (Date().date < Date(it).date) datePicker()
+                else {
+                    viewModel.setField(FieldTags.BIRTHDAY, it)
+                    binding.birthday.editText!!.setText(
+                        Utils.formatDate(
+                            viewModel.birthdayInMillis,
+                            getString(R.string.text_date_pattern_in_words)
+                        )
                     )
-                )
-                viewModel.setField(FieldTags.PROFILE_INFO_CHANGED, true)
+                }
             }
-        }
+        )
 
-        datePicker.showNow(childFragmentManager, "")
     }
 
     /**
@@ -257,26 +285,6 @@ class BookerProfileFragment : Fragment() {
      */
     private fun phoneWidgetConfig() =
         binding.countryCodePicker.registerCarrierNumberEditText(binding.recoveryPhone.editText)
-
-    private fun initPictureSelection() = pickScannerPhoto.launch("image/*")
-
-    /**
-     * A pre-built contract to pick an image from the gallery!
-     * If the received photoUri is not null, we convert the uri to a bitmap and set its value to that of [BookerSignInViewModel.photoField]
-     * else we re-launch the selection
-     */
-    private val pickScannerPhoto: ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { photoUri ->
-            photoUri?.let { uri ->
-                val photoStream = requireActivity().contentResolver.openInputStream(uri)!!
-                viewModel.setField(
-                    FieldTags.PROFILE_PHOTO,
-                    BitmapFactory.decodeStream(photoStream)
-                )
-                binding.profilePhoto.setImageBitmap(viewModel.photoField!!)
-                viewModel.setField(FieldTags.PROFILE_PHOTO_CHANGED, true)
-            }
-        }
 
 
     /**
@@ -305,23 +313,44 @@ class BookerProfileFragment : Fragment() {
         }
 
         viewModel.existingProfileDoc.observe(viewLifecycleOwner) {
-            restoreFields()
-            binding.profilePhoto.loadImageFromUrl(viewModel.photoUrl)
+            if (it?.exists() == true) {
+                restoreFields()
+            }
         }
 
         viewModel.onFailed.observe(viewLifecycleOwner) {
-            if (it) {
-                viewModel.setField(
-                    FieldTags.TOAST_MESSAGE,
-                    getString(R.string.warn_internet_required)
-                )
+//            if (it) {
+//                viewModel.setField(
+//                    FieldTags.TOAST_MESSAGE,
+//                    getString(R.string.warn_internet_required)
+//                )
+//
+//                viewModel.setField(FieldTags.ON_INFO_SAVED, true)
+//            }
+        }
 
-                viewModel.setField(FieldTags.ON_INFO_SAVED, true)
+        viewModel.startSaving.observe(viewLifecycleOwner) {
+            if (it) {
+                Log.d("PROFILE", "startSavingCalled")
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.uploadProfilePhoto()
+                }
+            }
+        }
+        viewModel.onPhotoSaved.observe(viewLifecycleOwner) {
+            if (it) {
+                Log.d("PROFILE", "PhotoCalled")
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (viewModel.existingProfileDoc.value?.exists() == true)
+                        viewModel.updateBookerProfile()
+                    else viewModel.createBookerProfile()
+                }
             }
         }
 
         viewModel.onInfoSaved.observe(viewLifecycleOwner) {
             if (it) {
+                Log.d("PROFILE", "CreationFinishedCalled")
                 uiUtils.editSharedPreference(UIUtils.SP_BOOL_BOOKER_PROFILE_EXIST, true)
                 //To creation center
                 when (viewModel.caller) {
@@ -346,4 +375,50 @@ class BookerProfileFragment : Fragment() {
         }
     }
 
+    private fun verifyFields() {
+        when {
+            viewModel.nameField.isBlank() -> {
+                viewModel.setField(FieldTags.TOAST_MESSAGE,
+                    getString(R.string.text_field_is_required))
+                binding.name.requestFocus()
+            }
+
+            viewModel.nationalityField.isBlank() -> {
+                viewModel.setField(FieldTags.TOAST_MESSAGE,
+                    getString(R.string.text_field_is_required))
+                binding.nationality.requestFocus()
+            }
+
+            !binding.countryCodePicker.isValidFullNumber -> {
+                viewModel.setField(FieldTags.TOAST_MESSAGE, getString(R.string.text_invalid_phone))
+                binding.recoveryPhone.requestFocus()
+            }
+
+            //TODO: Check if booker is connected before saving
+            else -> {
+                viewModel.setField(FieldTags.START_SAVING, true)
+                viewModel.setField(FieldTags.START_SAVING, false)
+            }
+        }
+    }
+
+    /**
+     * We check if any change have been made i.e if we have edit the field
+     */
+    private fun haveFieldsBeenModified(): Boolean {
+        val scannerDoc = viewModel.existingProfileDoc.value
+        return if (scannerDoc?.exists() == true) {
+            !(
+                    //If true, then some fields have changed
+                    viewModel.nameField == scannerDoc.getString("name")!! &&
+                            viewModel.birthdayInMillis == scannerDoc.getLong("birthdayInMillis")!! &&
+                            viewModel.nationalityField == scannerDoc.getString("nationality")!! &&
+                            viewModel.photoUri == null &&
+                            viewModel.recoveryPhoneField == scannerDoc.getString("recoveryPhone")!! &&
+                            viewModel.recoveryPhoneCountryCode == scannerDoc.getLong("recoveryPhoneCountryCode")!!
+                        .toInt() &&
+                            viewModel.sex == scannerDoc.getString("sex")!!.toSEX()
+                    )
+        } else true// This is true when we are creating the account hence it is normal tha we want to save changes in this case
+    }
 }

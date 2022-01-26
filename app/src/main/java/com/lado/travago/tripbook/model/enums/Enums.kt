@@ -1,7 +1,9 @@
 package com.lado.travago.tripbook.model.enums
 
+import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.model.enums.OCCUPATION.*
 import com.lado.travago.tripbook.model.enums.SEX.*
+import com.lado.travago.tripbook.ui.notification.ImageViewerFragment
 
 
 /**
@@ -15,6 +17,7 @@ import com.lado.travago.tripbook.model.enums.SEX.*
  * @property UNKNOWN for initialising sex variables
  */
 enum class SEX {
+
     MALE {
         override fun toString() = "M"
     },
@@ -57,4 +60,21 @@ enum class OCCUPATION {
  */
 enum class DbOperations {
     SET, DELETE, UPDATE, GET
+}
+
+/**
+ * This tells us which placeholders to use if the image does not load successfully and during loading also
+ *
+ * @see ImageViewerFragment
+ */
+enum class PlaceHolder {
+    PERSON, AGENCY, ANY;
+
+    fun placeholderResID(): Int {
+        return when (this) {
+            PERSON -> R.drawable.baseline_person_24
+            AGENCY -> R.drawable.outline_agency_profile_24
+            ANY ->  R.drawable.baseline_insert_photo_24
+        }
+    }
 }

@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.lado.travago.tripbook.databinding.ItemSummaryListBinding
 import com.lado.travago.tripbook.model.admin.SummaryItem
-import com.lado.travago.tripbook.utils.loadLogoFromUrl
+import com.lado.travago.tripbook.model.enums.PlaceHolder
+import com.lado.travago.tripbook.utils.imageFromUrl
 
 
 class SummaryItemAdapter(
@@ -29,41 +30,49 @@ class SummaryItemViewHolder private constructor(
     val binding: ItemSummaryListBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(clickListener: SummaryItemClickListener, item: SummaryItem) {
-        binding.clickListener = clickListener
-        binding.item = item
-        if (item.isMainItem) {
-            binding.mainTitle.textSize = 15F
-            binding.imageLogo.minimumWidth = 32
-            binding.imageLogo.minimumHeight = 32
-            binding.divider.visibility = View.VISIBLE
+        if (item.isVisible) {
+            binding.clickListener = clickListener
+            binding.item = item
+            if (item.isMainItem) {
+                binding.mainTitle.textSize = 15F
+                binding.imageLogo.minimumWidth = 32
+                binding.imageLogo.minimumHeight = 32
+                binding.divider.visibility = View.VISIBLE
 
-        }
-        when (item.state) {
-            SummaryItem.SettingsItemState.OK -> {
-                binding.imageOk.visibility = View.VISIBLE
             }
-            SummaryItem.SettingsItemState.NOT_OK -> {
-                binding.imageNotOk.visibility = View.VISIBLE
+            when (item.state) {
+                SummaryItem.SettingsItemState.OK -> {
+                    binding.imageOk.visibility = View.VISIBLE
+                }
+                SummaryItem.SettingsItemState.NOT_OK -> {
+                    binding.imageNotOk.visibility = View.VISIBLE
+                }
+                SummaryItem.SettingsItemState.PENDING -> {
+                    binding.imagePending.visibility = View.VISIBLE
+                }
+                else -> {}
             }
-            SummaryItem.SettingsItemState.PENDING -> {
-                binding.imagePending.visibility = View.VISIBLE
+            binding.mainTitle.text = item.mainTitle
+            binding.subTitle.text = item.subTitle
+            item.logoResourceID?.let { binding.imageLogo.setImageResource(it) }
+            item.logoUrl?.let {
+                binding.imageLogo.imageFromUrl(it,
+                    PlaceHolder.AGENCY,
+                    null)//TODO: create a PlaceHolder.ANY
+            }
+            item.extraDetails?.let {
+                binding.subDetail.text = it
+                binding.subDetail.visibility = View.VISIBLE
             }
         }
-        binding.mainTitle.text = item.mainTitle
-        binding.subTitle.text = item.subTitle
-        item.logoResourceID?.let { binding.imageLogo.setImageResource(it) }
-        item.logoUrl?.let {
-            binding.imageLogo.loadLogoFromUrl(it)
-        }
-        item.extraDetails?.let {
-            binding.subDetail.text = it
-            binding.subDetail.visibility = View.VISIBLE
-        }
+        //This is just the spacer
+        else binding.root.visibility = View.GONE
+
     }
 
     companion object {
         fun from(
-            parent: ViewGroup
+            parent: ViewGroup,
         ): SummaryItemViewHolder {
             val binding = ItemSummaryListBinding.inflate(
                 LayoutInflater.from(parent.context),

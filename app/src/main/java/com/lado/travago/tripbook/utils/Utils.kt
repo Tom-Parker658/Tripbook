@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Pattern
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -67,7 +68,6 @@ object Utils {
     }
 
 
-
     /**
      * @author Tom Parkert
      * Subtracts the birthday in millis from the current date in millis, then convert the
@@ -89,7 +89,11 @@ object Utils {
      * @return the qrCode generated is returned as a bitmap image.
      *
      */
-    fun bookQRCodeGenerator(qrCodeText: String, requiredHeight: Int = 150, requiredWidth: Int = 150): Bitmap? {
+    fun bookQRCodeGenerator(
+        qrCodeText: String,
+        requiredHeight: Int = 150,
+        requiredWidth: Int = 150,
+    ): Bitmap? {
         val result: BitMatrix
         val encryptedSeed = qrCodeEncryptor(qrCodeText)
         //Try to encode the qrSeed to QR code or generate an error
@@ -168,10 +172,10 @@ object Utils {
     fun convertBitmapToStream(
         bitmap: Bitmap?,
         format: Bitmap.CompressFormat,
-        quality: Int
+        quality: Int,
     ): ByteArrayInputStream {
         val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap!!.compress(format, 0, byteArrayOutputStream)
+        bitmap!!.compress(format, quality, byteArrayOutputStream)
         return ByteArrayInputStream(byteArrayOutputStream.toByteArray())
     }
 
@@ -181,7 +185,20 @@ object Utils {
     fun String.removeSpaces() = this.filter {
         it != ' '
     }
+
     fun formatDistance(distance: Long) = "$distance km"
 
+
+    /**
+     * This implements only the most basic checking for an email address's validity -- that it contains
+     * an '@' and contains no characters disallowed by RFC 2822. This is an overly lenient definition of
+     * validity. We want to generally be lenient here since this class is only intended to encapsulate what's
+     * in a barcode, not "judge" it.
+     */
+    fun isBasicallyValidEmailAddress(email: String): Boolean {
+        val regex = Pattern.compile("[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+")
+        return regex.matcher(email)
+            .matches() && email.indexOf('@') > 0 && email.indexOf('.') > email.indexOf('@')
+    }
 
 }

@@ -29,7 +29,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.45"
+                app:layout_constraintVertical_bias="0.25"
                 app:layout_constraintVertical_chainStyle="packed"
                 tools:srcCompat="@drawable/baseline_login_24" />
 
@@ -38,6 +38,7 @@
                 style="@style/titleStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:padding="4dp"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toTopOf="@+id/text_notif_message"
@@ -80,7 +81,9 @@
                 style="@style/positiveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
                 app:icon="@drawable/baseline_arrow_forward_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

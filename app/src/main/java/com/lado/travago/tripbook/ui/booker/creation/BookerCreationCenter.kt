@@ -67,14 +67,14 @@ class BookerCreationCenter : Fragment() {
             clickListener = SummaryItemClickListener {
                 when (it.id) {
                     //Profile Info
-                    "1" -> {
+                    SummaryItem.ITEM_BOOKER_PROFILE_ID -> {
                         findNavController().navigate(
                             BookerCreationCenterDirections.actionBookerCreationCenterToBookerProfileFragment(
                                 caller
                             )
                         )
                     }
-                    "2" -> {
+                    SummaryItem.ITEM_SWAP_PHONE_ID -> {
                         findNavController().navigate(
                             BookerCreationCenterDirections.actionBookerCreationCenterToChangePhoneFragment()
                         )

@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.lado.travago.tripbook.databinding.ItemScannerBinding
+import com.lado.travago.tripbook.model.enums.PlaceHolder
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.ScannerConfigViewModel
 import com.lado.travago.tripbook.utils.Utils
-import com.lado.travago.tripbook.utils.loadImageFromUrl
+import com.lado.travago.tripbook.utils.imageFromUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import java.text.SimpleDateFormat
@@ -43,7 +44,7 @@ class ScannerConfigViewHolder private constructor(
      */
     fun bind(clickListener: ScannerConfigClickListener, scannerDoc: DocumentSnapshot) {
         binding.scannerDoc = scannerDoc
-        binding.scannerPhoto.loadImageFromUrl(scannerDoc.getString("photoUrl")!!)
+        binding.scannerPhoto.imageFromUrl(scannerDoc.getString("photoUrl")!!, PlaceHolder.PERSON, null)
         binding.textNumberScan.text = "Total Scans: ${scannerDoc["scansNumber"]}"
         binding.textScannerName.text = scannerDoc["name"].toString()
         binding.textScannerPhone.text = scannerDoc["phone"].toString()

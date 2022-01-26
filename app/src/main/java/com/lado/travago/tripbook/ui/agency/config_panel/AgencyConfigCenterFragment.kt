@@ -1,15 +1,18 @@
 package com.lado.travago.tripbook.ui.agency.config_panel
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.button.MaterialButton
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyConfigCenterBinding
 import com.lado.travago.tripbook.model.admin.SummaryItem
@@ -17,13 +20,17 @@ import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigVi
 import com.lado.travago.tripbook.ui.agency.scanner_panel.ScannerPanelActivity
 import com.lado.travago.tripbook.ui.recycler_adapters.SummaryItemAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.SummaryItemClickListener
+import com.lado.travago.tripbook.utils.UIUtils
 import kotlinx.coroutines.*
+import kotlin.properties.Delegates
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class AgencyConfigCenterFragment : Fragment() {
     private lateinit var binding: FragmentAgencyConfigCenterBinding
-    //    TODO: TEST COMMENTING
+    private var isReady by Delegates.notNull<Boolean>()
+    private lateinit var uiUtils: UIUtils
+
     private lateinit var parentViewModel: AgencyConfigViewModel
 
     override fun onCreateView(
@@ -36,22 +43,68 @@ class AgencyConfigCenterFragment : Fragment() {
             container,
             false
         )
+        parentViewModel = ViewModelProvider(requireActivity())[AgencyConfigViewModel::class.java]
+        uiUtils = UIUtils(this, requireActivity(), viewLifecycleOwner)
+        initGoOnlineButton()
         initSettingsRecycler()
 
         return binding.root
     }
 
-    /**
-     * Inorder to stop any loading blocking the ui
-     */
-    override fun onDetach() {
-        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-        super.onDetach()
+    private fun initGoOnlineButton() {
+        when {
+            parentViewModel.agencyDoc.value!!.getBoolean("hasOngoingEvent")!! -> {
+                parentViewModel.agencyDoc.value?.run {
+                    isReady =
+                        getBoolean("hasScanners")!! && getBoolean("hasSTrips")!! && getBoolean("hasEvents")!! && getBoolean(
+                            "hasTakeOffPeriods")!! && getBoolean("hasConfiguredPayments")!!
+                }
+
+                if (!isReady) {
+                    (binding.btnUploadAgency as MaterialButton).apply {
+                        strokeColor =
+                            ColorStateList.valueOf(resources.getColor(R.color.quantum_grey))
+                        setTextColor(resources.getColor(R.color.quantum_grey))
+                        iconTint = ColorStateList.valueOf(resources.getColor(R.color.quantum_grey))
+                    }
+                    binding.btnUploadAgency.setOnClickListener {
+                        Toast.makeText(requireContext(),
+                            getString(R.string.text_message_agency_not_ready_go_online),
+                            Toast.LENGTH_LONG).show()
+                    }
+                } else
+                    binding.btnUploadAgency.setOnClickListener {
+                        uiUtils.warningDialog(
+                            getString(R.string.text_go_online),
+                            getString(R.string.text_message_agency_ready_go_online),
+                            getString(R.string.text_continue),
+                            null,
+                            getString(R.string.text_cancel),
+                            onPositiveListener = { dialog, _ ->
+                                //TODO: Get online
+                                dialog.dismiss()
+                            },
+
+                            null,
+                            onNeutralListener = { dialog, _ ->
+                                dialog.dismiss()
+                            },
+                        )
+
+                    }
+            }
+
+            else -> binding.btnUploadAgency.visibility = View.GONE
+        }
+
     }
 
+
     private fun initSettingsRecycler() {
-        val adminList = SummaryItem.createForAgencyConfigOptions(resources)
+        val optionsList = SummaryItem.adminAgencyConfigOptions(resources,
+            parentViewModel.scannerDoc.value!!,
+            parentViewModel.agencyDoc.value!!
+        )
 
         SummaryItemAdapter(
             SummaryItemClickListener {
@@ -59,50 +112,44 @@ class AgencyConfigCenterFragment : Fragment() {
             }
         ).apply {
             this.submitList(
-                adminList
+                optionsList
             )
-            //TODO: TEST:COMMENTING
-//            this.submitList(
-//                if (parentViewModel.scannerDoc.value!!.getBoolean("isAdmin")!!)
-//                    SummaryItem.adminScannerItems
-//                else SummaryItem.adminScannerItems //TODO: Urgent: Change it with Scanner related panels
-//            )
+
             val linearLayoutManager = LinearLayoutManager(requireContext())
             binding.recyclerConfigAdmin.layoutManager = linearLayoutManager
             binding.recyclerConfigAdmin.adapter = this
         }
 
-
     }
 
     private fun handleNavClicks(it: SummaryItem) {
-        when (it.mainTitle) {
-            // Trips
-            getString(R.string.text_trips) -> findNavController().navigate(
-                AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTownsConfigFragment()
-            )
+        when (it.id) {
             // Agency Profile
-            getString(R.string.text_agency_profile) -> findNavController().navigate(
+            SummaryItem.ITEM_AGENCY_PROFILE_ID -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyProfileFragment()
             )
+            // Trips
+            SummaryItem.ITEM_AGENCY_TRIPS_ID -> findNavController().navigate(
+                AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTownsConfigFragment()
+            )
             // Money
-            getString(R.string.text_money) -> {
+            SummaryItem.ITEM_MONEY_ID -> {
                 //TODO: Payment Modules
             }
             // Scanners
-            getString(R.string.text_scanners) -> findNavController().navigate(
+            SummaryItem.ITEM_SCANNERS_ID -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToScannerConfigFragment()
             )
             //Events
-            getString(R.string.text_event_planner) -> findNavController().navigate(
+            SummaryItem.ITEM_PLAN_EVENTS_ID -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToAgencyEventPlannerFragment()
             )
             //Intervals
-            getString(R.string.text_take_off_periods) -> findNavController().navigate(
+            SummaryItem.ITEM_TAKE_OFF_TIME_ID -> findNavController().navigate(
                 AgencyConfigCenterFragmentDirections.actionAgencyConfigCenterFragmentToTripDepartureTimeConfigFragment()
             )
             //All the agencies books
-            getString(R.string.text_all_trip_books) -> startActivity(
+            SummaryItem.ITEM_SCAN_BOOKS_ID -> startActivity(
                 Intent(
                     requireActivity(),
                     ScannerPanelActivity::class.java

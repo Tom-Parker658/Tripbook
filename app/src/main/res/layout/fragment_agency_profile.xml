@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="inputType"
             type="android.text.InputType" />
@@ -14,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
+
         tools:context=".ui.agency.config_panel.creation.AgencyProfileFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,21 +24,24 @@
 
             <ImageView
                 android:id="@+id/logoField"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                app:layout_constraintBottom_toTopOf="@+id/name"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:layout_marginTop="4dp"
+                android:contentDescription="@string/desc_agency_logo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_insert_photo_24" />
+                app:srcCompat="@drawable/outline_agency_profile_24" />
 
             <TextView
                 android:id="@+id/text_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="4dp"
+                android:selectAllOnFocus="true"
+                android:focusable="true"
                 android:text="@string/text_logo"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toTopOf="@+id/name"
                 app:layout_constraintEnd_toEndOf="@+id/logoField"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -63,7 +68,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/support_phone_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/creation_year">
+                app:layout_constraintTop_toBottomOf="@+id/creation_date">
 
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/textInputStyle"
@@ -71,32 +76,22 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/name_of_CEO"
+                android:id="@+id/creation_date"
                 style="@style/editTextStyle"
-                android:hint="@string/text_ceo"
-                app:layout_constraintBottom_toTopOf="@+id/creation_year"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_creation_date"
+                app:endIconDrawable="@drawable/baseline_event_24"
+                app:endIconMode="custom"
+                app:layout_constraintBottom_toTopOf="@+id/motto"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/decree_number">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    style="@style/textInputStyle"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/creation_year"
-                style="@style/editTextStyle"
-                android:hint="@string/text_creation_year"
-                app:layout_constraintBottom_toTopOf="@+id/motto"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name_of_CEO">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/textInputStyle"
-                    android:inputType="number"
-                    android:maxLength="4" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -104,7 +99,7 @@
                 style="@style/editTextStyle"
                 android:hint="@string/text_min_decree"
                 app:helperText="@string/text_helper_min_decree"
-                app:layout_constraintBottom_toTopOf="@+id/name_of_CEO"
+                app:layout_constraintBottom_toTopOf="@+id/creation_date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/name">
@@ -189,6 +184,7 @@
                 style="@style/positiveButton"
                 android:layout_marginTop="8dp"
                 android:text="@string/text_save"
+                app:icon="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/support_email" />
@@ -204,6 +200,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.39999998" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_logo"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/text_logo"
+                app:layout_constraintEnd_toEndOf="@+id/logoField"
+                app:layout_constraintStart_toStartOf="@+id/logoField"
+                app:layout_constraintTop_toTopOf="@+id/logoField"
+                app:layout_constraintVertical_bias="1.0" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

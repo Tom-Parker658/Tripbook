@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="clickListener"
             type="com.lado.travago.tripbook.ui.recycler_adapters.SimpleClickListener" />
@@ -12,10 +13,11 @@
             name="itemMap"
             type="java.util.HashMap&lt;String, String>" />
     </data>
-<!-- '&lt' means '<' -->
+    <!-- '&lt' means '<' -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         android:onClickListener="@{() -> clickListener.onClick(itemMap)}">
 
         <TextView

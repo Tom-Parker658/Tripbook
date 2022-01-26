@@ -16,12 +16,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.MaterialDatePicker.INPUT_MODE_CALENDAR
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripSearchBinding
 import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchViewModel
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripSearchViewModel.*
+import com.lado.travago.tripbook.utils.UIUtils
 import com.lado.travago.tripbook.utils.Utils
 import kotlinx.coroutines.*
 import java.util.*
@@ -34,6 +36,7 @@ import java.util.*
 class TripSearchFragment : Fragment() {
     private lateinit var binding: FragmentTripSearchBinding
     private lateinit var viewModel: TripSearchViewModel
+    private lateinit var uiUtils: UIUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +50,7 @@ class TripSearchFragment : Fragment() {
             false
         )
         initViewModel()
+        uiUtils = UIUtils(this, requireActivity(), viewLifecycleOwner)
         clickListeners()
         adaptAutoCompleteNames()
         restoreFields()
@@ -87,7 +91,6 @@ class TripSearchFragment : Fragment() {
 
 
     private fun datePicker() {
-        val titleText = "Trip Date"
         val calendar = Calendar.getInstance()//An instance of the current Calendar
         val minDate = Date().time // The current date(today) in millis
         calendar.roll(Calendar.DATE, 30)
@@ -97,46 +100,41 @@ class TripSearchFragment : Fragment() {
             .setStart(minDate)//Smallest date which can be selected
             .setEnd(maxDate)
             .build()
-        //We create our date picker which the user will use to enter his travel day
-        //Showing the created date picker onScreen
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setCalendarConstraints(bounds)//Constrain the possible dates
-            .setTitleText(titleText)//Set the Title of the Picker
-            .setSelection(viewModel.tripDateInMillis)
-            .build()
 
-        //Sets the value of the edit text to the formatted value of the selection
-        datePicker.addOnPositiveButtonClickListener {
+        uiUtils.datePicker(childFragmentManager,
+            getString(R.string.text_trip_date),
+            viewModel.tripDateInMillis,
+            bounds,
+            INPUT_MODE_CALENDAR
+        ) {
             if (Date().date > Date(it).date) datePicker()
             else {
                 viewModel.setField(FieldTags.TRIP_DATE, it)
                 binding.editTextDates.editText!!.setText(Utils.formatDate(it, "EEEE dd MMMM YYYY"))
             }
         }
-        datePicker.showNow(childFragmentManager, "Date")
-
     }
 
     private fun timePicker() {
-        val titleText = getString(R.string.text_pick_time)//TODO Translate
-        val timePicker = MaterialTimePicker.Builder()
-            .setTitleText(titleText)
-            .setHour(viewModel.tripTime.hour)
-            .setMinute(viewModel.tripTime.minutes)
-            .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-            .build()
-        timePicker.addOnPositiveButtonClickListener {
-            viewModel.setField(
-                FieldTags.TRIP_TIME,
-                TimeModel.from24Format(
-                    timePicker.hour, timePicker.minute, 0
+        uiUtils.timePicker(
+            childFragmentManager,
+            getString(R.string.text_pick_time),
+            viewModel.tripTime.hour,
+            viewModel.tripTime.minutes,
+            MaterialTimePicker.INPUT_MODE_CLOCK
+        ) { timePicker ->
+            View.OnClickListener {
+                viewModel.setField(
+                    FieldTags.TRIP_TIME,
+                    TimeModel.from24Format(
+                        timePicker.hour, timePicker.minute, 0
+                    )
                 )
-            )
-            binding.editTextTime.editText!!.setText(
-                viewModel.tripTime.localTimeFormat()
-            )
+                binding.editTextTime.editText!!.setText(
+                    viewModel.tripTime.localTimeFormat()
+                )
+            }
         }
-        timePicker.showNow(childFragmentManager, "")
     }
 
 

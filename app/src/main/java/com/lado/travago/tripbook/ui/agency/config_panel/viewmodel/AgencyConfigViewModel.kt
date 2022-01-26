@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import com.lado.travago.tripbook.R
+import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.firebase.FirebaseAuthRepo
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
 import com.lado.travago.tripbook.utils.UIUtils
@@ -30,6 +31,9 @@ class AgencyConfigViewModel : ViewModel() {
 
     private val _bookerDoc = MutableLiveData<DocumentSnapshot>()
     val bookerDoc: LiveData<DocumentSnapshot> get() = _bookerDoc
+
+    private val _agencyDoc = MutableLiveData<DocumentSnapshot>()
+    val agencyDoc: LiveData<DocumentSnapshot> get() = _agencyDoc
 
     private val _onLoading = MutableLiveData<Boolean>()
     val onLoading: LiveData<Boolean> get() = _onLoading
@@ -60,9 +64,6 @@ class AgencyConfigViewModel : ViewModel() {
     private val _navArgs = MutableLiveData(Bundle.EMPTY)
     val navArgs: LiveData<Bundle> get() = _navArgs
 
-    lateinit var bookerListener: ListenerRegistration
-    lateinit var scannerListener: ListenerRegistration
-
 
     /**
      * @since 15-01-2022
@@ -70,31 +71,36 @@ class AgencyConfigViewModel : ViewModel() {
      * Tries to get the scanner document associated to that booker if he is a scanner of course (>_<)
      * Notice that when ever we fail because of a network error, we mark [_noCachedData] true
      */
-    private fun scannerDoc(agencyID: String, context: Context) {
-//        Log.d("GATEWAY", "ScannerDoc called")
-        scannerListener =
+    private fun scannerDoc(agencyID: String, hostActivity: Activity) {
+        if (/*_retryable.value != true && */_hasProfile.value == true && authRepo.currentUser != null && _bookerDoc.value != null && !_bookerDoc.value!!.getString(
+                "agencyID").isNullOrBlank()
+        ) {
             firestoreRepo.db.document("OnlineTransportAgency/$agencyID/Scanners/${authRepo.currentUser!!.uid}")
                 .addSnapshotListener { value: DocumentSnapshot?, error: FirebaseFirestoreException? ->
                     _onLoading.value = false
+                    _toastMessage.value = error?.handleError { }
                     if (error != null) {
                         if (error.code == FirebaseFirestoreException.Code.UNAVAILABLE) _noCachedData.value =
                             true
                         _toastMessage.value =
-                            context.getString(R.string.text_unexpected_error_retry)
+                            hostActivity.getString(R.string.text_unexpected_error_retry)
                         _retryable.value = true
                     }
 
-                    if (value != null && value.exists()) {
+                    if (value?.exists() == true) //This is true if the scanner is demoted as he is already working for the agency
+                    {
                         _scannerDoc.value = value
+                        _bookerIsNotScanner.value =
+                            false
                     } else {
                         _toastMessage.value =
-                            context.getString(R.string.text_unexpected_error_retry)
+                            hostActivity.getString(R.string.text_unexpected_error_retry)
                         _retryable.value = true
-                        _bookerIsNotScanner.value = true
+                        _bookerIsNotScanner.value =
+                            true//This is true if the scanner is demoted as he is already working for the agency
                     }
-
                 }
-
+        }
     }
 
     /**
@@ -102,38 +108,60 @@ class AgencyConfigViewModel : ViewModel() {
      *
      * Tries to get the current user booker document(at least when we know the booker is logged In)
      */
-    fun bookerDoc(context: Context, uiUtils: UIUtils) {
+    fun bookerDoc(hostActivity: Activity, uiUtils: UIUtils) {
         _onLoading.value = true
-        _retryable.value = false
-        bookerListener =
+        if (/*_retryable.value != true &&*/ _hasProfile.value == true && authRepo.currentUser != null) {
             firestoreRepo.db.document("Bookers/${authRepo.currentUser!!.uid}")
                 .addSnapshotListener { value: DocumentSnapshot?, error: FirebaseFirestoreException? ->
-                    if (value != null) {
+                    _onLoading.value = true
+                    if (value?.exists() == true) {
                         val agencyID = value.getString("agencyID")
-                        when {
-                            !agencyID.isNullOrBlank() -> scannerDoc(agencyID, context)
-                            uiUtils.isConnected.value == false -> {
-                                _noCachedData.value = true
-                                _retryable.value = true
-                                Log.d("GATEWAY", "Call2")
-                            }
-                            else -> {
-                                Log.d("GATEWAY", "Call1")
-                                _bookerIsNotScanner.value = true
-                                _retryable.value = true
-                            }
+                        _bookerDoc.value = value
+
+                        if (!agencyID.isNullOrBlank()) scannerDoc(agencyID, hostActivity)
+                        else _bookerIsNotScanner.value = true
+
+                        if (error != null) {
+                            if (error.code == FirebaseFirestoreException.Code.UNAVAILABLE) _noCachedData.value =
+                                true
+                            _noCachedData.value = true
+                            _toastMessage.value =
+                                hostActivity.getString(R.string.text_unexpected_error_retry)
+                            _retryable.value = true
                         }
                     }
-                    if (error != null) {
-                        if (error.code == FirebaseFirestoreException.Code.UNAVAILABLE) _noCachedData.value =
-                            true
-                        _toastMessage.value =
-                            context.getString(R.string.text_unexpected_error_retry)
-//                        _retryable.value = true
-                    }
-
+//                    else {
+//                        _hasProfile.value = false
+//                    }TODO: Correct this and make sure we can retry
+                    _toastMessage.value = error?.handleError { }
                 }
+
+        }
     }
+
+    /**
+     *  @since 18-01-2022 A life listener to the agency document
+     */
+    fun agencyDoc(hostActivity: Activity, agencyID: String) {
+        Log.d("GATEWAY_NOPE", "AGENCY DOC")
+
+        _onLoading.value = true
+        firestoreRepo.db.document("OnlineTransportAgency/${agencyID}")
+            .addSnapshotListener(hostActivity) { value, error ->
+                Log.d("GATEWAY", "AGENCY DOC")
+                _onLoading.value = false
+                _toastMessage.value = error?.handleError { }
+
+                if (value?.exists() == true) _agencyDoc.value = value
+                else _toastMessage.value = hostActivity.getString(R.string.no_result_found)
+
+                if (error != null) {
+                    _toastMessage.value = error.message
+                }
+            }
+
+    }
+
 
     /**
      * @since 17-01-2022
@@ -151,8 +179,7 @@ class AgencyConfigViewModel : ViewModel() {
                     _hasProfile.value = value as Boolean
             }
             FieldTags.NAV_ARGS -> {
-                if (_navArgs != value)
-                    _navArgs.value = value as Bundle
+                _navArgs.value = value as Bundle
             }
             FieldTags.BOOKER_IS_NOT_SCANNER -> {
                 if (value != _bookerIsNotScanner.value)
@@ -163,13 +190,18 @@ class AgencyConfigViewModel : ViewModel() {
                     _retryable.value = value as Boolean?
             }
             FieldTags.TOAST_MESSAGE ->
-
                 _toastMessage.value = value as String
+
+            FieldTags.IS_FIRST_LAUNCH ->
+                if (isFirstLaunch != value)
+                    isFirstLaunch = value as Boolean
         }
     }
 
     enum class FieldTags {
-        NO_CACHED_DATA, HAS_PROFILE, NAV_ARGS, BOOKER_IS_NOT_SCANNER, RETRYABLE, TOAST_MESSAGE
+        NO_CACHED_DATA, HAS_PROFILE, NAV_ARGS, BOOKER_IS_NOT_SCANNER, RETRYABLE, TOAST_MESSAGE, IS_FIRST_LAUNCH
     }
 
+
 }
+

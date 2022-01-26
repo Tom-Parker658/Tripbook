@@ -40,6 +40,7 @@ import kotlinx.coroutines.*
  */
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
+//TODO: Repair this Gate way since it spins eternally when it has no access to the database
 class AgencyGatewayFragment : Fragment() {
     private lateinit var viewModel: AgencyConfigViewModel
     private lateinit var binding: FragmentAgencyGatewayBinding
@@ -54,20 +55,9 @@ class AgencyGatewayFragment : Fragment() {
             R.layout.fragment_agency_gateway,
             container,
             false)
-        viewModel = ViewModelProvider(this)[AgencyConfigViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[AgencyConfigViewModel::class.java]
 
         uiUtils = UIUtils(this, requireActivity(), viewLifecycleOwner)
-
-//        We immediately know if this current booker has an associate profile(We don't want to know if he is even logged in or not at this time)
-//        NB: We want to make this false iff the booker at least is logged in but has mo profile and true if he is
-//        logged in and has a profile else null
-//        viewModel.setField(FieldTags.HAS_PROFILE,
-//            uiUtils.getSharedPreference(UIUtils.SP_BOOL_BOOKER_PROFILE_EXIST) == true
-//        )
-        if (viewModel.isFirstLaunch) {
-//            retryProcess()TODO Help
-            viewModel.isFirstLaunch = false
-        }
 
         observeLiveData()
         clickListeners()
@@ -78,6 +68,7 @@ class AgencyGatewayFragment : Fragment() {
         viewModel.setField(FieldTags.HAS_PROFILE,
             uiUtils.getSharedPreference(UIUtils.SP_BOOL_BOOKER_PROFILE_EXIST) == true
         )
+        Log.d("GATEWAY_FRAG", "HAS PROFILE SET")
         super.onResume()
     }
 
@@ -98,16 +89,17 @@ class AgencyGatewayFragment : Fragment() {
     }
 
     private fun observeLiveData() {
-
         viewModel.authRepo.firebaseAuth.addAuthStateListener {
             val args = NotificationFragmentArgs.Builder(NotificationType.ACCOUNT_NOT_FOUND,
                 NotificationType.ACCOUNT_NOT_FOUND.toString(), binding.root.id).build()
                 .toBundle()
-            if (it.currentUser == null) {
-                if (args != viewModel.navArgs.value) viewModel.setField(FieldTags.NAV_ARGS, args)
+            if (it.currentUser == null || viewModel.hasProfile.value != true) {
+                Log.d("GATEWAY_FRAG", "No current use or profile")
+                viewModel.setField(FieldTags.NAV_ARGS, args)
             } else {//When ever the user signs in or signs up and was previously not signed in or signed up, we set the navArg empty
-                if (args == viewModel.navArgs.value) viewModel.setField(FieldTags.NAV_ARGS,
-                    Bundle.EMPTY)
+                viewModel.setField(FieldTags.NAV_ARGS, Bundle.EMPTY)
+                Log.d("GATEWAY_FRAG", "Current user and profile")
+                viewModel.bookerDoc(requireActivity(), uiUtils)
             }
         }
 
@@ -120,30 +112,33 @@ class AgencyGatewayFragment : Fragment() {
         }
 
         viewModel.bookerDoc.observe(viewLifecycleOwner) {
-            if (it != null) {
+            if (it != null || it?.exists() == true) {
                 if (viewModel.hasProfile.value == false)
                     viewModel.setField(FieldTags.HAS_PROFILE, true)
             }
         }
-//
-        viewModel.hasProfile.observe(viewLifecycleOwner) {
-            if (!it && viewModel.authRepo.currentUser != null) {
-                val args = NotificationFragmentArgs.Builder(
-                    NotificationType.ACCOUNT_NOT_FOUND,
-                    NotificationType.ACCOUNT_NOT_FOUND.toString(),
-                    R.id.agencyGatewayFragment).build().toBundle()
-                viewModel.setField(FieldTags.NAV_ARGS, args)
-            }
-        }
 
         viewModel.bookerIsNotScanner.observe(viewLifecycleOwner) {
-            if (it && viewModel.hasProfile.value == true && viewModel.authRepo.currentUser != null) {
+            if (it) {
                 val args = NotificationFragmentArgs.Builder(
                     NotificationType.BOOKER_IS_NOT_SCANNER,
                     NotificationType.BOOKER_IS_NOT_SCANNER.toString(),
                     R.id.agencyGatewayFragment
                 ).build().toBundle()
                 viewModel.setField(FieldTags.NAV_ARGS, args)
+            }
+        }
+
+        viewModel.hasProfile.observe(viewLifecycleOwner) {
+            if (!it) {
+                val args = NotificationFragmentArgs.Builder(
+                    NotificationType.ACCOUNT_NOT_FOUND,
+                    NotificationType.ACCOUNT_NOT_FOUND.toString(),
+                    R.id.agencyGatewayFragment
+                ).build().toBundle()
+                viewModel.setField(FieldTags.NAV_ARGS, args)
+            } else {
+                viewModel.setField(FieldTags.NAV_ARGS, Bundle.EMPTY)
             }
         }
 
@@ -154,6 +149,7 @@ class AgencyGatewayFragment : Fragment() {
                 binding.progressBar4.visibility = View.GONE
             }
         }
+
         viewModel.scannerDoc.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (viewModel.bookerIsNotScanner.value == true) {
@@ -165,7 +161,7 @@ class AgencyGatewayFragment : Fragment() {
                     binding.btnEnterAgency.visibility = View.VISIBLE
                     (binding.btnEnterAgency as MaterialButton).setIconResource(R.drawable.baseline_login_24)
                     val text =
-                        "Dear ${it.getString("name")},\n You are about to enter your agency. Note that any action you do here is visible to your managers. Also, you are required to keep your device save from any intrusion! Welcome to the SCANNER GATEWAY!!!.\n If this is your first time being a Scanner, press the 'help' button to get help"
+                        "Dear ${viewModel.bookerDoc.value?.getString("name")},\n You are about to enter your agency. Note that any action you do here is visible to your managers. Also, you are required to keep your device save from any intrusion! Welcome to the SCANNER GATEWAY!!!.\n If this is your first time being a Scanner, press the 'help' button to get help"
 
                     binding.textWarningGateway.text = text
                     binding.textWarningGateway.visibility = View.VISIBLE
@@ -174,13 +170,13 @@ class AgencyGatewayFragment : Fragment() {
         }
         viewModel.noCachedData.observe(viewLifecycleOwner) {
             if (it) {
-                viewModel.bookerListener.remove()
+//                viewModel.bookerListener.remove()
                 Log.d("Gateway",
                     "You are offline! We will retry automatically when you get back online!")
             }
         }
         viewModel.toastMessage.observe(viewLifecycleOwner) {
-            if (it.isNotBlank()) {
+            if (it?.isNotBlank() == true) {
                 Toast.makeText(requireActivity(), it, Toast.LENGTH_SHORT).show()
                 viewModel.setField(FieldTags.TOAST_MESSAGE, "")
             }
@@ -188,7 +184,7 @@ class AgencyGatewayFragment : Fragment() {
         uiUtils.isConnected.observe(viewLifecycleOwner) {
             //If there was previously no internet and the request failed, we try again
             if (it && viewModel.noCachedData.value == true) {
-//                retryProcess()
+                viewModel.bookerDoc(requireActivity(), uiUtils)
             }
         }
 
@@ -200,20 +196,4 @@ class AgencyGatewayFragment : Fragment() {
 
     }
 
-    /**
-     * @since 16-01-2022
-     *
-     * Just a functions to encapsulate all the request we do to the database
-     */
-    private fun retryProcess() {
-        Log.d("RETRY_PROCESS", "CALLED")
-        if (viewModel.noCachedData.value != false)
-            viewModel.setField(FieldTags.NO_CACHED_DATA, false)
-//
-        if (viewModel.authRepo.currentUser != null)
-            CoroutineScope(Dispatchers.Main).launch {
-                viewModel.bookerDoc(requireContext(),
-                    uiUtils)//We retry to get the booker document again
-            }
-    }
 }

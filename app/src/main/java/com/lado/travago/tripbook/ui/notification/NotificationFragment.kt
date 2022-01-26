@@ -45,21 +45,11 @@ class NotificationFragment : Fragment() {
             false
         )
         /**
-         * We want to avoid by all means to be on this notification fragment when the booker is already signed in and we still show him/her that he needs to signup still
+         * We want to avoid by all means to be on the notification fragment for signup/Profile creation  when the booker is already signed in and we still show him/her that he needs to signup still
          */
-        if (NotificationFragmentArgs.fromBundle(requireArguments()).callerResID ==
-            R.id.agencyGatewayFragment
-        ) {
-            val uiUtil = UIUtils(this, requireActivity(), viewLifecycleOwner)
-            if (uiUtil.getSharedPreference(UIUtils.SP_BOOL_BOOKER_PROFILE_EXIST) == true && FirebaseAuthRepo().currentUser != null) {
-                findNavController().navigateUp()
-            } else if (uiUtil.getSharedPreference(UIUtils.SP_BOOL_BOOKER_PROFILE_EXIST) == true) {
-                findNavController().navigateUp()
-            }
-        }
+
         getNotificationObject(NotificationFragmentArgs.fromBundle(requireArguments()).notificationType)
 
-        Log.d("NotificationFragment", "Called!")
         return binding.root
     }
 

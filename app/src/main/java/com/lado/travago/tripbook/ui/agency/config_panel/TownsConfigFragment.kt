@@ -32,6 +32,7 @@ import com.lado.travago.tripbook.ui.recycler_adapters.SimpleAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.SimpleClickListener
 import com.lado.travago.tripbook.ui.recycler_adapters.TownClickListener
 import com.lado.travago.tripbook.ui.recycler_adapters.TownConfigAdapter
+import com.lado.travago.tripbook.utils.UIUtils
 import kotlinx.coroutines.*
 
 /**
@@ -45,6 +46,7 @@ class TownsConfigFragment : Fragment() {
     private lateinit var viewModel: TownsConfigViewModel
     private lateinit var binding: FragmentTownsConfigBinding
     private lateinit var adapter: TownConfigAdapter
+    private lateinit var uiUtils: UIUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

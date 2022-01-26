@@ -11,14 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentTripDetailBinding
-import com.lado.travago.tripbook.model.admin.TimeModel
 import com.lado.travago.tripbook.model.enums.NotificationType
+import com.lado.travago.tripbook.model.enums.PlaceHolder
 import com.lado.travago.tripbook.repo.firebase.FirebaseAuthRepo
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripsDetailsViewModel
 import com.lado.travago.tripbook.ui.booker.book_panel.viewmodel.TripsDetailsViewModel.*
 import com.lado.travago.tripbook.ui.notification.NotificationFragmentArgs
 import com.lado.travago.tripbook.utils.Utils
-import com.lado.travago.tripbook.utils.loadLogoFromUrl
+import com.lado.travago.tripbook.utils.imageFromUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -82,7 +82,7 @@ class TripDetailsFragment : Fragment() {
         }
         viewModel.agencyDoc.observe(viewLifecycleOwner) {
             CoroutineScope(Dispatchers.Main).launch {
-                binding.imageLogoAgency.loadLogoFromUrl(it.getString("logoUrl")!!)
+                binding.imageLogoAgency.imageFromUrl(it.getString("logoUrl")!!,PlaceHolder.AGENCY,null)
             }
             viewModel.tripListener(requireActivity())
         }

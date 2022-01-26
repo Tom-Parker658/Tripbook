@@ -58,6 +58,8 @@
     <string name="warn_invalid_phone">Invalid phone number</string>
     <string name="warn_wrong_confirmation_code">Wrong confirmation code</string>
     <string name="create_profile">Create your profile</string>
+    <string name="create">Create</string>
+    <string name="save_changes">Save changes</string>
     <string name="warn_old_phone_not_match">That is not your old phone number</string>
     <string name="sign_in_with_new_phone">Please, sign in with your new phone number</string>
     <string name="congrats_phone_changed">Congratulations! Your phone number has successfully been changed!</string>
@@ -69,6 +71,20 @@
     <string name="you_are_online">You are back Online!</string>
     <string name="you_are_offline">You are offline</string>
     <string name="text_unexpected_error_retry">Unexpected error, please try again!</string>
+    <string name="text_edit">Edit</string>
+    <string name="text_creation_month">Creation month</string>
+    <string name="text_creation_date">Creation date</string>
+    <string name="text_change">Change</string>
+    <string name="text_go_online">Go online</string>
+    <string name="text_message_agency_ready_go_online">This action will end the current event and your agency will become visible again to bookers</string>
+    <string name="text_message_agency_not_ready_go_online">Your agency is not ready to go online, Please make all markers blue!</string>
+    <string name="text_trip_date">Trip date</string>
+    <string name="text_unsaved_changes">Unsaved Changes</string>
+    <string name="text_do_not_save">Don\'t save</string>
+    <string name="text_field_is_required">This field is required</string>
+    <string name="text_invalid_email">Invalid email</string>
+    <string name="text_invalid_phone">Invalid phone number</string>
+    <string name="text_field_is_optional">this field is optional</string>
 </resources>
 
 

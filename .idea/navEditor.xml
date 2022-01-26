@@ -207,8 +207,20 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="661" />
-                            <option name="y" value="-40" />
+                            <option name="x" value="683" />
+                            <option name="y" value="-14" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="imageViewerFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-692" />
+                            <option name="y" value="39" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -231,8 +243,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="675" />
-                            <option name="y" value="368" />
+                            <option name="x" value="690" />
+                            <option name="y" value="417" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -243,8 +255,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="675" />
-                            <option name="y" value="724" />
+                            <option name="x" value="678" />
+                            <option name="y" value="776" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -662,6 +674,18 @@
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="imageViewerFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="171" />
+                            <option name="y" value="-221" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>

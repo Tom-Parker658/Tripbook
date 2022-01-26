@@ -34,6 +34,7 @@ import com.lado.travago.tripbook.ui.recycler_adapters.SimpleAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.SimpleClickListener
 import com.lado.travago.tripbook.ui.recycler_adapters.TripsClickListener
 import com.lado.travago.tripbook.ui.recycler_adapters.TripsConfigAdapter
+import com.lado.travago.tripbook.utils.UIUtils
 import kotlinx.coroutines.*
 
 /**
@@ -46,12 +47,14 @@ class TripsConfigFragment : Fragment() {
     private lateinit var binding: FragmentTripsConfigBinding
     private lateinit var viewModel: TripsConfigViewModel
     private lateinit var adapter: TripsConfigAdapter
+    private lateinit var uiUtils: UIUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         parentViewModel = ViewModelProvider(requireActivity())[AgencyConfigViewModel::class.java]
+        viewModel = ViewModelProvider(this)[TripsConfigViewModel::class.java]
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             layoutInflater,
@@ -59,7 +62,6 @@ class TripsConfigFragment : Fragment() {
             container,
             false
         )
-        viewModel = ViewModelProvider(this)[TripsConfigViewModel::class.java]
         setup()
         viewModel.tripsListener(
             requireActivity(),

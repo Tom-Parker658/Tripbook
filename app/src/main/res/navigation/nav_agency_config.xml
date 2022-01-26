@@ -124,7 +124,44 @@
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"/>
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageViewerFragment"
+        android:name="com.lado.travago.tripbook.ui.notification.ImageViewerFragment"
+        android:label="{titleLabel}"
+        tools:layout="@layout/fragment_image_viewer">
+        <argument
+            android:name="imageUrl"
+            app:argType="string"
+            app:nullable="true" />
+
+<!--        This is a bitmap whic-->
+        <argument
+            android:name="currentImageBitmap"
+            app:argType="android.graphics.Bitmap"
+            app:nullable="true" />
+
+        <!--        This is not null if the image view contains a drawable as image-->
+        <argument
+            android:name="imageUri"
+            app:argType="android.net.Uri"
+            app:nullable="true" />
+        <argument
+            android:name="isEditable"
+            app:argType="boolean" />
+        <argument
+            android:name="isDeletable"
+            app:argType="boolean" />
+        <argument
+            android:name="doCompression"
+            app:argType="boolean" />
+        <argument
+            android:name="titleLabel"
+            app:argType="string" />
+        <argument
+            android:name="placeHolder"
+            app:argType="com.lado.travago.tripbook.model.enums.PlaceHolder" />/>
     </fragment>
 
 </navigation>

@@ -1,5 +1,6 @@
 package com.lado.travago.tripbook.repo.firebase
 
+import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
 import com.lado.travago.tripbook.repo.FirestoreTags
 import com.lado.travago.tripbook.repo.State
@@ -33,7 +34,7 @@ class StorageRepo {
      * @param imageType is the name of the type of image e.g PROFILE see [StorageTags]
      * @return the url of the image as a String
      */
-    fun uploadPhoto(
+    fun uploadStream(
         stream: InputStream,
         filename: String,
         userType: FirestoreTags,
@@ -54,4 +55,39 @@ class StorageRepo {
         emit(State.failed(it as Exception))
     }.flowOn(Dispatchers.IO)
 
+    fun uploadFile(
+        uri: Uri,
+        agencyID: String,
+        userType: FirestoreTags,
+        imageType: StorageTags,
+    ) = flow {
+        emit(State.loading())
+        //Loading
+        val storageRef = storage.reference
+        val imagesRef =
+            storageRef.child("images/${imageType.name}/${userType.name}/$agencyID")
+        val photoUrl = imagesRef.putFile(uri).await()
+            .storage.downloadUrl.await().toString()
+
+        //Process complete
+        emit(State.success(photoUrl))
+    }.catch {
+        //Process failed
+        emit(State.failed(it as Exception))
+    }.flowOn(Dispatchers.IO)
+
+    /**
+     * It retrieves a downloadable url of the image
+     * @param path A firestore-like path
+     */
+    fun url(
+        path: String,
+    ) = flow {
+        emit(State.loading())
+
+        val url = storage.getReference(path).downloadUrl.await()
+        emit(State.success(url))
+    }.catch {
+        emit(State.failed(it as Exception))
+    }.flowOn(Dispatchers.IO)
 }

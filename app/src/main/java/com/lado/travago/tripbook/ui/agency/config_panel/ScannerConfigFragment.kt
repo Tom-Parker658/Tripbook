@@ -22,11 +22,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentScannerConfigBinding
 import com.lado.travago.tripbook.databinding.LayoutScannerSearchBinding
+import com.lado.travago.tripbook.model.enums.PlaceHolder
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.AgencyConfigViewModel
 import com.lado.travago.tripbook.ui.agency.config_panel.viewmodel.ScannerConfigViewModel
 import com.lado.travago.tripbook.ui.recycler_adapters.ScannerConfigAdapter
 import com.lado.travago.tripbook.ui.recycler_adapters.ScannerConfigClickListener
-import com.lado.travago.tripbook.utils.loadImageFromUrl
+import com.lado.travago.tripbook.utils.imageFromUrl
 import kotlinx.coroutines.*
 
 /**
@@ -39,6 +40,7 @@ class ScannerConfigFragment : Fragment() {
     private lateinit var binding: FragmentScannerConfigBinding
     private lateinit var viewModel: ScannerConfigViewModel
     private lateinit var adapter: ScannerConfigAdapter
+
     /**
      * Inorder to stop any loading blocking the ui
      */
@@ -50,7 +52,7 @@ class ScannerConfigFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         parentViewModel = ViewModelProvider(requireActivity())[AgencyConfigViewModel::class.java]
         binding = DataBindingUtil.inflate(
@@ -190,7 +192,7 @@ class ScannerConfigFragment : Fragment() {
                         getString(R.string.text_sort_by_none),
                         getString(R.string.text_sort_by_name_asc),
                         "Number of Scans", "Recruitment date",
-                    getString(R.string.text_admin_full)),
+                        getString(R.string.text_admin_full)),
                     viewModel.sortCheckedItem
                 ) { dialog, which ->
                     when (which) {
@@ -223,10 +225,13 @@ class ScannerConfigFragment : Fragment() {
         }
     }
 
-    class AddScannerDialogFragment(val viewModel: ScannerConfigViewModel, private val parentViewModel: AgencyConfigViewModel) : DialogFragment() {
+    class AddScannerDialogFragment(
+        val viewModel: ScannerConfigViewModel,
+        private val parentViewModel: AgencyConfigViewModel,
+    ) : DialogFragment() {
         @SuppressLint("DialogFragmentCallbacksDetector")
         override fun onCreateDialog(
-            savedInstanceState: Bundle?
+            savedInstanceState: Bundle?,
         ): Dialog {
             val scannerBinding: LayoutScannerSearchBinding = DataBindingUtil.inflate(
                 layoutInflater,
@@ -284,7 +289,8 @@ class ScannerConfigFragment : Fragment() {
                 else
                     CoroutineScope(Dispatchers.Main).launch {
                         viewModel.fireScanner(
-                            viewModel.newScannerDoc.value!!.id, parentViewModel.bookerDoc.value!!.getString("agencyID")!!
+                            viewModel.newScannerDoc.value!!.id,
+                            parentViewModel.bookerDoc.value!!.getString("agencyID")!!
                         )
                     }
 
@@ -317,15 +323,18 @@ class ScannerConfigFragment : Fragment() {
                     }
                     //We inflate with data
                     scannerBinding.scannerCard.visibility = View.VISIBLE
-                    scannerBinding.scannerPhoto.loadImageFromUrl(it.getString("photoUrl")!!)
+                    scannerBinding.scannerPhoto.imageFromUrl(it.getString("photoUrl")!!,
+                        PlaceHolder.PERSON,
+                        null)
                     scannerBinding.textScannerPhone.text = it.getString("phone")
                     scannerBinding.textScannerName.text = it.getString("name")
-                }else{
+                } else {
                     scannerBinding.scannerCard.visibility = View.GONE
                 }
             }
             viewModel.onNoResult.observe(this) {
-                viewModel.setField(ScannerConfigViewModel.FieldTags.TOAST_MESSAGE, getString(R.string.no_result_found))
+                viewModel.setField(ScannerConfigViewModel.FieldTags.TOAST_MESSAGE,
+                    getString(R.string.no_result_found))
             }
         }
 

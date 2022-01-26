@@ -127,12 +127,12 @@
                     android:layout_width="wrap_content"
                     android:onClickListener="@{() -> clickListener.onClick(agencyDoc, tripDoc, tripTime, true)}"
                     android:textSize="14sp"
-                    app:backgroundTint="@color/vip"
                     app:icon="@drawable/baseline_vip_24"
                     app:layout_constraintBottom_toBottomOf="@+id/btn_normal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_normal"
                     app:layout_constraintTop_toTopOf="@+id/btn_normal"
+                    app:strokeColor="@color/vip"
                     tools:text="16 125 FCFA" />
 
                 <TextView
