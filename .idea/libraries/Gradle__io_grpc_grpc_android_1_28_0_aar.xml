@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: io.grpc:grpc-android:1.28.0@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f07b4d12578210ffc91667a253d02970/transformed/jetified-grpc-android-1.28.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/009715444749e0f4b6ff8062e43a88ac/transformed/jetified-grpc-android-1.28.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/793ee391f7b032c207b4aa1e95982d24/transformed/jetified-grpc-android-1.28.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/793ee391f7b032c207b4aa1e95982d24/transformed/jetified-grpc-android-1.28.0/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/793ee391f7b032c207b4aa1e95982d24/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d71d90082030df30e974616cdfe11b28/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/42d786d1a12dfdd0b72f373883545a9e/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/1ff2d48904e34c97c9e094d2b0e039ab/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d71d90082030df30e974616cdfe11b28/transformed/jetified-grpc-android-1.28.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d71d90082030df30e974616cdfe11b28/transformed/jetified-grpc-android-1.28.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/io.grpc/grpc-android/1.28.0/e7c3f4a90a5862818fc0ff52806ab2b2986bea67/grpc-android-1.28.0-javadoc.jar!/" />

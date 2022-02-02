@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-auth:21.0.1@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/1b737fb7e46bcb7812435ebffd946203/transformed/jetified-firebase-auth-21.0.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/1b9b20ac449d5365cd8caf8fc4c421e1/transformed/jetified-firebase-auth-21.0.1/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3eacd8564f46ef915754fe49a1f3e26b/transformed/jetified-firebase-auth-21.0.1/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3eacd8564f46ef915754fe49a1f3e26b/transformed/jetified-firebase-auth-21.0.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3eacd8564f46ef915754fe49a1f3e26b/transformed/jetified-firebase-auth-21.0.1/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/61984d50ca48e5a4edc7f7a23e550256/transformed/jetified-firebase-auth-21.0.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/03f5d7628244e382012fcb6ae44049da/transformed/jetified-firebase-auth-21.0.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/14c6f51ab519414ed0eafd89772291fc/transformed/jetified-firebase-auth-21.0.1/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/61984d50ca48e5a4edc7f7a23e550256/transformed/jetified-firebase-auth-21.0.1/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/61984d50ca48e5a4edc7f7a23e550256/transformed/jetified-firebase-auth-21.0.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-auth/21.0.1/93cfb8e92221edeece91b286008325e05ab1f53f/firebase-auth-21.0.1-javadoc.jar!/" />

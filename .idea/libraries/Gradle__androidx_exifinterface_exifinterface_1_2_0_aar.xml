@@ -1,14 +1,14 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.exifinterface:exifinterface:1.2.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/baa076c3efe69ac7d1cdd3b04720f955/transformed/exifinterface-1.2.0/annotations.zip!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d581f430067ef5b46f7d7414b69b94e3/transformed/exifinterface-1.2.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/28b630583eb0296a46dd5c6891d1363f/transformed/exifinterface-1.2.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f6c44a2942345269c2d33f5b71aa907b/transformed/exifinterface-1.2.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/baa076c3efe69ac7d1cdd3b04720f955/transformed/exifinterface-1.2.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/baa076c3efe69ac7d1cdd3b04720f955/transformed/exifinterface-1.2.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/baa076c3efe69ac7d1cdd3b04720f955/transformed/exifinterface-1.2.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d581f430067ef5b46f7d7414b69b94e3/transformed/exifinterface-1.2.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/768ab0b36176acf74babd75f877e9d36/transformed/exifinterface-1.2.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f26d28437d0238b834ebc71b47d10c59/transformed/exifinterface-1.2.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d581f430067ef5b46f7d7414b69b94e3/transformed/exifinterface-1.2.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d581f430067ef5b46f7d7414b69b94e3/transformed/exifinterface-1.2.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

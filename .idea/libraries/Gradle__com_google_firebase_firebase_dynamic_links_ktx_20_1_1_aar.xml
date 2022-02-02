@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-dynamic-links-ktx:20.1.1@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/1d3335dbabe11f760bd23b2b72694761/transformed/jetified-firebase-dynamic-links-ktx-20.1.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0bdf8bae1df8377a3445452b0ee4048b/transformed/jetified-firebase-dynamic-links-ktx-20.1.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a4b28f630e1aec76ad7553909c1f7876/transformed/jetified-firebase-dynamic-links-ktx-20.1.1/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a4b28f630e1aec76ad7553909c1f7876/transformed/jetified-firebase-dynamic-links-ktx-20.1.1/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a4b28f630e1aec76ad7553909c1f7876/transformed/jetified-firebase-dynamic-links-ktx-20.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/093f8b05e3abb4b9fa27dab77a0c1ad2/transformed/jetified-firebase-dynamic-links-ktx-20.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/7809c084a1722daee3f593e80ab8565a/transformed/jetified-firebase-dynamic-links-ktx-20.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3fc5c8529ae114e69cd2609ca82ae8b7/transformed/jetified-firebase-dynamic-links-ktx-20.1.1/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/093f8b05e3abb4b9fa27dab77a0c1ad2/transformed/jetified-firebase-dynamic-links-ktx-20.1.1/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/093f8b05e3abb4b9fa27dab77a0c1ad2/transformed/jetified-firebase-dynamic-links-ktx-20.1.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-dynamic-links-ktx/20.1.1/2062327e66be978b47edd9d22a4bc2d8f1db7f5/firebase-dynamic-links-ktx-20.1.1-javadoc.jar!/" />

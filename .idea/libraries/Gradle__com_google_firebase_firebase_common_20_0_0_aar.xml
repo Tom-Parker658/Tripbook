@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-common:20.0.0@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/4bd55bf56bdfe2519829ab627030ab42/transformed/jetified-firebase-common-20.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/b9624bb5b42c70c5e249e8f76031f668/transformed/jetified-firebase-common-20.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/99d26e526ac745f9acf2375d27329576/transformed/jetified-firebase-common-20.0.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/99d26e526ac745f9acf2375d27329576/transformed/jetified-firebase-common-20.0.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/99d26e526ac745f9acf2375d27329576/transformed/jetified-firebase-common-20.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/704269ca0ced67a47f9f1e823bb1b573/transformed/jetified-firebase-common-20.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/4869c21753ee2eb6b5e546229e19616e/transformed/jetified-firebase-common-20.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8a45673c565e4405586b0191775a2b60/transformed/jetified-firebase-common-20.0.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/704269ca0ced67a47f9f1e823bb1b573/transformed/jetified-firebase-common-20.0.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/704269ca0ced67a47f9f1e823bb1b573/transformed/jetified-firebase-common-20.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-common/20.0.0/35a489d6cdcfa34dd756120fe574500e30a62d8a/firebase-common-20.0.0-javadoc.jar!/" />

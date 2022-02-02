@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="Gradle: hu.supercluster:overpasser-retrofit-adapter:0.2.2@aar">
+    <CLASSES>
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ea5c0c774454aaa7c3a287dcaa4ece5d/transformed/jetified-overpasser-retrofit-adapter-0.2.2/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/688428501818ca6ef915c2c686f1c3bd/transformed/jetified-overpasser-retrofit-adapter-0.2.2/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/b720177dd65dfcf012220b3ee5536f24/transformed/jetified-overpasser-retrofit-adapter-0.2.2/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ea5c0c774454aaa7c3a287dcaa4ece5d/transformed/jetified-overpasser-retrofit-adapter-0.2.2/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ea5c0c774454aaa7c3a287dcaa4ece5d/transformed/jetified-overpasser-retrofit-adapter-0.2.2/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/hu.supercluster/overpasser-retrofit-adapter/0.2.2/87d7c3ebe933d075fb723beb3aceef954d9864e/overpasser-retrofit-adapter-0.2.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/hu.supercluster/overpasser-retrofit-adapter/0.2.2/e579da041b13debac7940b9a7593c040e621f484/overpasser-retrofit-adapter-0.2.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

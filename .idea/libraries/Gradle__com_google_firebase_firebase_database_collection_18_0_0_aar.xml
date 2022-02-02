@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-database-collection:18.0.0@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/fa8288c2a1d7ca8ec4142e9d81469146/transformed/jetified-firebase-database-collection-18.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/3560e1cf5a16b1035eeae28b634a0d84/transformed/jetified-firebase-database-collection-18.0.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/aeaf13d7b1124963b72aaa92d2c06144/transformed/jetified-firebase-database-collection-18.0.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/aeaf13d7b1124963b72aaa92d2c06144/transformed/jetified-firebase-database-collection-18.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/aeaf13d7b1124963b72aaa92d2c06144/transformed/jetified-firebase-database-collection-18.0.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/c73c8e9d22379d8fb54e916bce0a68b3/transformed/jetified-firebase-database-collection-18.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8352685dc6df30c8351767abbe8a351a/transformed/jetified-firebase-database-collection-18.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/eeafd58a58dd8472a16009a7dedccf4e/transformed/jetified-firebase-database-collection-18.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/c73c8e9d22379d8fb54e916bce0a68b3/transformed/jetified-firebase-database-collection-18.0.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/c73c8e9d22379d8fb54e916bce0a68b3/transformed/jetified-firebase-database-collection-18.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-database-collection/18.0.0/356b17279173563a32e5043c9ead29ca888f8813/firebase-database-collection-18.0.0-javadoc.jar!/" />

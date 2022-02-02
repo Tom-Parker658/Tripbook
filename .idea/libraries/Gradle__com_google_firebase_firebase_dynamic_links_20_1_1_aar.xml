@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-dynamic-links:20.1.1@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a0ef4498203002f5d717e17af454693d/transformed/jetified-firebase-dynamic-links-20.1.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/1fa1ca0e247c3a38d6f4b1966130aa1c/transformed/jetified-firebase-dynamic-links-20.1.1/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/725674970cf586bca673270a4c4a8c55/transformed/jetified-firebase-dynamic-links-20.1.1/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/725674970cf586bca673270a4c4a8c55/transformed/jetified-firebase-dynamic-links-20.1.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/725674970cf586bca673270a4c4a8c55/transformed/jetified-firebase-dynamic-links-20.1.1/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8aa28c1710a3a7f30e139cea8d291674/transformed/jetified-firebase-dynamic-links-20.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d086e347ad055477da3e58707290c4ba/transformed/jetified-firebase-dynamic-links-20.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a84b79b5841f3b10f88796ebe04dcacb/transformed/jetified-firebase-dynamic-links-20.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8aa28c1710a3a7f30e139cea8d291674/transformed/jetified-firebase-dynamic-links-20.1.1/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8aa28c1710a3a7f30e139cea8d291674/transformed/jetified-firebase-dynamic-links-20.1.1/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-dynamic-links/20.1.1/266a036354553edfe9543d4b5c2500917e9f021a/firebase-dynamic-links-20.1.1-javadoc.jar!/" />

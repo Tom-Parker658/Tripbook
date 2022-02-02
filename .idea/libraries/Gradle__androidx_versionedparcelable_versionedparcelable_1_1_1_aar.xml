@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.versionedparcelable:versionedparcelable:1.1.1@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/b51912dd55cde6128374ca73f680dae0/transformed/versionedparcelable-1.1.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/2e6dfca772872c9f5c921815e498e8a4/transformed/versionedparcelable-1.1.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f6fd4c4977143dcd7ccb2c24a7f56fb9/transformed/versionedparcelable-1.1.1/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f6fd4c4977143dcd7ccb2c24a7f56fb9/transformed/versionedparcelable-1.1.1/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f6fd4c4977143dcd7ccb2c24a7f56fb9/transformed/versionedparcelable-1.1.1/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f8ac70004d9f922996d4bf32477bd445/transformed/versionedparcelable-1.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/1f65dff77e3f382811a84e7fe69b3999/transformed/versionedparcelable-1.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/4311125f2a77e0b078d5bb12844e2557/transformed/versionedparcelable-1.1.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f8ac70004d9f922996d4bf32477bd445/transformed/versionedparcelable-1.1.1/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f8ac70004d9f922996d4bf32477bd445/transformed/versionedparcelable-1.1.1/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

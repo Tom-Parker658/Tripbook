@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.lifecycle:lifecycle-extensions:2.2.0@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/7c74482acb25b6a3c02aee09157f369e/transformed/lifecycle-extensions-2.2.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/1736d3de8f7cbfca8ac187956e72d3d3/transformed/lifecycle-extensions-2.2.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9791642da74cc99826899f490e3e52be/transformed/lifecycle-extensions-2.2.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9791642da74cc99826899f490e3e52be/transformed/lifecycle-extensions-2.2.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9791642da74cc99826899f490e3e52be/transformed/lifecycle-extensions-2.2.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/c5f5388d1071d2157eb25a009514c84a/transformed/lifecycle-extensions-2.2.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/e2fef26c40dd5312e6385f6cc1e2a984/transformed/lifecycle-extensions-2.2.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9201fad689ed810c1f6c83ac1c12a958/transformed/lifecycle-extensions-2.2.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/c5f5388d1071d2157eb25a009514c84a/transformed/lifecycle-extensions-2.2.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/c5f5388d1071d2157eb25a009514c84a/transformed/lifecycle-extensions-2.2.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

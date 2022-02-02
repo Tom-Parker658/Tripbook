@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.lifecycle:lifecycle-runtime-ktx:2.3.1@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f80438a3e58dfc1cc73f72334173389c/transformed/jetified-lifecycle-runtime-ktx-2.3.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/54a6a8e54b7c706a501b7fea007b348e/transformed/jetified-lifecycle-runtime-ktx-2.3.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8c3d6c7c41b48a85c42b27188f3d306f/transformed/jetified-lifecycle-runtime-ktx-2.3.1/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8c3d6c7c41b48a85c42b27188f3d306f/transformed/jetified-lifecycle-runtime-ktx-2.3.1/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8c3d6c7c41b48a85c42b27188f3d306f/transformed/jetified-lifecycle-runtime-ktx-2.3.1/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9f0bb3b0a12b98eca938fe7b7ea60bec/transformed/jetified-lifecycle-runtime-ktx-2.3.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/7dfbea80de595a97f8b89d704d37fbbb/transformed/jetified-lifecycle-runtime-ktx-2.3.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/55b556e68e3393957c27cfbb6a941571/transformed/jetified-lifecycle-runtime-ktx-2.3.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9f0bb3b0a12b98eca938fe7b7ea60bec/transformed/jetified-lifecycle-runtime-ktx-2.3.1/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/9f0bb3b0a12b98eca938fe7b7ea60bec/transformed/jetified-lifecycle-runtime-ktx-2.3.1/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

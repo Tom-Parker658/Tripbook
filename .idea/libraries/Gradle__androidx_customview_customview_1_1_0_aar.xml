@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.customview:customview:1.1.0@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/c8ceaa9e9407c383df46c7717da51cdc/transformed/customview-1.1.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/934a7f30d8644f7fb85e8f0203168ebc/transformed/customview-1.1.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/38f0f680acb8948f363f270c4ef75f3d/transformed/customview-1.1.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/38f0f680acb8948f363f270c4ef75f3d/transformed/customview-1.1.0/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/38f0f680acb8948f363f270c4ef75f3d/transformed/customview-1.1.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/7d144ec6c92719dc165d78477f16221d/transformed/customview-1.1.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/af96e3c3d04752094e184d65b8b2defd/transformed/customview-1.1.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/be39df6748a01d76cc162c8706454de1/transformed/customview-1.1.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/7d144ec6c92719dc165d78477f16221d/transformed/customview-1.1.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/7d144ec6c92719dc165d78477f16221d/transformed/customview-1.1.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

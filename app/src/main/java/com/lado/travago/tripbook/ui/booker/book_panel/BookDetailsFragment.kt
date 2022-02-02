@@ -79,12 +79,11 @@ class BookDetailsFragment : Fragment() {
             if (FirebaseAuthRepo().currentUser == null) {
                 //Navigate to creation
                 val args =
-                    NotificationFragmentArgs.Builder(
+                    NotificationFragmentArgs(
                         NotificationType.ACCOUNT_NOT_FOUND,
                         NotificationType.ACCOUNT_NOT_FOUND.toString(),
                         R.layout.fragment_book_details
-                    ).build()
-                        .toBundle()
+                    ).toBundle()
                 findNavController().navigate(R.id.notificationFragment, args)
 
             } else {

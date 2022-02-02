@@ -8,7 +8,6 @@ import android.net.ConnectivityManager
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -22,7 +21,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
 import android.widget.ProgressBar
-import androidx.annotation.IntDef
+import androidx.annotation.*
 import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -142,8 +141,10 @@ class UIUtils(
     /**
      * This is a warning dialog to ask for short confirmation request e.g "Are you sure you wnat to ...."-kind or dialog
      */
-    fun warningDialog(
+    fun dialog(
         title: String,
+        @DrawableRes
+        iconResId: Int = R.drawable.outline_info_24,
         message: String,
         positiveText: String?,
         negativeText: String?,
@@ -153,7 +154,7 @@ class UIUtils(
         onNeutralListener: DialogInterface.OnClickListener?,
     ) {
         val dialog = MaterialAlertDialogBuilder(hostActivity)
-            .setIcon(R.drawable.outline_info_24)
+            .setIcon(iconResId)
             .setTitle(title)
             .setMessage(message)
 

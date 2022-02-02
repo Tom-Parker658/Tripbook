@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: hu.supercluster:overpasser:0.2.2">
+    <CLASSES>
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/hu.supercluster/overpasser/0.2.2/371106d796a3b6eb5950fa3b94c5a6eb93711998/overpasser-0.2.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/hu.supercluster/overpasser/0.2.2/5da1ddabf71f33fa2a7053a813222472824fddaf/overpasser-0.2.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/hu.supercluster/overpasser/0.2.2/720bba0cc58da858d42cb9327c148cf41cee8920/overpasser-0.2.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

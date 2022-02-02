@@ -16,12 +16,8 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.navigateUp
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialDatePicker.INPUT_MODE_CALENDAR
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentAgencyProfileBinding
@@ -61,8 +57,9 @@ class AgencyProfileFragment : Fragment() {
                     val hasChanged = haveFieldsBeenModified()
                     if (hasChanged) {
                         Log.d("HAS CHANGED", hasChanged.toString())
-                        uiUtils.warningDialog(
+                        uiUtils.dialog(
                             getString(R.string.text_unsaved_changes),
+                            R.drawable.outline_info_24,
                             "All your changes will be discarded if you don't save. What should we do?",
                             getString(R.string.save_changes),
                             null,
@@ -260,7 +257,7 @@ class AgencyProfileFragment : Fragment() {
     private fun clickListeners() {
         //Launches logo selection when logo image is tapped
         binding.logoField.setOnClickListener {
-            val args = ImageViewerFragmentArgs.Builder(
+            val args = ImageViewerFragmentArgs(
                 viewModel.logoUrl,
                 null,
                 viewModel.logoUri,
@@ -269,7 +266,7 @@ class AgencyProfileFragment : Fragment() {
                 false,
                 getString(R.string.desc_agency_logo),
                 PlaceHolder.AGENCY
-            ).build().toBundle()
+            ).toBundle()
             val navOptions = NavOptions.Builder()
                 .setEnterAnim(R.anim.expand_out)
                 .setExitAnim(R.anim.shrink_in)

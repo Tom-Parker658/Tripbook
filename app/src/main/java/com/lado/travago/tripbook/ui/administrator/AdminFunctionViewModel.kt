@@ -1,22 +1,33 @@
 package com.lado.travago.tripbook.ui.administrator
 
+
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.google.firebase.firestore.Source
+import com.lado.travago.tripbook.repo.cache_db.getDatabase
 import com.lado.travago.tripbook.model.enums.DataResources
 import com.lado.travago.tripbook.model.error.ErrorHandler.handleError
 import com.lado.travago.tripbook.repo.State
 import com.lado.travago.tripbook.repo.firebase.FirestoreRepo
+import com.lado.travago.tripbook.repo.osm_services.TownEntity
+import com.lado.travago.tripbook.repo.osm_services.TownsRepository
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
-import java.util.*
-import kotlin.collections.HashMap
 
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
-class AdminFunctionViewModel : ViewModel() {
+class AdminFunctionViewModel(application: Application) : ViewModel() {
     private val db = FirestoreRepo()
+    private val database = getDatabase(application.applicationContext)
+    private val townsRepository = TownsRepository(database)
+
+    val towns: LiveData<List<TownEntity>> = townsRepository.towns
+
+    private val _onLoading = MutableLiveData(false)
+    val onLoading: LiveData<Boolean> get() = _onLoading
+
+    private val viewModelJob = Job()
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     /**
      * Administrator utility
@@ -201,6 +212,37 @@ class AdminFunctionViewModel : ViewModel() {
         }
 
     }
+
+    fun readOSMTowns() {
+        coroutineScope.launch {
+            townsRepository.refreshTowns().collect {
+                when(it){
+                    is State.Failed -> {
+                        _toastMessage.value = it.exception.handleError {  }
+                        _onLoading.value = false
+                    }
+                    is State.Loading -> _onLoading.value = true
+                    is State.Success -> {
+                        _toastMessage.value = "Refresh successful: Got ${it.data} towns"
+                        _onLoading.value = false
+                    }
+                }
+            }
+        }
+    }
+
+    class AdminFunctionViewModelFactory(
+        private val application: Application,
+    ) : ViewModelProvider.Factory {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return AdminFunctionViewModel(
+                application
+            ) as T
+        }
+    }
+
 }
 
 

@@ -133,11 +133,11 @@ class TripSearchResultsFragment : Fragment() {
         viewModel.onNoSuchResults.observe(viewLifecycleOwner) {
             if (it) {
                 val args =
-                    NotificationFragmentArgs.Builder(
+                    NotificationFragmentArgs(
                         NotificationType.EMPTY_RESULTS,
                         "${viewModel.localityName} ${getString(R.string.text_to)} ${viewModel.destinationName}",
                         R.layout.fragment_trip_search_result
-                    ).build()
+                    )
                         .toBundle()
                 //To avoid going back to this screen again after the user presses the back button
                 findNavController().popBackStack(R.id.tripSearchFragment, false)

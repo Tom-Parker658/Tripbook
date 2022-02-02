@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.legacy:legacy-support-core-ui:1.0.0@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a9479b3238f8ec71cb4685be8db25e2d/transformed/legacy-support-core-ui-1.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/4d27f4d9589c2fcfcba5ad0cb34349a4/transformed/legacy-support-core-ui-1.0.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/5caf588ee91c1bd5bfb1f8844d1bcbb4/transformed/legacy-support-core-ui-1.0.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/5caf588ee91c1bd5bfb1f8844d1bcbb4/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/5caf588ee91c1bd5bfb1f8844d1bcbb4/transformed/legacy-support-core-ui-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/824b31fd0f4c06666827167620decf0a/transformed/legacy-support-core-ui-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ce4b0408365930d968f55d7ed8d00b1d/transformed/legacy-support-core-ui-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/5ff004aa9386cfbeffa71e4926e07c92/transformed/legacy-support-core-ui-1.0.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/824b31fd0f4c06666827167620decf0a/transformed/legacy-support-core-ui-1.0.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/824b31fd0f4c06666827167620decf0a/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

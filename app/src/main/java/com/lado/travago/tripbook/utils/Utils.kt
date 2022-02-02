@@ -2,6 +2,7 @@ package com.lado.travago.tripbook.utils
 
 import android.graphics.Bitmap
 import android.util.Log
+import androidx.room.TypeConverter
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
@@ -200,5 +201,7 @@ object Utils {
         return regex.matcher(email)
             .matches() && email.indexOf('@') > 0 && email.indexOf('.') > email.indexOf('@')
     }
+
+
 
 }

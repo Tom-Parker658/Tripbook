@@ -104,11 +104,11 @@ class TripDetailsFragment : Fragment() {
             if (it) {
                 if (FirebaseAuthRepo().currentUser == null) {
                     val args =
-                        NotificationFragmentArgs.Builder(
+                        NotificationFragmentArgs(
                             NotificationType.ACCOUNT_NOT_FOUND,
                             NotificationType.ACCOUNT_NOT_FOUND.toString(),
                             R.layout.fragment_trip_detail
-                        ).build()
+                        )
                             .toBundle()
                     findNavController().navigate(R.id.action_tripDetailsFragment_to_notificationFragment, args)
 
@@ -126,12 +126,11 @@ class TripDetailsFragment : Fragment() {
         viewModel.bookingComplete.observe(viewLifecycleOwner){
             if(it){
                 val args =
-                    NotificationFragmentArgs.Builder(
+                    NotificationFragmentArgs(
                         NotificationType.BOOKING_COMPLETE,
                         NotificationType.BOOKING_COMPLETE.toString(),
                         R.layout.fragment_trip_detail
-                    ).build()
-                        .toBundle()
+                    ).toBundle()
                 findNavController().navigate(R.id.action_tripDetailsFragment_to_notificationFragment, args)
             }
         }

@@ -90,8 +90,8 @@ class AgencyGatewayFragment : Fragment() {
 
     private fun observeLiveData() {
         viewModel.authRepo.firebaseAuth.addAuthStateListener {
-            val args = NotificationFragmentArgs.Builder(NotificationType.ACCOUNT_NOT_FOUND,
-                NotificationType.ACCOUNT_NOT_FOUND.toString(), binding.root.id).build()
+            val args = NotificationFragmentArgs(NotificationType.ACCOUNT_NOT_FOUND,
+                NotificationType.ACCOUNT_NOT_FOUND.toString(), binding.root.id)
                 .toBundle()
             if (it.currentUser == null || viewModel.hasProfile.value != true) {
                 Log.d("GATEWAY_FRAG", "No current use or profile")
@@ -120,22 +120,22 @@ class AgencyGatewayFragment : Fragment() {
 
         viewModel.bookerIsNotScanner.observe(viewLifecycleOwner) {
             if (it) {
-                val args = NotificationFragmentArgs.Builder(
+                val args = NotificationFragmentArgs(
                     NotificationType.BOOKER_IS_NOT_SCANNER,
                     NotificationType.BOOKER_IS_NOT_SCANNER.toString(),
                     R.id.agencyGatewayFragment
-                ).build().toBundle()
+                ).toBundle()
                 viewModel.setField(FieldTags.NAV_ARGS, args)
             }
         }
 
         viewModel.hasProfile.observe(viewLifecycleOwner) {
             if (!it) {
-                val args = NotificationFragmentArgs.Builder(
+                val args = NotificationFragmentArgs(
                     NotificationType.ACCOUNT_NOT_FOUND,
                     NotificationType.ACCOUNT_NOT_FOUND.toString(),
                     R.id.agencyGatewayFragment
-                ).build().toBundle()
+                ).toBundle()
                 viewModel.setField(FieldTags.NAV_ARGS, args)
             } else {
                 viewModel.setField(FieldTags.NAV_ARGS, Bundle.EMPTY)

@@ -16,10 +16,9 @@ object ErrorHandler {
     /**
      * general error handler
      */
-    fun Exception.handleError(doSomething: (exception: Exception ) -> Unit): String {
+    fun Exception.handleError( doSomething: (exception: Exception ) -> Unit): String {
         doSomething(this)
         return when(this){
-
             is FirebaseException -> typeFirestore(this)
             else -> message.toString()
         }

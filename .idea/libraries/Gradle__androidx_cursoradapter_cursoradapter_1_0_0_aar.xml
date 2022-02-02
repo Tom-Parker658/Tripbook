@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.cursoradapter:cursoradapter:1.0.0@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a7d410c7bd59966b0b59bd8f84023c48/transformed/cursoradapter-1.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a06eccb7c12d1df7b91a5801e0485c08/transformed/cursoradapter-1.0.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f00e82b9bde0690d48c1fc2d891f7126/transformed/cursoradapter-1.0.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f00e82b9bde0690d48c1fc2d891f7126/transformed/cursoradapter-1.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f00e82b9bde0690d48c1fc2d891f7126/transformed/cursoradapter-1.0.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f47573fc5b4d7d119d959e9a3bdae12d/transformed/cursoradapter-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/c05869c14576cbeecac69972352c350c/transformed/cursoradapter-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/21415c78ce34bd587853f3afc497d227/transformed/cursoradapter-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f47573fc5b4d7d119d959e9a3bdae12d/transformed/cursoradapter-1.0.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f47573fc5b4d7d119d959e9a3bdae12d/transformed/cursoradapter-1.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

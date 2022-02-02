@@ -1,14 +1,14 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.bumptech.glide:gifdecoder:4.12.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0807f6fb6d47d910f2c2e91c47040db3/transformed/jetified-gifdecoder-4.12.0/annotations.zip!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/01bc6c43c92427a93db4c12bf674411d/transformed/jetified-gifdecoder-4.12.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/19dd8a8b542236bf90d764b96832525c/transformed/jetified-gifdecoder-4.12.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/27a3a861ee716df984e3112f1833ffac/transformed/jetified-gifdecoder-4.12.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0807f6fb6d47d910f2c2e91c47040db3/transformed/jetified-gifdecoder-4.12.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0807f6fb6d47d910f2c2e91c47040db3/transformed/jetified-gifdecoder-4.12.0/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0807f6fb6d47d910f2c2e91c47040db3/transformed/jetified-gifdecoder-4.12.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/01bc6c43c92427a93db4c12bf674411d/transformed/jetified-gifdecoder-4.12.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/8155f32360555b23457c10eb158b94ab/transformed/jetified-gifdecoder-4.12.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/57eafd6528337aaa5f186e53d56b3c0c/transformed/jetified-gifdecoder-4.12.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/01bc6c43c92427a93db4c12bf674411d/transformed/jetified-gifdecoder-4.12.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/01bc6c43c92427a93db4c12bf674411d/transformed/jetified-gifdecoder-4.12.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.github.bumptech.glide/gifdecoder/4.12.0/746b9323bb108e97840d4dacd37bd8d4cec34419/gifdecoder-4.12.0-javadoc.jar!/" />

@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-components:17.0.0@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/7a7acd97acf441f631b03fb477f6da16/transformed/jetified-firebase-components-17.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/bef0fd6410ca468a73ab30060afbe4f9/transformed/jetified-firebase-components-17.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d3edd50192a5288a5b9e254570941f65/transformed/jetified-firebase-components-17.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d3edd50192a5288a5b9e254570941f65/transformed/jetified-firebase-components-17.0.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/d3edd50192a5288a5b9e254570941f65/transformed/jetified-firebase-components-17.0.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f1078b277914e7cb5bc67bb90b8991e0/transformed/jetified-firebase-components-17.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/19150529dbe854b49682aaa7218ce5b1/transformed/jetified-firebase-components-17.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/beebbe762d4b0abe67a388340a84e5a2/transformed/jetified-firebase-components-17.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f1078b277914e7cb5bc67bb90b8991e0/transformed/jetified-firebase-components-17.0.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/f1078b277914e7cb5bc67bb90b8991e0/transformed/jetified-firebase-components-17.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.google.firebase/firebase-components/17.0.0/9e60bbf61b1c71e0b01a3e959f2e2111b51f3c83/firebase-components-17.0.0-javadoc.jar!/" />

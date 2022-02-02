@@ -23,8 +23,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import com.lado.travago.tripbook.R
 import com.lado.travago.tripbook.databinding.FragmentBookerProfileBinding
 import com.lado.travago.tripbook.model.enums.PlaceHolder
@@ -57,8 +55,9 @@ class BookerProfileFragment : Fragment() {
                     val hasChanged = haveFieldsBeenModified()
                     if (hasChanged) {
                         Log.d("HAS CHANGED", hasChanged.toString())
-                        uiUtils.warningDialog(
+                        uiUtils.dialog(
                             getString(R.string.text_unsaved_changes),
+                            R.drawable.outline_info_24,
                             "All your changes will be discarded if you don't save. What should we do?",
                             getString(R.string.save_changes),
                             null,
@@ -140,7 +139,7 @@ class BookerProfileFragment : Fragment() {
 
     private fun clickListeners() {
         binding.profilePhoto.setOnClickListener {
-            val args = ImageViewerFragmentArgs.Builder(
+            val args = ImageViewerFragmentArgs(
                 viewModel.photoUrl,
                 null,
                 viewModel.photoUri,
@@ -149,7 +148,7 @@ class BookerProfileFragment : Fragment() {
                 false,
                 getString(R.string.desc_agency_logo),
                 PlaceHolder.PERSON
-            ).build().toBundle()
+            ).toBundle()
             val navOptions = NavOptions.Builder()
                 .setEnterAnim(R.anim.expand_out)
                 .setExitAnim(R.anim.shrink_in)

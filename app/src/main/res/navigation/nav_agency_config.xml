@@ -136,7 +136,7 @@
             app:argType="string"
             app:nullable="true" />
 
-<!--        This is a bitmap whic-->
+<!--        This is a bitmap which-->
         <argument
             android:name="currentImageBitmap"
             app:argType="android.graphics.Bitmap"

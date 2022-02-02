@@ -74,8 +74,9 @@ class AgencyConfigCenterFragment : Fragment() {
                     }
                 } else
                     binding.btnUploadAgency.setOnClickListener {
-                        uiUtils.warningDialog(
+                        uiUtils.dialog(
                             getString(R.string.text_go_online),
+                            R.drawable.outline_info_24,
                             getString(R.string.text_message_agency_ready_go_online),
                             getString(R.string.text_continue),
                             null,

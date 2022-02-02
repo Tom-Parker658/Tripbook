@@ -1,14 +1,14 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.swiperefreshlayout:swiperefreshlayout:1.0.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ac319f09e2671f7e44876caa549890e7/transformed/swiperefreshlayout-1.0.0/annotations.zip!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/69810d74a3a86989f497314713242144/transformed/swiperefreshlayout-1.0.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/aea58adfb290255d00475a01a1819d85/transformed/swiperefreshlayout-1.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/0d664ce33bc4d6b000bc2c6f308c65fc/transformed/swiperefreshlayout-1.0.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ac319f09e2671f7e44876caa549890e7/transformed/swiperefreshlayout-1.0.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ac319f09e2671f7e44876caa549890e7/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/ac319f09e2671f7e44876caa549890e7/transformed/swiperefreshlayout-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/69810d74a3a86989f497314713242144/transformed/swiperefreshlayout-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/823d1dc9dc04e885014a1389266aa607/transformed/swiperefreshlayout-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/a5533e3221922c4305b6001306890415/transformed/swiperefreshlayout-1.0.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/69810d74a3a86989f497314713242144/transformed/swiperefreshlayout-1.0.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-3/69810d74a3a86989f497314713242144/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
